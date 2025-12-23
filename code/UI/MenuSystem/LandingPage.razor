@@ -8,31 +8,14 @@
 @namespace Punt.UI
 
 <root class="main-menu">
-
-
-    <menu-header> Punt!</menu-header>
+    <menu-header>Punt!</menu-header>
 
     <div class="menu-options">
-
-        <a class="menu-button" href="/play"> Play</a>
-
-        <a class="menu-button" href="/leaderboard"> Leaderboard</a>
-
-        <a class="button wip-button" href="myteam"> How to play</a>
-
-        <a class="button wip-button" href="settings"> Settings</a>
-
-        <a class="button wip-button" href="myteam"> Team</a>
-
-        <div class="menu-button" onclick=@(() => Quit())>
-
-            Quit
-        </div>
-
-
-
+        <a class="menu-button" href="/play">Play</a>
+        <a class="menu-button" href="/leaderboard">Leaderboard</a>
+        <a class="menu-button wip" href="/settings">Settings</a>
+        <div class="menu-button" onclick=@(() => Quit())>Quit</div>
     </div>
-
 </root>
 
 @code

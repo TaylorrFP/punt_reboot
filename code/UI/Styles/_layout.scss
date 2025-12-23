@@ -1,0 +1,18 @@
+.main-menu {
+	position: absolute;
+	top: 0;
+	left: $menu-padding;
+	right: 0;
+	bottom: 0;
+	flex-direction: column;
+
+	&.hidden {
+		display: none;
+	}
+}
+
+.menu-options {
+	flex-direction: column;
+	justify-content: center;
+	max-width: 600px;
+}

@@ -1,0 +1,22 @@
+.menu-button {
+	font-family: $font-header;
+	font-size: 64px;
+	color: $color-text;
+	pointer-events: all;
+	cursor: pointer;
+	transition: all 0.1s ease;
+	transform-origin: left center;
+
+	&:hover {
+		transform: scale(1.2);
+		sound-in: ui.button.over;
+	}
+	// Modifier for work-in-progress buttons
+	&.wip {
+		color: $color-text-disabled;
+		cursor: default;
+		pointer-events: none;
+		transition: none;
+		transform: none;
+	}
+}
