@@ -1,0 +1,62 @@
+@using Sandbox.Menu
+@using Sandbox.UI;
+@using Sandbox.UI.Navigation;
+@using Sandbox.Network;
+
+@inherits Panel
+@implements INavigatorPage
+@namespace Punt.UI
+
+<root class="main-menu">
+
+
+    <menu-header> Punt!</menu-header>
+
+    <div class="menu-options">
+
+        <a class="menu-button" href="/play"> Play</a>
+
+        <a class="menu-button" href="/leaderboard"> Leaderboard</a>
+
+        <a class="button wip-button" href="myteam"> How to play</a>
+
+        <a class="button wip-button" href="settings"> Settings</a>
+
+        <a class="button wip-button" href="myteam"> Team</a>
+
+        <div class="menu-button" onclick=@(() => Quit())>
+
+            Quit
+        </div>
+
+
+
+    </div>
+
+</root>
+
+@code
+{
+    void Quit()
+    {
+        Game.Close();
+    }
+
+    public void OnNavigationOpen()
+    {
+        //check here were we should be
+
+        //if we are in a custom lobby, do
+
+
+        // if (Networking.IsActive & QueueManager.Instance.SelectedQueueType == QueueType.Custom)
+        // {
+
+        //     this.Navigate("/lobby");
+
+        // }
+
+
+
+    }
+}
