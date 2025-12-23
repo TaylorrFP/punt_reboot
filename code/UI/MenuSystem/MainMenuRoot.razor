@@ -1,0 +1,31 @@
+@namespace Punt.UI
+@using Sandbox.Menu
+@using Sandbox.UI;
+@using Sandbox.UI.Navigation;
+
+@inherits NavigationHost
+
+<root>
+
+    <div class="navigator-canvas" slot="navigator-canvas" />
+
+@*     <MatchmakingStatus /> *@
+
+</root>
+
+@code
+{
+    public static MainMenuRoot Instance { get; set; }
+
+    public MainMenuRoot()
+    {
+        Instance = this;
+        DefaultUrl = "/";
+        // AddDestination("/", typeof(LandingPage));
+        // AddDestination("/play", typeof(Play));
+        // AddDestination("/leaderboard", typeof(Leaderboard));
+        // AddDestination("/gamebrowser", typeof(GameBrowser));
+        // AddDestination("/createcustomgame", typeof(CreateCustomGame));
+        // AddDestination("/lobby", typeof(Lobby));
+    }
+}
