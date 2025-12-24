@@ -1,0 +1,28 @@
+@using Sandbox.Menu
+@using Sandbox.UI;
+@using Sandbox.UI.Navigation;
+@using Sandbox.Network;
+
+@inherits Panel
+@implements INavigatorPage
+@namespace Punt.UI
+
+<root class="main-menu">
+    <menu-header>Punt!</menu-header>
+
+    <div class="menu-options">
+
+        <div class="menu-button">
+            <button class="button" onclick=@(() => PlayGame())>Play Game</button>
+        </div>
+        <a class="menu-button" href="">Back</a>
+    </div>
+</root>
+
+@code
+{
+    void PlayGame()
+    {
+        Scene.LoadFromFile("scenes/game/pitch.scene");
+    }
+}
