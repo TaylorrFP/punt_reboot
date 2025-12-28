@@ -17,7 +17,6 @@ public sealed class PieceAudio : Component
 	[Property, Group( "Sound" )]
 	public SoundEvent StretchSound { get; set; }
 
-
 	/// <summary>
 	/// If true, the sound starts at a random position each time.
 	/// Makes repeated grabs sound more varied.
@@ -43,12 +42,13 @@ public sealed class PieceAudio : Component
 	public float StretchVolume { get; set; } = 0.6f;
 
 	/// <summary>
-	/// Maps drag intensity (0-1) to minimum "tension" volume.
+	/// Maps drag intensity (0-1) to minimum volume as a percentage of StretchVolume.
 	/// At low intensity, silence when not moving. At high intensity, 
 	/// there's always a baseline hum representing the held tension.
+	/// Value of 1.0 = 100% of StretchVolume.
 	/// </summary>
 	[Property, Group( "Volume" )]
-	public Curve MinVolumeCurve { get; set; } = new Curve( new Curve.Frame( 0f, 0f ), new Curve.Frame( 0.5f, 0f ), new Curve.Frame( 1f, 0.4f ) );
+	public Curve MinVolumeCurve { get; set; } = new Curve( new Curve.Frame( 0f, 0f ), new Curve.Frame( 0.5f, 0f ), new Curve.Frame( 1f, 0.7f ) );
 
 	// === Smoothing ===
 
@@ -101,14 +101,16 @@ public sealed class PieceAudio : Component
 		// Calculate target pitch from curve
 		targetPitch = PitchCurve.Evaluate( intensity );
 
-		// Calculate target volume
-		float minVolume = MinVolumeCurve.Evaluate( intensity );
+		// Calculate minimum volume (curve outputs 0-1 as percentage of StretchVolume)
+		float minVolumePercent = MinVolumeCurve.Evaluate( intensity );
+		float minVolume = minVolumePercent * StretchVolume;
+
 		bool isStretching = cursorDelta > MovementThreshold;
 
 		if ( isStretching )
 		{
-			// Active stretching - use full stretch volume (but never below tension minimum)
-			targetVolume = MathF.Max( StretchVolume, minVolume );
+			// Active stretching - use full stretch volume
+			targetVolume = StretchVolume;
 		}
 		else
 		{
@@ -139,11 +141,12 @@ public sealed class PieceAudio : Component
 		{
 			soundHandle.Volume = 0f;
 			soundHandle.Pitch = currentPitch;
-		}
 
-		if ( RandomizeStartPosition )
-		{
-			soundHandle.Time = Random.Shared.Float( 0f, 3f );
+			// Start at random position so it doesn't sound identical each time
+			if ( RandomizeStartPosition )
+			{
+				soundHandle.Position = Random.Shared.Float( 0f, 3f );
+			}
 		}
 	}
 
@@ -158,7 +161,7 @@ public sealed class PieceAudio : Component
 		currentVolume = MathX.Lerp( currentVolume, targetVolume, dt * volumeSpeed );
 
 		// Smooth pitch
-		currentPitch = targetPitch;
+		currentPitch = MathX.Lerp( currentPitch, targetPitch, dt * PitchSmoothSpeed );
 
 		// Apply to sound
 		if ( soundHandle.IsValid )
@@ -181,3 +184,15 @@ public sealed class PieceAudio : Component
 		//soundHandle.Stop();
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
