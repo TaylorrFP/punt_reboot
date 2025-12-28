@@ -1,0 +1,100 @@
+<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:modeldoc30:version{8c2d7a91-9c42-4bf0-883a-5a3b1762d4f1} -->
+{
+	rootNode = 
+	{
+		_class = "RootNode"
+		children = 
+		[
+			{
+				_class = "RenderMeshList"
+				children = 
+				[
+					{
+						_class = "RenderMeshFile"
+						filename = "prefabs/pieces/puntpiece/base/puntplayerbase.fbx"
+						import_translation = [ 0.0, 0.0, 0.0 ]
+						import_rotation = [ 0.0, 0.0, 0.0 ]
+						import_scale = 1.0
+						align_origin_x_type = "None"
+						align_origin_y_type = "None"
+						align_origin_z_type = "None"
+						parent_bone = ""
+						import_filter = 
+						{
+							exclude_by_default = false
+							exception_list = [  ]
+						}
+					},
+				]
+			},
+			{
+				_class = "MaterialGroupList"
+				children = 
+				[
+					{
+						_class = "DefaultMaterialGroup"
+						remaps = 
+						[
+							{
+								from = "socceteobaseinner.vmat"
+								to = "prefabs/pieces/puntpiece/base/materials/puntbase_inner.vmat"
+							},
+							{
+								from = "soccetteobasecolour.vmat"
+								to = "prefabs/pieces/puntpiece/base/materials/puntbase.vmat"
+							},
+						]
+						use_global_default = false
+						global_default_material = "models/citizen_props/beachball.vmat"
+					},
+					{
+						_class = "MaterialGroup"
+						name = "Blue"
+						remaps = 
+						[
+							{
+								from = "prefabs/pieces/puntpiece/base/materials/puntbase.vmat"
+								to = "prefabs/pieces/puntpiece/base/materials/puntbase_blue.vmat"
+							},
+						]
+					},
+					{
+						_class = "MaterialGroup"
+						name = "Red"
+						remaps = 
+						[
+							{
+								from = "prefabs/pieces/puntpiece/base/materials/puntbase.vmat"
+								to = "prefabs/pieces/puntpiece/base/materials/puntbase_red.vmat"
+							},
+						]
+					},
+				]
+			},
+			{
+				_class = "GameDataList"
+				children = 
+				[
+					{
+						_class = "GenericGameData"
+						game_class = "prop_data"
+						game_keys = 
+						{
+							bakelighting = false
+							health = 0.0
+							flammable = false
+							explosive = false
+							explosive_damage = -1.0
+							explosive_radius = -1.0
+							explosive_force = -1.0
+						}
+					},
+				]
+			},
+		]
+		model_archetype = "physics_prop_model"
+		primary_associated_entity = "prop_physics"
+		anim_graph_name = ""
+		base_model_name = ""
+	}
+}
