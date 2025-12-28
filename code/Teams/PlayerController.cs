@@ -4,18 +4,18 @@ public sealed class PlayerController : Component
 	[Property, Sync] public TeamSide Team { get; set; }
 	[Property, Sync] public Vector3 CursorWorldPosition { get; private set; }
 
-	[Property] public float FlickStrength { get; set; } = 0.6f;
-	[Property] public float MaxFlickStrength { get; set; } = 650f;
+	[Property, Group( "Flick Settings" )] public float FlickStrength { get; set; } = 0.6f;
+	[Property, Group( "Flick Settings" )] public float MaxFlickStrength { get; set; } = 650f;
 
 	// === Local State ===
 	private ISelectable hoveredSelectable;
 	private ISelectable selectedSelectable;
 	private Vector2 currentMouseOffset;
 	private Vector3 flickVector;
+	private float lastCursorDelta;
 
 	protected override void OnUpdate()
 	{
-		
 		if ( IsProxy ) return;
 
 		UpdateCursorPosition();
@@ -29,7 +29,6 @@ public sealed class PlayerController : Component
 			UpdateHovering();
 		}
 
-		// Update cursor
 		UpdateCursor();
 	}
 
@@ -43,7 +42,6 @@ public sealed class PlayerController : Component
 
 		if ( tr.Hit )
 		{
-			//Gizmo.Draw.SolidSphere( tr.HitPosition, 8f, 32 );
 			CursorWorldPosition = tr.HitPosition.WithZ( 0f );
 		}
 	}
@@ -72,9 +70,18 @@ public sealed class PlayerController : Component
 		// For draggable selectables (pieces), calculate flick vector
 		if ( selectedSelectable.CapturesSelection )
 		{
+			// Track cursor movement this frame
+			lastCursorDelta = Mouse.Delta.Length;
+
 			currentMouseOffset += Mouse.Delta;
 			flickVector = new Vector3( -currentMouseOffset.x, currentMouseOffset.y, 0f ) * FlickStrength;
 			flickVector = flickVector.ClampLength( MaxFlickStrength );
+
+			// Calculate intensity (0-1) based on flick strength
+			float intensity = flickVector.Length / MaxFlickStrength;
+
+			// Tell the selectable about the ongoing drag
+			selectedSelectable.OnDragUpdate( intensity, lastCursorDelta );
 		}
 
 		// Check for release
@@ -96,6 +103,7 @@ public sealed class PlayerController : Component
 		// Reset flick tracking
 		currentMouseOffset = Vector2.Zero;
 		flickVector = Vector3.Zero;
+		lastCursorDelta = 0f;
 
 		// Non-capturing selectables (props) release immediately
 		if ( !selectedSelectable.CapturesSelection )
@@ -110,6 +118,7 @@ public sealed class PlayerController : Component
 		selectedSelectable = null;
 		flickVector = Vector3.Zero;
 		currentMouseOffset = Vector2.Zero;
+		lastCursorDelta = 0f;
 	}
 
 	private ISelectable FindNearestSelectable()
@@ -120,18 +129,14 @@ public sealed class PlayerController : Component
 		// Add all pieces
 		selectables.AddRange( Scene.GetAllComponents<PuntPiece>() );
 
-		// Add other selectable types as you create them
+		// Add all props (includes inherited types like ClickableDuck)
 		selectables.AddRange( Scene.GetAllComponents<ClickableProp>() );
-
-
 
 		// Filter to valid targets
 		var validSelectables = selectables.Where( s => IsValidTarget( s ) );
 
 		ISelectable best = null;
 		float bestScore = float.MaxValue;
-
-		
 
 		foreach ( var selectable in validSelectables )
 		{
@@ -189,6 +194,6 @@ public sealed class PlayerController : Component
 		}
 
 		// Hovering something selectable
-		Mouse.CursorType = "hovering";  // Or "hover" if you have a custom cursor
+		Mouse.CursorType = "pointer";
 	}
 }

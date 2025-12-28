@@ -1,202 +1,183 @@
-using Sandbox;
+namespace Punt;
+
+using System;
 
 /// <summary>
-/// Handles audio feedback for a piece being grabbed and charged.
-/// Plays a stretching/charging sound that increases in pitch as drag intensity increases.
+/// Handles the "rubber band" audio feedback when a piece is being grabbed and charged.
+/// 
+/// The stretch sound behaves like pulling a rubber band:
+/// - Pitch increases with drag distance (more tension = higher pitch)
+/// - Volume spikes when actively stretching (cursor moving)
+/// - A minimum "tension hum" volume increases as you approach max charge
 /// </summary>
 public sealed class PieceAudio : Component
 {
-	// === Sound Configuration ===
+	// === Sound ===
 
-	[Property, Group( "Stretch Sound" )]
+	[Property, Group( "Sound" )]
 	public SoundEvent StretchSound { get; set; }
 
-	/// <summary>
-	/// Minimum pitch when barely dragging.
-	/// </summary>
-	[Property, Group( "Stretch Sound" )]
-	public float MinPitch { get; set; } = 0.8f;
 
 	/// <summary>
-	/// Maximum pitch at full charge.
+	/// If true, the sound starts at a random position each time.
+	/// Makes repeated grabs sound more varied.
 	/// </summary>
-	[Property, Group( "Stretch Sound" )]
-	public float MaxPitch { get; set; } = 1.5f;
+	[Property, Group( "Sound" )]
+	public bool RandomizeStartPosition { get; set; } = true;
+
+	// === Pitch ===
 
 	/// <summary>
-	/// Volume of the stretch sound.
+	/// Maps drag intensity (0-1) to pitch multiplier.
+	/// Typically starts around 0.8 and rises to 1.5 at full charge.
 	/// </summary>
-	[Property, Group( "Stretch Sound" ), Range( 0f, 1f )]
-	public float Volume { get; set; } = 0.5f;
+	[Property, Group( "Pitch" )]
+	public Curve PitchCurve { get; set; } = new Curve( new Curve.Frame( 0f, 0.8f ), new Curve.Frame( 1f, 1.5f ) );
 
-	// === Tension Sound (at max charge) ===
-
-	[Property, Group( "Tension Sound" )]
-	public SoundEvent TensionSound { get; set; }
+	// === Volume ===
 
 	/// <summary>
-	/// Intensity threshold (0-1) at which tension sound starts playing.
+	/// Volume when actively stretching (cursor moving).
 	/// </summary>
-	[Property, Group( "Tension Sound" ), Range( 0f, 1f )]
-	public float TensionThreshold { get; set; } = 0.85f;
-
-	// === Behaviour ===
+	[Property, Group( "Volume" ), Range( 0f, 1f )]
+	public float StretchVolume { get; set; } = 0.6f;
 
 	/// <summary>
-	/// How fast the sound fades out when cursor stops moving.
+	/// Maps drag intensity (0-1) to minimum "tension" volume.
+	/// At low intensity, silence when not moving. At high intensity, 
+	/// there's always a baseline hum representing the held tension.
 	/// </summary>
-	[Property, Group( "Behaviour" )]
-	public float FadeOutSpeed { get; set; } = 5f;
+	[Property, Group( "Volume" )]
+	public Curve MinVolumeCurve { get; set; } = new Curve( new Curve.Frame( 0f, 0f ), new Curve.Frame( 0.5f, 0f ), new Curve.Frame( 1f, 0.4f ) );
+
+	// === Smoothing ===
 
 	/// <summary>
-	/// Minimum cursor delta to be considered "moving".
+	/// How quickly volume ramps up when stretching.
 	/// </summary>
-	[Property, Group( "Behaviour" )]
-	public float MovementThreshold { get; set; } = 0.5f;
+	[Property, Group( "Smoothing" )]
+	public float VolumeAttackSpeed { get; set; } = 15f;
 
 	/// <summary>
-	/// How quickly pitch changes (smoothing).
+	/// How quickly volume fades when cursor stops moving.
 	/// </summary>
-	[Property, Group( "Behaviour" )]
+	[Property, Group( "Smoothing" )]
+	public float VolumeDecaySpeed { get; set; } = 5f;
+
+	/// <summary>
+	/// How quickly pitch changes to match target.
+	/// </summary>
+	[Property, Group( "Smoothing" )]
 	public float PitchSmoothSpeed { get; set; } = 10f;
 
-	// === Internal State ===
+	/// <summary>
+	/// Minimum cursor movement per frame to be considered "stretching".
+	/// </summary>
+	[Property, Group( "Smoothing" )]
+	public float MovementThreshold { get; set; } = 0.5f;
 
-	private SoundHandle stretchHandle;
-	private SoundHandle tensionHandle;
+	// === Internal ===
 
+	private SoundHandle soundHandle;
 	private float currentVolume;
 	private float targetVolume;
 	private float currentPitch;
 	private float targetPitch;
-	private float currentIntensity;
-	private bool isActive;
+	private bool isPlaying;
 
 	/// <summary>
-	/// Call this each frame while the piece is being dragged.
+	/// Call each frame while the piece is grabbed.
 	/// </summary>
-	/// <param name="intensity">0-1 drag intensity (distance / max distance).</param>
+	/// <param name="intensity">Normalized drag distance (0 = no pull, 1 = max pull).</param>
 	/// <param name="cursorDelta">How much the cursor moved this frame.</param>
 	public void UpdateStretch( float intensity, float cursorDelta )
 	{
-		currentIntensity = intensity;
-		bool isMoving = cursorDelta > MovementThreshold;
-
-		// Start sound if not playing
-		if ( !isActive )
+		// Start sound if needed
+		if ( !isPlaying )
 		{
-			StartStretchSound();
+			StartSound();
 		}
 
-		// Target pitch based on intensity
-		targetPitch = MathX.Lerp( MinPitch, MaxPitch, intensity );
+		// Calculate target pitch from curve
+		targetPitch = PitchCurve.Evaluate( intensity );
 
-		// Target volume based on movement (or high intensity)
-		if ( isMoving || intensity >= TensionThreshold )
+		// Calculate target volume
+		float minVolume = MinVolumeCurve.Evaluate( intensity );
+		bool isStretching = cursorDelta > MovementThreshold;
+
+		if ( isStretching )
 		{
-			targetVolume = Volume;
+			// Active stretching - use full stretch volume (but never below tension minimum)
+			targetVolume = MathF.Max( StretchVolume, minVolume );
 		}
 		else
 		{
-			targetVolume = 0f;
+			// Not moving - decay to tension minimum
+			targetVolume = minVolume;
 		}
-
-		// Handle tension sound at high intensity
-		UpdateTensionSound( intensity );
 	}
 
 	/// <summary>
-	/// Call this when the piece is released or deselected.
+	/// Call when the piece is released.
 	/// </summary>
 	public void StopStretch()
 	{
-		isActive = false;
 		targetVolume = 0f;
-
-		// Stop tension immediately
-		tensionHandle.Stop();
+		// Let OnUpdate handle the fade out and cleanup
 	}
 
-	private void StartStretchSound()
+	private void StartSound()
 	{
 		if ( StretchSound == null ) return;
 
-		isActive = true;
+		isPlaying = true;
 		currentVolume = 0f;
-		currentPitch = MinPitch;
+		currentPitch = PitchCurve.Evaluate( 0f );
 
-		// Start looping sound
-		stretchHandle = Sound.Play( StretchSound, WorldPosition );
-		if ( stretchHandle.IsValid )
+		soundHandle = Sound.Play( StretchSound, WorldPosition );
+		if ( soundHandle.IsValid )
 		{
-			stretchHandle.Volume = 0f;
-			stretchHandle.Pitch = MinPitch;
+			soundHandle.Volume = 0f;
+			soundHandle.Pitch = currentPitch;
 		}
-	}
 
-	private void UpdateTensionSound( float intensity )
-	{
-		if ( TensionSound == null ) return;
-
-		bool shouldPlayTension = intensity >= TensionThreshold;
-
-		if ( shouldPlayTension && !tensionHandle.IsValid )
+		if ( RandomizeStartPosition )
 		{
-			// Start tension sound
-			tensionHandle = Sound.Play( TensionSound, WorldPosition );
-		}
-		else if ( !shouldPlayTension && tensionHandle.IsValid )
-		{
-			// Stop tension sound
-			tensionHandle.Stop();
+			soundHandle.Time = Random.Shared.Float( 0f, 3f );
 		}
 	}
 
 	protected override void OnUpdate()
 	{
-		if ( !isActive && currentVolume <= 0.01f )
-		{
-			// Fully stopped
-			if ( stretchHandle.IsValid )
-			{
-				stretchHandle.Stop();
-			}
-			return;
-		}
+		if ( !isPlaying ) return;
 
 		float dt = Time.Delta;
 
-		// Smooth volume
-		if ( targetVolume > currentVolume )
-		{
-			currentVolume = MathX.Lerp( currentVolume, targetVolume, dt * PitchSmoothSpeed );
-		}
-		else
-		{
-			currentVolume = MathX.Lerp( currentVolume, targetVolume, dt * FadeOutSpeed );
-		}
+		// Smooth volume (fast attack, slower decay)
+		float volumeSpeed = targetVolume > currentVolume ? VolumeAttackSpeed : VolumeDecaySpeed;
+		currentVolume = MathX.Lerp( currentVolume, targetVolume, dt * volumeSpeed );
 
 		// Smooth pitch
-		currentPitch = MathX.Lerp( currentPitch, targetPitch, dt * PitchSmoothSpeed );
+		currentPitch = targetPitch;
 
 		// Apply to sound
-		if ( stretchHandle.IsValid )
+		if ( soundHandle.IsValid )
 		{
-			stretchHandle.Volume = currentVolume;
-			stretchHandle.Pitch = currentPitch;
-			stretchHandle.Position = WorldPosition;
+			soundHandle.Volume = currentVolume;
+			soundHandle.Pitch = currentPitch;
+			soundHandle.Position = WorldPosition;
 		}
 
-		// Update tension position
-		if ( tensionHandle.IsValid )
+		// Stop when fully faded out
+		if ( currentVolume < 0.01f && targetVolume <= 0f )
 		{
-			tensionHandle.Position = WorldPosition;
+			soundHandle.Stop();
+			isPlaying = false;
 		}
 	}
 
 	protected override void OnDestroy()
 	{
-		stretchHandle.Stop();
-		tensionHandle.Stop();
+		//soundHandle.Stop();
 	}
 }

@@ -1,3 +1,4 @@
+using Punt;
 using Sandbox;
 using System;
 
@@ -9,20 +10,24 @@ public sealed class PuntPiece : Component, ISelectable
 	[Property, Sync] public Guid GrabbedByPlayerId { get; private set; }
 
 	// === Settings ===
-	[Property] public float CooldownDuration { get; set; } = 2f;
+	[Property, Group( "Gameplay" )] public float CooldownDuration { get; set; } = 2f;
 
 	// === Components ===
-	[Property] public Rigidbody Rigidbody { get; set; }
-	[Property] public SelectableHighlight Highlight { get; set; }
-	[Property] public SquashAndStretch SquashStretch { get; set; }
-	[Property] public ShakeEffect ShakeEffect { get; set; }
+	[Property, Group( "Components" )] public Rigidbody Rigidbody { get; set; }
+	[Property, Group( "Components" )] public SelectableHighlight Highlight { get; set; }
+	[Property, Group( "Components" )] public ShakeEffect ShakeEffect { get; set; }
+	[Property, Group( "Components" )] public SquashAndStretch SquashStretch { get; set; }
+	[Property, Group( "Components" )] public PieceAudio Audio { get; set; }
 
 	// === ISelectable Implementation ===
 	public bool CanSelect => State == PieceState.Ready || State == PieceState.Hovered;
-	public float SelectPriority => 100f; // High priority - pieces are important
-	public float SelectRadius => 100f;   // Large radius
+	public float SelectPriority => 100f;
+	public float SelectRadius => 100f;
 	public Vector3 SelectPosition => WorldPosition;
-	public bool CapturesSelection => true; // Draggable
+	public bool CapturesSelection => true;
+
+	// === Cooldown ===
+	private TimeSince timeSinceCooldownStarted;
 
 	public void OnHoverEnter()
 	{
@@ -49,26 +54,57 @@ public sealed class PuntPiece : Component, ISelectable
 
 		State = PieceState.Grabbed;
 		Highlight?.SetState( SelectableHighlightState.Selected );
-		SquashStretch?.Play( 0.4f );
-		ShakeEffect?.Play();
+		SquashStretch?.Play( 0.3f );
+		ShakeEffect?.Play( 0f ); // Start with no shake, will increase with drag
 		Sound.Play( "sounds/kenny/pieceselect.sound" );
 	}
 
+	public void OnDragUpdate( float intensity, float cursorDelta )
+	{
+		// Scale shake effect with drag intensity
+		if ( ShakeEffect != null )
+		{
+			ShakeEffect.Strength = intensity;
+		}
 
+		// Update audio (handles stretch sound and pitch)
+		Audio?.UpdateStretch( intensity, cursorDelta );
+	}
 
 	public void OnDeselect( Vector3 flickVelocity )
 	{
 		if ( State != PieceState.Grabbed ) return;
 
+		// Stop effects
 		ShakeEffect?.Stop();
+		Audio?.StopStretch();
+
 		// Apply flick
 		Rigidbody.Velocity = flickVelocity;
 
 		// Start cooldown
-		State = PieceState.Cooldown;
+		State = PieceState.Ready;
 		GrabbedByPlayerId = Guid.Empty;
+		timeSinceCooldownStarted = 0;
 		Highlight?.SetState( SelectableHighlightState.None );
 	}
 
-	// ... rest of Piece logic (cooldown timer, etc.)
+	protected override void OnUpdate()
+	{
+		// Handle cooldown timer
+		if ( State == PieceState.Cooldown )
+		{
+			if ( timeSinceCooldownStarted >= CooldownDuration )
+			{
+				State = PieceState.Ready;
+			}
+		}
+	}
+
+	/// <summary>
+	/// Cooldown progress from 0 (just started) to 1 (ready).
+	/// </summary>
+	public float CooldownProgress => State == PieceState.Cooldown
+		? Math.Min( 1f, timeSinceCooldownStarted / CooldownDuration )
+		: 1f;
 }

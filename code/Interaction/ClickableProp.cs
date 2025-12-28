@@ -1,9 +1,11 @@
-// Interaction/ClickableProp.cs
+using Sandbox;
+/// <summary>
+/// Base class for clickable interactive props on the pitch.
+/// </summary>
 public class ClickableProp : Component, ISelectable
 {
 	[Property] public SelectableHighlight Highlight { get; set; }
 	[Property] public float Radius { get; set; } = 30f;
-	[Property] public SoundEvent HoverSound { get; set; }
 
 	// ISelectable
 	public bool CanSelect => true;
@@ -15,17 +17,18 @@ public class ClickableProp : Component, ISelectable
 	public void OnSelect() => OnClicked();
 	public void OnDeselect( Vector3 releaseData ) { }
 
+	// Props don't capture selection, so this won't be called
+	public void OnDragUpdate( float intensity, float cursorDelta ) { }
 
 	protected virtual void OnClicked()
 	{
 		Log.Info( $"Clicked: {GameObject.Name}" );
-	}
 
+	}
 	public void OnHoverEnter()
 	{
 		Highlight?.SetState( SelectableHighlightState.Hovered );
-		Sound.Play( HoverSound );
+		Sound.Play( "sounds/kenny/proppiecehover.sound" );
+
 	}
-
-
 }

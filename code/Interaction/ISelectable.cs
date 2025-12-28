@@ -1,6 +1,3 @@
-// Interaction/ISelectable.cs
-
-
 /// <summary>
 /// Anything the player can hover over and interact with.
 /// </summary>
@@ -53,6 +50,11 @@ public interface ISelectable
 	/// </summary>
 	bool CapturesSelection { get; }
 
-
-
+	/// <summary>
+	/// Called each frame while this selectable is being dragged.
+	/// Only called if CapturesSelection is true.
+	/// </summary>
+	/// <param name="intensity">0-1 value representing drag distance / max distance.</param>
+	/// <param name="cursorDelta">How much the cursor moved this frame.</param>
+	void OnDragUpdate( float intensity, float cursorDelta );
 }
