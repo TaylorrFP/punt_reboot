@@ -17,7 +17,6 @@ public sealed class PuntPiece : Component, ISelectable
 	[Property, Group( "Components" )] public SelectableHighlight Highlight { get; set; }
 	[Property, Group( "Components" )] public ShakeEffect ShakeEffect { get; set; }
 	[Property, Group( "Components" )] public SquashAndStretch SquashStretch { get; set; }
-	[Property, Group( "Components" )] public PieceAudio Audio { get; set; }
 
 	// === ISelectable Implementation ===
 	public bool CanSelect => State == PieceState.Ready || State == PieceState.Hovered;
@@ -55,7 +54,7 @@ public sealed class PuntPiece : Component, ISelectable
 		State = PieceState.Grabbed;
 		Highlight?.SetState( SelectableHighlightState.Selected );
 		SquashStretch?.Play( 0.3f );
-		ShakeEffect?.Play( 0f ); // Start with no shake, will increase with drag
+		ShakeEffect?.Play( 1f );
 		Sound.Play( "sounds/kenny/pieceselect.sound" );
 	}
 
@@ -64,11 +63,10 @@ public sealed class PuntPiece : Component, ISelectable
 		// Scale shake effect with drag intensity
 		if ( ShakeEffect != null )
 		{
-			ShakeEffect.Strength = intensity;
+			//ShakeEffect.Strength = intensity;
 		}
 
-		// Update audio (handles stretch sound and pitch)
-		Audio?.UpdateStretch( intensity, cursorDelta );
+
 	}
 
 	public void OnDeselect( Vector3 flickVelocity )
@@ -77,7 +75,6 @@ public sealed class PuntPiece : Component, ISelectable
 
 		// Stop effects
 		ShakeEffect?.Stop();
-		Audio?.StopStretch();
 
 		// Apply flick
 		Rigidbody.Velocity = flickVelocity;
