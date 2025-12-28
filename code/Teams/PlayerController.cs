@@ -40,7 +40,6 @@ public sealed class PlayerController : Component
 
 		if ( tr.Hit )
 		{
-			Gizmo.Draw.SolidSphere(tr.HitPosition, 5f,32);
 			CursorWorldPosition = tr.HitPosition.WithZ( 0f );
 		}
 	}
@@ -121,7 +120,9 @@ public sealed class PlayerController : Component
 		selectables.AddRange( Scene.GetAllComponents<PuntPiece>() );
 
 		// Add other selectable types as you create them
-		// selectables.AddRange( Scene.GetAllComponents<ClickableProp>() );
+		selectables.AddRange( Scene.GetAllComponents<ClickableProp>() );
+
+
 
 		// Filter to valid targets
 		var validSelectables = selectables.Where( s => IsValidTarget( s ) );
@@ -129,7 +130,7 @@ public sealed class PlayerController : Component
 		ISelectable best = null;
 		float bestScore = float.MaxValue;
 
-		Log.Info(validSelectables.Count() + " valid selectables");
+		
 
 		foreach ( var selectable in validSelectables )
 		{
@@ -167,7 +168,7 @@ public sealed class PlayerController : Component
 	{
 		if ( target == null )
 		{
-			Mouse.CursorType = "default";
+			Mouse.CursorType = "pointer";
 		}
 		else if ( !target.CanSelect )
 		{

@@ -5,7 +5,7 @@
   "Ident": "punt_staging",
   "Schema": 1,
   "IncludeSourceFiles": false,
-  "Resources": "UI/cursors/*",
+  "Resources": "UI/Cursors/*",
   "PackageReferences": [],
   "EditorReferences": null,
   "Mounts": null,
