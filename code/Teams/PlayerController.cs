@@ -28,6 +28,9 @@ public sealed class PlayerController : Component
 		{
 			UpdateHovering();
 		}
+
+		// Update cursor
+		UpdateCursor();
 	}
 
 	private void UpdateCursorPosition()
@@ -40,6 +43,7 @@ public sealed class PlayerController : Component
 
 		if ( tr.Hit )
 		{
+			//Gizmo.Draw.SolidSphere( tr.HitPosition, 8f, 32 );
 			CursorWorldPosition = tr.HitPosition.WithZ( 0f );
 		}
 	}
@@ -55,9 +59,6 @@ public sealed class PlayerController : Component
 			hoveredSelectable = nearest;
 			hoveredSelectable?.OnHoverEnter();
 		}
-
-		// Update cursor
-		UpdateCursor( hoveredSelectable );
 
 		// Check for click
 		if ( Input.Pressed( "attack1" ) && hoveredSelectable != null && hoveredSelectable.CanSelect )
@@ -164,23 +165,30 @@ public sealed class PlayerController : Component
 		return true;
 	}
 
-	private void UpdateCursor( ISelectable target )
+	private void UpdateCursor()
 	{
-		if ( target == null )
+		// Grabbing takes priority
+		if ( selectedSelectable != null )
+		{
+			Mouse.CursorType = "grabbing";
+			return;
+		}
+
+		// Nothing hovered
+		if ( hoveredSelectable == null )
 		{
 			Mouse.CursorType = "pointer";
+			return;
 		}
-		else if ( !target.CanSelect )
+
+		// Hovering something we can't select
+		if ( !hoveredSelectable.CanSelect )
 		{
 			Mouse.CursorType = "not-allowed";
+			return;
 		}
-		else if ( target is PuntPiece )
-		{
-			Mouse.CursorType = "pointer";
-		}
-		else
-		{
-			Mouse.CursorType = "pointer";
-		}
+
+		// Hovering something selectable
+		Mouse.CursorType = "hovering";  // Or "hover" if you have a custom cursor
 	}
 }

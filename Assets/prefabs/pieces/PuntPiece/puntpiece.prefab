@@ -143,6 +143,18 @@
           "go": "ad8604dc-4731-4bf5-9544-f9bd106773c0",
           "component_type": "Rigidbody"
         },
+        "ShakeEffect": {
+          "_type": "component",
+          "component_id": "797caf46-9bc2-4e26-b71b-94468ede104c",
+          "go": "011e0ad9-9f74-4495-a243-152fc90f6bc6",
+          "component_type": "ShakeEffect"
+        },
+        "SquashStretch": {
+          "_type": "component",
+          "component_id": "6560871c-c32b-473d-ba3b-4bb11aab1c17",
+          "go": "011e0ad9-9f74-4495-a243-152fc90f6bc6",
+          "component_type": "SquashAndStretch"
+        },
         "State": "Ready",
         "Team": "Blue"
       }
@@ -432,6 +444,89 @@
             "OverrideTargets": false,
             "Targets": null,
             "Width": 0.18
+          },
+          {
+            "__type": "SquashAndStretch",
+            "__guid": "6560871c-c32b-473d-ba3b-4bb11aab1c17",
+            "__enabled": true,
+            "MaxStretch": 2,
+            "MinSquash": 0,
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "SquashCurve": {
+              "rangex": "0,0.9999999",
+              "rangey": "0.3120001,0.8809999",
+              "frames": [
+                {
+                  "x": 0,
+                  "y": 0.15465719,
+                  "in": 0,
+                  "out": 0,
+                  "mode": "Mirrored"
+                },
+                {
+                  "x": 0.12900002,
+                  "y": 1,
+                  "in": 0,
+                  "out": 0,
+                  "mode": "Mirrored"
+                },
+                {
+                  "x": 0.37300006,
+                  "y": 0,
+                  "in": 0,
+                  "out": 0,
+                  "mode": "Mirrored"
+                },
+                {
+                  "x": 0.5000001,
+                  "y": 0.33040416,
+                  "in": -4.976386,
+                  "out": 4.976386,
+                  "mode": "Mirrored"
+                },
+                {
+                  "x": 0.834,
+                  "y": 0.24428815,
+                  "in": 0,
+                  "out": 0,
+                  "mode": "Mirrored"
+                },
+                {
+                  "x": 1,
+                  "y": 0.33040416,
+                  "in": 0,
+                  "out": 0,
+                  "mode": "Mirrored"
+                }
+              ]
+            },
+            "StretchAxis": "Z",
+            "UseRealTime": true
+          },
+          {
+            "__type": "ShakeEffect",
+            "__guid": "797caf46-9bc2-4e26-b71b-94468ede104c",
+            "__enabled": true,
+            "IsActive": false,
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "PositionAmount": 3,
+            "PositionFrequency": 300,
+            "RotationAmount": 10,
+            "RotationFrequency": 300,
+            "ShakePosition": true,
+            "ShakeRotation": true,
+            "Strength": 1,
+            "UseRealTime": true
           }
         ],
         "Children": [

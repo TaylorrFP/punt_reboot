@@ -52,4 +52,7 @@ public interface ISelectable
 	/// True for pieces (drag to flick), false for props (just click).
 	/// </summary>
 	bool CapturesSelection { get; }
+
+
+
 }

@@ -14,6 +14,8 @@ public sealed class PuntPiece : Component, ISelectable
 	// === Components ===
 	[Property] public Rigidbody Rigidbody { get; set; }
 	[Property] public SelectableHighlight Highlight { get; set; }
+	[Property] public SquashAndStretch SquashStretch { get; set; }
+	[Property] public ShakeEffect ShakeEffect { get; set; }
 
 	// === ISelectable Implementation ===
 	public bool CanSelect => State == PieceState.Ready || State == PieceState.Hovered;
@@ -28,7 +30,7 @@ public sealed class PuntPiece : Component, ISelectable
 		{
 			State = PieceState.Hovered;
 			Highlight?.SetState( SelectableHighlightState.Hovered );
-			Sound.Play( "sounds/piecehover.sound" );
+			Sound.Play( "sounds/kenny/puntpiecehover.sound" );
 		}
 	}
 
@@ -47,13 +49,18 @@ public sealed class PuntPiece : Component, ISelectable
 
 		State = PieceState.Grabbed;
 		Highlight?.SetState( SelectableHighlightState.Selected );
-		Sound.Play( "sounds/pieceselect.sound" );
+		SquashStretch?.Play( 0.4f );
+		ShakeEffect?.Play();
+		Sound.Play( "sounds/kenny/pieceselect.sound" );
 	}
+
+
 
 	public void OnDeselect( Vector3 flickVelocity )
 	{
 		if ( State != PieceState.Grabbed ) return;
 
+		ShakeEffect?.Stop();
 		// Apply flick
 		Rigidbody.Velocity = flickVelocity;
 
