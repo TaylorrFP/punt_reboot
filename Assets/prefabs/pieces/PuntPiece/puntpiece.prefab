@@ -102,7 +102,7 @@
         "__guid": "9804d496-f0f0-486e-b6e1-0692acc7dcfd",
         "__enabled": true,
         "DisabledColor": "0.5,0.5,0.5,1",
-        "HoverColor": "1,1,0,1",
+        "HoverColor": "0.53488,0.53488,0.53488,1",
         "HoverWidth": 0.25,
         "OnComponentDestroy": null,
         "OnComponentDisabled": null,
@@ -116,7 +116,7 @@
           "go": "011e0ad9-9f74-4495-a243-152fc90f6bc6",
           "component_type": "HighlightOutline"
         },
-        "SelectedColor": "0,1,0,1",
+        "SelectedColor": "1,1,1,1",
         "SelectedWidth": 0.4
       },
       {
@@ -144,7 +144,7 @@
           "component_type": "Rigidbody"
         },
         "State": "Ready",
-        "Team": "None"
+        "Team": "Blue"
       }
     ],
     "Children": [

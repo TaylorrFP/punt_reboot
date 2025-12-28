@@ -466,14 +466,6 @@
             },
             "Property": "Position",
             "Value": "-470.3094,45.95678,4.73002"
-          },
-          {
-            "Target": {
-              "Type": "Component",
-              "IdValue": "38bc432e-dcb1-4edb-81ed-472b549f59e1"
-            },
-            "Property": "Team",
-            "Value": "Blue"
           }
         ],
         "MovedObjects": []
@@ -521,14 +513,6 @@
             },
             "Property": "Position",
             "Value": "-384.0159,-87.14152,4.730021"
-          },
-          {
-            "Target": {
-              "Type": "Component",
-              "IdValue": "38bc432e-dcb1-4edb-81ed-472b549f59e1"
-            },
-            "Property": "Team",
-            "Value": "Blue"
           }
         ],
         "MovedObjects": []
@@ -576,14 +560,6 @@
             },
             "Property": "Position",
             "Value": "-310.7446,103.2093,4.729825"
-          },
-          {
-            "Target": {
-              "Type": "Component",
-              "IdValue": "38bc432e-dcb1-4edb-81ed-472b549f59e1"
-            },
-            "Property": "Team",
-            "Value": "Blue"
           }
         ],
         "MovedObjects": []
@@ -631,14 +607,6 @@
             },
             "Property": "Position",
             "Value": "-191.489,-79.42782,4.729825"
-          },
-          {
-            "Target": {
-              "Type": "Component",
-              "IdValue": "38bc432e-dcb1-4edb-81ed-472b549f59e1"
-            },
-            "Property": "Team",
-            "Value": "Blue"
           }
         ],
         "MovedObjects": []
@@ -686,14 +654,6 @@
             },
             "Property": "Position",
             "Value": "-169.4177,243.7581,4.729825"
-          },
-          {
-            "Target": {
-              "Type": "Component",
-              "IdValue": "38bc432e-dcb1-4edb-81ed-472b549f59e1"
-            },
-            "Property": "Team",
-            "Value": "Blue"
           }
         ],
         "MovedObjects": []
@@ -741,14 +701,6 @@
             },
             "Property": "Position",
             "Value": "-87.3037,73.53017,4.729825"
-          },
-          {
-            "Target": {
-              "Type": "Component",
-              "IdValue": "38bc432e-dcb1-4edb-81ed-472b549f59e1"
-            },
-            "Property": "Team",
-            "Value": "Blue"
           }
         ],
         "MovedObjects": []
@@ -819,6 +771,147 @@
         }
       ],
       "Children": []
+    },
+    {
+      "__guid": "88cf8335-a311-454a-8dc6-c228522e67e3",
+      "__version": 1,
+      "__Prefab": "prefabs/pitches/dev/rubberduck/rubberduckclickable.prefab",
+      "__PrefabInstancePatch": {
+        "AddedObjects": [
+          {
+            "Id": {
+              "Type": "Component",
+              "IdValue": "5602e5d2-2952-4bc1-b369-8216829ade89"
+            },
+            "Parent": {
+              "Type": "GameObject",
+              "IdValue": "25d6cc95-0a98-49d4-a64d-5c7e6bd5c2b4"
+            },
+            "PreviousElement": {
+              "Type": "Component",
+              "IdValue": "b58d4a8f-cbca-40b2-8c39-49a5d90e009b"
+            },
+            "ContainerProperty": "Components",
+            "IsContainerArray": true,
+            "Data": {
+              "__type": "ClickableProp",
+              "__guid": "5602e5d2-2952-4bc1-b369-8216829ade89",
+              "__enabled": true,
+              "Highlight": {
+                "_type": "component",
+                "component_id": "992963d8-88c8-4210-a8ce-ff236b5a5e14",
+                "go": "25d6cc95-0a98-49d4-a64d-5c7e6bd5c2b4",
+                "component_type": "SelectableHighlight"
+              },
+              "OnComponentDestroy": null,
+              "OnComponentDisabled": null,
+              "OnComponentEnabled": null,
+              "OnComponentFixedUpdate": null,
+              "OnComponentStart": null,
+              "OnComponentUpdate": null,
+              "Radius": 30
+            }
+          },
+          {
+            "Id": {
+              "Type": "Component",
+              "IdValue": "992963d8-88c8-4210-a8ce-ff236b5a5e14"
+            },
+            "Parent": {
+              "Type": "GameObject",
+              "IdValue": "25d6cc95-0a98-49d4-a64d-5c7e6bd5c2b4"
+            },
+            "PreviousElement": {
+              "Type": "Component",
+              "IdValue": "5602e5d2-2952-4bc1-b369-8216829ade89"
+            },
+            "ContainerProperty": "Components",
+            "IsContainerArray": true,
+            "Data": {
+              "__type": "SelectableHighlight",
+              "__guid": "992963d8-88c8-4210-a8ce-ff236b5a5e14",
+              "__enabled": true,
+              "DisabledColor": "0.5,0.5,0.5,1",
+              "HoverColor": "1,1,0,1",
+              "HoverWidth": 0.25,
+              "OnComponentDestroy": null,
+              "OnComponentDisabled": null,
+              "OnComponentEnabled": null,
+              "OnComponentFixedUpdate": null,
+              "OnComponentStart": null,
+              "OnComponentUpdate": null,
+              "Outline": {
+                "_type": "component",
+                "component_id": "ba20b0a1-88ab-420b-87ec-1232ac3e9819",
+                "go": "25d6cc95-0a98-49d4-a64d-5c7e6bd5c2b4",
+                "component_type": "HighlightOutline"
+              },
+              "SelectedColor": "0,1,0,1",
+              "SelectedWidth": 0.4
+            }
+          },
+          {
+            "Id": {
+              "Type": "Component",
+              "IdValue": "ba20b0a1-88ab-420b-87ec-1232ac3e9819"
+            },
+            "Parent": {
+              "Type": "GameObject",
+              "IdValue": "25d6cc95-0a98-49d4-a64d-5c7e6bd5c2b4"
+            },
+            "PreviousElement": {
+              "Type": "Component",
+              "IdValue": "992963d8-88c8-4210-a8ce-ff236b5a5e14"
+            },
+            "ContainerProperty": "Components",
+            "IsContainerArray": true,
+            "Data": {
+              "__type": "Sandbox.HighlightOutline",
+              "__guid": "ba20b0a1-88ab-420b-87ec-1232ac3e9819",
+              "__enabled": false,
+              "Color": "1,1,1,1",
+              "InsideColor": "0,0,0,0",
+              "InsideObscuredColor": "0,0,0,0",
+              "Material": null,
+              "ObscuredColor": "0,0,0,0.4",
+              "OnComponentDestroy": null,
+              "OnComponentDisabled": null,
+              "OnComponentEnabled": null,
+              "OnComponentFixedUpdate": null,
+              "OnComponentStart": null,
+              "OnComponentUpdate": null,
+              "OverrideTargets": false,
+              "Targets": null,
+              "Width": 0.25
+            }
+          }
+        ],
+        "RemovedObjects": [],
+        "PropertyOverrides": [
+          {
+            "Target": {
+              "Type": "GameObject",
+              "IdValue": "25d6cc95-0a98-49d4-a64d-5c7e6bd5c2b4"
+            },
+            "Property": "Name",
+            "Value": "RubberDuckClickable"
+          },
+          {
+            "Target": {
+              "Type": "GameObject",
+              "IdValue": "25d6cc95-0a98-49d4-a64d-5c7e6bd5c2b4"
+            },
+            "Property": "Position",
+            "Value": "-48.97165,-120.9335,0"
+          }
+        ],
+        "MovedObjects": []
+      },
+      "__PrefabIdToInstanceId": {
+        "25d6cc95-0a98-49d4-a64d-5c7e6bd5c2b4": "88cf8335-a311-454a-8dc6-c228522e67e3",
+        "b15bc3fd-e55f-4f79-8ede-0cdc25104144": "bac81627-9e92-48a3-a17f-7eb083565d4e",
+        "b58d4a8f-cbca-40b2-8c39-49a5d90e009b": "1af3a708-26e9-4166-a053-2e5251dac889"
+      }
     }
   ],
   "SceneProperties": {

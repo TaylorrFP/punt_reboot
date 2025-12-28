@@ -114,18 +114,24 @@ public sealed class PlayerController : Component
 
 	private ISelectable FindNearestSelectable()
 	{
-		// Find all selectables in scene
-		var allSelectables = Scene.GetAllComponents<Component>()
-			.OfType<ISelectable>()
-			.Where( s => IsValidTarget( s ) );
+		// Build a list of all selectables from known types
+		var selectables = new List<ISelectable>();
+
+		// Add all pieces
+		selectables.AddRange( Scene.GetAllComponents<PuntPiece>() );
+
+		// Add other selectable types as you create them
+		// selectables.AddRange( Scene.GetAllComponents<ClickableProp>() );
+
+		// Filter to valid targets
+		var validSelectables = selectables.Where( s => IsValidTarget( s ) );
 
 		ISelectable best = null;
 		float bestScore = float.MaxValue;
 
+		Log.Info(validSelectables.Count() + " valid selectables");
 
-		Log.Info(allSelectables.Count() + " selectables in scene");
-
-		foreach ( var selectable in allSelectables )
+		foreach ( var selectable in validSelectables )
 		{
 			var dist = (selectable.SelectPosition - CursorWorldPosition).WithZ( 0 ).Length;
 
@@ -133,7 +139,6 @@ public sealed class PlayerController : Component
 			if ( dist > selectable.SelectRadius ) continue;
 
 			// Score: lower is better (distance minus priority)
-			// Higher priority = lower score = selected first
 			float score = dist - selectable.SelectPriority;
 
 			if ( score < bestScore )
