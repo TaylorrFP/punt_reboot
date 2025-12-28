@@ -16,6 +16,18 @@ public sealed class ClickableDuck : ClickableProp
 
 	private TimeSince timeSinceClicked;
 	private bool isWobbling;
+	private Rotation originalRotation;
+
+	protected override void OnStart()
+	{
+		base.OnStart();
+
+		// Store the original rotation set in the editor
+		if ( DuckModel != null )
+		{
+			originalRotation = DuckModel.LocalRotation;
+		}
+	}
 
 	protected override void OnClicked()
 	{
@@ -35,7 +47,6 @@ public sealed class ClickableDuck : ClickableProp
 		timeSinceClicked = 0;
 	}
 
-
 	protected override void OnUpdate()
 	{
 		base.OnUpdate();
@@ -49,14 +60,26 @@ public sealed class ClickableDuck : ClickableProp
 			{
 				// Animation finished
 				isWobbling = false;
-				DuckModel.LocalRotation = Rotation.Identity;
+				DuckModel.LocalRotation = originalRotation;
 			}
 			else
 			{
-				// Wobble with decreasing intensity
+				// Wobble with decreasing intensity, relative to original rotation
 				float wobble = MathF.Sin( progress * MathF.PI * 4 ) * WobbleAmount * (1f - progress);
-				DuckModel.LocalRotation = Rotation.FromYaw( wobble );
+				DuckModel.LocalRotation = originalRotation * Rotation.FromYaw( wobble );
 			}
 		}
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
