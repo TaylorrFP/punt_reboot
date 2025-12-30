@@ -1,4 +1,5 @@
 using Punt;
+using Punt.UI;
 using Sandbox;
 using System;
 
@@ -8,6 +9,7 @@ public sealed class PuntPiece : Component, ISelectable
 	[Property, Sync] public TeamSide Team { get; set; }
 	[Property, Sync] public PieceState State { get; private set; } = PieceState.Ready;
 	[Property, Sync] public Guid GrabbedByPlayerId { get; private set; }
+	[Property, Sync] public Vector3 AimTargetPosition { get; private set; }
 
 	// === Settings ===
 	[Property, Group( "Gameplay" )] public float CooldownDuration { get; set; } = 2f;
@@ -17,6 +19,7 @@ public sealed class PuntPiece : Component, ISelectable
 	[Property, Group( "Components" )] public SelectableHighlight Highlight { get; set; }
 	[Property, Group( "Components" )] public ShakeEffect ShakeEffect { get; set; }
 	[Property, Group( "Components" )] public SquashAndStretch SquashStretch { get; set; }
+	[Property, Group( "Components" )] public AimIndicator AimIndicator { get; set; }
 
 	// === ISelectable Implementation ===
 	public bool CanSelect => State == PieceState.Ready || State == PieceState.Hovered;
@@ -56,22 +59,43 @@ public sealed class PuntPiece : Component, ISelectable
 		SquashStretch?.Play( 0.3f );
 		ShakeEffect?.Play( 1f );
 		Sound.Play( "sounds/kenny/pieceselect.sound" );
+
+		// Show the aim indicator
+		if ( AimIndicator != null )
+		{
+			AimIndicator.IsVisible = true;
+			AimIndicator.StartPosition = WorldPosition;
+		}
 	}
 
-	public void OnDragUpdate( float intensity, float cursorDelta )
+	public void OnDragUpdate( float intensity, float cursorDelta, Vector3 cursorPosition )
 	{
+		// Update the aim target position for the indicator
+		AimTargetPosition = cursorPosition;
+
+		// Update the aim indicator
+		if ( AimIndicator != null && State == PieceState.Grabbed )
+		{
+			AimIndicator.StartPosition = WorldPosition;
+			AimIndicator.EndPosition = cursorPosition;
+		}
+
 		// Scale shake effect with drag intensity
 		if ( ShakeEffect != null )
 		{
 			//ShakeEffect.Strength = intensity;
 		}
-
-
 	}
 
 	public void OnDeselect( Vector3 flickVelocity )
 	{
 		if ( State != PieceState.Grabbed ) return;
+
+		// Hide the aim indicator
+		if ( AimIndicator != null )
+		{
+			AimIndicator.IsVisible = false;
+		}
 
 		// Stop effects
 		ShakeEffect?.Stop();

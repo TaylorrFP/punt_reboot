@@ -1,0 +1,90 @@
+@using System;
+@using Sandbox;
+@using Sandbox.UI;
+@namespace Punt.UI
+@inherits PanelComponent
+
+<root class="aim-indicator @(IsVisible ? "visible" : "hidden")">
+    <div class="aim-line"></div>
+</root>
+
+@code
+{
+    /// <summary>
+    /// Reference to the WorldPanel component that hosts this panel
+    /// </summary>
+    [Property] public Sandbox.WorldPanel WorldPanel { get; set; }
+
+    /// <summary>
+    /// Start position of the aim line (world space)
+    /// </summary>
+    [Property] public Vector3 StartPosition { get; set; }
+
+    /// <summary>
+    /// End position of the aim line (world space)
+    /// </summary>
+    [Property] public Vector3 EndPosition { get; set; }
+
+    /// <summary>
+    /// Is the indicator currently visible?
+    /// </summary>
+    [Property] public bool IsVisible { get; set; }
+
+    /// <summary>
+    /// Fixed width (perpendicular to the line direction)
+    /// </summary>
+    [Property] public float Width { get; set; } = 2000f;
+
+    protected override void OnStart()
+    {
+        base.OnStart();
+
+        // Auto-find the WorldPanel component if not manually set
+        if (WorldPanel == null)
+        {
+            WorldPanel = GameObject.Components.Get<Sandbox.WorldPanel>();
+        }
+    }
+
+    protected override void OnUpdate()
+    {
+        base.OnUpdate();
+
+        if (!IsVisible || WorldPanel == null)
+            return;
+
+        // Calculate direction and distance (work in 2D on the pitch)
+        Vector3 direction = (EndPosition - StartPosition).WithZ(0);
+        float distance = direction.Length;
+
+        if (distance < 0.1f)
+            return;
+
+        // Position the panel at the midpoint between piece and cursor
+        // This makes it appear to start at the piece and end at the cursor
+        // (since the panel scales from its center)
+        Vector3 midpoint = StartPosition + (direction / 2);
+        WorldPanel.GameObject.WorldPosition = midpoint;
+
+        // Calculate rotation - the line should point from start to end
+        // We need to rotate around the Z axis (up axis)
+        float angleRadians = MathF.Atan2(direction.y, direction.x);
+        float angleDegrees = angleRadians * (180f / MathF.PI);
+
+        // Set the rotation - combine the panel's default 90° pitch with the calculated yaw
+        // The panel's default orientation is (90, 0, 0) so we need to preserve that
+        WorldPanel.GameObject.WorldRotation = Rotation.From(90, angleDegrees, 0);
+
+        // Update the panel size - the line should stretch the distance
+        var panelSize = new Vector2(Width, distance*20f);
+        WorldPanel.PanelSize = panelSize;
+
+        // Update the line element's width to match the distance
+        StateHasChanged();
+    }
+
+    protected override int BuildHash()
+    {
+        return HashCode.Combine(IsVisible, StartPosition, EndPosition);
+    }
+}

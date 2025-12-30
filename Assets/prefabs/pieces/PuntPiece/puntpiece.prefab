@@ -621,6 +621,48 @@
             "Children": []
           }
         ]
+      },
+      {
+        "__guid": "dd32ce13-e62c-473e-8080-b0e725c0f061",
+        "__version": 1,
+        "Flags": 0,
+        "Name": "FlickDirection",
+        "Position": "0,0,0",
+        "Rotation": "0,-0.7071067,0,0.7071068",
+        "Scale": "1,1,1",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkInterpolation": true,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 1,
+        "Components": [
+          {
+            "__type": "Sandbox.WorldPanel",
+            "__guid": "f0acf77d-3321-4560-9c30-c0017ade40ac",
+            "__enabled": true,
+            "HorizontalAlign": "Center",
+            "InteractionRange": 1000,
+            "LookAtCamera": false,
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "PanelSize": "512,512",
+            "RenderOptions": {
+              "GameLayer": true,
+              "OverlayLayer": false,
+              "BloomLayer": false,
+              "AfterUILayer": false
+            },
+            "RenderScale": 1,
+            "VerticalAlign": "Center"
+          }
+        ],
+        "Children": []
       }
     ],
     "__properties": {

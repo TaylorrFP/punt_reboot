@@ -43,6 +43,7 @@ public sealed class PlayerController : Component
 		if ( tr.Hit )
 		{
 			CursorWorldPosition = tr.HitPosition.WithZ( 0f );
+			Gizmo.Draw.SolidSphere ( CursorWorldPosition, 32,32);
 		}
 	}
 
@@ -80,8 +81,8 @@ public sealed class PlayerController : Component
 			// Calculate intensity (0-1) based on flick strength
 			float intensity = flickVector.Length / MaxFlickStrength;
 
-			// Tell the selectable about the ongoing drag
-			selectedSelectable.OnDragUpdate( intensity, lastCursorDelta );
+			// Tell the selectable about the ongoing drag (now with cursor position)
+			selectedSelectable.OnDragUpdate( intensity, lastCursorDelta, CursorWorldPosition );
 		}
 
 		// Check for release

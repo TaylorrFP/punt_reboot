@@ -725,15 +725,46 @@
       "__version": 1,
       "__Prefab": "prefabs/pieces/puntpiece/puntpiece.prefab",
       "__PrefabInstancePatch": {
-        "AddedObjects": [],
-        "RemovedObjects": [
+        "AddedObjects": [
           {
             "Id": {
               "Type": "Component",
-              "IdValue": "2c627c7b-0332-4555-b9a4-5404eedc622a"
+              "IdValue": "cebde046-e52b-4088-b3e0-d47347ff69de"
+            },
+            "Parent": {
+              "Type": "GameObject",
+              "IdValue": "dd32ce13-e62c-473e-8080-b0e725c0f061"
+            },
+            "PreviousElement": {
+              "Type": "Component",
+              "IdValue": "f0acf77d-3321-4560-9c30-c0017ade40ac"
+            },
+            "ContainerProperty": "Components",
+            "IsContainerArray": true,
+            "Data": {
+              "__type": "Punt.UI.AimIndicator",
+              "__guid": "cebde046-e52b-4088-b3e0-d47347ff69de",
+              "__enabled": true,
+              "EndPosition": "0,0,0",
+              "IsVisible": false,
+              "OnComponentDestroy": null,
+              "OnComponentDisabled": null,
+              "OnComponentEnabled": null,
+              "OnComponentFixedUpdate": null,
+              "OnComponentStart": null,
+              "OnComponentUpdate": null,
+              "StartPosition": "0,0,0",
+              "Width": 2000,
+              "WorldPanel": {
+                "_type": "component",
+                "component_id": "f0acf77d-3321-4560-9c30-c0017ade40ac",
+                "go": "dd32ce13-e62c-473e-8080-b0e725c0f061",
+                "component_type": "WorldPanel"
+              }
             }
           }
         ],
+        "RemovedObjects": [],
         "PropertyOverrides": [
           {
             "Target": {
@@ -742,6 +773,51 @@
             },
             "Property": "Position",
             "Value": "-430.5914,-185.1934,5.509016"
+          },
+          {
+            "Target": {
+              "Type": "Component",
+              "IdValue": "38bc432e-dcb1-4edb-81ed-472b549f59e1"
+            },
+            "Property": "AimIndicator",
+            "Value": {
+              "_type": "component",
+              "component_id": "cebde046-e52b-4088-b3e0-d47347ff69de",
+              "go": "dd32ce13-e62c-473e-8080-b0e725c0f061",
+              "component_type": "AimIndicator"
+            }
+          },
+          {
+            "Target": {
+              "Type": "Component",
+              "IdValue": "38bc432e-dcb1-4edb-81ed-472b549f59e1"
+            },
+            "Property": "AimTargetPosition",
+            "Value": "0,0,0"
+          },
+          {
+            "Target": {
+              "Type": "GameObject",
+              "IdValue": "dd32ce13-e62c-473e-8080-b0e725c0f061"
+            },
+            "Property": "Position",
+            "Value": "0,0,9.017434"
+          },
+          {
+            "Target": {
+              "Type": "GameObject",
+              "IdValue": "dd32ce13-e62c-473e-8080-b0e725c0f061"
+            },
+            "Property": "Rotation",
+            "Value": "0,0.7071068,0,0.7071068"
+          },
+          {
+            "Target": {
+              "Type": "Component",
+              "IdValue": "f0acf77d-3321-4560-9c30-c0017ade40ac"
+            },
+            "Property": "PanelSize",
+            "Value": "2000,2000"
           }
         ],
         "MovedObjects": []
@@ -765,7 +841,9 @@
         "b7c8c7f9-d403-4d36-b7bb-66983aa71e68": "be307447-50af-4c54-86bf-5afbed9b65c8",
         "475ad2b9-6832-42a5-87db-b7b99dcf1a8b": "ae2dba64-22d2-4a33-9dfd-057c4a3ef6b8",
         "a94cf439-2d29-4c01-9fb2-a25deb17f4e7": "ff413d22-247c-498c-8cb9-6bc3533c3ef6",
-        "20a16300-e9f1-46a0-a328-037e78582cc1": "9e6ed673-c711-41f8-b350-9635a0c70e97"
+        "20a16300-e9f1-46a0-a328-037e78582cc1": "9e6ed673-c711-41f8-b350-9635a0c70e97",
+        "dd32ce13-e62c-473e-8080-b0e725c0f061": "be369d30-c089-4e52-90a4-4bb09ed968a7",
+        "f0acf77d-3321-4560-9c30-c0017ade40ac": "73bafc8b-cccf-4c26-80cc-73d85c202020"
       }
     },
     {
@@ -774,14 +852,7 @@
       "__Prefab": "prefabs/pieces/puntpiece/puntpiece.prefab",
       "__PrefabInstancePatch": {
         "AddedObjects": [],
-        "RemovedObjects": [
-          {
-            "Id": {
-              "Type": "Component",
-              "IdValue": "2c627c7b-0332-4555-b9a4-5404eedc622a"
-            }
-          }
-        ],
+        "RemovedObjects": [],
         "PropertyOverrides": [
           {
             "Target": {
@@ -806,6 +877,22 @@
             },
             "Property": "Enabled",
             "Value": false
+          },
+          {
+            "Target": {
+              "Type": "Component",
+              "IdValue": "38bc432e-dcb1-4edb-81ed-472b549f59e1"
+            },
+            "Property": "AimIndicator",
+            "Value": null
+          },
+          {
+            "Target": {
+              "Type": "Component",
+              "IdValue": "38bc432e-dcb1-4edb-81ed-472b549f59e1"
+            },
+            "Property": "AimTargetPosition",
+            "Value": "0,0,0"
           }
         ],
         "MovedObjects": []
@@ -829,7 +916,9 @@
         "b7c8c7f9-d403-4d36-b7bb-66983aa71e68": "52e3b48e-362d-4d04-b920-f91662a6623e",
         "475ad2b9-6832-42a5-87db-b7b99dcf1a8b": "cded1c48-dd86-47ec-87e0-2a87b05e49b4",
         "a94cf439-2d29-4c01-9fb2-a25deb17f4e7": "85cdeb12-93af-48c4-a09f-33e5fa445d35",
-        "20a16300-e9f1-46a0-a328-037e78582cc1": "56457758-3508-47b4-85ea-4f71452443a8"
+        "20a16300-e9f1-46a0-a328-037e78582cc1": "56457758-3508-47b4-85ea-4f71452443a8",
+        "dd32ce13-e62c-473e-8080-b0e725c0f061": "2d7aafda-3f45-4eb2-b0a6-00b8443a382c",
+        "f0acf77d-3321-4560-9c30-c0017ade40ac": "fa924624-222b-4390-a7fd-010310d74472"
       }
     },
     {
@@ -838,14 +927,7 @@
       "__Prefab": "prefabs/pieces/puntpiece/puntpiece.prefab",
       "__PrefabInstancePatch": {
         "AddedObjects": [],
-        "RemovedObjects": [
-          {
-            "Id": {
-              "Type": "Component",
-              "IdValue": "2c627c7b-0332-4555-b9a4-5404eedc622a"
-            }
-          }
-        ],
+        "RemovedObjects": [],
         "PropertyOverrides": [
           {
             "Target": {
@@ -870,6 +952,22 @@
             },
             "Property": "Enabled",
             "Value": false
+          },
+          {
+            "Target": {
+              "Type": "Component",
+              "IdValue": "38bc432e-dcb1-4edb-81ed-472b549f59e1"
+            },
+            "Property": "AimIndicator",
+            "Value": null
+          },
+          {
+            "Target": {
+              "Type": "Component",
+              "IdValue": "38bc432e-dcb1-4edb-81ed-472b549f59e1"
+            },
+            "Property": "AimTargetPosition",
+            "Value": "0,0,0"
           }
         ],
         "MovedObjects": []
@@ -893,7 +991,9 @@
         "b7c8c7f9-d403-4d36-b7bb-66983aa71e68": "edea5984-5337-4d60-8856-1884b5f3378b",
         "475ad2b9-6832-42a5-87db-b7b99dcf1a8b": "00620c18-458e-4094-833b-db20394e5b82",
         "a94cf439-2d29-4c01-9fb2-a25deb17f4e7": "f769fcae-731f-482d-980c-2416a1e7e549",
-        "20a16300-e9f1-46a0-a328-037e78582cc1": "901bd68b-1060-4696-83d2-dbd7f9dd1e9a"
+        "20a16300-e9f1-46a0-a328-037e78582cc1": "901bd68b-1060-4696-83d2-dbd7f9dd1e9a",
+        "dd32ce13-e62c-473e-8080-b0e725c0f061": "20bfe2de-d87c-4b2a-b958-0dda62b02ae5",
+        "f0acf77d-3321-4560-9c30-c0017ade40ac": "62cc6774-93df-47f6-b9f4-697b0b4f6545"
       }
     },
     {
@@ -902,14 +1002,7 @@
       "__Prefab": "prefabs/pieces/puntpiece/puntpiece.prefab",
       "__PrefabInstancePatch": {
         "AddedObjects": [],
-        "RemovedObjects": [
-          {
-            "Id": {
-              "Type": "Component",
-              "IdValue": "2c627c7b-0332-4555-b9a4-5404eedc622a"
-            }
-          }
-        ],
+        "RemovedObjects": [],
         "PropertyOverrides": [
           {
             "Target": {
@@ -932,16 +1025,24 @@
               "Type": "GameObject",
               "IdValue": "ad8604dc-4731-4bf5-9544-f9bd106773c0"
             },
-            "Property": "Rotation",
-            "Value": "0,0,0,0.9999999"
+            "Property": "Enabled",
+            "Value": false
           },
           {
             "Target": {
-              "Type": "GameObject",
-              "IdValue": "ad8604dc-4731-4bf5-9544-f9bd106773c0"
+              "Type": "Component",
+              "IdValue": "38bc432e-dcb1-4edb-81ed-472b549f59e1"
             },
-            "Property": "Enabled",
-            "Value": false
+            "Property": "AimIndicator",
+            "Value": null
+          },
+          {
+            "Target": {
+              "Type": "Component",
+              "IdValue": "38bc432e-dcb1-4edb-81ed-472b549f59e1"
+            },
+            "Property": "AimTargetPosition",
+            "Value": "0,0,0"
           }
         ],
         "MovedObjects": []
@@ -965,7 +1066,9 @@
         "b7c8c7f9-d403-4d36-b7bb-66983aa71e68": "fec03148-07bf-406e-bfa0-7875a37813b6",
         "475ad2b9-6832-42a5-87db-b7b99dcf1a8b": "4e1db022-8986-49e0-bdf7-eebeffe133bf",
         "a94cf439-2d29-4c01-9fb2-a25deb17f4e7": "e32f0a55-8cdc-494d-84c2-f5240e86369a",
-        "20a16300-e9f1-46a0-a328-037e78582cc1": "7407828b-25c8-45bb-bed3-eb4e53ac7b70"
+        "20a16300-e9f1-46a0-a328-037e78582cc1": "7407828b-25c8-45bb-bed3-eb4e53ac7b70",
+        "dd32ce13-e62c-473e-8080-b0e725c0f061": "dfd2c665-254e-4595-ae89-c14415cc118f",
+        "f0acf77d-3321-4560-9c30-c0017ade40ac": "2e51b51c-2d86-4a30-b5aa-7c4a93d0a66f"
       }
     }
   ],

@@ -56,5 +56,6 @@ public interface ISelectable
 	/// </summary>
 	/// <param name="intensity">0-1 value representing drag distance / max distance.</param>
 	/// <param name="cursorDelta">How much the cursor moved this frame.</param>
-	void OnDragUpdate( float intensity, float cursorDelta );
+	/// <param name="cursorPosition">The current world position of the cursor.</param>
+	void OnDragUpdate( float intensity, float cursorDelta, Vector3 cursorPosition );
 }
