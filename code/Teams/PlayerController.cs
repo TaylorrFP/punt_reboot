@@ -1,21 +1,24 @@
 using Sandbox;
+using System.Diagnostics;
 public sealed class PlayerController : Component
 {
 	[Property, Sync] public TeamSide Team { get; set; }
-	[Property, Sync] public Vector3 CursorWorldPosition { get; private set; }
 
 	[Property, Group( "Flick Settings" )] public float FlickStrength { get; set; } = 0.6f;
 	[Property, Group( "Flick Settings" )] public float MaxFlickStrength { get; set; } = 650f;
 	[Property, Group( "Flick Settings" )] public float MinFlickDistance { get; set; } = 50f;
 	[Property, Group( "Flick Settings" )] public float MaxFlickDistance { get; set; } = 650f;
+
 	[Property, Group( "Debug" )] public bool isDebug { get; set; } = false;
 
 	// === Local State ===
 	private ISelectable hoveredSelectable;
 	private ISelectable selectedSelectable;
 	private Vector2 mouseOffset; // Accumulated mouse movement since selection
+	private Vector2 initialScreenPosition; // Screen position when piece was selected
 	private Vector3 flickVector;
 	private float lastCursorDelta;
+	private Vector3 currentWorldPosition; // Current cursor world position (updated every frame)
 
 	protected override void OnUpdate()
 	{
@@ -37,16 +40,17 @@ public sealed class PlayerController : Component
 
 	private void UpdateCursorPosition()
 	{
+		// Unproject current mouse position to world space at Z=0 (the pitch plane)
 		var camera = Scene.Camera;
 		var ray = camera.ScreenPixelToRay( Mouse.Position );
-		var tr = Scene.Trace.Ray( ray, 10000f )
-			.WithAllTags( "pitch" )
-			.Run();
 
-		if ( tr.Hit )
-		{
-			CursorWorldPosition = tr.HitPosition.WithZ( 0f );
-		}
+		// Intersect ray with Z=0 plane to get world position
+		// Ray equation: P = Origin + t * Direction
+		// For Z=0 plane: Origin.z + t * Direction.z = 0
+		// Solve for t: t = -Origin.z / Direction.z
+		float t = -ray.Position.z / ray.Forward.z;
+		currentWorldPosition = ray.Position + ray.Forward * t;
+		currentWorldPosition = currentWorldPosition.WithZ( 0f );
 	}
 
 	private void UpdateHovering()
@@ -83,13 +87,28 @@ public sealed class PlayerController : Component
 			// Track cursor movement this frame
 			lastCursorDelta = Mouse.Delta.Length;
 
-			// Accumulate mouse offset (works even if cursor leaves screen)
-			// Scale by screen width for resolution independence
-			float screenScale = 1995f / Screen.Width;
-			mouseOffset += Mouse.Delta * screenScale;
+			// Accumulate mouse offset in screen space (works even if cursor leaves screen)
+			mouseOffset += Mouse.Delta;
 
-			// Convert to world-space flick vector (invert X for intuitive pull-back)
-			flickVector = new Vector3( -mouseOffset.x, mouseOffset.y, 0f ) * FlickStrength;
+			// Calculate the new screen position (initial position + accumulated offset)
+			Vector2 currentScreenPosition = initialScreenPosition + mouseOffset;
+
+			// Unproject this screen position back to world space at Z=0 (the pitch plane)
+			var camera = Scene.Camera;
+			var ray = camera.ScreenPixelToRay( currentScreenPosition );
+
+			// Intersect ray with Z=0 plane to get world position
+			// Ray equation: P = Origin + t * Direction
+			// For Z=0 plane: Origin.z + t * Direction.z = 0
+			// Solve for t: t = -Origin.z / Direction.z
+			float t = -ray.Position.z / ray.Forward.z;
+			Vector3 worldPosition = ray.Position + ray.Forward * t;
+
+			// Calculate flick vector from piece to this world position
+			flickVector = (selectedSelectable.SelectPosition - worldPosition).WithZ( 0 );
+
+			// Apply strength multiplier for tuning
+			flickVector *= FlickStrength;
 
 			// Clamp to max distance
 			flickVector = flickVector.ClampLength( MaxFlickDistance );
@@ -101,8 +120,8 @@ public sealed class PlayerController : Component
 			bool exceedsMinimum = flickVector.Length >= MinFlickDistance;
 
 			// Calculate clamped cursor position for aim indicator
-			// This ensures the visual line stops at the max distance circle
-			Vector3 pieceToCursor = CursorWorldPosition - selectedSelectable.SelectPosition;
+			// Use worldPosition (unprojected) for perfect consistency with flick vector
+			Vector3 pieceToCursor = worldPosition - selectedSelectable.SelectPosition;
 			pieceToCursor = pieceToCursor.WithZ( 0 ); // Keep on 2D plane
 			Vector3 clampedOffset = pieceToCursor.ClampLength( MaxFlickDistance );
 			Vector3 clampedCursorPosition = selectedSelectable.SelectPosition + clampedOffset;
@@ -113,9 +132,26 @@ public sealed class PlayerController : Component
 
 			if ( isDebug )
 			{
+				// Cyan sphere: worldPosition (unprojected from accumulated mouse offset)
+				// Continues tracking even off-screen - this is what the flick uses!
+				Gizmo.Draw.Color = Color.Cyan;
+				Gizmo.Draw.SolidSphere( worldPosition, 5f, 16, 16 );
+
+				// White line: Actual flick vector direction
+				Gizmo.Draw.Color = Color.White;
+				Gizmo.Draw.Line( selectedSelectable.SelectPosition, selectedSelectable.SelectPosition + (flickVector * -1f) );
+
+				// Red circle: Min threshold
+				Gizmo.Draw.Color = Color.Red;
 				Gizmo.Draw.LineCircle( selectedSelectable.SelectPosition, Vector3.Up, MinFlickDistance, 0, 360, 64 );
+
+				// Green circle: Max threshold
+				Gizmo.Draw.Color = Color.Green;
 				Gizmo.Draw.LineCircle( selectedSelectable.SelectPosition, Vector3.Up, MaxFlickDistance, 0, 360, 512 );
-				Gizmo.Draw.Line(selectedSelectable.SelectPosition, selectedSelectable.SelectPosition + flickVector*-1f);
+
+				//White text: Flick distance
+				Gizmo.Draw.Color = Color.Black;
+				Gizmo.Draw.ScreenText( flickVector.Length.ToString(), initialScreenPosition + Vector2.Up*20,"roboto",16f);
 			}
 		}
 
@@ -134,6 +170,10 @@ public sealed class PlayerController : Component
 		// Clear hover
 		hoveredSelectable?.OnHoverExit();
 		hoveredSelectable = null;
+
+		// CRITICAL FIX: Store the cursor's ACTUAL screen position when clicking
+		// Not the piece's position! The cursor could be offset from piece center.
+		initialScreenPosition = Mouse.Position;
 
 		// Reset flick tracking
 		mouseOffset = Vector2.Zero;
@@ -193,7 +233,7 @@ public sealed class PlayerController : Component
 
 		foreach ( var selectable in validSelectables )
 		{
-			var dist = (selectable.SelectPosition - CursorWorldPosition).WithZ( 0 ).Length;
+			var dist = (selectable.SelectPosition - currentWorldPosition).WithZ( 0 ).Length;
 
 			// Must be within select radius
 			if ( dist > selectable.SelectRadius ) continue;

@@ -123,6 +123,13 @@
         "__type": "PuntPiece",
         "__guid": "38bc432e-dcb1-4edb-81ed-472b549f59e1",
         "__enabled": true,
+        "AimIndicator": {
+          "_type": "component",
+          "component_id": "4834d9d2-6246-4914-be23-9380b627292c",
+          "go": "dd32ce13-e62c-473e-8080-b0e725c0f061",
+          "component_type": "AimIndicator"
+        },
+        "AimTargetPosition": "0,0,0",
         "CooldownDuration": 2,
         "GrabbedByPlayerId": "00000000-0000-0000-0000-000000000000",
         "Highlight": {
@@ -628,7 +635,7 @@
         "Flags": 0,
         "Name": "FlickDirection",
         "Position": "0,0,0",
-        "Rotation": "0,-0.7071067,0,0.7071068",
+        "Rotation": "0,0.7071068,0,0.7071068",
         "Scale": "1,1,1",
         "Tags": "",
         "Enabled": true,
@@ -651,7 +658,7 @@
             "OnComponentFixedUpdate": null,
             "OnComponentStart": null,
             "OnComponentUpdate": null,
-            "PanelSize": "512,512",
+            "PanelSize": "2000,2000",
             "RenderOptions": {
               "GameLayer": true,
               "OverlayLayer": false,
@@ -660,6 +667,28 @@
             },
             "RenderScale": 1,
             "VerticalAlign": "Center"
+          },
+          {
+            "__type": "Punt.UI.AimIndicator",
+            "__guid": "4834d9d2-6246-4914-be23-9380b627292c",
+            "__enabled": true,
+            "EndPosition": "0,0,0",
+            "IsVisible": false,
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "StartOffset": 50,
+            "StartPosition": "0,0,0",
+            "Width": 2000,
+            "WorldPanel": {
+              "_type": "component",
+              "component_id": "f0acf77d-3321-4560-9c30-c0017ade40ac",
+              "go": "dd32ce13-e62c-473e-8080-b0e725c0f061",
+              "component_type": "WorldPanel"
+            }
           }
         ],
         "Children": []

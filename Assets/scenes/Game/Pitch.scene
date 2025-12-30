@@ -728,46 +728,7 @@
       "__version": 1,
       "__Prefab": "prefabs/pieces/puntpiece/puntpiece.prefab",
       "__PrefabInstancePatch": {
-        "AddedObjects": [
-          {
-            "Id": {
-              "Type": "Component",
-              "IdValue": "cebde046-e52b-4088-b3e0-d47347ff69de"
-            },
-            "Parent": {
-              "Type": "GameObject",
-              "IdValue": "dd32ce13-e62c-473e-8080-b0e725c0f061"
-            },
-            "PreviousElement": {
-              "Type": "Component",
-              "IdValue": "f0acf77d-3321-4560-9c30-c0017ade40ac"
-            },
-            "ContainerProperty": "Components",
-            "IsContainerArray": true,
-            "Data": {
-              "__type": "Punt.UI.AimIndicator",
-              "__guid": "cebde046-e52b-4088-b3e0-d47347ff69de",
-              "__enabled": true,
-              "EndPosition": "0,0,0",
-              "IsVisible": false,
-              "OnComponentDestroy": null,
-              "OnComponentDisabled": null,
-              "OnComponentEnabled": null,
-              "OnComponentFixedUpdate": null,
-              "OnComponentStart": null,
-              "OnComponentUpdate": null,
-              "StartOffset": 50,
-              "StartPosition": "0,0,0",
-              "Width": 2000,
-              "WorldPanel": {
-                "_type": "component",
-                "component_id": "f0acf77d-3321-4560-9c30-c0017ade40ac",
-                "go": "dd32ce13-e62c-473e-8080-b0e725c0f061",
-                "component_type": "WorldPanel"
-              }
-            }
-          }
-        ],
+        "AddedObjects": [],
         "RemovedObjects": [],
         "PropertyOverrides": [
           {
@@ -781,39 +742,10 @@
           {
             "Target": {
               "Type": "Component",
-              "IdValue": "38bc432e-dcb1-4edb-81ed-472b549f59e1"
+              "IdValue": "4834d9d2-6246-4914-be23-9380b627292c"
             },
-            "Property": "AimIndicator",
-            "Value": {
-              "_type": "component",
-              "component_id": "cebde046-e52b-4088-b3e0-d47347ff69de",
-              "go": "dd32ce13-e62c-473e-8080-b0e725c0f061",
-              "component_type": "AimIndicator"
-            }
-          },
-          {
-            "Target": {
-              "Type": "Component",
-              "IdValue": "38bc432e-dcb1-4edb-81ed-472b549f59e1"
-            },
-            "Property": "AimTargetPosition",
-            "Value": "0,0,0"
-          },
-          {
-            "Target": {
-              "Type": "GameObject",
-              "IdValue": "dd32ce13-e62c-473e-8080-b0e725c0f061"
-            },
-            "Property": "Rotation",
-            "Value": "0,0.7071068,0,0.7071068"
-          },
-          {
-            "Target": {
-              "Type": "Component",
-              "IdValue": "f0acf77d-3321-4560-9c30-c0017ade40ac"
-            },
-            "Property": "PanelSize",
-            "Value": "2000,2000"
+            "Property": "Width",
+            "Value": 1000
           }
         ],
         "MovedObjects": []
@@ -839,54 +771,16 @@
         "a94cf439-2d29-4c01-9fb2-a25deb17f4e7": "ff413d22-247c-498c-8cb9-6bc3533c3ef6",
         "20a16300-e9f1-46a0-a328-037e78582cc1": "9e6ed673-c711-41f8-b350-9635a0c70e97",
         "dd32ce13-e62c-473e-8080-b0e725c0f061": "be369d30-c089-4e52-90a4-4bb09ed968a7",
-        "f0acf77d-3321-4560-9c30-c0017ade40ac": "73bafc8b-cccf-4c26-80cc-73d85c202020"
+        "f0acf77d-3321-4560-9c30-c0017ade40ac": "73bafc8b-cccf-4c26-80cc-73d85c202020",
+        "4834d9d2-6246-4914-be23-9380b627292c": "cebde046-e52b-4088-b3e0-d47347ff69de"
       }
     },
     {
-      "__guid": "23a18441-1c51-48ba-96b5-c0c3cc83dc9d",
+      "__guid": "55b78eff-9cd1-4b27-80d5-82936cf84552",
       "__version": 1,
       "__Prefab": "prefabs/pieces/puntpiece/puntpiece.prefab",
       "__PrefabInstancePatch": {
-        "AddedObjects": [
-          {
-            "Id": {
-              "Type": "Component",
-              "IdValue": "4f5480fa-26ac-49d8-99dd-cc16282b1cb7"
-            },
-            "Parent": {
-              "Type": "GameObject",
-              "IdValue": "dd32ce13-e62c-473e-8080-b0e725c0f061"
-            },
-            "PreviousElement": {
-              "Type": "Component",
-              "IdValue": "f0acf77d-3321-4560-9c30-c0017ade40ac"
-            },
-            "ContainerProperty": "Components",
-            "IsContainerArray": true,
-            "Data": {
-              "__type": "Punt.UI.AimIndicator",
-              "__guid": "4f5480fa-26ac-49d8-99dd-cc16282b1cb7",
-              "__enabled": true,
-              "EndPosition": "0,0,0",
-              "IsVisible": false,
-              "OnComponentDestroy": null,
-              "OnComponentDisabled": null,
-              "OnComponentEnabled": null,
-              "OnComponentFixedUpdate": null,
-              "OnComponentStart": null,
-              "OnComponentUpdate": null,
-              "StartOffset": 50,
-              "StartPosition": "0,0,0",
-              "Width": 2000,
-              "WorldPanel": {
-                "_type": "component",
-                "component_id": "f0acf77d-3321-4560-9c30-c0017ade40ac",
-                "go": "dd32ce13-e62c-473e-8080-b0e725c0f061",
-                "component_type": "WorldPanel"
-              }
-            }
-          }
-        ],
+        "AddedObjects": [],
         "RemovedObjects": [],
         "PropertyOverrides": [
           {
@@ -903,117 +797,50 @@
               "IdValue": "ad8604dc-4731-4bf5-9544-f9bd106773c0"
             },
             "Property": "Position",
-            "Value": "-293.3353,-77.88137,5.507615"
+            "Value": "211.3189,-251.2101,5.508378"
           },
           {
             "Target": {
               "Type": "Component",
-              "IdValue": "38bc432e-dcb1-4edb-81ed-472b549f59e1"
+              "IdValue": "4834d9d2-6246-4914-be23-9380b627292c"
             },
-            "Property": "AimIndicator",
-            "Value": {
-              "_type": "component",
-              "component_id": "4f5480fa-26ac-49d8-99dd-cc16282b1cb7",
-              "go": "dd32ce13-e62c-473e-8080-b0e725c0f061",
-              "component_type": "AimIndicator"
-            }
-          },
-          {
-            "Target": {
-              "Type": "Component",
-              "IdValue": "38bc432e-dcb1-4edb-81ed-472b549f59e1"
-            },
-            "Property": "AimTargetPosition",
-            "Value": "0,0,0"
-          },
-          {
-            "Target": {
-              "Type": "GameObject",
-              "IdValue": "dd32ce13-e62c-473e-8080-b0e725c0f061"
-            },
-            "Property": "Rotation",
-            "Value": "0,0.7071068,0,0.7071068"
-          },
-          {
-            "Target": {
-              "Type": "Component",
-              "IdValue": "f0acf77d-3321-4560-9c30-c0017ade40ac"
-            },
-            "Property": "PanelSize",
-            "Value": "2000,2000"
+            "Property": "Width",
+            "Value": 1000
           }
         ],
         "MovedObjects": []
       },
       "__PrefabIdToInstanceId": {
-        "ad8604dc-4731-4bf5-9544-f9bd106773c0": "23a18441-1c51-48ba-96b5-c0c3cc83dc9d",
-        "860a1dc4-0b11-4b29-9fa2-0761e954d29d": "db90cb4e-1a42-4f7b-8355-eefbb2e1b0fb",
-        "6908b8f6-276c-4317-9f22-61902ad35137": "eb786a59-7676-46f9-8f57-01f0e03a1af6",
-        "557a9a38-57a3-4178-8b8a-089424db388a": "8b9603ed-ae57-4fad-b6fa-b1f14cd4689c",
-        "9804d496-f0f0-486e-b6e1-0692acc7dcfd": "e34f0af4-6397-45e7-9bc4-7b3dc133dd71",
-        "38bc432e-dcb1-4edb-81ed-472b549f59e1": "5082dd18-f2b8-49e5-8e99-21b1e9844f05",
-        "02f9dbf4-2d8b-425b-9d43-67fd66f98461": "bb65dbc8-ae99-4bc5-beb5-05ac4d419a4a",
-        "667741e6-99c4-4607-b886-3b9002761cff": "6b883a09-6faa-4a91-b31d-3de9f2368daa",
-        "4d05c825-915a-47f5-ab8c-d38838417f21": "c3c611db-81a5-4a4c-900d-e1b9f26b4f92",
-        "2750d0aa-df49-443f-af2a-51ef62929f79": "25bf8bd8-d7b3-48b6-afef-e8abccbe64b8",
-        "d42e5e7d-3d5f-4eaf-b677-41fb7a18f09a": "e0c4b22b-e704-4f78-93b6-bf85c52d6079",
-        "011e0ad9-9f74-4495-a243-152fc90f6bc6": "f2b876f1-0a6a-46e5-89ba-e6ea7b0ded87",
-        "5efe1f01-19ee-4413-b9e8-31300e849382": "893017cb-3bdb-432a-8c70-cac77448be97",
-        "6560871c-c32b-473d-ba3b-4bb11aab1c17": "2ae3d4d1-cf5e-46f5-89ee-706ffedc8952",
-        "797caf46-9bc2-4e26-b71b-94468ede104c": "aa02bfd1-7dfb-4b5d-a3a2-a83da95d757e",
-        "b7c8c7f9-d403-4d36-b7bb-66983aa71e68": "617d4941-83ae-4081-9394-819cf3732c6f",
-        "475ad2b9-6832-42a5-87db-b7b99dcf1a8b": "19cc8877-4d52-41fe-8029-e1020089ea27",
-        "a94cf439-2d29-4c01-9fb2-a25deb17f4e7": "b6fe7111-2b39-421e-b896-a561f317e5ab",
-        "20a16300-e9f1-46a0-a328-037e78582cc1": "78d80fc7-eef9-4b57-805e-489075c3a7fb",
-        "dd32ce13-e62c-473e-8080-b0e725c0f061": "2aaab67f-dbbf-4323-9e0a-95850cc8391a",
-        "f0acf77d-3321-4560-9c30-c0017ade40ac": "81d2ed00-4527-4834-91f0-2332e1c8c341"
+        "ad8604dc-4731-4bf5-9544-f9bd106773c0": "55b78eff-9cd1-4b27-80d5-82936cf84552",
+        "860a1dc4-0b11-4b29-9fa2-0761e954d29d": "bbf89c93-8393-4b56-b012-02dd94b658e7",
+        "6908b8f6-276c-4317-9f22-61902ad35137": "2d862e08-8afc-4ce9-868d-779534ad0bde",
+        "557a9a38-57a3-4178-8b8a-089424db388a": "77a83d14-3e68-4b41-bf3b-14c788e5b7d6",
+        "9804d496-f0f0-486e-b6e1-0692acc7dcfd": "87f206fd-fee6-4115-a840-4c288af5f815",
+        "38bc432e-dcb1-4edb-81ed-472b549f59e1": "f380dcbe-91f7-4a2c-8c43-cec7f74a3107",
+        "02f9dbf4-2d8b-425b-9d43-67fd66f98461": "10f66809-3b6e-43e6-8bb0-a6ea85673ae6",
+        "667741e6-99c4-4607-b886-3b9002761cff": "7eba81ab-e562-42f9-a5d9-d4f918a556ab",
+        "4d05c825-915a-47f5-ab8c-d38838417f21": "a8dfab05-f7ed-418e-8ae0-387bbbab7971",
+        "2750d0aa-df49-443f-af2a-51ef62929f79": "8e2edc4b-439a-486e-8730-987bf332c2b2",
+        "d42e5e7d-3d5f-4eaf-b677-41fb7a18f09a": "3551320c-6232-4c43-802a-da32fa9dd230",
+        "011e0ad9-9f74-4495-a243-152fc90f6bc6": "b12f926a-17cc-4595-9df3-e1bf3acabe92",
+        "5efe1f01-19ee-4413-b9e8-31300e849382": "c8eee277-52b2-4280-89e0-0013cff8d51f",
+        "6560871c-c32b-473d-ba3b-4bb11aab1c17": "9d0852ff-3ff0-4d5a-8685-8597262c0e7d",
+        "797caf46-9bc2-4e26-b71b-94468ede104c": "0cee1b1b-15c2-45f9-b08f-be3edce40365",
+        "b7c8c7f9-d403-4d36-b7bb-66983aa71e68": "35943820-c31c-46e2-8035-1370a0df5602",
+        "475ad2b9-6832-42a5-87db-b7b99dcf1a8b": "798d02e7-d94c-478d-b1ac-35b386e84819",
+        "a94cf439-2d29-4c01-9fb2-a25deb17f4e7": "f75d41e7-ad0d-40a1-996f-e44719ed68cd",
+        "20a16300-e9f1-46a0-a328-037e78582cc1": "0ce960c4-036c-4766-a481-bd81e00f36f0",
+        "dd32ce13-e62c-473e-8080-b0e725c0f061": "d7b63cea-c59b-4505-96a6-68d9f3785599",
+        "f0acf77d-3321-4560-9c30-c0017ade40ac": "ff32d9b8-7e7c-4cca-95c7-29b6c6772b8c",
+        "4834d9d2-6246-4914-be23-9380b627292c": "b8e3d545-516b-4c08-b8ce-b8345c9f4b84"
       }
     },
     {
-      "__guid": "47666a0d-0c4f-4cc4-bd6f-3b8f4cebee96",
+      "__guid": "ba334394-d50f-4a8c-b66b-cdff76decb3f",
       "__version": 1,
       "__Prefab": "prefabs/pieces/puntpiece/puntpiece.prefab",
       "__PrefabInstancePatch": {
-        "AddedObjects": [
-          {
-            "Id": {
-              "Type": "Component",
-              "IdValue": "d52a3ace-8a85-4acc-a2ac-7b5369946c49"
-            },
-            "Parent": {
-              "Type": "GameObject",
-              "IdValue": "dd32ce13-e62c-473e-8080-b0e725c0f061"
-            },
-            "PreviousElement": {
-              "Type": "Component",
-              "IdValue": "f0acf77d-3321-4560-9c30-c0017ade40ac"
-            },
-            "ContainerProperty": "Components",
-            "IsContainerArray": true,
-            "Data": {
-              "__type": "Punt.UI.AimIndicator",
-              "__guid": "d52a3ace-8a85-4acc-a2ac-7b5369946c49",
-              "__enabled": true,
-              "EndPosition": "0,0,0",
-              "IsVisible": false,
-              "OnComponentDestroy": null,
-              "OnComponentDisabled": null,
-              "OnComponentEnabled": null,
-              "OnComponentFixedUpdate": null,
-              "OnComponentStart": null,
-              "OnComponentUpdate": null,
-              "StartOffset": 50,
-              "StartPosition": "0,0,0",
-              "Width": 2000,
-              "WorldPanel": {
-                "_type": "component",
-                "component_id": "f0acf77d-3321-4560-9c30-c0017ade40ac",
-                "go": "dd32ce13-e62c-473e-8080-b0e725c0f061",
-                "component_type": "WorldPanel"
-              }
-            }
-          }
-        ],
+        "AddedObjects": [],
         "RemovedObjects": [],
         "PropertyOverrides": [
           {
@@ -1030,117 +857,50 @@
               "IdValue": "ad8604dc-4731-4bf5-9544-f9bd106773c0"
             },
             "Property": "Position",
-            "Value": "457.7372,299.7108,5.508048"
+            "Value": "-201.6978,-374.4127,5.508266"
           },
           {
             "Target": {
               "Type": "Component",
-              "IdValue": "38bc432e-dcb1-4edb-81ed-472b549f59e1"
+              "IdValue": "4834d9d2-6246-4914-be23-9380b627292c"
             },
-            "Property": "AimIndicator",
-            "Value": {
-              "_type": "component",
-              "component_id": "d52a3ace-8a85-4acc-a2ac-7b5369946c49",
-              "go": "dd32ce13-e62c-473e-8080-b0e725c0f061",
-              "component_type": "AimIndicator"
-            }
-          },
-          {
-            "Target": {
-              "Type": "Component",
-              "IdValue": "38bc432e-dcb1-4edb-81ed-472b549f59e1"
-            },
-            "Property": "AimTargetPosition",
-            "Value": "0,0,0"
-          },
-          {
-            "Target": {
-              "Type": "GameObject",
-              "IdValue": "dd32ce13-e62c-473e-8080-b0e725c0f061"
-            },
-            "Property": "Rotation",
-            "Value": "0,0.7071068,0,0.7071068"
-          },
-          {
-            "Target": {
-              "Type": "Component",
-              "IdValue": "f0acf77d-3321-4560-9c30-c0017ade40ac"
-            },
-            "Property": "PanelSize",
-            "Value": "2000,2000"
+            "Property": "Width",
+            "Value": 1000
           }
         ],
         "MovedObjects": []
       },
       "__PrefabIdToInstanceId": {
-        "ad8604dc-4731-4bf5-9544-f9bd106773c0": "47666a0d-0c4f-4cc4-bd6f-3b8f4cebee96",
-        "860a1dc4-0b11-4b29-9fa2-0761e954d29d": "981090c5-12fc-4aaf-9b5d-80d1ddce1aec",
-        "6908b8f6-276c-4317-9f22-61902ad35137": "43bd7d0a-8b4b-4f9f-8f9c-7324be4b5a23",
-        "557a9a38-57a3-4178-8b8a-089424db388a": "1d0042ed-9d6f-47b8-852a-21ffa1625839",
-        "9804d496-f0f0-486e-b6e1-0692acc7dcfd": "bb9af208-2340-4170-b6da-e5814d111b97",
-        "38bc432e-dcb1-4edb-81ed-472b549f59e1": "f5cd8985-6832-455a-a474-c714e560afed",
-        "02f9dbf4-2d8b-425b-9d43-67fd66f98461": "43201103-79ca-440d-8cba-eff2fb091e1b",
-        "667741e6-99c4-4607-b886-3b9002761cff": "31788162-9794-4d49-8793-2d636fbd237f",
-        "4d05c825-915a-47f5-ab8c-d38838417f21": "b8e3eb5a-7482-4848-acd2-1b6e26cd2b53",
-        "2750d0aa-df49-443f-af2a-51ef62929f79": "12b46732-67c2-4e44-b374-6897f0964565",
-        "d42e5e7d-3d5f-4eaf-b677-41fb7a18f09a": "fa096a5d-dc13-4be6-851e-77fdbf3f2356",
-        "011e0ad9-9f74-4495-a243-152fc90f6bc6": "58b20999-6ff7-47f9-b833-6f7973fb4e4c",
-        "5efe1f01-19ee-4413-b9e8-31300e849382": "77d4ec97-398b-4807-940e-8ce89335e0a0",
-        "6560871c-c32b-473d-ba3b-4bb11aab1c17": "1ccbd025-8d40-4150-b511-78d3f88d64a6",
-        "797caf46-9bc2-4e26-b71b-94468ede104c": "8676f872-4802-470f-99a1-cf7ed27edcb2",
-        "b7c8c7f9-d403-4d36-b7bb-66983aa71e68": "c7f0c605-d0d4-43d2-ad62-4791c1ddcd26",
-        "475ad2b9-6832-42a5-87db-b7b99dcf1a8b": "f9b9f9d0-475d-4a10-95da-45caf24f7dea",
-        "a94cf439-2d29-4c01-9fb2-a25deb17f4e7": "59f6087b-25c9-412f-95e5-c9bd73f7e6d1",
-        "20a16300-e9f1-46a0-a328-037e78582cc1": "e4b74848-68f7-4d1d-85d2-298ca618b1e3",
-        "dd32ce13-e62c-473e-8080-b0e725c0f061": "fc01a928-e8aa-49c1-8664-f281e82df751",
-        "f0acf77d-3321-4560-9c30-c0017ade40ac": "f569ecdd-6af5-4143-89d8-c7f7a72be230"
+        "ad8604dc-4731-4bf5-9544-f9bd106773c0": "ba334394-d50f-4a8c-b66b-cdff76decb3f",
+        "860a1dc4-0b11-4b29-9fa2-0761e954d29d": "c48c32bf-9c70-454d-be5f-dcf706eeee1c",
+        "6908b8f6-276c-4317-9f22-61902ad35137": "964ae998-4c07-4b07-8013-4d1457cba5fb",
+        "557a9a38-57a3-4178-8b8a-089424db388a": "14ef6da0-7c74-4d0c-85f2-b5f355b734cb",
+        "9804d496-f0f0-486e-b6e1-0692acc7dcfd": "b4118a83-48b5-488e-8c92-754c539e7899",
+        "38bc432e-dcb1-4edb-81ed-472b549f59e1": "a28a60f5-d06e-4d48-a694-aa16663d1fbf",
+        "02f9dbf4-2d8b-425b-9d43-67fd66f98461": "93b4ec08-37c9-4b73-acd2-196d77876baa",
+        "667741e6-99c4-4607-b886-3b9002761cff": "39cbf490-e502-4ec2-8beb-31ce6a48deed",
+        "4d05c825-915a-47f5-ab8c-d38838417f21": "96fcf5e3-e777-47e0-a302-f137225d8687",
+        "2750d0aa-df49-443f-af2a-51ef62929f79": "26c7e82d-f4e4-4677-a68b-0ad407cdb057",
+        "d42e5e7d-3d5f-4eaf-b677-41fb7a18f09a": "aade1791-ac34-476f-9ba1-42892fa7403c",
+        "011e0ad9-9f74-4495-a243-152fc90f6bc6": "caa175dd-f57a-41d8-873b-b8fe8adc06f1",
+        "5efe1f01-19ee-4413-b9e8-31300e849382": "2db96c2e-b4de-4b0b-9e1f-52024f47aa1b",
+        "6560871c-c32b-473d-ba3b-4bb11aab1c17": "ac92eac0-29c8-43a5-adc6-77bbb8dd96c2",
+        "797caf46-9bc2-4e26-b71b-94468ede104c": "8a4aef18-4f67-461b-9209-50b36f6beb2f",
+        "b7c8c7f9-d403-4d36-b7bb-66983aa71e68": "3a7bf7c7-be26-453d-b8a4-7beb1ef4d6f6",
+        "475ad2b9-6832-42a5-87db-b7b99dcf1a8b": "f5f75658-d32f-4bf8-b5a1-5e47838fe148",
+        "a94cf439-2d29-4c01-9fb2-a25deb17f4e7": "5d881f88-9807-4782-8c7d-a8e2bb4aeb9d",
+        "20a16300-e9f1-46a0-a328-037e78582cc1": "25278feb-cf9d-4dc0-a371-2a79d4e3ab11",
+        "dd32ce13-e62c-473e-8080-b0e725c0f061": "e1963433-6150-471c-91b3-a60f04014de5",
+        "f0acf77d-3321-4560-9c30-c0017ade40ac": "1bd0e1da-a805-400d-bb76-e674903a8bfd",
+        "4834d9d2-6246-4914-be23-9380b627292c": "ec1b968a-9b60-4763-a64d-a5b2125db425"
       }
     },
     {
-      "__guid": "dd9bcb5b-69f3-4003-9739-b29b85393b12",
+      "__guid": "24f21646-bcc7-4cd6-92e4-88c49d1622ef",
       "__version": 1,
       "__Prefab": "prefabs/pieces/puntpiece/puntpiece.prefab",
       "__PrefabInstancePatch": {
-        "AddedObjects": [
-          {
-            "Id": {
-              "Type": "Component",
-              "IdValue": "b57a8c70-f2e4-4d1b-8285-c51fd2b871b6"
-            },
-            "Parent": {
-              "Type": "GameObject",
-              "IdValue": "dd32ce13-e62c-473e-8080-b0e725c0f061"
-            },
-            "PreviousElement": {
-              "Type": "Component",
-              "IdValue": "f0acf77d-3321-4560-9c30-c0017ade40ac"
-            },
-            "ContainerProperty": "Components",
-            "IsContainerArray": true,
-            "Data": {
-              "__type": "Punt.UI.AimIndicator",
-              "__guid": "b57a8c70-f2e4-4d1b-8285-c51fd2b871b6",
-              "__enabled": true,
-              "EndPosition": "0,0,0",
-              "IsVisible": false,
-              "OnComponentDestroy": null,
-              "OnComponentDisabled": null,
-              "OnComponentEnabled": null,
-              "OnComponentFixedUpdate": null,
-              "OnComponentStart": null,
-              "OnComponentUpdate": null,
-              "StartOffset": 50,
-              "StartPosition": "0,0,0",
-              "Width": 2000,
-              "WorldPanel": {
-                "_type": "component",
-                "component_id": "f0acf77d-3321-4560-9c30-c0017ade40ac",
-                "go": "dd32ce13-e62c-473e-8080-b0e725c0f061",
-                "component_type": "WorldPanel"
-              }
-            }
-          }
-        ],
+        "AddedObjects": [],
         "RemovedObjects": [],
         "PropertyOverrides": [
           {
@@ -1157,70 +917,42 @@
               "IdValue": "ad8604dc-4731-4bf5-9544-f9bd106773c0"
             },
             "Property": "Position",
-            "Value": "-372.8726,299.7108,5.508048"
+            "Value": "-328.0265,66.11557,5.508603"
           },
           {
             "Target": {
               "Type": "Component",
-              "IdValue": "38bc432e-dcb1-4edb-81ed-472b549f59e1"
+              "IdValue": "4834d9d2-6246-4914-be23-9380b627292c"
             },
-            "Property": "AimIndicator",
-            "Value": {
-              "_type": "component",
-              "component_id": "b57a8c70-f2e4-4d1b-8285-c51fd2b871b6",
-              "go": "dd32ce13-e62c-473e-8080-b0e725c0f061",
-              "component_type": "AimIndicator"
-            }
-          },
-          {
-            "Target": {
-              "Type": "Component",
-              "IdValue": "38bc432e-dcb1-4edb-81ed-472b549f59e1"
-            },
-            "Property": "AimTargetPosition",
-            "Value": "0,0,0"
-          },
-          {
-            "Target": {
-              "Type": "GameObject",
-              "IdValue": "dd32ce13-e62c-473e-8080-b0e725c0f061"
-            },
-            "Property": "Rotation",
-            "Value": "0,0.7071068,0,0.7071068"
-          },
-          {
-            "Target": {
-              "Type": "Component",
-              "IdValue": "f0acf77d-3321-4560-9c30-c0017ade40ac"
-            },
-            "Property": "PanelSize",
-            "Value": "2000,2000"
+            "Property": "Width",
+            "Value": 1000
           }
         ],
         "MovedObjects": []
       },
       "__PrefabIdToInstanceId": {
-        "ad8604dc-4731-4bf5-9544-f9bd106773c0": "dd9bcb5b-69f3-4003-9739-b29b85393b12",
-        "860a1dc4-0b11-4b29-9fa2-0761e954d29d": "741601f1-b95d-4100-9b8c-d5ab194ef8c9",
-        "6908b8f6-276c-4317-9f22-61902ad35137": "62a1b414-7196-406b-963e-64d912542fa7",
-        "557a9a38-57a3-4178-8b8a-089424db388a": "e56e80c9-b910-4b6c-840a-e74d72189c1d",
-        "9804d496-f0f0-486e-b6e1-0692acc7dcfd": "f895e3fc-5a06-48dc-bd67-605aecc14eba",
-        "38bc432e-dcb1-4edb-81ed-472b549f59e1": "fce5b2d0-4521-4286-a817-58088963bdc0",
-        "02f9dbf4-2d8b-425b-9d43-67fd66f98461": "f2f88cb1-0e48-4994-afdf-9c27059c3422",
-        "667741e6-99c4-4607-b886-3b9002761cff": "557ca76f-5a02-49ce-8993-e2dbbcf56090",
-        "4d05c825-915a-47f5-ab8c-d38838417f21": "d6c3cb1e-7c6d-43e8-bc9a-898bc8ac8b48",
-        "2750d0aa-df49-443f-af2a-51ef62929f79": "b44e3dba-04bc-4483-8af6-c2a7b56a28e9",
-        "d42e5e7d-3d5f-4eaf-b677-41fb7a18f09a": "7a2d898c-0188-4e9e-836a-1ff06901872a",
-        "011e0ad9-9f74-4495-a243-152fc90f6bc6": "9d70ea39-89e9-465c-80bd-abfc19c393db",
-        "5efe1f01-19ee-4413-b9e8-31300e849382": "3bcd4267-179a-4f2b-a965-b3846aba7520",
-        "6560871c-c32b-473d-ba3b-4bb11aab1c17": "f7ee62d3-8402-46e4-a6cd-6f1f61e3b9d9",
-        "797caf46-9bc2-4e26-b71b-94468ede104c": "4f6447cb-0856-467d-8875-6ac3f35b1950",
-        "b7c8c7f9-d403-4d36-b7bb-66983aa71e68": "5706d4fb-2847-4ac4-bea6-54b8a7c327b3",
-        "475ad2b9-6832-42a5-87db-b7b99dcf1a8b": "0148750b-594c-45cb-a9c2-dc245c14cd52",
-        "a94cf439-2d29-4c01-9fb2-a25deb17f4e7": "12a2dd1b-d8ff-4b62-8738-acaffc92b916",
-        "20a16300-e9f1-46a0-a328-037e78582cc1": "142561fc-7afa-4950-9ec8-d87df3883774",
-        "dd32ce13-e62c-473e-8080-b0e725c0f061": "bf018590-16e0-4977-a579-9ea3d8a42ef7",
-        "f0acf77d-3321-4560-9c30-c0017ade40ac": "67dd8961-0527-4cbe-bb6f-03c991347e03"
+        "ad8604dc-4731-4bf5-9544-f9bd106773c0": "24f21646-bcc7-4cd6-92e4-88c49d1622ef",
+        "860a1dc4-0b11-4b29-9fa2-0761e954d29d": "bf8600b0-94c4-47e6-9ba9-d4064a01b092",
+        "6908b8f6-276c-4317-9f22-61902ad35137": "fe2bef08-2b62-460b-a192-c21718232cf3",
+        "557a9a38-57a3-4178-8b8a-089424db388a": "135c355c-fe24-4dd3-add2-e4777f43b0ae",
+        "9804d496-f0f0-486e-b6e1-0692acc7dcfd": "b4041a4a-44ed-4442-8458-75255598c26f",
+        "38bc432e-dcb1-4edb-81ed-472b549f59e1": "3af3ddf4-77ba-49f8-ba35-4eec56db51c9",
+        "02f9dbf4-2d8b-425b-9d43-67fd66f98461": "8ca5c917-86ae-4882-a2b5-2e476d6a90b7",
+        "667741e6-99c4-4607-b886-3b9002761cff": "2d931576-eea0-4a35-a728-ef6cfde09de8",
+        "4d05c825-915a-47f5-ab8c-d38838417f21": "43ddfbaf-bc86-4632-a5fa-e97e7f8b2729",
+        "2750d0aa-df49-443f-af2a-51ef62929f79": "f5d0ea6b-ec96-4e59-9fec-51541b013a9a",
+        "d42e5e7d-3d5f-4eaf-b677-41fb7a18f09a": "03b80470-5fae-4d65-8590-0504dea36cf8",
+        "011e0ad9-9f74-4495-a243-152fc90f6bc6": "6b5e1390-d822-4dc2-a49f-a42399246d79",
+        "5efe1f01-19ee-4413-b9e8-31300e849382": "5f3cd043-fded-4b67-8a1e-a32da41e7c62",
+        "6560871c-c32b-473d-ba3b-4bb11aab1c17": "f5c77ff9-f6b2-40a7-9535-df72d8f90526",
+        "797caf46-9bc2-4e26-b71b-94468ede104c": "93027f90-2aa9-4741-acf2-37871e1669a8",
+        "b7c8c7f9-d403-4d36-b7bb-66983aa71e68": "70bf5ac0-6148-4a4d-a6a1-977426e13267",
+        "475ad2b9-6832-42a5-87db-b7b99dcf1a8b": "f0f8acca-892b-429f-a0f4-b92d8c1234d4",
+        "a94cf439-2d29-4c01-9fb2-a25deb17f4e7": "8de3f882-ef77-4849-98a4-9cd9dd4ba3d8",
+        "20a16300-e9f1-46a0-a328-037e78582cc1": "f42ed1e0-8b5a-4570-8780-22818a293af4",
+        "dd32ce13-e62c-473e-8080-b0e725c0f061": "35bdc957-407b-4b12-b528-75916f07bf50",
+        "f0acf77d-3321-4560-9c30-c0017ade40ac": "3cabd449-6e0a-42c7-ac43-59d6fbe9e563",
+        "4834d9d2-6246-4914-be23-9380b627292c": "18823eaa-5fc1-4b05-bd29-f578251fd4cd"
       }
     }
   ],
