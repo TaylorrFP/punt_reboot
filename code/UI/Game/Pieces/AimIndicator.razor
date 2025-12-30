@@ -35,6 +35,11 @@
     /// </summary>
     [Property] public float Width { get; set; } = 2000f;
 
+    /// <summary>
+    /// Distance to offset the start of the line away from the piece center (in world units)
+    /// </summary>
+    [Property] public float StartOffset { get; set; } = 30f;
+
     protected override void OnStart()
     {
         base.OnStart();
@@ -60,26 +65,32 @@
         if (distance < 0.1f)
             return;
 
-        // Position the panel at the midpoint between piece and cursor
-        // This makes it appear to start at the piece and end at the cursor
-        // (since the panel scales from its center)
-        Vector3 midpoint = StartPosition + (direction / 2);
+        // Apply start offset - move the start position along the direction vector
+        Vector3 directionNormalized = direction.Normal;
+        Vector3 offsetStartPosition = StartPosition + (directionNormalized * StartOffset);
+
+        // Recalculate distance after offset
+        Vector3 offsetDirection = (EndPosition - offsetStartPosition).WithZ(0);
+        float offsetDistance = offsetDirection.Length;
+
+        if (offsetDistance < 0.1f)
+            return;
+
+        // Position the panel at the midpoint between offset start and cursor
+        Vector3 midpoint = offsetStartPosition + (offsetDirection / 2);
         WorldPanel.GameObject.WorldPosition = midpoint;
 
         // Calculate rotation - the line should point from start to end
-        // We need to rotate around the Z axis (up axis)
-        float angleRadians = MathF.Atan2(direction.y, direction.x);
+        float angleRadians = MathF.Atan2(offsetDirection.y, offsetDirection.x);
         float angleDegrees = angleRadians * (180f / MathF.PI);
 
         // Set the rotation - combine the panel's default 90° pitch with the calculated yaw
-        // The panel's default orientation is (90, 0, 0) so we need to preserve that
         WorldPanel.GameObject.WorldRotation = Rotation.From(90, angleDegrees, 0);
 
-        // Update the panel size - the line should stretch the distance
-        var panelSize = new Vector2(Width, distance*20f);
+        // Update the panel size - use the offset distance
+        var panelSize = new Vector2(Width, offsetDistance * 20f);
         WorldPanel.PanelSize = panelSize;
 
-        // Update the line element's width to match the distance
         StateHasChanged();
     }
 

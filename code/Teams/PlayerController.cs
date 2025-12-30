@@ -115,6 +115,7 @@ public sealed class PlayerController : Component
 			{
 				Gizmo.Draw.LineCircle( selectedSelectable.SelectPosition, Vector3.Up, MinFlickDistance, 0, 360, 64 );
 				Gizmo.Draw.LineCircle( selectedSelectable.SelectPosition, Vector3.Up, MaxFlickDistance, 0, 360, 512 );
+				Gizmo.Draw.Line(selectedSelectable.SelectPosition, selectedSelectable.SelectPosition + flickVector*-1f);
 			}
 		}
 
