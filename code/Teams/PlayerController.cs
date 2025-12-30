@@ -6,11 +6,14 @@ public sealed class PlayerController : Component
 
 	[Property, Group( "Flick Settings" )] public float FlickStrength { get; set; } = 0.6f;
 	[Property, Group( "Flick Settings" )] public float MaxFlickStrength { get; set; } = 650f;
+	[Property, Group( "Flick Settings" )] public float MinFlickDistance { get; set; } = 50f;
+	[Property, Group( "Flick Settings" )] public float MaxFlickDistance { get; set; } = 650f;
+	[Property, Group( "Debug" )] public bool isDebug { get; set; } = false;
 
 	// === Local State ===
 	private ISelectable hoveredSelectable;
 	private ISelectable selectedSelectable;
-	private Vector2 currentMouseOffset;
+	private Vector2 mouseOffset; // Accumulated mouse movement since selection
 	private Vector3 flickVector;
 	private float lastCursorDelta;
 
@@ -43,7 +46,6 @@ public sealed class PlayerController : Component
 		if ( tr.Hit )
 		{
 			CursorWorldPosition = tr.HitPosition.WithZ( 0f );
-			Gizmo.Draw.SolidSphere ( CursorWorldPosition, 32,32);
 		}
 	}
 
@@ -68,21 +70,52 @@ public sealed class PlayerController : Component
 
 	private void UpdateSelected()
 	{
-		// For draggable selectables (pieces), calculate flick vector
+		// Check for abort (right-click)
+		if ( Input.Pressed( "attack2" ) )
+		{
+			AbortTarget();
+			return;
+		}
+
+		// For draggable selectables (pieces), calculate flick vector from accumulated mouse offset
 		if ( selectedSelectable.CapturesSelection )
 		{
 			// Track cursor movement this frame
 			lastCursorDelta = Mouse.Delta.Length;
 
-			currentMouseOffset += Mouse.Delta;
-			flickVector = new Vector3( -currentMouseOffset.x, currentMouseOffset.y, 0f ) * FlickStrength;
-			flickVector = flickVector.ClampLength( MaxFlickStrength );
+			// Accumulate mouse offset (works even if cursor leaves screen)
+			// Scale by screen width for resolution independence
+			float screenScale = 1995f / Screen.Width;
+			mouseOffset += Mouse.Delta * screenScale;
+
+			// Convert to world-space flick vector (invert X for intuitive pull-back)
+			flickVector = new Vector3( -mouseOffset.x, mouseOffset.y, 0f ) * FlickStrength;
+
+			// Clamp to max distance
+			flickVector = flickVector.ClampLength( MaxFlickDistance );
 
 			// Calculate intensity (0-1) based on flick strength
-			float intensity = flickVector.Length / MaxFlickStrength;
+			float intensity = flickVector.Length / MaxFlickDistance;
 
-			// Tell the selectable about the ongoing drag (now with cursor position)
-			selectedSelectable.OnDragUpdate( intensity, lastCursorDelta, CursorWorldPosition );
+			// Check if we've exceeded the minimum threshold
+			bool exceedsMinimum = flickVector.Length >= MinFlickDistance;
+
+			// Calculate clamped cursor position for aim indicator
+			// This ensures the visual line stops at the max distance circle
+			Vector3 pieceToCursor = CursorWorldPosition - selectedSelectable.SelectPosition;
+			pieceToCursor = pieceToCursor.WithZ( 0 ); // Keep on 2D plane
+			Vector3 clampedOffset = pieceToCursor.ClampLength( MaxFlickDistance );
+			Vector3 clampedCursorPosition = selectedSelectable.SelectPosition + clampedOffset;
+
+			// Tell the selectable about the ongoing drag (with clamped cursor position)
+			// Pass exceedsMinimum so the aim indicator can show/hide based on threshold
+			selectedSelectable.OnDragUpdate( intensity, lastCursorDelta, clampedCursorPosition, exceedsMinimum );
+
+			if ( isDebug )
+			{
+				Gizmo.Draw.LineCircle( selectedSelectable.SelectPosition, Vector3.Up, MinFlickDistance, 0, 360, 64 );
+				Gizmo.Draw.LineCircle( selectedSelectable.SelectPosition, Vector3.Up, MaxFlickDistance, 0, 360, 512 );
+			}
 		}
 
 		// Check for release
@@ -102,7 +135,7 @@ public sealed class PlayerController : Component
 		hoveredSelectable = null;
 
 		// Reset flick tracking
-		currentMouseOffset = Vector2.Zero;
+		mouseOffset = Vector2.Zero;
 		flickVector = Vector3.Zero;
 		lastCursorDelta = 0f;
 
@@ -115,10 +148,28 @@ public sealed class PlayerController : Component
 
 	private void ReleaseTarget()
 	{
+		// Check if flick meets minimum distance threshold
+		float flickDistance = flickVector.Length;
+		if ( flickDistance < MinFlickDistance )
+		{
+			// Below threshold - abort instead of applying flick
+			AbortTarget();
+			return;
+		}
+
 		selectedSelectable?.OnDeselect( flickVector );
 		selectedSelectable = null;
 		flickVector = Vector3.Zero;
-		currentMouseOffset = Vector2.Zero;
+		mouseOffset = Vector2.Zero;
+		lastCursorDelta = 0f;
+	}
+
+	private void AbortTarget()
+	{
+		selectedSelectable?.OnAbort();
+		selectedSelectable = null;
+		flickVector = Vector3.Zero;
+		mouseOffset = Vector2.Zero;
 		lastCursorDelta = 0f;
 	}
 

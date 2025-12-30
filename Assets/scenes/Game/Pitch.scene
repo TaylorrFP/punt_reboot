@@ -176,7 +176,10 @@
           "__enabled": true,
           "CursorWorldPosition": "0,0,0",
           "FlickStrength": 0.6,
+          "isDebug": true,
+          "MaxFlickDistance": 650,
           "MaxFlickStrength": 650,
+          "MinFlickDistance": 100,
           "OnComponentDestroy": null,
           "OnComponentDisabled": null,
           "OnComponentEnabled": null,
@@ -794,14 +797,6 @@
             },
             "Property": "AimTargetPosition",
             "Value": "0,0,0"
-          },
-          {
-            "Target": {
-              "Type": "GameObject",
-              "IdValue": "dd32ce13-e62c-473e-8080-b0e725c0f061"
-            },
-            "Property": "Position",
-            "Value": "0,0,9.017434"
           },
           {
             "Target": {

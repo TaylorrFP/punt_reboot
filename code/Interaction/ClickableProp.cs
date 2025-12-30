@@ -16,9 +16,10 @@ public class ClickableProp : Component, ISelectable
 	public void OnHoverExit() => Highlight?.SetState( SelectableHighlightState.None );
 	public void OnSelect() => OnClicked();
 	public void OnDeselect( Vector3 releaseData ) { }
+	public void OnAbort() { }
 
 	// Props don't capture selection, so this won't be called
-	public void OnDragUpdate( float intensity, float cursorDelta, Vector3 cursorPosition ) { }
+	public void OnDragUpdate( float intensity, float cursorDelta, Vector3 cursorPosition, bool exceedsMinimum ) { }
 
 	protected virtual void OnClicked()
 	{
@@ -30,4 +31,6 @@ public class ClickableProp : Component, ISelectable
 		Highlight?.SetState( SelectableHighlightState.Hovered );
 		Sound.Play( "sounds/kenny/proppiecehover.sound" );
 	}
+
+
 }

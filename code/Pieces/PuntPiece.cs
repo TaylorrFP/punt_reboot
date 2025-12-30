@@ -60,15 +60,15 @@ public sealed class PuntPiece : Component, ISelectable
 		ShakeEffect?.Play( 1f );
 		Sound.Play( "sounds/kenny/pieceselect.sound" );
 
-		// Show the aim indicator
+		// Start with indicator hidden - it will become visible once MinFlickDistance is exceeded
 		if ( AimIndicator != null )
 		{
-			AimIndicator.IsVisible = true;
+			AimIndicator.IsVisible = false;
 			AimIndicator.StartPosition = WorldPosition;
 		}
 	}
 
-	public void OnDragUpdate( float intensity, float cursorDelta, Vector3 cursorPosition )
+	public void OnDragUpdate( float intensity, float cursorDelta, Vector3 cursorPosition, bool exceedsMinimum )
 	{
 		// Update the aim target position for the indicator
 		AimTargetPosition = cursorPosition;
@@ -78,6 +78,9 @@ public sealed class PuntPiece : Component, ISelectable
 		{
 			AimIndicator.StartPosition = WorldPosition;
 			AimIndicator.EndPosition = cursorPosition;
+
+			// Only show indicator once we exceed the minimum threshold
+			AimIndicator.IsVisible = exceedsMinimum;
 		}
 
 		// Scale shake effect with drag intensity
@@ -108,6 +111,29 @@ public sealed class PuntPiece : Component, ISelectable
 		GrabbedByPlayerId = Guid.Empty;
 		timeSinceCooldownStarted = 0;
 		Highlight?.SetState( SelectableHighlightState.None );
+	}
+
+	public void OnAbort()
+	{
+		if ( State != PieceState.Grabbed ) return;
+
+		// Hide the aim indicator
+		if ( AimIndicator != null )
+		{
+			AimIndicator.IsVisible = false;
+		}
+
+		// Stop effects
+		ShakeEffect?.Stop();
+		SquashStretch?.Stop();
+
+		// Return to ready state WITHOUT applying cooldown or flick
+		State = PieceState.Ready;
+		GrabbedByPlayerId = Guid.Empty;
+		Highlight?.SetState( SelectableHighlightState.None );
+
+		// Play cancel sound (quieter)
+		Sound.Play( "sounds/kenny/pieceabort.sound");
 	}
 
 	protected override void OnUpdate()

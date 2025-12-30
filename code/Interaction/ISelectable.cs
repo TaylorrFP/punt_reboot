@@ -45,6 +45,12 @@ public interface ISelectable
 	void OnDeselect( Vector3 releaseData );
 
 	/// <summary>
+	/// Called when selection is cancelled/aborted (right-click or below min threshold).
+	/// Does not apply cooldown or penalties.
+	/// </summary>
+	void OnAbort();
+
+	/// <summary>
 	/// Does this selectable capture the cursor while selected?
 	/// True for pieces (drag to flick), false for props (just click).
 	/// </summary>
@@ -57,5 +63,6 @@ public interface ISelectable
 	/// <param name="intensity">0-1 value representing drag distance / max distance.</param>
 	/// <param name="cursorDelta">How much the cursor moved this frame.</param>
 	/// <param name="cursorPosition">The current world position of the cursor.</param>
-	void OnDragUpdate( float intensity, float cursorDelta, Vector3 cursorPosition );
+	/// <param name="exceedsMinimum">True if the drag exceeds the minimum flick threshold.</param>
+	void OnDragUpdate( float intensity, float cursorDelta, Vector3 cursorPosition, bool exceedsMinimum );
 }
