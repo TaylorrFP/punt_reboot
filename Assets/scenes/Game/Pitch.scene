@@ -726,7 +726,14 @@
       "__Prefab": "prefabs/pieces/puntpiece/puntpiece.prefab",
       "__PrefabInstancePatch": {
         "AddedObjects": [],
-        "RemovedObjects": [],
+        "RemovedObjects": [
+          {
+            "Id": {
+              "Type": "Component",
+              "IdValue": "2c627c7b-0332-4555-b9a4-5404eedc622a"
+            }
+          }
+        ],
         "PropertyOverrides": [
           {
             "Target": {
@@ -735,73 +742,6 @@
             },
             "Property": "Position",
             "Value": "-430.5914,-185.1934,5.509016"
-          },
-          {
-            "Target": {
-              "Type": "Component",
-              "IdValue": "2c627c7b-0332-4555-b9a4-5404eedc622a"
-            },
-            "Property": "MinVolumeCurve",
-            "Value": {
-              "rangex": "0,0.5",
-              "frames": [
-                {
-                  "x": 0,
-                  "y": 0,
-                  "in": 0,
-                  "out": 0,
-                  "mode": "Mirrored"
-                },
-                {
-                  "x": 1,
-                  "y": 1,
-                  "in": 0,
-                  "out": 0,
-                  "mode": "Mirrored"
-                }
-              ]
-            }
-          },
-          {
-            "Target": {
-              "Type": "Component",
-              "IdValue": "2c627c7b-0332-4555-b9a4-5404eedc622a"
-            },
-            "Property": "PitchCurve",
-            "Value": {
-              "rangey": "0,1.2",
-              "frames": [
-                {
-                  "x": 0,
-                  "y": 0,
-                  "in": 0,
-                  "out": 0,
-                  "mode": "Mirrored"
-                },
-                {
-                  "x": 0.5,
-                  "y": 0.8333333,
-                  "in": 0,
-                  "out": 0,
-                  "mode": "Mirrored"
-                },
-                {
-                  "x": 1,
-                  "y": 0.8333333,
-                  "in": 0,
-                  "out": 0,
-                  "mode": "Mirrored"
-                }
-              ]
-            }
-          },
-          {
-            "Target": {
-              "Type": "Component",
-              "IdValue": "2c627c7b-0332-4555-b9a4-5404eedc622a"
-            },
-            "Property": "RandomizeStartPosition",
-            "Value": true
           }
         ],
         "MovedObjects": []
@@ -813,7 +753,6 @@
         "557a9a38-57a3-4178-8b8a-089424db388a": "18c27b8f-f84e-4b97-817f-6e092fda2175",
         "9804d496-f0f0-486e-b6e1-0692acc7dcfd": "f785608e-fc67-48ba-8b4b-bd0e6b27a939",
         "38bc432e-dcb1-4edb-81ed-472b549f59e1": "b3f8fff2-6a25-4114-9ae3-b57697afae95",
-        "2c627c7b-0332-4555-b9a4-5404eedc622a": "c31a1f42-83b9-49c8-9138-d31930dd6d12",
         "02f9dbf4-2d8b-425b-9d43-67fd66f98461": "17bacddf-24e0-4a3b-972d-6722cbb9f767",
         "667741e6-99c4-4607-b886-3b9002761cff": "bc56d42b-e903-4ccc-ad00-0ffb5edcfda8",
         "4d05c825-915a-47f5-ab8c-d38838417f21": "f2bc3554-98a3-4e9c-831d-0e08ecd67fee",
@@ -835,7 +774,14 @@
       "__Prefab": "prefabs/pieces/puntpiece/puntpiece.prefab",
       "__PrefabInstancePatch": {
         "AddedObjects": [],
-        "RemovedObjects": [],
+        "RemovedObjects": [
+          {
+            "Id": {
+              "Type": "Component",
+              "IdValue": "2c627c7b-0332-4555-b9a4-5404eedc622a"
+            }
+          }
+        ],
         "PropertyOverrides": [
           {
             "Target": {
@@ -860,14 +806,6 @@
             },
             "Property": "Enabled",
             "Value": false
-          },
-          {
-            "Target": {
-              "Type": "Component",
-              "IdValue": "2c627c7b-0332-4555-b9a4-5404eedc622a"
-            },
-            "Property": "RandomizeStartPosition",
-            "Value": true
           }
         ],
         "MovedObjects": []
@@ -879,7 +817,6 @@
         "557a9a38-57a3-4178-8b8a-089424db388a": "a59534d9-d659-4eb3-b11b-8ef83d390bed",
         "9804d496-f0f0-486e-b6e1-0692acc7dcfd": "e6b3bd0b-9816-4179-9e90-8182a71fb1fc",
         "38bc432e-dcb1-4edb-81ed-472b549f59e1": "679390b0-7939-46b2-9e14-7338fb0070da",
-        "2c627c7b-0332-4555-b9a4-5404eedc622a": "3c6a458a-32c1-460a-9a2d-b2e5554d1f84",
         "02f9dbf4-2d8b-425b-9d43-67fd66f98461": "ba93b7bd-8400-4fa5-8ba1-7c838c0556c3",
         "667741e6-99c4-4607-b886-3b9002761cff": "7b22b901-e28a-4517-91fb-68d278f49ecd",
         "4d05c825-915a-47f5-ab8c-d38838417f21": "6d27418a-f8ba-41ee-b980-adb2b91643cc",
@@ -901,7 +838,14 @@
       "__Prefab": "prefabs/pieces/puntpiece/puntpiece.prefab",
       "__PrefabInstancePatch": {
         "AddedObjects": [],
-        "RemovedObjects": [],
+        "RemovedObjects": [
+          {
+            "Id": {
+              "Type": "Component",
+              "IdValue": "2c627c7b-0332-4555-b9a4-5404eedc622a"
+            }
+          }
+        ],
         "PropertyOverrides": [
           {
             "Target": {
@@ -926,14 +870,6 @@
             },
             "Property": "Enabled",
             "Value": false
-          },
-          {
-            "Target": {
-              "Type": "Component",
-              "IdValue": "2c627c7b-0332-4555-b9a4-5404eedc622a"
-            },
-            "Property": "RandomizeStartPosition",
-            "Value": true
           }
         ],
         "MovedObjects": []
@@ -945,7 +881,6 @@
         "557a9a38-57a3-4178-8b8a-089424db388a": "90c259e5-df23-4d1c-b60f-43504f296bf4",
         "9804d496-f0f0-486e-b6e1-0692acc7dcfd": "cd05ef51-5c2e-47b7-908d-fdf7a966a499",
         "38bc432e-dcb1-4edb-81ed-472b549f59e1": "1ef409e0-5c06-467f-91ea-161315a8406e",
-        "2c627c7b-0332-4555-b9a4-5404eedc622a": "60dccb7c-12a0-4c8b-977d-e0f72117e189",
         "02f9dbf4-2d8b-425b-9d43-67fd66f98461": "79d57d7e-33ed-4fb4-a7c9-0eb1a69b114f",
         "667741e6-99c4-4607-b886-3b9002761cff": "a1c2beb2-82c0-4e67-aa32-157c6a2df20f",
         "4d05c825-915a-47f5-ab8c-d38838417f21": "35a4b551-242d-48b0-ab5e-0dd7dff503ce",
@@ -967,7 +902,14 @@
       "__Prefab": "prefabs/pieces/puntpiece/puntpiece.prefab",
       "__PrefabInstancePatch": {
         "AddedObjects": [],
-        "RemovedObjects": [],
+        "RemovedObjects": [
+          {
+            "Id": {
+              "Type": "Component",
+              "IdValue": "2c627c7b-0332-4555-b9a4-5404eedc622a"
+            }
+          }
+        ],
         "PropertyOverrides": [
           {
             "Target": {
@@ -1000,14 +942,6 @@
             },
             "Property": "Enabled",
             "Value": false
-          },
-          {
-            "Target": {
-              "Type": "Component",
-              "IdValue": "2c627c7b-0332-4555-b9a4-5404eedc622a"
-            },
-            "Property": "RandomizeStartPosition",
-            "Value": true
           }
         ],
         "MovedObjects": []
@@ -1019,7 +953,6 @@
         "557a9a38-57a3-4178-8b8a-089424db388a": "84aef440-9843-4075-840d-ad7915d20c19",
         "9804d496-f0f0-486e-b6e1-0692acc7dcfd": "95f2c797-672e-4eea-95d4-a20c0387acf1",
         "38bc432e-dcb1-4edb-81ed-472b549f59e1": "b463afc0-c5b8-4589-b8dc-f761479bd0c2",
-        "2c627c7b-0332-4555-b9a4-5404eedc622a": "974dc64a-cc4a-47a4-8ddb-477b63cd39bc",
         "02f9dbf4-2d8b-425b-9d43-67fd66f98461": "d48c3763-97a7-4961-81ae-cce7ae56173c",
         "667741e6-99c4-4607-b886-3b9002761cff": "10a003a1-1146-41b9-a83d-6e9e1c3981ff",
         "4d05c825-915a-47f5-ab8c-d38838417f21": "ec5f5273-cef7-4da0-9799-f7e8db50504b",

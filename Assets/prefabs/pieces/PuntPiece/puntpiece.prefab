@@ -123,12 +123,6 @@
         "__type": "PuntPiece",
         "__guid": "38bc432e-dcb1-4edb-81ed-472b549f59e1",
         "__enabled": true,
-        "Audio": {
-          "_type": "component",
-          "component_id": "2c627c7b-0332-4555-b9a4-5404eedc622a",
-          "go": "ad8604dc-4731-4bf5-9544-f9bd106773c0",
-          "component_type": "PieceAudio"
-        },
         "CooldownDuration": 2,
         "GrabbedByPlayerId": "00000000-0000-0000-0000-000000000000",
         "Highlight": {
@@ -163,63 +157,6 @@
         },
         "State": "Ready",
         "Team": "Blue"
-      },
-      {
-        "__type": "Punt.PieceAudio",
-        "__guid": "2c627c7b-0332-4555-b9a4-5404eedc622a",
-        "__enabled": true,
-        "MinVolumeCurve": {
-          "rangex": "0.5,1",
-          "rangey": "0.01000001,0.15",
-          "frames": [
-            {
-              "x": 0,
-              "y": 0,
-              "in": 0,
-              "out": 0,
-              "mode": "Mirrored"
-            },
-            {
-              "x": 1,
-              "y": 1,
-              "in": 0,
-              "out": 0,
-              "mode": "Mirrored"
-            }
-          ]
-        },
-        "MovementThreshold": 0.5,
-        "OnComponentDestroy": null,
-        "OnComponentDisabled": null,
-        "OnComponentEnabled": null,
-        "OnComponentFixedUpdate": null,
-        "OnComponentStart": null,
-        "OnComponentUpdate": null,
-        "PitchCurve": {
-          "rangex": "0.00000000372529,1",
-          "rangey": "0.6,1.13955",
-          "frames": [
-            {
-              "x": 0,
-              "y": 0,
-              "in": -1.7409343,
-              "out": 1.7409343,
-              "mode": "Mirrored"
-            },
-            {
-              "x": 1,
-              "y": 1,
-              "in": 0,
-              "out": 0,
-              "mode": "Mirrored"
-            }
-          ]
-        },
-        "PitchSmoothSpeed": 500,
-        "StretchSound": "sounds/custom/elastic/rubberstretchloop.sound",
-        "StretchVolume": 0.2,
-        "VolumeAttackSpeed": 15,
-        "VolumeDecaySpeed": 20
       }
     ],
     "Children": [
