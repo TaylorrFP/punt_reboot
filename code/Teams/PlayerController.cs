@@ -12,25 +12,29 @@ public sealed class PlayerController : Component
 
 	[Property, Group( "Debug" )] public bool isDebug { get; set; } = false;
 
-	[Property, Group( "Cursor" )] public float EdgeThreshold { get; set; } = 1f; // Pixels from edge to start constraining movement
+	[Property, Group( "Cursor" )] public float EdgeThreshold { get; set; } = 10f;
+	[Property, Group( "Cursor" )] public float FakeCursorSize { get; set; } = 10f;
 
-	// === Local State ===
+	// === Interaction State ===
 	private ISelectable hoveredSelectable;
 	private ISelectable selectedSelectable;
-	private Vector2 mouseOffset; // Accumulated mouse movement since selection
-	private Vector2 initialScreenPosition; // Screen position when piece was selected
+	private Vector3 currentWorldPosition;
+
+	// === Flick Tracking ===
+	private Vector2 mouseOffset;
+	private Vector2 initialScreenPosition;
 	private Vector3 flickVector;
 	private float lastCursorDelta;
-	private Vector3 currentWorldPosition; // Current cursor world position (updated every frame)
+
+	// === Virtual Cursor System ===
+	[Property, ReadOnly] public bool isCursorHidden { get; private set; } = false;
+	private Vector2 virtualCursorPosition;
 
 	protected override void OnUpdate()
 	{
 		if ( IsProxy ) return;
 
-		// Keep mouse clamped to screen bounds (only when it goes outside)
-
-		ClampMouseToScreen();
-
+		UpdateVirtualCursor();
 		UpdateCursorPosition();
 
 		if ( selectedSelectable != null )
@@ -42,42 +46,109 @@ public sealed class PlayerController : Component
 			UpdateHovering();
 		}
 
-		UpdateCursor();
+		UpdateCursorVisuals();
+		DrawFakeCursor();
 	}
 
+	#region Virtual Cursor System
 
 	/// <summary>
-	/// Clamps the mouse position to stay within screen bounds.
-	/// Only sets Mouse.Position if it's actually outside bounds to avoid jitter.
+	/// Manages the virtual cursor that appears when the real cursor hits screen edges.
+	/// Hides real cursor at edge, shows fake cursor, unhides when moving back inward.
 	/// </summary>
-	private void ClampMouseToScreen()
+	private void UpdateVirtualCursor()
 	{
 		Vector2 mousePos = Mouse.Position;
 		Vector2 screenSize = new Vector2( Screen.Width, Screen.Height );
 
-		Vector2 clampedPos = new Vector2(
-			Math.Clamp( mousePos.x, 0, screenSize.x ),
-			Math.Clamp( mousePos.y, 0, screenSize.y )
-		);
+		if ( !isCursorHidden )
+		{
+			// Check if cursor touched any screen edge
+			bool hitEdge = mousePos.x <= EdgeThreshold ||
+						  mousePos.x >= screenSize.x - EdgeThreshold ||
+						  mousePos.y <= EdgeThreshold ||
+						  mousePos.y >= screenSize.y - EdgeThreshold;
 
-		Mouse.Position = clampedPos;
+			if ( hitEdge )
+			{
+				// Hide real cursor and initialize virtual cursor at clamped edge position
+				Mouse.Visibility = MouseVisibility.Hidden;
+				virtualCursorPosition = ClampToScreen( mousePos, screenSize );
+				isCursorHidden = true;
+			}
+		}
+		else
+		{
+			// Virtual cursor is active - track movement but keep clamped to screen
+			virtualCursorPosition += Mouse.Delta;
+			virtualCursorPosition = ClampToScreen( virtualCursorPosition, screenSize );
 
+			// Check if virtual cursor has moved away from ALL edges (back into safe zone)
+			bool awayFromAllEdges = virtualCursorPosition.x > EdgeThreshold &&
+								   virtualCursorPosition.x < screenSize.x - EdgeThreshold &&
+								   virtualCursorPosition.y > EdgeThreshold &&
+								   virtualCursorPosition.y < screenSize.y - EdgeThreshold;
+
+			if ( awayFromAllEdges )
+			{
+				// Unhide real cursor at the virtual cursor's position
+				Mouse.Position = virtualCursorPosition;
+				Mouse.Visibility = MouseVisibility.Visible;
+				isCursorHidden = false;
+			}
+		}
 	}
 
+	/// <summary>
+	/// Clamps a screen position to be within screen bounds.
+	/// </summary>
+	private Vector2 ClampToScreen( Vector2 position, Vector2 screenSize )
+	{
+		return new Vector2(
+			Math.Clamp( position.x, 0, screenSize.x ),
+			Math.Clamp( position.y, 0, screenSize.y )
+		);
+	}
+
+	/// <summary>
+	/// Draws the fake cursor when the real cursor is hidden.
+	/// </summary>
+	private void DrawFakeCursor()
+	{
+		if ( !isCursorHidden ) return;
+
+		// Fake cursor is always drawn at the clamped virtual position (at screen edge)
+		Gizmo.Draw.Color = Color.White;
+		float halfSize = FakeCursorSize / 2f;
+		Gizmo.Draw.ScreenRect( new Rect(
+			virtualCursorPosition.x - halfSize,
+			virtualCursorPosition.y - halfSize,
+			FakeCursorSize,
+			FakeCursorSize
+		), Color.Black );
+	}
+
+	#endregion
+
+	#region Cursor Position & World Tracking
+
+	/// <summary>
+	/// Unprojects cursor position to world space on the pitch (Z=0 plane).
+	/// </summary>
 	private void UpdateCursorPosition()
 	{
-		// Unproject current mouse position to world space at Z=0 (the pitch plane)
 		var camera = Scene.Camera;
 		var ray = camera.ScreenPixelToRay( Mouse.Position );
 
-		// Intersect ray with Z=0 plane to get world position
-		// Ray equation: P = Origin + t * Direction
-		// For Z=0 plane: Origin.z + t * Direction.z = 0
-		// Solve for t: t = -Origin.z / Direction.z
+		// Intersect ray with Z=0 plane: t = -Origin.z / Direction.z
 		float t = -ray.Position.z / ray.Forward.z;
 		currentWorldPosition = ray.Position + ray.Forward * t;
 		currentWorldPosition = currentWorldPosition.WithZ( 0f );
 	}
+
+	#endregion
+
+	#region Selection & Interaction
 
 	private void UpdateHovering()
 	{
@@ -110,71 +181,42 @@ public sealed class PlayerController : Component
 		// For draggable selectables (pieces), calculate flick vector from accumulated mouse offset
 		if ( selectedSelectable.CapturesSelection )
 		{
-			// Use raw mouse delta - don't constrain it!
-			// This allows smooth accumulation even when cursor is at screen edge
+			// Accumulate raw mouse delta (works even when cursor is at screen edge)
 			Vector2 delta = Mouse.Delta;
 			lastCursorDelta = delta.Length;
-
-			// Accumulate the delta
 			mouseOffset += delta;
 
-			// Calculate the new screen position (initial position + accumulated offset)
-			Vector2 currentScreenPosition = initialScreenPosition + mouseOffset;
+			// Determine effective cursor position (use virtual cursor if real cursor is hidden)
+			Vector2 effectiveCursorPosition = isCursorHidden ? virtualCursorPosition : Mouse.Position;
 
-			// Unproject this screen position to world space
+			// Unproject effective cursor position to world space
 			var camera = Scene.Camera;
-			var ray = camera.ScreenPixelToRay( currentScreenPosition );
-
-			// Intersect ray with Z=0 plane to get world position
+			var ray = camera.ScreenPixelToRay( effectiveCursorPosition );
 			float t = -ray.Position.z / ray.Forward.z;
 			Vector3 worldPosition = ray.Position + ray.Forward * t;
 
-			// Calculate flick vector from piece to this world position
+			// Calculate flick vector (from piece to cursor)
 			flickVector = (selectedSelectable.SelectPosition - worldPosition).WithZ( 0 );
-
-			// Apply strength multiplier for tuning
 			flickVector *= FlickStrength;
-
-			// Clamp to max distance
 			flickVector = flickVector.ClampLength( MaxFlickDistance );
 
-			// Calculate intensity (0-1) based on flick strength
+			// Calculate drag info for feedback
 			float intensity = flickVector.Length / MaxFlickDistance;
-
-			// Check if we've exceeded the minimum threshold
 			bool exceedsMinimum = flickVector.Length >= MinFlickDistance;
 
 			// Calculate clamped cursor position for aim indicator
-			// Use worldPosition (unprojected) for perfect consistency with flick vector
 			Vector3 pieceToCursor = worldPosition - selectedSelectable.SelectPosition;
-			pieceToCursor = pieceToCursor.WithZ( 0 ); // Keep on 2D plane
+			pieceToCursor = pieceToCursor.WithZ( 0 );
 			Vector3 clampedOffset = pieceToCursor.ClampLength( MaxFlickDistance );
 			Vector3 clampedCursorPosition = selectedSelectable.SelectPosition + clampedOffset;
 
-			// Tell the selectable about the ongoing drag (with clamped cursor position)
+			// Update the selectable
 			selectedSelectable.OnDragUpdate( intensity, lastCursorDelta, clampedCursorPosition, exceedsMinimum );
 
+			// Debug visualization
 			if ( isDebug )
 			{
-				// Cyan sphere: worldPosition (unprojected from accumulated mouse offset)
-				Gizmo.Draw.Color = Color.Cyan;
-				Gizmo.Draw.SolidSphere( worldPosition, 5f, 16, 16 );
-
-				// White line: Actual flick vector direction
-				Gizmo.Draw.Color = Color.White;
-				Gizmo.Draw.Line( selectedSelectable.SelectPosition, selectedSelectable.SelectPosition + (flickVector * -1f) );
-
-				// Red circle: Min threshold
-				Gizmo.Draw.Color = Color.Red;
-				Gizmo.Draw.LineCircle( selectedSelectable.SelectPosition, Vector3.Up, MinFlickDistance, 0, 360, 64 );
-
-				// Green circle: Max threshold (in drag distance, not flick power)
-				Gizmo.Draw.Color = Color.Green;
-				Gizmo.Draw.LineCircle( selectedSelectable.SelectPosition, Vector3.Up, MaxFlickDistance / FlickStrength, 0, 360, 512 );
-
-				// Black text: Flick distance
-				Gizmo.Draw.Color = Color.Black;
-				Gizmo.Draw.ScreenText( flickVector.Length.ToString(), initialScreenPosition + Vector2.Up * 20, "roboto", 16f );
+				DrawFlickDebug( worldPosition );
 			}
 		}
 
@@ -190,14 +232,12 @@ public sealed class PlayerController : Component
 		selectedSelectable = target;
 		selectedSelectable.OnSelect();
 
-		// Clear hover
+		// Clear hover state
 		hoveredSelectable?.OnHoverExit();
 		hoveredSelectable = null;
 
-		// Store the cursor's ACTUAL screen position when clicking
+		// Initialize flick tracking
 		initialScreenPosition = Mouse.Position;
-
-		// Reset flick tracking
 		mouseOffset = Vector2.Zero;
 		flickVector = Vector3.Zero;
 		lastCursorDelta = 0f;
@@ -212,24 +252,24 @@ public sealed class PlayerController : Component
 	private void ReleaseTarget()
 	{
 		// Check if flick meets minimum distance threshold
-		float flickDistance = flickVector.Length;
-		if ( flickDistance < MinFlickDistance )
+		if ( flickVector.Length < MinFlickDistance )
 		{
-			// Below threshold - abort instead of applying flick
 			AbortTarget();
 			return;
 		}
 
 		selectedSelectable?.OnDeselect( flickVector );
-		selectedSelectable = null;
-		flickVector = Vector3.Zero;
-		mouseOffset = Vector2.Zero;
-		lastCursorDelta = 0f;
+		ResetSelectionState();
 	}
 
 	private void AbortTarget()
 	{
 		selectedSelectable?.OnAbort();
+		ResetSelectionState();
+	}
+
+	private void ResetSelectionState()
+	{
 		selectedSelectable = null;
 		flickVector = Vector3.Zero;
 		mouseOffset = Vector2.Zero;
@@ -238,31 +278,24 @@ public sealed class PlayerController : Component
 
 	private ISelectable FindNearestSelectable()
 	{
-		// Build a list of all selectables from known types
+		// Gather all selectables
 		var selectables = new List<ISelectable>();
-
-		// Add all pieces
 		selectables.AddRange( Scene.GetAllComponents<PuntPiece>() );
-
-		// Add all props (includes inherited types like ClickableDuck)
 		selectables.AddRange( Scene.GetAllComponents<ClickableProp>() );
 
-		// Filter to valid targets
-		var validSelectables = selectables.Where( s => IsValidTarget( s ) );
-
+		// Find best valid target
 		ISelectable best = null;
 		float bestScore = float.MaxValue;
 
-		foreach ( var selectable in validSelectables )
+		foreach ( var selectable in selectables )
 		{
-			var dist = (selectable.SelectPosition - currentWorldPosition).WithZ( 0 ).Length;
+			if ( !IsValidTarget( selectable ) ) continue;
 
-			// Must be within select radius
+			float dist = (selectable.SelectPosition - currentWorldPosition).WithZ( 0 ).Length;
 			if ( dist > selectable.SelectRadius ) continue;
 
-			// Score: lower is better (distance minus priority)
+			// Lower score = better (distance minus priority bonus)
 			float score = dist - selectable.SelectPriority;
-
 			if ( score < bestScore )
 			{
 				bestScore = score;
@@ -285,30 +318,56 @@ public sealed class PlayerController : Component
 		return true;
 	}
 
-	private void UpdateCursor()
+	#endregion
+
+	#region Cursor Visuals
+
+	private void UpdateCursorVisuals()
 	{
-		// Grabbing takes priority
 		if ( selectedSelectable != null )
 		{
 			Mouse.CursorType = "grabbing";
-			return;
 		}
-
-		// Nothing hovered
-		if ( hoveredSelectable == null )
+		else if ( hoveredSelectable == null )
 		{
 			Mouse.CursorType = "pointer";
-			return;
 		}
-
-		// Hovering something we can't select
-		if ( !hoveredSelectable.CanSelect )
+		else if ( !hoveredSelectable.CanSelect )
 		{
 			Mouse.CursorType = "not-allowed";
-			return;
 		}
-
-		// Hovering something selectable
-		Mouse.CursorType = "pointer";
+		else
+		{
+			Mouse.CursorType = "pointer";
+		}
 	}
+
+	#endregion
+
+	#region Debug Visualization
+
+	private void DrawFlickDebug( Vector3 worldPosition )
+	{
+		// Cyan sphere: unprojected world position
+		Gizmo.Draw.Color = Color.Cyan;
+		Gizmo.Draw.SolidSphere( worldPosition, 5f, 16, 16 );
+
+		// White line: flick vector direction
+		Gizmo.Draw.Color = Color.White;
+		Gizmo.Draw.Line( selectedSelectable.SelectPosition, selectedSelectable.SelectPosition + (flickVector * -1f) );
+
+		// Red circle: minimum threshold
+		Gizmo.Draw.Color = Color.Red;
+		Gizmo.Draw.LineCircle( selectedSelectable.SelectPosition, Vector3.Up, MinFlickDistance, 0, 360, 64 );
+
+		// Green circle: maximum threshold
+		Gizmo.Draw.Color = Color.Green;
+		Gizmo.Draw.LineCircle( selectedSelectable.SelectPosition, Vector3.Up, MaxFlickDistance / FlickStrength, 0, 360, 512 );
+
+		// Black text: flick distance
+		Gizmo.Draw.Color = Color.Black;
+		Gizmo.Draw.ScreenText( flickVector.Length.ToString( "F1" ), initialScreenPosition + Vector2.Up * 20, "roboto", 16f );
+	}
+
+	#endregion
 }
