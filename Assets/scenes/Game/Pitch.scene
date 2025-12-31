@@ -697,14 +697,6 @@
               "Type": "Component",
               "IdValue": "38bc432e-dcb1-4edb-81ed-472b549f59e1"
             },
-            "Property": "selectPriority",
-            "Value": 100
-          },
-          {
-            "Target": {
-              "Type": "Component",
-              "IdValue": "38bc432e-dcb1-4edb-81ed-472b549f59e1"
-            },
             "Property": "selectRadius",
             "Value": 200
           }
@@ -759,14 +751,6 @@
             },
             "Property": "Position",
             "Value": "25.5581,654.004,5.508378"
-          },
-          {
-            "Target": {
-              "Type": "Component",
-              "IdValue": "38bc432e-dcb1-4edb-81ed-472b549f59e1"
-            },
-            "Property": "selectPriority",
-            "Value": 100
           },
           {
             "Target": {
@@ -833,14 +817,6 @@
               "Type": "Component",
               "IdValue": "38bc432e-dcb1-4edb-81ed-472b549f59e1"
             },
-            "Property": "selectPriority",
-            "Value": 100
-          },
-          {
-            "Target": {
-              "Type": "Component",
-              "IdValue": "38bc432e-dcb1-4edb-81ed-472b549f59e1"
-            },
             "Property": "selectRadius",
             "Value": 200
           }
@@ -895,14 +871,6 @@
             },
             "Property": "Position",
             "Value": "-201.6978,-374.4127,5.508266"
-          },
-          {
-            "Target": {
-              "Type": "Component",
-              "IdValue": "38bc432e-dcb1-4edb-81ed-472b549f59e1"
-            },
-            "Property": "selectPriority",
-            "Value": 100
           },
           {
             "Target": {
@@ -969,14 +937,6 @@
               "Type": "Component",
               "IdValue": "38bc432e-dcb1-4edb-81ed-472b549f59e1"
             },
-            "Property": "selectPriority",
-            "Value": 100
-          },
-          {
-            "Target": {
-              "Type": "Component",
-              "IdValue": "38bc432e-dcb1-4edb-81ed-472b549f59e1"
-            },
             "Property": "selectRadius",
             "Value": 200
           }
@@ -1031,14 +991,6 @@
             },
             "Property": "Position",
             "Value": "370.4529,372.6693,5.507874"
-          },
-          {
-            "Target": {
-              "Type": "Component",
-              "IdValue": "38bc432e-dcb1-4edb-81ed-472b549f59e1"
-            },
-            "Property": "selectPriority",
-            "Value": 100
           },
           {
             "Target": {

@@ -292,6 +292,7 @@ public sealed class PlayerController : Component
 		{
 			Mouse.Visibility = MouseVisibility.Visible;
 			isCursorHidden = false;
+			Mouse.Position = clampedScreenPosition;
 		}
 	}
 
