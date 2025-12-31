@@ -1,4 +1,5 @@
 using Sandbox;
+using System;
 using System.Diagnostics;
 public sealed class PlayerController : Component
 {
@@ -11,6 +12,10 @@ public sealed class PlayerController : Component
 
 	[Property, Group( "Debug" )] public bool isDebug { get; set; } = false;
 
+	[Property, Group( "Cursor" )] public float EdgeThreshold { get; set; } = 5f; // Pixels from edge before hiding cursor
+	[Property, Group( "Cursor" )] public float FakeCursorSize { get; set; } = 12f; // Size of fake cursor square
+	[Property, Group( "Cursor" )] public Color FakeCursorColor { get; set; } = Color.White;
+
 	// === Local State ===
 	private ISelectable hoveredSelectable;
 	private ISelectable selectedSelectable;
@@ -19,6 +24,10 @@ public sealed class PlayerController : Component
 	private Vector3 flickVector;
 	private float lastCursorDelta;
 	private Vector3 currentWorldPosition; // Current cursor world position (updated every frame)
+
+	// === Cursor Hiding (for off-screen tracking) ===
+	private bool isCursorHidden;
+	private Vector2 clampedScreenPosition; // Where to draw fake cursor when hidden
 
 	protected override void OnUpdate()
 	{
@@ -36,6 +45,7 @@ public sealed class PlayerController : Component
 		}
 
 		UpdateCursor();
+		DrawFakeCursor();
 	}
 
 	private void UpdateCursorPosition()
@@ -87,14 +97,70 @@ public sealed class PlayerController : Component
 			// Track cursor movement this frame
 			lastCursorDelta = Mouse.Delta.Length;
 
-			// Accumulate mouse offset in screen space (works even if cursor leaves screen)
-			mouseOffset += Mouse.Delta;
+			// === SMART CURSOR RESET FOR OFF-SCREEN MOVEMENT ===
+			// Calculate where we would be with normal accumulation
+			Vector2 tentativeOffset = mouseOffset + Mouse.Delta;
+			Vector2 tentativePosition = initialScreenPosition + tentativeOffset;
+
+			// If cursor is currently hidden (off-screen), check movement direction
+			if ( isCursorHidden )
+			{
+				// Check if the movement brings us closer to the screen
+				float currentDist = GetDistanceFromScreen( initialScreenPosition + mouseOffset );
+				float newDist = GetDistanceFromScreen( tentativePosition );
+
+				if ( newDist < currentDist ) // Moving TOWARDS screen
+				{
+					// "Teleport" cursor to edge so it immediately responds
+					// This prevents having to drag all the way back from off-screen
+					mouseOffset = clampedScreenPosition - initialScreenPosition;
+					Mouse.Position = clampedScreenPosition;
+
+					// Note: currentScreenPosition will be recalculated below
+				}
+				else // Moving AWAY from screen
+				{
+					// Normal accumulation - continue building flick distance
+					mouseOffset = tentativeOffset;
+				}
+			}
+			else
+			{
+				// When cursor is visible, always accumulate normally
+				mouseOffset = tentativeOffset;
+			}
 
 			// Calculate the new screen position (initial position + accumulated offset)
 			Vector2 currentScreenPosition = initialScreenPosition + mouseOffset;
 
-			// Unproject this screen position back to world space at Z=0 (the pitch plane)
+			// === EDGE DETECTION & CURSOR HIDING ===
+			Vector2 screenSize = new Vector2( Screen.Width, Screen.Height );
+
+			// Check if we're at or beyond the screen edge (with threshold)
+			bool atEdge = currentScreenPosition.x <= EdgeThreshold ||
+						  currentScreenPosition.x >= screenSize.x - EdgeThreshold ||
+						  currentScreenPosition.y <= EdgeThreshold ||
+						  currentScreenPosition.y >= screenSize.y - EdgeThreshold;
+
+			// Hide cursor when at edge so Mouse.Delta continues working off-screen
+			if ( atEdge && !isCursorHidden )
+			{
+				Mouse.Visibility = MouseVisibility.Hidden;
+				isCursorHidden = true;
+			}
+			// Restore cursor when back on screen
+			else if ( !atEdge && isCursorHidden )
+			{
+				Mouse.Visibility = MouseVisibility.Visible;
+				isCursorHidden = false;
+			}
+
+			// Calculate fake cursor position as intersection of piece-to-cursor line with screen edge
+			// This keeps the fake cursor aligned with the aim indicator direction
 			var camera = Scene.Camera;
+			Vector2 pieceScreenPosition = camera.PointToScreenPixels( selectedSelectable.SelectPosition );
+			clampedScreenPosition = GetScreenEdgeIntersection( pieceScreenPosition, currentScreenPosition );
+
 			var ray = camera.ScreenPixelToRay( currentScreenPosition );
 
 			// Intersect ray with Z=0 plane to get world position
@@ -149,9 +215,9 @@ public sealed class PlayerController : Component
 				Gizmo.Draw.Color = Color.Green;
 				Gizmo.Draw.LineCircle( selectedSelectable.SelectPosition, Vector3.Up, MaxFlickDistance, 0, 360, 512 );
 
-				//White text: Flick distance
+				//Black text: Flick distance
 				Gizmo.Draw.Color = Color.Black;
-				Gizmo.Draw.ScreenText( flickVector.Length.ToString(), initialScreenPosition + Vector2.Up*20,"roboto",16f);
+				Gizmo.Draw.ScreenText( flickVector.Length.ToString(), initialScreenPosition + Vector2.Up * 20, "roboto", 16f );
 			}
 		}
 
@@ -189,6 +255,9 @@ public sealed class PlayerController : Component
 
 	private void ReleaseTarget()
 	{
+		// Restore cursor visibility if it was hidden
+		RestoreCursor();
+
 		// Check if flick meets minimum distance threshold
 		float flickDistance = flickVector.Length;
 		if ( flickDistance < MinFlickDistance )
@@ -207,11 +276,41 @@ public sealed class PlayerController : Component
 
 	private void AbortTarget()
 	{
+		// Restore cursor visibility if it was hidden
+		RestoreCursor();
+
 		selectedSelectable?.OnAbort();
 		selectedSelectable = null;
 		flickVector = Vector3.Zero;
 		mouseOffset = Vector2.Zero;
 		lastCursorDelta = 0f;
+	}
+
+	private void RestoreCursor()
+	{
+		if ( isCursorHidden )
+		{
+			Mouse.Visibility = MouseVisibility.Visible;
+			isCursorHidden = false;
+		}
+	}
+
+	private void DrawFakeCursor()
+	{
+		// Only draw fake cursor when it's hidden and we're dragging
+		if ( !isCursorHidden || selectedSelectable == null ) return;
+
+		// Draw a simple square cursor at the clamped screen position
+		float halfSize = FakeCursorSize / 2f;
+		Rect cursorRect = new Rect(
+			clampedScreenPosition.x - halfSize,
+			clampedScreenPosition.y - halfSize,
+			FakeCursorSize,
+			FakeCursorSize
+		);
+
+		Gizmo.Draw.Color = FakeCursorColor;
+		Gizmo.Draw.ScreenRect( cursorRect, Color.White );
 	}
 
 	private ISelectable FindNearestSelectable()
@@ -263,8 +362,105 @@ public sealed class PlayerController : Component
 		return true;
 	}
 
+	/// <summary>
+	/// Calculate how far off-screen a position is.
+	/// Returns 0 if on-screen, otherwise the maximum distance past any edge.
+	/// </summary>
+	private float GetDistanceFromScreen( Vector2 position )
+	{
+		Vector2 screenSize = new Vector2( Screen.Width, Screen.Height );
+
+		// Distance past each edge (0 if not past that edge)
+		float leftDist = Math.Max( 0, -position.x );
+		float rightDist = Math.Max( 0, position.x - screenSize.x );
+		float topDist = Math.Max( 0, -position.y );
+		float bottomDist = Math.Max( 0, position.y - screenSize.y );
+
+		// Return the maximum off-screen distance
+		return Math.Max( Math.Max( leftDist, rightDist ), Math.Max( topDist, bottomDist ) );
+	}
+
+	/// <summary>
+	/// Find where a line from start to end intersects the screen rectangle.
+	/// Returns the intersection point closest to start.
+	/// </summary>
+	private Vector2 GetScreenEdgeIntersection( Vector2 start, Vector2 end )
+	{
+		Vector2 screenSize = new Vector2( Screen.Width, Screen.Height );
+		Vector2 direction = end - start;
+
+		float closestT = float.MaxValue;
+		Vector2 closestPoint = end; // Default to end if no intersection found
+
+		// Check intersection with each screen edge
+		// Top edge (y = 0)
+		if ( direction.y != 0 )
+		{
+			float t = (0 - start.y) / direction.y;
+			if ( t >= 0 && t <= 1 )
+			{
+				float x = start.x + t * direction.x;
+				if ( x >= 0 && x <= screenSize.x && t < closestT )
+				{
+					closestT = t;
+					closestPoint = new Vector2( x, 0 );
+				}
+			}
+		}
+
+		// Bottom edge (y = height)
+		if ( direction.y != 0 )
+		{
+			float t = (screenSize.y - start.y) / direction.y;
+			if ( t >= 0 && t <= 1 )
+			{
+				float x = start.x + t * direction.x;
+				if ( x >= 0 && x <= screenSize.x && t < closestT )
+				{
+					closestT = t;
+					closestPoint = new Vector2( x, screenSize.y );
+				}
+			}
+		}
+
+		// Left edge (x = 0)
+		if ( direction.x != 0 )
+		{
+			float t = (0 - start.x) / direction.x;
+			if ( t >= 0 && t <= 1 )
+			{
+				float y = start.y + t * direction.y;
+				if ( y >= 0 && y <= screenSize.y && t < closestT )
+				{
+					closestT = t;
+					closestPoint = new Vector2( 0, y );
+				}
+			}
+		}
+
+		// Right edge (x = width)
+		if ( direction.x != 0 )
+		{
+			float t = (screenSize.x - start.x) / direction.x;
+			if ( t >= 0 && t <= 1 )
+			{
+				float y = start.y + t * direction.y;
+				if ( y >= 0 && y <= screenSize.y && t < closestT )
+				{
+					closestT = t;
+					closestPoint = new Vector2( screenSize.x, y );
+				}
+			}
+		}
+
+		return closestPoint;
+	}
+
 	private void UpdateCursor()
 	{
+		// Don't change cursor type when it's hidden (we're off-screen)
+		if ( isCursorHidden ) return;
+
 		// Grabbing takes priority
 		if ( selectedSelectable != null )
 		{
