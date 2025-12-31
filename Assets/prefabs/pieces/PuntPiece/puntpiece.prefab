@@ -83,7 +83,7 @@
           "Yaw": false,
           "Roll": false
         },
-        "MassCenterOverride": "0,0,0",
+        "MassCenterOverride": "0,0,9",
         "MassOverride": 0,
         "MinImpactDamageSpeed": 500,
         "MotionEnabled": true,
@@ -93,7 +93,7 @@
         "OnComponentFixedUpdate": null,
         "OnComponentStart": null,
         "OnComponentUpdate": null,
-        "OverrideMassCenter": false,
+        "OverrideMassCenter": true,
         "RigidbodyFlags": 0,
         "StartAsleep": false
       },
@@ -682,7 +682,7 @@
             "OnComponentUpdate": null,
             "StartOffset": 50,
             "StartPosition": "0,0,0",
-            "Width": 2000,
+            "Width": 1000,
             "WorldPanel": {
               "_type": "component",
               "component_id": "f0acf77d-3321-4560-9c30-c0017ade40ac",

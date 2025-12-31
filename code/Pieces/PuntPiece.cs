@@ -23,8 +23,11 @@ public sealed class PuntPiece : Component, ISelectable
 
 	// === ISelectable Implementation ===
 	public bool CanSelect => State == PieceState.Ready || State == PieceState.Hovered;
-	public float SelectPriority => 100f;
-	public float SelectRadius => 100f;
+
+	[Property, Group( "Selection" )] public float selectPriority = 100f;
+	public float SelectPriority => selectPriority;
+	[Property, Group( "Selection" )] public float selectRadius = 100f;
+	public float SelectRadius => selectRadius;
 	public Vector3 SelectPosition => WorldPosition;
 	public bool CapturesSelection => true;
 

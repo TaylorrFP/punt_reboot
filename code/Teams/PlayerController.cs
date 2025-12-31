@@ -211,9 +211,9 @@ public sealed class PlayerController : Component
 				Gizmo.Draw.Color = Color.Red;
 				Gizmo.Draw.LineCircle( selectedSelectable.SelectPosition, Vector3.Up, MinFlickDistance, 0, 360, 64 );
 
-				// Green circle: Max threshold
+				// Green circle: Max threshold (in drag distance, not flick power)
 				Gizmo.Draw.Color = Color.Green;
-				Gizmo.Draw.LineCircle( selectedSelectable.SelectPosition, Vector3.Up, MaxFlickDistance, 0, 360, 512 );
+				Gizmo.Draw.LineCircle( selectedSelectable.SelectPosition, Vector3.Up, MaxFlickDistance / FlickStrength, 0, 360, 512 );
 
 				//Black text: Flick distance
 				Gizmo.Draw.Color = Color.Black;
