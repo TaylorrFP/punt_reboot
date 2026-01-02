@@ -13,6 +13,7 @@ public sealed class PlayerController : Component
 	[Property, Group( "Debug" )] public bool isDebug { get; set; } = false;
 
 	[Property, Group( "Virtual Cursor" )] public bool ShowRealCursor { get; set; } = false;
+	[Property, Group( "Virtual Cursor" )] public bool ShowCursor { get; set; } = true;
 	[Property, Group( "Virtual Cursor" )] public float Sensitivity { get; set; } = 1.0f;
 
 	// === Interaction State ===
@@ -50,12 +51,12 @@ public sealed class PlayerController : Component
 		UpdateCursorVisuals();
 		UpdateCursorPanel();
 
-		if (Input.EscapePressed)
-		{
-			Mouse.Position = cursorPosition;
-			Mouse.Visibility = MouseVisibility.Visible;
+		//if (Input.EscapePressed)
+		//{
+		//	Mouse.Position = cursorPosition;
+		//	Mouse.Visibility = MouseVisibility.Visible;
 			
-		}
+		//}
 		//This actually works - can we just do this every time we need to 
 
 	}
@@ -89,6 +90,7 @@ public sealed class PlayerController : Component
 
 	private void UpdateCursorPanel()
 	{
+
 		Hud.Instance?.UpdateCursorPosition( cursorPosition );
 	}
 
@@ -285,7 +287,7 @@ public sealed class PlayerController : Component
 	private void DrawFlickDebug()
 	{
 		Gizmo.Draw.Color = Color.Cyan;
-		Gizmo.Draw.SolidSphere( currentWorldPosition, 5f, 16, 16 );
+		Gizmo.Draw.SolidSphere( currentWorldPosition, 16f, 16, 16 );
 
 		Gizmo.Draw.Color = Color.White;
 		Gizmo.Draw.Line( selectedSelectable.SelectPosition, selectedSelectable.SelectPosition + (flickVector * -1f) );
@@ -297,7 +299,7 @@ public sealed class PlayerController : Component
 		Gizmo.Draw.LineCircle( selectedSelectable.SelectPosition, Vector3.Up, MaxFlickDistance / FlickStrength, 0, 360, 512 );
 
 		// Draw cursor position rect
-		float cursorDebugSize = 10f;
+		float cursorDebugSize = 8f;
 		Gizmo.Draw.ScreenRect( new Rect(
 			cursorPosition.x - cursorDebugSize / 2f,
 			cursorPosition.y - cursorDebugSize / 2f,

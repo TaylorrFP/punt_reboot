@@ -186,6 +186,7 @@
           "OnComponentStart": null,
           "OnComponentUpdate": null,
           "Sensitivity": 1,
+          "ShowCursor": true,
           "ShowRealCursor": false,
           "Team": "Blue"
         }
@@ -514,7 +515,8 @@
           "OnComponentEnabled": null,
           "OnComponentFixedUpdate": null,
           "OnComponentStart": null,
-          "OnComponentUpdate": null
+          "OnComponentUpdate": null,
+          "ShowCursor": true
         }
       ],
       "Children": []

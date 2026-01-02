@@ -16,6 +16,7 @@
 
 	// Cursor properties
 	[Property] public float CursorSize { get; set; } = 32f;
+	[Property] public bool ShowCursor { get; set; } = true;
 
 	// Cursor images for different states
 	[Property, Group( "Cursor Images" )] public string DefaultCursorImage { get; set; } = "ui/cursors/gauntlet_point.png";
@@ -76,6 +77,9 @@
 
 		CursorElement.Style.Left = Length.Pixels( screenPosition.x - halfSize );
 		CursorElement.Style.Top = Length.Pixels( screenPosition.y - halfSize );
+
+		// Update visibility based on ShowCursor property
+		CursorElement.Style.Display = ShowCursor ? DisplayMode.Flex : DisplayMode.None;
 	}
 
 	public void SetCursorImage( string texturePath )
