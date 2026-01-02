@@ -16,6 +16,8 @@ public sealed class PlayerController : Component
 	[Property, Group( "Virtual Cursor" )] public bool ShowCursor { get; set; } = true;
 	[Property, Group( "Virtual Cursor" )] public float Sensitivity { get; set; } = 1.0f;
 
+	[Property, Group( "Camera" )] public CameraController CameraController { get; set; }
+
 	// === Interaction State ===
 	private ISelectable hoveredSelectable;
 	private ISelectable selectedSelectable;
@@ -24,6 +26,7 @@ public sealed class PlayerController : Component
 	// === Flick Tracking ===
 	private Vector3 flickVector;
 	private float lastCursorDelta;
+	private bool isAtMaxFlickDistance;
 
 	// === Virtual Cursor ===
 	private Vector2 cursorPosition;
@@ -48,6 +51,9 @@ public sealed class PlayerController : Component
 			UpdateHovering();
 		}
 
+		// Update camera edge pan based on cursor position and drag state
+		UpdateCameraEdgePan();
+
 		UpdateCursorVisuals();
 		UpdateCursorPanel();
 		DrawDebug();
@@ -59,7 +65,7 @@ public sealed class PlayerController : Component
 			Mouse.Visibility = MouseVisibility.Visible;
 
 		}
-		//This actually works - can we just do this every time we need to 
+		//This actually works - can we just do this every time we need to
 
 	}
 
@@ -160,6 +166,10 @@ public sealed class PlayerController : Component
 			// Calculate flick vector
 			flickVector = (selectedSelectable.SelectPosition - currentWorldPosition).WithZ( 0 );
 			flickVector *= FlickStrength;
+
+			// Check if we're at max distance before clamping
+			isAtMaxFlickDistance = flickVector.Length >= MaxFlickDistance;
+
 			flickVector = flickVector.ClampLength( MaxFlickDistance );
 
 			// Calculate feedback data
@@ -263,6 +273,37 @@ public sealed class PlayerController : Component
 		}
 
 		return true;
+	}
+
+	#endregion
+
+	#region Camera Edge Pan
+
+	private void UpdateCameraEdgePan()
+	{
+		if ( CameraController == null ) return;
+
+		bool isDragging = selectedSelectable != null && selectedSelectable.CapturesSelection;
+
+		// If we're already at max flick distance, don't pan the camera
+		if ( isDragging && isAtMaxFlickDistance )
+		{
+			CameraController.UpdateEdgePan( cursorPosition, false, null );
+			return;
+		}
+
+		// Get piece position in screen space if dragging
+		Vector2? pieceScreenPos = null;
+		if ( isDragging && selectedSelectable != null )
+		{
+			var camera = Scene.Camera;
+			Vector3 worldPos = selectedSelectable.SelectPosition;
+			Vector3 screenPos3D = camera.PointToScreenPixels( worldPos );
+			pieceScreenPos = new Vector2( screenPos3D.x, screenPos3D.y );
+		}
+
+		// Always update, even when not dragging (for passive pan)
+		CameraController.UpdateEdgePan( cursorPosition, isDragging, pieceScreenPos );
 	}
 
 	#endregion
