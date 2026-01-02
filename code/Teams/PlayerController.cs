@@ -12,7 +12,6 @@ public sealed class PlayerController : Component
 
 	[Property, Group( "Debug" )] public bool isDebug { get; set; } = false;
 
-	[Property, Group( "Virtual Cursor" )] public float CursorSize { get; set; } = 10f;
 	[Property, Group( "Virtual Cursor" )] public bool ShowRealCursor { get; set; } = false;
 	[Property, Group( "Virtual Cursor" )] public float Sensitivity { get; set; } = 1.0f;
 
@@ -29,9 +28,6 @@ public sealed class PlayerController : Component
 	private Vector2 cursorPosition;
 	private bool initialized = false;
 
-
-
-	[Property] public Vector2 MousePosition;
 
 	
 
@@ -52,12 +48,13 @@ public sealed class PlayerController : Component
 		}
 
 		UpdateCursorVisuals();
-		DrawCursor();
+		UpdateCursorPanel();
 
 		if (Input.EscapePressed)
 		{
-			Mouse.Visibility = MouseVisibility.Visible;
 			Mouse.Position = cursorPosition;
+			Mouse.Visibility = MouseVisibility.Visible;
+			
 		}
 		//This actually works - can we just do this every time we need to 
 
@@ -68,9 +65,7 @@ public sealed class PlayerController : Component
 	private void UpdateCursor()
 	{
 
-		MousePosition = Mouse.Position;
-
-
+		
 		// Initialize cursor position on first frame
 		if ( !initialized )
 		{
@@ -92,16 +87,9 @@ public sealed class PlayerController : Component
 		Mouse.Visibility = ShowRealCursor ? MouseVisibility.Visible : MouseVisibility.Hidden;
 	}
 
-	private void DrawCursor()
+	private void UpdateCursorPanel()
 	{
-		Gizmo.Draw.Color = Color.White;
-		float halfSize = CursorSize / 2f;
-		Gizmo.Draw.ScreenRect( new Rect(
-			cursorPosition.x - halfSize,
-			cursorPosition.y - halfSize,
-			CursorSize,
-			CursorSize
-		), Color.Black );
+		Hud.Instance?.UpdateCursorPosition( cursorPosition );
 	}
 
 	#endregion
@@ -266,21 +254,27 @@ public sealed class PlayerController : Component
 
 	private void UpdateCursorVisuals()
 	{
+		if ( Hud.Instance == null ) return;
+
 		if ( selectedSelectable != null )
 		{
 			Mouse.CursorType = "grabbing";
+			Hud.Instance.SetCursorState( CursorState.Grabbing );
 		}
 		else if ( hoveredSelectable == null )
 		{
 			Mouse.CursorType = "pointer";
+			Hud.Instance.SetCursorState( CursorState.Default );
 		}
 		else if ( !hoveredSelectable.CanSelect )
 		{
 			Mouse.CursorType = "not-allowed";
+			Hud.Instance.SetCursorState( CursorState.Disabled );
 		}
 		else
 		{
 			Mouse.CursorType = "pointer";
+			Hud.Instance.SetCursorState( CursorState.Hover );
 		}
 	}
 
@@ -302,8 +296,17 @@ public sealed class PlayerController : Component
 		Gizmo.Draw.Color = Color.Green;
 		Gizmo.Draw.LineCircle( selectedSelectable.SelectPosition, Vector3.Up, MaxFlickDistance / FlickStrength, 0, 360, 512 );
 
+		// Draw cursor position rect
+		float cursorDebugSize = 10f;
+		Gizmo.Draw.ScreenRect( new Rect(
+			cursorPosition.x - cursorDebugSize / 2f,
+			cursorPosition.y - cursorDebugSize / 2f,
+			cursorDebugSize,
+			cursorDebugSize
+		), Color.Magenta );
+
 		Gizmo.Draw.Color = Color.Black;
-		Gizmo.Draw.ScreenText( flickVector.Length.ToString( "F1" ), cursorPosition + Vector2.Up * 20, "roboto", 16f );
+		Gizmo.Draw.ScreenText( flickVector.Length.ToString( "F1" ), cursorPosition + Vector2.Down * 32, "roboto", 16f );
 	}
 
 	#endregion

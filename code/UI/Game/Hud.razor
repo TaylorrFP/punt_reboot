@@ -1,0 +1,116 @@
+@using Sandbox;
+@using Sandbox.UI;
+@using Punt.UI;
+@inherits PanelComponent
+@namespace Sandbox
+
+<root>
+	<div class="cursor" @ref="CursorElement"></div>
+</root>
+
+@code
+{
+	public static Hud Instance { get; private set; }
+
+	[Property, TextArea] public string MyStringValue { get; set; } = "Hello World!";
+
+	// Cursor properties
+	[Property] public float CursorSize { get; set; } = 32f;
+
+	// Cursor images for different states
+	[Property, Group( "Cursor Images" )] public string DefaultCursorImage { get; set; } = "ui/cursors/gauntlet_point.png";
+	[Property, Group( "Cursor Images" )] public string HoverCursorImage { get; set; } = "ui/cursors/gauntlet_open.png";
+	[Property, Group( "Cursor Images" )] public string GrabbingCursorImage { get; set; } = "ui/cursors/gauntlet_default.png";
+	[Property, Group( "Cursor Images" )] public string DisabledCursorImage { get; set; } = "ui/cursors/hand_point.png";
+
+	private Panel CursorElement { get; set; }
+	private Vector2 cursorPosition;
+	private string currentCursorImage;
+
+	protected override void OnTreeBuilt()
+	{
+		base.OnTreeBuilt();
+
+		Instance = this;
+
+		// Setup cursor element
+		if ( CursorElement != null )
+		{
+			CursorElement.Style.Width = Length.Pixels( CursorSize );
+			CursorElement.Style.Height = Length.Pixels( CursorSize );
+			CursorElement.Style.Position = PositionMode.Absolute;
+			CursorElement.Style.PointerEvents = PointerEvents.None;
+			CursorElement.Style.ZIndex = 9999;
+			CursorElement.Style.Opacity = 1.0f;
+
+			// Load default cursor image if provided
+			if ( !string.IsNullOrEmpty( DefaultCursorImage ) )
+			{
+				SetCursorImage( DefaultCursorImage );
+			}
+			else
+			{
+				// Fallback to white square if no image provided
+				CursorElement.Style.BackgroundColor = Color.White;
+			}
+		}
+
+		Log.Info( "Hud initialized with cursor" );
+	}
+
+	protected override void OnDestroy()
+	{
+		base.OnDestroy();
+		if ( Instance == this )
+		{
+			Instance = null;
+		}
+	}
+
+	public void UpdateCursorPosition( Vector2 screenPosition )
+	{
+		if ( CursorElement == null ) return;
+
+		cursorPosition = screenPosition;
+		float halfSize = CursorSize / 2f;
+
+		CursorElement.Style.Left = Length.Pixels( screenPosition.x - halfSize );
+		CursorElement.Style.Top = Length.Pixels( screenPosition.y - halfSize );
+	}
+
+	public void SetCursorImage( string texturePath )
+	{
+		if ( CursorElement == null ) return;
+
+		// Only update if the image path has changed (optimization)
+		if ( currentCursorImage == texturePath ) return;
+
+		currentCursorImage = texturePath;
+		CursorElement.Style.BackgroundImage = Texture.LoadFromFileSystem( texturePath, FileSystem.Mounted );
+	}
+
+	// Convenience methods for setting cursor state
+	public void SetCursorState( CursorState state )
+	{
+		switch ( state )
+		{
+			case CursorState.Default:
+				SetCursorImage( DefaultCursorImage );
+				break;
+			case CursorState.Hover:
+				SetCursorImage( HoverCursorImage );
+				break;
+			case CursorState.Grabbing:
+				SetCursorImage( GrabbingCursorImage );
+				break;
+			case CursorState.Disabled:
+				SetCursorImage( DisabledCursorImage );
+				break;
+		}
+	}
+
+	/// <summary>
+	/// the hash determines if the system should be rebuilt. If it changes, it will be rebuilt
+	/// </summary>
+	protected override int BuildHash() => System.HashCode.Combine( MyStringValue );
+}
