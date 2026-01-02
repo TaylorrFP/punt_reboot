@@ -29,8 +29,8 @@ public sealed class CameraController : Component
 
 	protected override void OnUpdate()
 	{
-		// Smoothly move current offset toward target
-		currentOffset = Vector3.Lerp( currentOffset, targetOffset, PanSmoothSpeed * Time.Delta );
+		// No smoothing - instant tracking for debugging
+		currentOffset = targetOffset;
 
 		// Apply the offset
 		LocalPosition = basePosition + currentOffset;

@@ -181,7 +181,7 @@
             "component_type": "CameraController"
           },
           "FlickStrength": 0.6,
-          "isDebug": false,
+          "isDebug": true,
           "MaxFlickDistance": 650,
           "MaxFlickStrength": 650,
           "MinFlickDistance": 50,
@@ -231,7 +231,7 @@
           "OnComponentStart": null,
           "OnComponentUpdate": null,
           "PanSmoothSpeed": 4,
-          "PassivePanStrength": 0.2,
+          "PassivePanStrength": 0,
           "SafeFrameColor": "0,1,1,0.5",
           "ShowSafeFrame": true
         }
