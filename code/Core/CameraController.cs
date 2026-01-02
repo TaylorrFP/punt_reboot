@@ -19,6 +19,8 @@ public sealed class CameraController : Component
 	private Vector3 targetOffset;
 	private Vector3 currentOffset;
 
+	public Vector3 CurrentOffset => currentOffset;
+
 	protected override void OnStart()
 	{
 		// Store the initial camera position as our base
@@ -87,7 +89,8 @@ public sealed class CameraController : Component
 	/// <summary>
 	/// Called by PlayerController when dragging to apply camera pan based on cursor position
 	/// </summary>
-	public void UpdateEdgePan( Vector2 cursorPos, bool isDragging, Vector2? pieceScreenPos )
+	/// <param name="maxPanMagnitude">If set, clamps the pan offset magnitude to this value (allows direction changes but not magnitude increases)</param>
+	public void UpdateEdgePan( Vector2 cursorPos, bool isDragging, Vector2? pieceScreenPos, float? maxPanMagnitude = null )
 	{
 		if ( !EnablePassivePan )
 		{
@@ -167,6 +170,12 @@ public sealed class CameraController : Component
 
 		// Clamp the total pan distance to MaxPanDistance (prevents over-panning in corners)
 		scaledPan = scaledPan.ClampLength( MaxPanDistance );
+
+		// If we have a magnitude cap, clamp to that (allows direction changes but not magnitude increases)
+		if ( maxPanMagnitude.HasValue )
+		{
+			scaledPan = scaledPan.ClampLength( maxPanMagnitude.Value );
+		}
 
 		// Convert to 3D offset
 		targetOffset = new Vector3( scaledPan.x, scaledPan.y, 0 );

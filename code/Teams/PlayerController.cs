@@ -27,6 +27,7 @@ public sealed class PlayerController : Component
 	private Vector3 flickVector;
 	private float lastCursorDelta;
 	private bool isAtMaxFlickDistance;
+	private float? lockedPanMagnitude;
 
 	// === Virtual Cursor ===
 	private Vector2 cursorPosition;
@@ -236,6 +237,7 @@ public sealed class PlayerController : Component
 		selectedSelectable = null;
 		flickVector = Vector3.Zero;
 		lastCursorDelta = 0f;
+		lockedPanMagnitude = null;
 	}
 
 	private ISelectable FindNearestSelectable()
@@ -285,13 +287,6 @@ public sealed class PlayerController : Component
 
 		bool isDragging = selectedSelectable != null && selectedSelectable.CapturesSelection;
 
-		// If we're already at max flick distance, don't pan the camera
-		if ( isDragging && isAtMaxFlickDistance )
-		{
-			CameraController.UpdateEdgePan( cursorPosition, false, null );
-			return;
-		}
-
 		// Get piece position in screen space if dragging
 		Vector2? pieceScreenPos = null;
 		if ( isDragging && selectedSelectable != null )
@@ -302,8 +297,25 @@ public sealed class PlayerController : Component
 			pieceScreenPos = new Vector2( screenPos3D.x, screenPos3D.y );
 		}
 
+		// Handle max flick distance - lock the pan magnitude but allow direction changes
+		float? maxPanMagnitude = null;
+		if ( isDragging && isAtMaxFlickDistance )
+		{
+			// First frame at max distance - lock the current pan magnitude
+			if ( !lockedPanMagnitude.HasValue )
+			{
+				lockedPanMagnitude = CameraController.CurrentOffset.Length;
+			}
+			maxPanMagnitude = lockedPanMagnitude;
+		}
+		else
+		{
+			// Not at max distance - clear the lock
+			lockedPanMagnitude = null;
+		}
+
 		// Always update, even when not dragging (for passive pan)
-		CameraController.UpdateEdgePan( cursorPosition, isDragging, pieceScreenPos );
+		CameraController.UpdateEdgePan( cursorPosition, isDragging, pieceScreenPos, maxPanMagnitude );
 	}
 
 	#endregion
