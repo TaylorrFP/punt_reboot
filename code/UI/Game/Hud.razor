@@ -73,10 +73,18 @@
 		if ( CursorElement == null ) return;
 
 		cursorPosition = screenPosition;
-		float halfSize = CursorSize / 2f;
 
-		CursorElement.Style.Left = Length.Pixels( screenPosition.x - halfSize );
-		CursorElement.Style.Top = Length.Pixels( screenPosition.y - halfSize );
+		// Convert screen coordinates to panel space
+		Vector2 panelPosition = Panel.ScaleFromScreen * screenPosition;
+
+		// Scale the cursor size to maintain consistent screen-space size
+		float scaledSize = CursorSize * Panel.ScaleFromScreen;
+		float halfSize = scaledSize / 2f;
+
+		CursorElement.Style.Left = Length.Pixels( panelPosition.x - halfSize );
+		CursorElement.Style.Top = Length.Pixels( panelPosition.y - halfSize );
+		CursorElement.Style.Width = Length.Pixels( scaledSize );
+		CursorElement.Style.Height = Length.Pixels( scaledSize );
 
 		// Update visibility based on ShowCursor property
 		CursorElement.Style.Display = ShowCursor ? DisplayMode.Flex : DisplayMode.None;

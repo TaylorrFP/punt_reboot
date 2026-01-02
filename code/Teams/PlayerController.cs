@@ -50,14 +50,29 @@ public sealed class PlayerController : Component
 
 		UpdateCursorVisuals();
 		UpdateCursorPanel();
+		DrawDebug();
 
-		//if (Input.EscapePressed)
-		//{
-		//	Mouse.Position = cursorPosition;
-		//	Mouse.Visibility = MouseVisibility.Visible;
-			
-		//}
+
+		if ( Input.EscapePressed )
+		{
+			Mouse.Position = cursorPosition;
+			Mouse.Visibility = MouseVisibility.Visible;
+
+		}
 		//This actually works - can we just do this every time we need to 
+
+	}
+
+	private void DrawDebug()
+	{
+		// Draw cursor position rect
+		float cursorDebugSize = 8f;
+		Gizmo.Draw.ScreenRect( new Rect(
+			cursorPosition.x - cursorDebugSize / 2f,
+			cursorPosition.y - cursorDebugSize / 2f,
+			cursorDebugSize,
+			cursorDebugSize
+		), Color.Magenta );
 
 	}
 
@@ -297,15 +312,6 @@ public sealed class PlayerController : Component
 
 		Gizmo.Draw.Color = Color.Green;
 		Gizmo.Draw.LineCircle( selectedSelectable.SelectPosition, Vector3.Up, MaxFlickDistance / FlickStrength, 0, 360, 512 );
-
-		// Draw cursor position rect
-		float cursorDebugSize = 8f;
-		Gizmo.Draw.ScreenRect( new Rect(
-			cursorPosition.x - cursorDebugSize / 2f,
-			cursorPosition.y - cursorDebugSize / 2f,
-			cursorDebugSize,
-			cursorDebugSize
-		), Color.Magenta );
 
 		Gizmo.Draw.Color = Color.Black;
 		Gizmo.Draw.ScreenText( flickVector.Length.ToString( "F1" ), cursorPosition + Vector2.Down * 32, "roboto", 16f );
