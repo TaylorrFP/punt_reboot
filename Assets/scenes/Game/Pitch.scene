@@ -172,7 +172,7 @@
       "Components": [
         {
           "__type": "PlayerController",
-          "__guid": "73860226-420e-4d66-8870-43a97232d98c",
+          "__guid": "d3685f9d-b13f-4326-9d7c-a086349cc825",
           "__enabled": true,
           "CameraController": {
             "_type": "component",
@@ -180,11 +180,11 @@
             "go": "96cdd6d5-293f-4b12-8ebd-76f82dde8d15",
             "component_type": "CameraController"
           },
-          "FlickStrength": 1,
-          "isDebug": true,
+          "FlickStrength": 0.6,
+          "isDebug": false,
           "MaxFlickDistance": 650,
           "MaxFlickStrength": 650,
-          "MinFlickDistance": 100,
+          "MinFlickDistance": 50,
           "OnComponentDestroy": null,
           "OnComponentDisabled": null,
           "OnComponentEnabled": null,
