@@ -329,6 +329,12 @@ public sealed class CameraController : Component
 		const float threshold = 1f;
 		const int samples = 64;
 
+		// Calculate where the camera will be (target + passive pan)
+		// We need to check edges relative to target position, not current position,
+		// otherwise smoothing causes overshoot as detection lags behind
+		Vector3 targetCameraPos = targetPosition + GetPassivePanOffset();
+		Vector3 cameraOffset = targetCameraPos - WorldPosition;
+
 		for ( int i = 0; i < samples; i++ )
 		{
 			float angle = (i / (float)samples) * MathF.PI * 2f;
@@ -338,7 +344,9 @@ public sealed class CameraController : Component
 				0
 			);
 
-			Vector2 screenPoint = Scene.Camera.PointToScreenPixels( worldPoint );
+			// Offset the world point as if camera were already at target position
+			Vector3 adjustedPoint = worldPoint - cameraOffset;
+			Vector2 screenPoint = Scene.Camera.PointToScreenPixels( adjustedPoint );
 
 			bool atEdge = edge switch
 			{
