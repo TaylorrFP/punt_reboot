@@ -385,6 +385,7 @@
           "BevelAmount": 515,
           "BevelResolution": 32,
           "DebugDraw": true,
+          "GoalDepth": 200,
           "GoalHeight": 296.98773,
           "GoalWidth": 650,
           "OnComponentDestroy": null,
@@ -396,6 +397,10 @@
           "PitchLength": 2000,
           "PitchWidth": 1700,
           "ShowCeilingDebug": true,
+          "ShowGoalEnclosureDebug": true,
+          "ShowGoalsDebug": true,
+          "ShowGoalVolumeDebug": true,
+          "ShowWallsDebug": true,
           "WallHeight": 500,
           "WallThickness": 96.02668
         }

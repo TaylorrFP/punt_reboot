@@ -61,7 +61,11 @@ public sealed class PitchGenerator : Component
 	}
 
 	[Property] public bool DebugDraw { get; set; } = false;
+	[Property, ShowIf( nameof( DebugDraw ), true )] public bool ShowWallsDebug { get; set; } = true;
+	[Property, ShowIf( nameof( DebugDraw ), true )] public bool ShowGoalsDebug { get; set; } = true;
+	[Property, ShowIf( nameof( DebugDraw ), true )] public bool ShowGoalEnclosureDebug { get; set; } = true;
 	[Property, ShowIf( nameof( DebugDraw ), true )] public bool ShowCeilingDebug { get; set; } = false;
+	[Property, ShowIf( nameof( DebugDraw ), true )] public bool ShowGoalVolumeDebug { get; set; } = false;
 
 	private float goalHeight = 30f;
 	[Property]
@@ -69,6 +73,14 @@ public sealed class PitchGenerator : Component
 	{
 		get => goalHeight;
 		set { goalHeight = value; OnPropertyChanged(); }
+	}
+
+	private float goalDepth = 20f;
+	[Property]
+	public float GoalDepth
+	{
+		get => goalDepth;
+		set { goalDepth = value; OnPropertyChanged(); }
 	}
 
 	private readonly List<Collider> wallColliders = new();
@@ -132,7 +144,10 @@ public sealed class PitchGenerator : Component
 
 	protected override void DrawGizmos()
 	{
-		DrawPitch();
+		if ( DebugDraw )
+		{
+			DrawPitch();
+		}
 	}
 
 	private void GeneratePitchColliders()
@@ -171,12 +186,16 @@ public sealed class PitchGenerator : Component
 		}
 
 		// Create goal posts and crossbar at each goal opening
+		int goalIndex = 0;
 		foreach (var (topIdx, bottomIdx) in goalLineIndices)
 		{
 			CreateGoalPost(vertices[topIdx]);
 			CreateGoalPost(vertices[bottomIdx]);
 			CreateCrossbar(vertices[topIdx], vertices[bottomIdx]);
 			CreateAboveCrossbarWall(vertices[topIdx], vertices[bottomIdx]);
+			CreateGoalVolume(vertices[topIdx], vertices[bottomIdx], goalIndex);
+			CreateGoalEnclosure(vertices[topIdx], vertices[bottomIdx], goalIndex);
+			goalIndex++;
 		}
 
 		// Create ceiling
@@ -195,6 +214,80 @@ public sealed class PitchGenerator : Component
 		collider.Scale = new Vector3( PitchLength, PitchWidth, WallThickness );
 
 		goalPosts.Add( ceilingObj );
+	}
+
+	private void CreateGoalVolume(Vector3 topPost, Vector3 bottomPost, int goalIndex)
+	{
+		// Goal volume sits behind the goal line, used as a trigger to detect goals
+		var center = (topPost + bottomPost) / 2f;
+
+		// Direction to push the volume behind the goal (outward from pitch center)
+		var xDirection = (topPost.x < 0) ? -1f : 1f;
+		var volumeCenter = center + new Vector3(xDirection * (GoalDepth / 2f + WallThickness / 2f), 0, GoalHeight / 2f);
+
+		var goalVolumeObj = new GameObject();
+		goalVolumeObj.Name = goalIndex == 0 ? "GoalVolume_Left" : "GoalVolume_Right";
+		goalVolumeObj.Parent = collidersContainer;
+		goalVolumeObj.WorldPosition = volumeCenter;
+
+		var collider = goalVolumeObj.Components.Create<BoxCollider>();
+		collider.Scale = new Vector3(GoalDepth, GoalWidth, GoalHeight);
+		collider.IsTrigger = true;
+
+		goalPosts.Add(goalVolumeObj);
+	}
+
+	private void CreateGoalEnclosure(Vector3 topPost, Vector3 bottomPost, int goalIndex)
+	{
+		// Create the 4 walls that enclose the goal: back, top, and two sides
+		var center = (topPost + bottomPost) / 2f;
+		var xDirection = (topPost.x < 0) ? -1f : 1f;
+		var sideName = goalIndex == 0 ? "Left" : "Right";
+
+		// Back wall - at the far end of the goal depth
+		var backWallX = center.x + xDirection * (GoalDepth + WallThickness);
+		var backWallObj = new GameObject();
+		backWallObj.Name = $"GoalBack_{sideName}";
+		backWallObj.Parent = collidersContainer;
+		backWallObj.WorldPosition = new Vector3(backWallX, center.y, GoalHeight / 2f);
+
+		var backCollider = backWallObj.Components.Create<BoxCollider>();
+		backCollider.Scale = new Vector3(WallThickness, GoalWidth, GoalHeight);
+		goalPosts.Add(backWallObj);
+
+		// Top wall - ceiling of the goal
+		var topWallX = center.x + xDirection * (GoalDepth / 2f + WallThickness / 2f);
+		var topWallObj = new GameObject();
+		topWallObj.Name = $"GoalTop_{sideName}";
+		topWallObj.Parent = collidersContainer;
+		topWallObj.WorldPosition = new Vector3(topWallX, center.y, GoalHeight + WallThickness / 2f);
+
+		var topCollider = topWallObj.Components.Create<BoxCollider>();
+		topCollider.Scale = new Vector3(GoalDepth + WallThickness, GoalWidth, WallThickness);
+		goalPosts.Add(topWallObj);
+
+		// Side walls - left and right sides of the goal
+		var sideWallX = center.x + xDirection * (GoalDepth / 2f + WallThickness / 2f);
+
+		// Top side (positive Y)
+		var topSideObj = new GameObject();
+		topSideObj.Name = $"GoalSideTop_{sideName}";
+		topSideObj.Parent = collidersContainer;
+		topSideObj.WorldPosition = new Vector3(sideWallX, center.y + GoalWidth / 2f + WallThickness / 2f, GoalHeight / 2f);
+
+		var topSideCollider = topSideObj.Components.Create<BoxCollider>();
+		topSideCollider.Scale = new Vector3(GoalDepth + WallThickness, WallThickness, GoalHeight);
+		goalPosts.Add(topSideObj);
+
+		// Bottom side (negative Y)
+		var bottomSideObj = new GameObject();
+		bottomSideObj.Name = $"GoalSideBottom_{sideName}";
+		bottomSideObj.Parent = collidersContainer;
+		bottomSideObj.WorldPosition = new Vector3(sideWallX, center.y - GoalWidth / 2f - WallThickness / 2f, GoalHeight / 2f);
+
+		var bottomSideCollider = bottomSideObj.Components.Create<BoxCollider>();
+		bottomSideCollider.Scale = new Vector3(GoalDepth + WallThickness, WallThickness, GoalHeight);
+		goalPosts.Add(bottomSideObj);
 	}
 
 	private void CreateGoalPost(Vector3 position)
@@ -431,16 +524,95 @@ public sealed class PitchGenerator : Component
 			Gizmo.Draw.LineBBox(new BBox(vertex - Vector3.One * size, vertex + Vector3.One * size));
 		}
 
-		// Draw debug boxes for colliders
-		DrawColliderDebugBoxes(vertices, goalLineIndices);
+		// Draw debug boxes for wall colliders
+		if ( ShowWallsDebug )
+		{
+			DrawColliderDebugBoxes( vertices, goalLineIndices );
+		}
 
 		// Draw debug cylinders for goal posts
-		DrawGoalPostDebug(vertices, goalLineIndices);
+		if ( ShowGoalsDebug )
+		{
+			DrawGoalPostDebug( vertices, goalLineIndices );
+		}
+
+		// Draw goal enclosure debug if enabled
+		if ( ShowGoalEnclosureDebug )
+		{
+			DrawGoalEnclosureDebug( vertices, goalLineIndices );
+		}
 
 		// Draw ceiling debug if enabled
 		if ( ShowCeilingDebug )
 		{
 			DrawCeilingDebug();
+		}
+
+		// Draw goal volume debug if enabled
+		if ( ShowGoalVolumeDebug )
+		{
+			DrawGoalVolumeDebug( vertices, goalLineIndices );
+		}
+	}
+
+	private void DrawGoalEnclosureDebug( List<Vector3> vertices, List<(int, int)> goalLineIndices )
+	{
+		Gizmo.Draw.Color = Color.Orange.WithAlpha( 0.3f );
+
+		foreach ( var (topIdx, bottomIdx) in goalLineIndices )
+		{
+			var topPost = vertices[topIdx];
+			var bottomPost = vertices[bottomIdx];
+			var center = ( topPost + bottomPost ) / 2f;
+			var xDirection = ( topPost.x < 0 ) ? -1f : 1f;
+
+			// Back wall
+			var backWallX = center.x + xDirection * ( GoalDepth + WallThickness );
+			var backHalfExtents = new Vector3( WallThickness / 2f, GoalWidth / 2f, GoalHeight / 2f );
+			Gizmo.Transform = new Transform( new Vector3( backWallX, center.y, GoalHeight / 2f ), Rotation.Identity );
+			Gizmo.Draw.LineBBox( new BBox( -backHalfExtents, backHalfExtents ) );
+
+			// Top wall
+			var topWallX = center.x + xDirection * ( GoalDepth / 2f + WallThickness / 2f );
+			var topHalfExtents = new Vector3( ( GoalDepth + WallThickness ) / 2f, GoalWidth / 2f, WallThickness / 2f );
+			Gizmo.Transform = new Transform( new Vector3( topWallX, center.y, GoalHeight + WallThickness / 2f ), Rotation.Identity );
+			Gizmo.Draw.LineBBox( new BBox( -topHalfExtents, topHalfExtents ) );
+
+			// Side walls
+			var sideWallX = center.x + xDirection * ( GoalDepth / 2f + WallThickness / 2f );
+			var sideHalfExtents = new Vector3( ( GoalDepth + WallThickness ) / 2f, WallThickness / 2f, GoalHeight / 2f );
+
+			// Top side (positive Y)
+			Gizmo.Transform = new Transform( new Vector3( sideWallX, center.y + GoalWidth / 2f + WallThickness / 2f, GoalHeight / 2f ), Rotation.Identity );
+			Gizmo.Draw.LineBBox( new BBox( -sideHalfExtents, sideHalfExtents ) );
+
+			// Bottom side (negative Y)
+			Gizmo.Transform = new Transform( new Vector3( sideWallX, center.y - GoalWidth / 2f - WallThickness / 2f, GoalHeight / 2f ), Rotation.Identity );
+			Gizmo.Draw.LineBBox( new BBox( -sideHalfExtents, sideHalfExtents ) );
+
+			Gizmo.Transform = global::Transform.Zero;
+		}
+	}
+
+	private void DrawGoalVolumeDebug( List<Vector3> vertices, List<(int, int)> goalLineIndices )
+	{
+		Gizmo.Draw.Color = Color.Green.WithAlpha( 0.3f );
+
+		foreach ( var (topIdx, bottomIdx) in goalLineIndices )
+		{
+			var topPost = vertices[topIdx];
+			var bottomPost = vertices[bottomIdx];
+			var center = ( topPost + bottomPost ) / 2f;
+
+			var xDirection = ( topPost.x < 0 ) ? -1f : 1f;
+			var volumeCenter = center + new Vector3( xDirection * ( GoalDepth / 2f + WallThickness / 2f ), 0, GoalHeight / 2f );
+
+			var halfExtents = new Vector3( GoalDepth / 2f, GoalWidth / 2f, GoalHeight / 2f );
+			var bbox = new BBox( -halfExtents, halfExtents );
+
+			Gizmo.Transform = new Transform( volumeCenter, Rotation.Identity );
+			Gizmo.Draw.LineBBox( bbox );
+			Gizmo.Transform = global::Transform.Zero;
 		}
 	}
 
