@@ -73,22 +73,23 @@ public sealed class CameraController : Component
 
 		Vector3 panOffset = Vector3.Zero;
 
-		// Calculate the maximum possible cursor distance from piece (in screen space)
-		// This is where the cursor would be if not clamped by screen edges
+		// Calculate current distance from piece to cursor
 		Vector2 cursorToPiece = cursorPosition - pieceScreenPos;
-		float maxPossibleDistance = maxFlickDistance;
+		float currentDistance = cursorToPiece.Length;
 
 		// Check each edge and calculate pan amount
+		// We need to account for the circular constraint (pythagorean theorem)
+
 		// Left edge
 		if ( cursorPosition.x < EdgeThreshold )
 		{
-			// Only pan if:
-			// 1. Cursor is left of piece (dragging away)
-			// 2. The cursor would be further left if not for the screen edge
 			if ( cursorPosition.x < pieceScreenPos.x )
 			{
-				// Check if we're actually constrained by the edge
-				float desiredCursorX = pieceScreenPos.x - maxPossibleDistance;
+				// Calculate how much X distance we can use given current Y distance
+				float currentYDistance = Math.Abs( cursorPosition.y - pieceScreenPos.y );
+				float maxXDistance = MathF.Sqrt( maxFlickDistance * maxFlickDistance - currentYDistance * currentYDistance );
+
+				float desiredCursorX = pieceScreenPos.x - maxXDistance;
 				if ( desiredCursorX < 0 )
 				{
 					float edgeDistance = EdgeThreshold - cursorPosition.x;
@@ -102,7 +103,10 @@ public sealed class CameraController : Component
 		{
 			if ( cursorPosition.x > pieceScreenPos.x )
 			{
-				float desiredCursorX = pieceScreenPos.x + maxPossibleDistance;
+				float currentYDistance = Math.Abs( cursorPosition.y - pieceScreenPos.y );
+				float maxXDistance = MathF.Sqrt( maxFlickDistance * maxFlickDistance - currentYDistance * currentYDistance );
+
+				float desiredCursorX = pieceScreenPos.x + maxXDistance;
 				if ( desiredCursorX > screenSize.x )
 				{
 					float edgeDistance = cursorPosition.x - (screenSize.x - EdgeThreshold);
@@ -117,7 +121,10 @@ public sealed class CameraController : Component
 		{
 			if ( cursorPosition.y < pieceScreenPos.y )
 			{
-				float desiredCursorY = pieceScreenPos.y - maxPossibleDistance;
+				float currentXDistance = Math.Abs( cursorPosition.x - pieceScreenPos.x );
+				float maxYDistance = MathF.Sqrt( maxFlickDistance * maxFlickDistance - currentXDistance * currentXDistance );
+
+				float desiredCursorY = pieceScreenPos.y - maxYDistance;
 				if ( desiredCursorY < 0 )
 				{
 					float edgeDistance = EdgeThreshold - cursorPosition.y;
@@ -131,7 +138,10 @@ public sealed class CameraController : Component
 		{
 			if ( cursorPosition.y > pieceScreenPos.y )
 			{
-				float desiredCursorY = pieceScreenPos.y + maxPossibleDistance;
+				float currentXDistance = Math.Abs( cursorPosition.x - pieceScreenPos.x );
+				float maxYDistance = MathF.Sqrt( maxFlickDistance * maxFlickDistance - currentXDistance * currentXDistance );
+
+				float desiredCursorY = pieceScreenPos.y + maxYDistance;
 				if ( desiredCursorY > screenSize.y )
 				{
 					float edgeDistance = cursorPosition.y - (screenSize.y - EdgeThreshold);
