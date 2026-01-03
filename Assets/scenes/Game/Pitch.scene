@@ -172,11 +172,16 @@
       "Components": [
         {
           "__type": "PlayerController",
-          "__guid": "73860226-420e-4d66-8870-43a97232d98c",
+          "__guid": "d3685f9d-b13f-4326-9d7c-a086349cc825",
           "__enabled": true,
+          "CameraController": {
+            "_type": "component",
+            "component_id": "27c40f93-d95a-4ea9-aa6c-aecfdeb8a733",
+            "go": "96cdd6d5-293f-4b12-8ebd-76f82dde8d15",
+            "component_type": "CameraController"
+          },
           "FlickStrength": 1,
-          "isDebug": true,
-          "MaxFlickDistance": 650,
+          "MaxFlickDistance": 450,
           "MaxFlickStrength": 650,
           "MinFlickDistance": 100,
           "OnComponentDestroy": null,
@@ -187,6 +192,7 @@
           "OnComponentUpdate": null,
           "Sensitivity": 1,
           "ShowCursor": true,
+          "ShowDebug": false,
           "ShowRealCursor": false,
           "Team": "Blue"
         }
@@ -213,12 +219,20 @@
           "__type": "CameraController",
           "__guid": "27c40f93-d95a-4ea9-aa6c-aecfdeb8a733",
           "__enabled": true,
+          "DebugPointSize": 4,
+          "EdgeThreshold": 100,
+          "EnablePassivePan": true,
           "OnComponentDestroy": null,
           "OnComponentDisabled": null,
           "OnComponentEnabled": null,
           "OnComponentFixedUpdate": null,
           "OnComponentStart": null,
-          "OnComponentUpdate": null
+          "OnComponentUpdate": null,
+          "PanSpeed": 1,
+          "PassivePanSpeed": 50,
+          "ShowDebug": true,
+          "Smoothing": 10,
+          "SmoothPan": true
         }
       ],
       "Children": [
@@ -227,7 +241,7 @@
           "__version": 1,
           "Flags": 0,
           "Name": "MainCamera",
-          "Position": "-3731.614,0,0",
+          "Position": "-3700,0,15",
           "Rotation": "0,0,0,1",
           "Scale": "1,1,1",
           "Tags": "maincamera",
@@ -412,7 +426,7 @@
               "__version": 1,
               "Flags": 0,
               "Name": "Plane",
-              "Position": "0,0,0",
+              "Position": "0,0,-0.1",
               "Rotation": "0,0,0,1",
               "Scale": "40,40,40",
               "Tags": "",
@@ -426,6 +440,51 @@
                 {
                   "__type": "Sandbox.ModelRenderer",
                   "__guid": "d3c04859-0427-4a31-896a-b51382eaa426",
+                  "__enabled": true,
+                  "BodyGroups": 18446744073709551615,
+                  "CreateAttachments": false,
+                  "LodOverride": null,
+                  "MaterialGroup": null,
+                  "MaterialOverride": "materials/default.vmat",
+                  "Materials": null,
+                  "Model": "models/dev/plane.vmdl",
+                  "OnComponentDestroy": null,
+                  "OnComponentDisabled": null,
+                  "OnComponentEnabled": null,
+                  "OnComponentFixedUpdate": null,
+                  "OnComponentStart": null,
+                  "OnComponentUpdate": null,
+                  "RenderOptions": {
+                    "GameLayer": true,
+                    "OverlayLayer": false,
+                    "BloomLayer": false,
+                    "AfterUILayer": false
+                  },
+                  "RenderType": "Off",
+                  "Tint": "0.20243,0.26977,0.15433,1"
+                }
+              ],
+              "Children": []
+            },
+            {
+              "__guid": "ad6e004c-5277-4afa-b0e1-0e71bd17c0ce",
+              "__version": 1,
+              "Flags": 0,
+              "Name": "Plane",
+              "Position": "0,174.7693,0",
+              "Rotation": "0,0,0,1",
+              "Scale": "17.80565,16.52008,40",
+              "Tags": "",
+              "Enabled": true,
+              "NetworkMode": 2,
+              "NetworkInterpolation": true,
+              "NetworkOrphaned": 0,
+              "NetworkTransmit": true,
+              "OwnerTransfer": 1,
+              "Components": [
+                {
+                  "__type": "Sandbox.ModelRenderer",
+                  "__guid": "0917a5a2-f243-4a51-9b6b-c4152fd16874",
                   "__enabled": true,
                   "BodyGroups": 18446744073709551615,
                   "CreateAttachments": false,
@@ -709,14 +768,6 @@
             },
             "Property": "Position",
             "Value": "25.5581,67.15658,5.508378"
-          },
-          {
-            "Target": {
-              "Type": "Component",
-              "IdValue": "38bc432e-dcb1-4edb-81ed-472b549f59e1"
-            },
-            "Property": "selectRadius",
-            "Value": 200
           }
         ],
         "MovedObjects": []
@@ -769,14 +820,6 @@
             },
             "Property": "Position",
             "Value": "25.5581,654.004,5.508378"
-          },
-          {
-            "Target": {
-              "Type": "Component",
-              "IdValue": "38bc432e-dcb1-4edb-81ed-472b549f59e1"
-            },
-            "Property": "selectRadius",
-            "Value": 200
           }
         ],
         "MovedObjects": []
@@ -829,14 +872,6 @@
             },
             "Property": "Position",
             "Value": "211.3189,-251.2101,5.508378"
-          },
-          {
-            "Target": {
-              "Type": "Component",
-              "IdValue": "38bc432e-dcb1-4edb-81ed-472b549f59e1"
-            },
-            "Property": "selectRadius",
-            "Value": 200
           }
         ],
         "MovedObjects": []
@@ -867,66 +902,6 @@
       }
     },
     {
-      "__guid": "ba334394-d50f-4a8c-b66b-cdff76decb3f",
-      "__version": 1,
-      "__Prefab": "prefabs/pieces/puntpiece/puntpiece.prefab",
-      "__PrefabInstancePatch": {
-        "AddedObjects": [],
-        "RemovedObjects": [],
-        "PropertyOverrides": [
-          {
-            "Target": {
-              "Type": "GameObject",
-              "IdValue": "ad8604dc-4731-4bf5-9544-f9bd106773c0"
-            },
-            "Property": "Name",
-            "Value": "puntpiece (2)"
-          },
-          {
-            "Target": {
-              "Type": "GameObject",
-              "IdValue": "ad8604dc-4731-4bf5-9544-f9bd106773c0"
-            },
-            "Property": "Position",
-            "Value": "-201.6978,-374.4127,5.508266"
-          },
-          {
-            "Target": {
-              "Type": "Component",
-              "IdValue": "38bc432e-dcb1-4edb-81ed-472b549f59e1"
-            },
-            "Property": "selectRadius",
-            "Value": 200
-          }
-        ],
-        "MovedObjects": []
-      },
-      "__PrefabIdToInstanceId": {
-        "ad8604dc-4731-4bf5-9544-f9bd106773c0": "ba334394-d50f-4a8c-b66b-cdff76decb3f",
-        "860a1dc4-0b11-4b29-9fa2-0761e954d29d": "c48c32bf-9c70-454d-be5f-dcf706eeee1c",
-        "6908b8f6-276c-4317-9f22-61902ad35137": "964ae998-4c07-4b07-8013-4d1457cba5fb",
-        "557a9a38-57a3-4178-8b8a-089424db388a": "14ef6da0-7c74-4d0c-85f2-b5f355b734cb",
-        "9804d496-f0f0-486e-b6e1-0692acc7dcfd": "b4118a83-48b5-488e-8c92-754c539e7899",
-        "38bc432e-dcb1-4edb-81ed-472b549f59e1": "a28a60f5-d06e-4d48-a694-aa16663d1fbf",
-        "02f9dbf4-2d8b-425b-9d43-67fd66f98461": "93b4ec08-37c9-4b73-acd2-196d77876baa",
-        "667741e6-99c4-4607-b886-3b9002761cff": "39cbf490-e502-4ec2-8beb-31ce6a48deed",
-        "4d05c825-915a-47f5-ab8c-d38838417f21": "96fcf5e3-e777-47e0-a302-f137225d8687",
-        "2750d0aa-df49-443f-af2a-51ef62929f79": "26c7e82d-f4e4-4677-a68b-0ad407cdb057",
-        "d42e5e7d-3d5f-4eaf-b677-41fb7a18f09a": "aade1791-ac34-476f-9ba1-42892fa7403c",
-        "011e0ad9-9f74-4495-a243-152fc90f6bc6": "caa175dd-f57a-41d8-873b-b8fe8adc06f1",
-        "5efe1f01-19ee-4413-b9e8-31300e849382": "2db96c2e-b4de-4b0b-9e1f-52024f47aa1b",
-        "6560871c-c32b-473d-ba3b-4bb11aab1c17": "ac92eac0-29c8-43a5-adc6-77bbb8dd96c2",
-        "797caf46-9bc2-4e26-b71b-94468ede104c": "8a4aef18-4f67-461b-9209-50b36f6beb2f",
-        "b7c8c7f9-d403-4d36-b7bb-66983aa71e68": "3a7bf7c7-be26-453d-b8a4-7beb1ef4d6f6",
-        "475ad2b9-6832-42a5-87db-b7b99dcf1a8b": "f5f75658-d32f-4bf8-b5a1-5e47838fe148",
-        "a94cf439-2d29-4c01-9fb2-a25deb17f4e7": "5d881f88-9807-4782-8c7d-a8e2bb4aeb9d",
-        "20a16300-e9f1-46a0-a328-037e78582cc1": "25278feb-cf9d-4dc0-a371-2a79d4e3ab11",
-        "dd32ce13-e62c-473e-8080-b0e725c0f061": "e1963433-6150-471c-91b3-a60f04014de5",
-        "f0acf77d-3321-4560-9c30-c0017ade40ac": "1bd0e1da-a805-400d-bb76-e674903a8bfd",
-        "4834d9d2-6246-4914-be23-9380b627292c": "ec1b968a-9b60-4763-a64d-a5b2125db425"
-      }
-    },
-    {
       "__guid": "24f21646-bcc7-4cd6-92e4-88c49d1622ef",
       "__version": 1,
       "__Prefab": "prefabs/pieces/puntpiece/puntpiece.prefab",
@@ -953,10 +928,10 @@
           {
             "Target": {
               "Type": "Component",
-              "IdValue": "38bc432e-dcb1-4edb-81ed-472b549f59e1"
+              "IdValue": "d42e5e7d-3d5f-4eaf-b677-41fb7a18f09a"
             },
-            "Property": "selectRadius",
-            "Value": 200
+            "Property": "DestroyOnEnd",
+            "Value": false
           }
         ],
         "MovedObjects": []
@@ -1009,14 +984,6 @@
             },
             "Property": "Position",
             "Value": "370.4529,372.6693,5.507874"
-          },
-          {
-            "Target": {
-              "Type": "Component",
-              "IdValue": "38bc432e-dcb1-4edb-81ed-472b549f59e1"
-            },
-            "Property": "selectRadius",
-            "Value": 200
           }
         ],
         "MovedObjects": []

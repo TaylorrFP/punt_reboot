@@ -150,6 +150,8 @@
           "go": "ad8604dc-4731-4bf5-9544-f9bd106773c0",
           "component_type": "Rigidbody"
         },
+        "selectPriority": 100,
+        "selectRadius": 200,
         "ShakeEffect": {
           "_type": "component",
           "component_id": "797caf46-9bc2-4e26-b71b-94468ede104c",
@@ -400,9 +402,9 @@
             "__enabled": true,
             "Burst": 0,
             "Delay": 0,
-            "DestroyOnEnd": false,
+            "DestroyOnEnd": true,
             "Duration": 10,
-            "Loop": false,
+            "Loop": true,
             "OnComponentDestroy": null,
             "OnComponentDisabled": null,
             "OnComponentEnabled": null,
