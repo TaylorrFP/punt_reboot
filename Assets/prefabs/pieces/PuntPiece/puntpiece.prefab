@@ -151,7 +151,7 @@
           "component_type": "Rigidbody"
         },
         "selectPriority": 100,
-        "selectRadius": 200,
+        "selectRadius": 100,
         "ShakeEffect": {
           "_type": "component",
           "component_id": "797caf46-9bc2-4e26-b71b-94468ede104c",
@@ -402,7 +402,7 @@
             "__enabled": true,
             "Burst": 0,
             "Delay": 0,
-            "DestroyOnEnd": true,
+            "DestroyOnEnd": false,
             "Duration": 10,
             "Loop": true,
             "OnComponentDestroy": null,

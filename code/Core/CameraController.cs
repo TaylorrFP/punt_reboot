@@ -20,6 +20,7 @@ public sealed class CameraController : Component
 
 	[Property, Group( "Passive Pan" )] public bool EnablePassivePan { get; set; } = false;
 	[Property, Group( "Passive Pan" )] public float PassivePanSpeed { get; set; } = 50f;
+	[Property, Group( "Passive Pan" )] public float PassivePanHorizontalMult { get; set; } = 2f;
 
 	#endregion
 
@@ -135,10 +136,9 @@ public sealed class CameraController : Component
 
 	private void HandleDragStart()
 	{
-		// Subtract passive pan offset to get true base position
-		Vector3 basePosition = WorldPosition - GetPassivePanOffset();
-		initialPosition = basePosition;
-		targetPosition = basePosition;
+		// targetPosition already represents the base position (without passive pan)
+		// so we just need to capture it as our initial position to return to
+		initialPosition = targetPosition;
 		isDragging = true;
 	}
 
@@ -185,7 +185,7 @@ public sealed class CameraController : Component
 		);
 
 		// Convert to world offset (invert Y for screen-to-world conversion)
-		return new Vector3( normalized.x, -normalized.y, 0 ) * PassivePanSpeed;
+		return new Vector3( normalized.x * PassivePanHorizontalMult, -normalized.y, 0 ) * PassivePanSpeed;
 	}
 
 	#endregion
