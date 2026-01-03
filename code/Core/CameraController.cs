@@ -8,7 +8,11 @@ public sealed class CameraController : Component
 
 	[Property, Group( "Pan Settings" )] public float EdgeThreshold { get; set; } = 50f; // How close cursor must be to edge to trigger panning
 	[Property, Group( "Pan Settings" )] public float PanSpeed { get; set; } = 1f; // Multiplier for pan speed
+	[Property, Group( "Pan Settings" )] public bool SmoothPan { get; set; } = true; // Do we smooth the camera
 	[Property, Group( "Pan Settings" )] public float Smoothing { get; set; } = 10f; // How quickly camera reaches target position
+
+	[Property, Group( "Passive Pan" )] public bool EnablePassivePan { get; set; } = false;
+	[Property, Group( "Passive Pan" )] public float PassivePanSpeed { get; set; } = 50f; // World units of max pan offset
 
 	private Vector3 debugPieceWorldPos;
 	private float debugWorldMaxFlickDistance;
@@ -31,18 +35,50 @@ public sealed class CameraController : Component
 	protected override void OnStart()
 	{
 		// Initialize target position to current position
-		targetCameraPosition = Transform.Position;
+		targetCameraPosition = WorldPosition;
 	}
 
 	protected override void OnUpdate()
 	{
-		// Always smoothly move camera towards target position
-		Transform.Position = Vector3.Lerp( Transform.Position, targetCameraPosition, Time.Delta * Smoothing );
+		// Passive pan offset is always applied on top of target position
+		Vector3 finalTarget = targetCameraPosition + GetPassivePanOffset();
+
+		//Do smoothing
+		if ( SmoothPan ) { WorldPosition = Vector3.Lerp( WorldPosition, finalTarget, Time.Delta * Smoothing ); } else { WorldPosition = finalTarget; }
+	
+
 
 		if ( ShowDebug )
 		{
 			DrawDebug();
 		}
+	}
+
+	public void UpdateCursorPosition( Vector2 cursorPosition )
+	{
+		debugCursorPosition = cursorPosition;
+	}
+
+	private Vector3 GetPassivePanOffset()
+	{
+		if ( !EnablePassivePan ) return Vector3.Zero;
+
+		// Calculate cursor offset from screen center
+		Vector2 screenCenter = new Vector2( Screen.Width / 2f, Screen.Height / 2f );
+		Vector2 cursorOffset = debugCursorPosition - screenCenter;
+
+		// Normalize by screen size to get a -1 to 1 range
+		Vector2 normalizedOffset = new Vector2(
+			cursorOffset.x / screenCenter.x,
+			cursorOffset.y / screenCenter.y
+		);
+
+		// Convert to world offset (same direction as cursor from center)
+		return new Vector3(
+			normalizedOffset.x,
+			-normalizedOffset.y, // Invert Y because screen Y is opposite to world Y
+			0
+		) * PassivePanSpeed;
 	}
 
 	private void DrawDebug()
@@ -144,10 +180,12 @@ public sealed class CameraController : Component
 		}
 
 		// If we just started dragging, store the initial camera position
+		// Subtract the passive pan offset to get the true base position (since WorldPosition includes it)
 		if ( !isDraggingPiece )
 		{
-			initialCameraPosition = Transform.Position;
-			targetCameraPosition = Transform.Position;
+			Vector3 basePosition = WorldPosition - GetPassivePanOffset();
+			initialCameraPosition = basePosition;
+			targetCameraPosition = basePosition;
 			isDraggingPiece = true;
 		}
 

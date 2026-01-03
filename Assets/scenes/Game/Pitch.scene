@@ -219,17 +219,20 @@
           "__type": "CameraController",
           "__guid": "27c40f93-d95a-4ea9-aa6c-aecfdeb8a733",
           "__enabled": true,
-          "DebugColor": "1,1,0,1",
+          "DebugPointSize": 4,
           "EdgeThreshold": 100,
-          "MaxPanDistance": 10000,
+          "EnablePassivePan": true,
           "OnComponentDestroy": null,
           "OnComponentDisabled": null,
           "OnComponentEnabled": null,
           "OnComponentFixedUpdate": null,
           "OnComponentStart": null,
           "OnComponentUpdate": null,
-          "PanSmoothness": 4,
-          "ShowDebug": true
+          "PanSpeed": 1,
+          "PassivePanSpeed": 50,
+          "ShowDebug": true,
+          "Smoothing": 10,
+          "SmoothPan": true
         }
       ],
       "Children": [
@@ -471,7 +474,7 @@
               "Position": "0,174.7693,0",
               "Rotation": "0,0,0,1",
               "Scale": "17.80565,16.52008,40",
-              "Tags": "pitch",
+              "Tags": "",
               "Enabled": true,
               "NetworkMode": 2,
               "NetworkInterpolation": true,
