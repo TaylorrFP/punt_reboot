@@ -1,8 +1,14 @@
 using Sandbox;
 using System;
 
+/// <summary>
+/// Handles player input for selecting and flicking pieces.
+/// Manages virtual cursor, hover/selection states, and camera control.
+/// </summary>
 public sealed class PlayerController : Component
 {
+	#region Properties
+
 	[Property, Sync] public TeamSide Team { get; set; }
 
 	[Property, Group( "Flick Settings" )] public float FlickStrength { get; set; } = 0.6f;
@@ -10,29 +16,36 @@ public sealed class PlayerController : Component
 	[Property, Group( "Flick Settings" )] public float MinFlickDistance { get; set; } = 50f;
 	[Property, Group( "Flick Settings" )] public float MaxFlickDistance { get; set; } = 650f;
 
-	[Property, Group( "Debug" )] public bool isDebug { get; set; } = false;
+	[Property, Group( "Cursor" )] public bool ShowRealCursor { get; set; } = false;
+	[Property, Group( "Cursor" )] public bool ShowCursor { get; set; } = true;
+	[Property, Group( "Cursor" )] public float Sensitivity { get; set; } = 1.0f;
 
-	[Property, Group( "Virtual Cursor" )] public bool ShowRealCursor { get; set; } = false;
-	[Property, Group( "Virtual Cursor" )] public bool ShowCursor { get; set; } = true;
-	[Property, Group( "Virtual Cursor" )] public float Sensitivity { get; set; } = 1.0f;
+	[Property, Group( "Debug" )] public bool ShowDebug { get; set; } = false;
 
 	[Property] public CameraController CameraController { get; set; }
 
-	// === Interaction State ===
+	#endregion
+
+	#region Private State
+
+	// Virtual cursor
+	private Vector2 cursorPosition;
+	private bool cursorInitialized;
+
+	// World position of cursor
+	private Vector3 worldCursorPosition;
+
+	// Selection state
 	private ISelectable hoveredSelectable;
 	private ISelectable selectedSelectable;
-	private Vector3 currentWorldPosition;
 
-	// === Flick Tracking ===
+	// Flick tracking
 	private Vector3 flickVector;
 	private float lastCursorDelta;
 
-	// === Virtual Cursor ===
-	private Vector2 cursorPosition;
-	private bool initialized = false;
+	#endregion
 
-
-	
+	#region Lifecycle
 
 	protected override void OnUpdate()
 	{
@@ -43,110 +56,72 @@ public sealed class PlayerController : Component
 
 		if ( selectedSelectable != null )
 		{
-			UpdateSelected();
+			UpdateSelection();
 		}
 		else
 		{
-			UpdateHovering();
+			UpdateHover();
 		}
 
-		UpdateCameraController();
+		UpdateCamera();
 		UpdateCursorVisuals();
-		UpdateCursorPanel();
-		DrawDebug();
+		UpdateHud();
 
+		HandleEscapeKey();
 
-		if ( Input.EscapePressed )
+		if ( ShowDebug )
 		{
-			Mouse.Position = cursorPosition;
-			Mouse.Visibility = MouseVisibility.Visible;
-
+			DrawDebug();
 		}
-		//This actually works - can we just do this every time we need to 
-
 	}
 
-	private void DrawDebug()
-	{
-		// Draw cursor position rect
-		float cursorDebugSize = 8f;
-		Gizmo.Draw.ScreenRect( new Rect(
-			cursorPosition.x - cursorDebugSize / 2f,
-			cursorPosition.y - cursorDebugSize / 2f,
-			cursorDebugSize,
-			cursorDebugSize
-		), Color.Magenta );
-
-	}
+	#endregion
 
 	#region Virtual Cursor
 
 	private void UpdateCursor()
 	{
-
-		
-		// Initialize cursor position on first frame
-		if ( !initialized )
+		if ( !cursorInitialized )
 		{
 			cursorPosition = Mouse.Position;
-			initialized = true;
+			cursorInitialized = true;
 		}
 
-		// Always update via delta
 		cursorPosition += Mouse.Delta;
 
-		// Clamp to screen bounds (allows sliding along edges)
-		Vector2 screenSize = new Vector2( Screen.Width, Screen.Height );
+		// Clamp to screen bounds
 		cursorPosition = new Vector2(
-			Math.Clamp( cursorPosition.x, 0, screenSize.x ),
-			Math.Clamp( cursorPosition.y, 0, screenSize.y )
+			Math.Clamp( cursorPosition.x, 0, Screen.Width ),
+			Math.Clamp( cursorPosition.y, 0, Screen.Height )
 		);
 
-		// Control real cursor visibility
 		Mouse.Visibility = ShowRealCursor ? MouseVisibility.Visible : MouseVisibility.Hidden;
 	}
 
-	private void UpdateCursorPanel()
-	{
-
-		Hud.Instance?.UpdateCursorPosition( cursorPosition );
-	}
-
-	#endregion
-
-	#region Camera Control
-
-	private void UpdateCameraController()
-	{
-		if ( CameraController == null ) return;
-
-		bool isDragging = selectedSelectable != null && selectedSelectable.CapturesSelection;
-		Vector3 piecePosition = isDragging ? selectedSelectable.SelectPosition : Vector3.Zero;
-		float worldMaxFlickDistance = isDragging ? MaxFlickDistance / FlickStrength : 0f;
-
-		CameraController.UpdatePan( cursorPosition, piecePosition, isDragging, worldMaxFlickDistance );
-	}
-
-	#endregion
-
-	#region World Position
-
 	private void UpdateWorldPosition()
 	{
-		var camera = Scene.Camera;
-		var ray = camera.ScreenPixelToRay( cursorPosition );
+		var ray = Scene.Camera.ScreenPixelToRay( cursorPosition );
 
 		// Intersect with Z=0 plane
 		float t = -ray.Position.z / ray.Forward.z;
-		currentWorldPosition = ray.Position + ray.Forward * t;
-		currentWorldPosition = currentWorldPosition.WithZ( 0f );
+		worldCursorPosition = ray.Position + ray.Forward * t;
+		worldCursorPosition = worldCursorPosition.WithZ( 0f );
+	}
+
+	private void HandleEscapeKey()
+	{
+		if ( Input.EscapePressed )
+		{
+			Mouse.Position = cursorPosition;
+			Mouse.Visibility = MouseVisibility.Visible;
+		}
 	}
 
 	#endregion
 
-	#region Selection & Interaction
+	#region Hover & Selection
 
-	private void UpdateHovering()
+	private void UpdateHover()
 	{
 		var nearest = FindNearestSelectable();
 
@@ -163,45 +138,45 @@ public sealed class PlayerController : Component
 		}
 	}
 
-	private void UpdateSelected()
+	private void UpdateSelection()
 	{
 		if ( Input.Pressed( "attack2" ) )
 		{
-			AbortTarget();
+			AbortSelection();
 			return;
 		}
 
 		if ( selectedSelectable.CapturesSelection )
 		{
-			lastCursorDelta = Mouse.Delta.Length;
-
-			// Calculate flick vector
-			flickVector = (selectedSelectable.SelectPosition - currentWorldPosition).WithZ( 0 );
-			flickVector *= FlickStrength;
-			flickVector = flickVector.ClampLength( MaxFlickDistance );
-
-			// Calculate feedback data
-			float intensity = flickVector.Length / MaxFlickDistance;
-			bool exceedsMinimum = flickVector.Length >= MinFlickDistance;
-
-			// Calculate clamped cursor position for aim indicator
-			Vector3 pieceToCursor = currentWorldPosition - selectedSelectable.SelectPosition;
-			pieceToCursor = pieceToCursor.WithZ( 0 );
-			Vector3 clampedOffset = pieceToCursor.ClampLength( MaxFlickDistance );
-			Vector3 clampedCursorPosition = selectedSelectable.SelectPosition + clampedOffset;
-
-			selectedSelectable.OnDragUpdate( intensity, lastCursorDelta, clampedCursorPosition, exceedsMinimum );
-
-			if ( isDebug )
-			{
-				DrawFlickDebug();
-			}
+			UpdateFlickVector();
 		}
 
 		if ( Input.Released( "attack1" ) )
 		{
-			ReleaseTarget();
+			ReleaseSelection();
 		}
+	}
+
+	private void UpdateFlickVector()
+	{
+		lastCursorDelta = Mouse.Delta.Length;
+
+		// Calculate flick vector from piece to cursor, scaled and clamped
+		flickVector = (selectedSelectable.SelectPosition - worldCursorPosition).WithZ( 0 );
+		flickVector *= FlickStrength;
+		flickVector = flickVector.ClampLength( MaxFlickDistance );
+
+		// Calculate feedback data for the selectable
+		float intensity = flickVector.Length / MaxFlickDistance;
+		bool exceedsMinimum = flickVector.Length >= MinFlickDistance;
+
+		// Calculate clamped cursor position for aim indicator
+		Vector3 pieceToCursor = worldCursorPosition - selectedSelectable.SelectPosition;
+		pieceToCursor = pieceToCursor.WithZ( 0 );
+		Vector3 clampedOffset = pieceToCursor.ClampLength( MaxFlickDistance );
+		Vector3 clampedCursorPos = selectedSelectable.SelectPosition + clampedOffset;
+
+		selectedSelectable.OnDragUpdate( intensity, lastCursorDelta, clampedCursorPos, exceedsMinimum );
 	}
 
 	private void SelectTarget( ISelectable target )
@@ -215,34 +190,32 @@ public sealed class PlayerController : Component
 		flickVector = Vector3.Zero;
 		lastCursorDelta = 0f;
 
+		// Some selectables don't capture (e.g. instant-click buttons)
 		if ( !selectedSelectable.CapturesSelection )
 		{
 			selectedSelectable = null;
 		}
-
-
-
 	}
 
-	private void ReleaseTarget()
+	private void ReleaseSelection()
 	{
 		if ( flickVector.Length < MinFlickDistance )
 		{
-			AbortTarget();
+			AbortSelection();
 			return;
 		}
 
 		selectedSelectable?.OnDeselect( flickVector );
-		ResetSelectionState();
+		ClearSelectionState();
 	}
 
-	private void AbortTarget()
+	private void AbortSelection()
 	{
 		selectedSelectable?.OnAbort();
-		ResetSelectionState();
+		ClearSelectionState();
 	}
 
-	private void ResetSelectionState()
+	private void ClearSelectionState()
 	{
 		selectedSelectable = null;
 		flickVector = Vector3.Zero;
@@ -262,7 +235,7 @@ public sealed class PlayerController : Component
 		{
 			if ( !IsValidTarget( selectable ) ) continue;
 
-			float dist = (selectable.SelectPosition - currentWorldPosition).WithZ( 0 ).Length;
+			float dist = (selectable.SelectPosition - worldCursorPosition).WithZ( 0 ).Length;
 			if ( dist > selectable.SelectRadius ) continue;
 
 			float score = dist - selectable.SelectPriority;
@@ -282,8 +255,22 @@ public sealed class PlayerController : Component
 		{
 			return piece.Team == Team;
 		}
-
 		return true;
+	}
+
+	#endregion
+
+	#region Camera
+
+	private void UpdateCamera()
+	{
+		if ( CameraController == null ) return;
+
+		bool isDragging = selectedSelectable != null && selectedSelectable.CapturesSelection;
+		Vector3 piecePosition = isDragging ? selectedSelectable.SelectPosition : Vector3.Zero;
+		float worldFlickRadius = isDragging ? MaxFlickDistance / FlickStrength : 0f;
+
+		CameraController.UpdatePan( cursorPosition, piecePosition, isDragging, worldFlickRadius );
 	}
 
 	#endregion
@@ -294,46 +281,79 @@ public sealed class PlayerController : Component
 	{
 		if ( Hud.Instance == null ) return;
 
+		CursorState state;
+
 		if ( selectedSelectable != null )
 		{
 			Mouse.CursorType = "grabbing";
-			Hud.Instance.SetCursorState( CursorState.Grabbing );
+			state = CursorState.Grabbing;
 		}
 		else if ( hoveredSelectable == null )
 		{
 			Mouse.CursorType = "pointer";
-			Hud.Instance.SetCursorState( CursorState.Default );
+			state = CursorState.Default;
 		}
 		else if ( !hoveredSelectable.CanSelect )
 		{
 			Mouse.CursorType = "not-allowed";
-			Hud.Instance.SetCursorState( CursorState.Disabled );
+			state = CursorState.Disabled;
 		}
 		else
 		{
 			Mouse.CursorType = "pointer";
-			Hud.Instance.SetCursorState( CursorState.Hover );
+			state = CursorState.Hover;
 		}
+
+		Hud.Instance.SetCursorState( state );
+	}
+
+	private void UpdateHud()
+	{
+		Hud.Instance?.UpdateCursorPosition( cursorPosition );
 	}
 
 	#endregion
 
 	#region Debug
 
+	private void DrawDebug()
+	{
+		DrawCursorDebug();
+
+		if ( selectedSelectable != null && selectedSelectable.CapturesSelection )
+		{
+			DrawFlickDebug();
+		}
+	}
+
+	private void DrawCursorDebug()
+	{
+		const float size = 8f;
+		Gizmo.Draw.ScreenRect(
+			new Rect( cursorPosition.x - size / 2f, cursorPosition.y - size / 2f, size, size ),
+			Color.Magenta
+		);
+	}
+
 	private void DrawFlickDebug()
 	{
+		// Draw cursor world position
 		Gizmo.Draw.Color = Color.Cyan;
-		Gizmo.Draw.SolidSphere( currentWorldPosition, 16f, 16, 16 );
+		Gizmo.Draw.SolidSphere( worldCursorPosition, 16f, 16, 16 );
 
+		// Draw flick direction line
 		Gizmo.Draw.Color = Color.White;
-		Gizmo.Draw.Line( selectedSelectable.SelectPosition, selectedSelectable.SelectPosition + (flickVector * -1f) );
+		Gizmo.Draw.Line( selectedSelectable.SelectPosition, selectedSelectable.SelectPosition - flickVector );
 
+		// Draw min flick distance circle
 		Gizmo.Draw.Color = Color.Red;
 		Gizmo.Draw.LineCircle( selectedSelectable.SelectPosition, Vector3.Up, MinFlickDistance, 0, 360, 64 );
 
+		// Draw max flick distance circle
 		Gizmo.Draw.Color = Color.Green;
 		Gizmo.Draw.LineCircle( selectedSelectable.SelectPosition, Vector3.Up, MaxFlickDistance / FlickStrength, 0, 360, 512 );
 
+		// Draw flick strength text
 		Gizmo.Draw.Color = Color.Black;
 		Gizmo.Draw.ScreenText( flickVector.Length.ToString( "F1" ), cursorPosition + Vector2.Down * 32, "roboto", 16f );
 	}
