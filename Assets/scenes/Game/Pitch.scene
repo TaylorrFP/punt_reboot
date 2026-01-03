@@ -221,7 +221,7 @@
           "__enabled": true,
           "DebugPointSize": 4,
           "EdgeThreshold": 50,
-          "EnablePassivePan": false,
+          "EnablePassivePan": true,
           "OnComponentDestroy": null,
           "OnComponentDisabled": null,
           "OnComponentEnabled": null,
@@ -233,7 +233,7 @@
           "PassivePanSpeed": 50,
           "ShowDebug": true,
           "Smoothing": 10,
-          "SmoothPan": false
+          "SmoothPan": true
         }
       ],
       "Children": [
