@@ -16,6 +16,8 @@ public sealed class PlayerController : Component
 	[Property, Group( "Virtual Cursor" )] public bool ShowCursor { get; set; } = true;
 	[Property, Group( "Virtual Cursor" )] public float Sensitivity { get; set; } = 1.0f;
 
+	[Property] public CameraController CameraController { get; set; }
+
 	// === Interaction State ===
 	private ISelectable hoveredSelectable;
 	private ISelectable selectedSelectable;
@@ -48,6 +50,7 @@ public sealed class PlayerController : Component
 			UpdateHovering();
 		}
 
+		UpdateCameraController();
 		UpdateCursorVisuals();
 		UpdateCursorPanel();
 		DrawDebug();
@@ -107,6 +110,20 @@ public sealed class PlayerController : Component
 	{
 
 		Hud.Instance?.UpdateCursorPosition( cursorPosition );
+	}
+
+	#endregion
+
+	#region Camera Control
+
+	private void UpdateCameraController()
+	{
+		if ( CameraController == null ) return;
+
+		bool isDragging = selectedSelectable != null && selectedSelectable.CapturesSelection;
+		Vector3 piecePosition = isDragging ? selectedSelectable.SelectPosition : Vector3.Zero;
+
+		CameraController.UpdatePan( cursorPosition, piecePosition, isDragging );
 	}
 
 	#endregion
