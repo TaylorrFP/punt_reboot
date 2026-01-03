@@ -48,9 +48,13 @@ public sealed class CameraController : Component
 
 		// Right line
 		Gizmo.Draw.ScreenRect( new Rect( screenSize.x - EdgeThreshold, EdgeThreshold, lineThickness, screenSize.y - EdgeThreshold * 2 ), DebugColor );
+
+		// Draw debug info
+		Gizmo.Draw.ScreenText( $"Pan Offset: {targetPanOffset}", new Vector2( 10, 100 ), "roboto", 14f, TextFlag.Left );
+		Gizmo.Draw.ScreenText( $"Camera Pos: {Transform.Position}", new Vector2( 10, 120 ), "roboto", 14f, TextFlag.Left );
 	}
 
-	public void UpdatePan( Vector2 cursorPosition, Vector3 piecePosition, bool isDragging )
+	public void UpdatePan( Vector2 cursorPosition, Vector3 piecePosition, bool isDragging, float maxFlickDistance )
 	{
 		if ( !isDragging )
 		{
@@ -60,57 +64,80 @@ public sealed class CameraController : Component
 		}
 
 		Vector2 screenSize = new Vector2( Screen.Width, Screen.Height );
+
+		// Calculate piece screen position from INITIAL camera position to avoid feedback loop
+		Vector3 savedCameraPos = Transform.Position;
+		Transform.Position = initialPosition;
+		Vector2 pieceScreenPos = Scene.Camera.PointToScreenPixels( piecePosition );
+		Transform.Position = savedCameraPos;
+
 		Vector3 panOffset = Vector3.Zero;
+
+		// Calculate the maximum possible cursor distance from piece (in screen space)
+		// This is where the cursor would be if not clamped by screen edges
+		Vector2 cursorToPiece = cursorPosition - pieceScreenPos;
+		float maxPossibleDistance = maxFlickDistance;
 
 		// Check each edge and calculate pan amount
 		// Left edge
 		if ( cursorPosition.x < EdgeThreshold )
 		{
-			float edgeDistance = EdgeThreshold - cursorPosition.x;
-			float panAmount = (edgeDistance / EdgeThreshold) * MaxPanDistance;
-
-			// Only pan if dragging away from piece (towards left edge)
-			Vector2 pieceScreenPos = Scene.Camera.PointToScreenPixels( piecePosition );
+			// Only pan if:
+			// 1. Cursor is left of piece (dragging away)
+			// 2. The cursor would be further left if not for the screen edge
 			if ( cursorPosition.x < pieceScreenPos.x )
 			{
-				panOffset.x = -panAmount;
+				// Check if we're actually constrained by the edge
+				float desiredCursorX = pieceScreenPos.x - maxPossibleDistance;
+				if ( desiredCursorX < 0 )
+				{
+					float edgeDistance = EdgeThreshold - cursorPosition.x;
+					float panAmount = (edgeDistance / EdgeThreshold) * MaxPanDistance;
+					panOffset.x = -panAmount;
+				}
 			}
 		}
 		// Right edge
 		else if ( cursorPosition.x > screenSize.x - EdgeThreshold )
 		{
-			float edgeDistance = cursorPosition.x - (screenSize.x - EdgeThreshold);
-			float panAmount = (edgeDistance / EdgeThreshold) * MaxPanDistance;
-
-			Vector2 pieceScreenPos = Scene.Camera.PointToScreenPixels( piecePosition );
 			if ( cursorPosition.x > pieceScreenPos.x )
 			{
-				panOffset.x = panAmount;
+				float desiredCursorX = pieceScreenPos.x + maxPossibleDistance;
+				if ( desiredCursorX > screenSize.x )
+				{
+					float edgeDistance = cursorPosition.x - (screenSize.x - EdgeThreshold);
+					float panAmount = (edgeDistance / EdgeThreshold) * MaxPanDistance;
+					panOffset.x = panAmount;
+				}
 			}
 		}
 
 		// Top edge
 		if ( cursorPosition.y < EdgeThreshold )
 		{
-			float edgeDistance = EdgeThreshold - cursorPosition.y;
-			float panAmount = (edgeDistance / EdgeThreshold) * MaxPanDistance;
-
-			Vector2 pieceScreenPos = Scene.Camera.PointToScreenPixels( piecePosition );
 			if ( cursorPosition.y < pieceScreenPos.y )
 			{
-				panOffset.y = panAmount;
+				float desiredCursorY = pieceScreenPos.y - maxPossibleDistance;
+				if ( desiredCursorY < 0 )
+				{
+					float edgeDistance = EdgeThreshold - cursorPosition.y;
+					float panAmount = (edgeDistance / EdgeThreshold) * MaxPanDistance;
+					panOffset.y = panAmount;
+				}
 			}
 		}
 		// Bottom edge
 		else if ( cursorPosition.y > screenSize.y - EdgeThreshold )
 		{
-			float edgeDistance = cursorPosition.y - (screenSize.y - EdgeThreshold);
-			float panAmount = (edgeDistance / EdgeThreshold) * MaxPanDistance;
-
-			Vector2 pieceScreenPos = Scene.Camera.PointToScreenPixels( piecePosition );
 			if ( cursorPosition.y > pieceScreenPos.y )
 			{
-				panOffset.y = -panAmount;
+				float desiredCursorY = pieceScreenPos.y + maxPossibleDistance;
+				if ( desiredCursorY > screenSize.y )
+				{
+					float edgeDistance = cursorPosition.y - (screenSize.y - EdgeThreshold);
+					float panAmount = (edgeDistance / EdgeThreshold) * MaxPanDistance;
+					panOffset.y = -panAmount;
+				}
 			}
 		}
 

@@ -123,7 +123,7 @@ public sealed class PlayerController : Component
 		bool isDragging = selectedSelectable != null && selectedSelectable.CapturesSelection;
 		Vector3 piecePosition = isDragging ? selectedSelectable.SelectPosition : Vector3.Zero;
 
-		CameraController.UpdatePan( cursorPosition, piecePosition, isDragging );
+		CameraController.UpdatePan( cursorPosition, piecePosition, isDragging, MaxFlickDistance / FlickStrength );
 	}
 
 	#endregion
