@@ -1,4 +1,5 @@
 using Sandbox;
+using System;
 
 public sealed class CameraController : Component
 {
@@ -92,8 +93,13 @@ public sealed class CameraController : Component
 				float desiredCursorX = pieceScreenPos.x - maxXDistance;
 				if ( desiredCursorX < 0 )
 				{
+					// Calculate how much we need to pan to allow full flick distance
+					float neededPan = Math.Abs( desiredCursorX );
 					float edgeDistance = EdgeThreshold - cursorPosition.x;
-					float panAmount = (edgeDistance / EdgeThreshold) * MaxPanDistance;
+					float edgeIntensity = edgeDistance / EdgeThreshold;
+
+					// Pan amount is the needed distance, scaled by edge proximity, capped at MaxPanDistance
+					float panAmount = Math.Min( neededPan * edgeIntensity, MaxPanDistance );
 					panOffset.x = -panAmount;
 				}
 			}
@@ -109,8 +115,11 @@ public sealed class CameraController : Component
 				float desiredCursorX = pieceScreenPos.x + maxXDistance;
 				if ( desiredCursorX > screenSize.x )
 				{
+					float neededPan = desiredCursorX - screenSize.x;
 					float edgeDistance = cursorPosition.x - (screenSize.x - EdgeThreshold);
-					float panAmount = (edgeDistance / EdgeThreshold) * MaxPanDistance;
+					float edgeIntensity = edgeDistance / EdgeThreshold;
+
+					float panAmount = Math.Min( neededPan * edgeIntensity, MaxPanDistance );
 					panOffset.x = panAmount;
 				}
 			}
@@ -127,8 +136,11 @@ public sealed class CameraController : Component
 				float desiredCursorY = pieceScreenPos.y - maxYDistance;
 				if ( desiredCursorY < 0 )
 				{
+					float neededPan = Math.Abs( desiredCursorY );
 					float edgeDistance = EdgeThreshold - cursorPosition.y;
-					float panAmount = (edgeDistance / EdgeThreshold) * MaxPanDistance;
+					float edgeIntensity = edgeDistance / EdgeThreshold;
+
+					float panAmount = Math.Min( neededPan * edgeIntensity, MaxPanDistance );
 					panOffset.y = panAmount;
 				}
 			}
@@ -144,8 +156,11 @@ public sealed class CameraController : Component
 				float desiredCursorY = pieceScreenPos.y + maxYDistance;
 				if ( desiredCursorY > screenSize.y )
 				{
+					float neededPan = desiredCursorY - screenSize.y;
 					float edgeDistance = cursorPosition.y - (screenSize.y - EdgeThreshold);
-					float panAmount = (edgeDistance / EdgeThreshold) * MaxPanDistance;
+					float edgeIntensity = edgeDistance / EdgeThreshold;
+
+					float panAmount = Math.Min( neededPan * edgeIntensity, MaxPanDistance );
 					panOffset.y = -panAmount;
 				}
 			}
