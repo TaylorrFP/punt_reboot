@@ -109,6 +109,8 @@ public sealed class PuntPiece : Component, ISelectable
 		// Apply flick
 		Rigidbody.Velocity = flickVelocity*2f; //random value for now
 
+		Sound.Play( "sounds/custom/elastic/boing.sound" );
+
 		// Start cooldown
 		State = PieceState.Ready;
 		GrabbedByPlayerId = Guid.Empty;
