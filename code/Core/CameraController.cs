@@ -389,7 +389,7 @@ public sealed class CameraController : Component
 	private void DrawDebug()
 	{
 		DrawFlickRadiusOval();
-		DrawDebugText();
+		//DrawDebugText();
 		DrawEdgeHighlights();
 	}
 
