@@ -122,26 +122,9 @@ public sealed class PlayerController : Component
 
 		bool isDragging = selectedSelectable != null && selectedSelectable.CapturesSelection;
 		Vector3 piecePosition = isDragging ? selectedSelectable.SelectPosition : Vector3.Zero;
+		float worldMaxFlickDistance = isDragging ? MaxFlickDistance / FlickStrength : 0f;
 
-		// Convert world-space max flick distance to screen-space distance
-		float maxFlickScreenDistance = 0f;
-		float worldMaxFlickDistance = 0f;
-		if ( isDragging )
-		{
-			worldMaxFlickDistance = MaxFlickDistance / FlickStrength;
-
-			// Project piece position to screen
-			Vector2 pieceScreenPos = Scene.Camera.PointToScreenPixels( piecePosition );
-
-			// Project a point at max distance to the right (arbitrary direction) to screen
-			Vector3 maxDistancePoint = piecePosition + Vector3.Right * worldMaxFlickDistance;
-			Vector2 maxDistanceScreenPos = Scene.Camera.PointToScreenPixels( maxDistancePoint );
-
-			// Calculate screen-space distance
-			maxFlickScreenDistance = (maxDistanceScreenPos - pieceScreenPos).Length;
-		}
-
-		CameraController.UpdatePan( cursorPosition, piecePosition, isDragging, maxFlickScreenDistance, worldMaxFlickDistance );
+		CameraController.UpdatePan( cursorPosition, piecePosition, isDragging, worldMaxFlickDistance );
 	}
 
 	#endregion
