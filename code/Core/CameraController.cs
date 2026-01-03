@@ -13,10 +13,6 @@ public sealed class CameraController : Component
 	private bool debugIsInPanZone;
 	private string debugPanDirection;
 	private Vector2 debugCursorPosition;
-	private string debugNearEdges;
-	private string debugOvalExtends;
-	private Vector2 debugMinScreenPoint;
-	private Vector2 debugMaxScreenPoint;
 
 	// Track where the oval intersects each edge (min/max along that edge)
 	private Vector2 leftEdgeRange;   // y range where oval touches left edge
@@ -75,18 +71,9 @@ public sealed class CameraController : Component
 		{
 			debugText += $"\nDirection: {debugPanDirection}";
 		}
-		debugText += $"\nVirtual Cursor: ({debugCursorPosition.x:F0}, {debugCursorPosition.y:F0})";
-		debugText += $"\nMouse.Position: ({Mouse.Position.x:F0}, {Mouse.Position.y:F0})";
-		debugText += $"\nScreen: ({debugScreenSize.x:F0}, {debugScreenSize.y:F0})";
-		debugText += $"\nEdge Threshold: {EdgeThreshold}";
-		debugText += $"\n{debugNearEdges}";
-		debugText += $"\n{debugOvalExtends}";
-		debugText += $"\nOval screen bounds: ({debugMinScreenPoint.x:F0}, {debugMinScreenPoint.y:F0}) to ({debugMaxScreenPoint.x:F0}, {debugMaxScreenPoint.y:F0})";
+		debugText += $"\nCursor: ({debugCursorPosition.x:F0}, {debugCursorPosition.y:F0})";
 
 		Gizmo.Draw.ScreenText( debugText, new Vector2( 10, 100 ), "roboto", 14f, TextFlag.Left );
-
-		// TEST: Always draw a small test rectangle to verify drawing works
-		Gizmo.Draw.ScreenRect( new Rect( 50, 50, 50, 50 ), Color.Red );
 
 		// Highlight screen edges when in pan zone
 		if ( debugIsInPanZone )
@@ -152,8 +139,6 @@ public sealed class CameraController : Component
 		bool topExtends = DoesOvalExtendBeyondEdge( piecePosition, worldMaxFlickDistance, "top" );
 		bool bottomExtends = DoesOvalExtendBeyondEdge( piecePosition, worldMaxFlickDistance, "bottom" );
 
-		debugNearEdges = $"(Cursor check disabled for now)";
-		debugOvalExtends = $"Oval extends - L:{leftExtends} R:{rightExtends} T:{topExtends} B:{bottomExtends}";
 
 		string direction = "";
 		bool overlaps = false;
@@ -187,10 +172,6 @@ public sealed class CameraController : Component
 	{
 		Vector2 screenSize = new Vector2( Screen.Width, Screen.Height );
 
-		// Track min/max screen points for debugging
-		Vector2 minPoint = new Vector2( float.MaxValue, float.MaxValue );
-		Vector2 maxPoint = new Vector2( float.MinValue, float.MinValue );
-
 		// Track the range along each edge where the oval touches
 		float edgeMin = float.MaxValue;
 		float edgeMax = float.MinValue;
@@ -211,12 +192,6 @@ public sealed class CameraController : Component
 			);
 
 			Vector2 screenPoint = Scene.Camera.PointToScreenPixels( worldPoint );
-
-			// Track bounds
-			minPoint.x = MathF.Min( minPoint.x, screenPoint.x );
-			minPoint.y = MathF.Min( minPoint.y, screenPoint.y );
-			maxPoint.x = MathF.Max( maxPoint.x, screenPoint.x );
-			maxPoint.y = MathF.Max( maxPoint.y, screenPoint.y );
 
 			// Check if this point is at the specified screen edge (within threshold since points get clamped)
 			switch ( edge )
@@ -267,13 +242,6 @@ public sealed class CameraController : Component
 				case "top": topEdgeRange = range; break;
 				case "bottom": bottomEdgeRange = range; break;
 			}
-		}
-
-		// Store for debug display (only update once per check cycle)
-		if ( edge == "left" )
-		{
-			debugMinScreenPoint = minPoint;
-			debugMaxScreenPoint = maxPoint;
 		}
 
 		return extends;
