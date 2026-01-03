@@ -40,6 +40,11 @@ public sealed class CameraController : Component
 	private float debugNeededPanX;
 	private float debugNeededPanY;
 
+	private float debugMaxFlickDistance;
+	private Vector2 debugCursorPosition;
+	private Vector3 debugPieceWorldPos;
+	private float debugWorldMaxFlickDistance;
+
 	private void DrawDebug()
 	{
 		Vector2 screenSize = new Vector2( Screen.Width, Screen.Height );
@@ -58,21 +63,50 @@ public sealed class CameraController : Component
 		// Right line
 		Gizmo.Draw.ScreenRect( new Rect( screenSize.x - EdgeThreshold, EdgeThreshold, lineThickness, screenSize.y - EdgeThreshold * 2 ), DebugColor );
 
+		// Draw the piece's max flick circle projected from world space to screen space
+		if ( debugPieceWorldPos != Vector3.Zero && debugWorldMaxFlickDistance > 0 )
+		{
+			// Project world-space circle points to screen space to get accurate oval shape
+			int segments = 128;
+			for ( int i = 0; i < segments; i++ )
+			{
+				float angle = (i / (float)segments) * MathF.PI * 2f;
+
+				// Calculate point on world-space circle (in XY plane, Z=0)
+				Vector3 worldPoint = debugPieceWorldPos + new Vector3(
+					MathF.Cos( angle ) * debugWorldMaxFlickDistance,
+					MathF.Sin( angle ) * debugWorldMaxFlickDistance,
+					0
+				);
+
+				// Project to screen space
+				Vector2 screenPoint = Scene.Camera.PointToScreenPixels( worldPoint );
+
+				// Draw a small rect to simulate the oval
+				Gizmo.Draw.ScreenRect( new Rect( screenPoint.x - 1, screenPoint.y - 1, 2, 2 ), Color.Cyan );
+			}
+
+			// Draw center point for reference
+			Gizmo.Draw.ScreenRect( new Rect( debugPieceScreenPos.x - 3, debugPieceScreenPos.y - 3, 6, 6 ), Color.Magenta );
+		}
+
 		// Draw debug info
-		Gizmo.Draw.ScreenText( $"Pan Offset: {targetPanOffset}", new Vector2( 10, 100 ), "roboto", 14f, TextFlag.Left );
-		Gizmo.Draw.ScreenText( $"Camera Pos: {Transform.Position}", new Vector2( 10, 120 ), "roboto", 14f, TextFlag.Left );
-		Gizmo.Draw.ScreenText( $"Piece Screen: {debugPieceScreenPos}", new Vector2( 10, 140 ), "roboto", 14f, TextFlag.Left );
-		Gizmo.Draw.ScreenText( $"Max X/Y Dist: {debugMaxXDistance:F0}/{debugMaxYDistance:F0}", new Vector2( 10, 160 ), "roboto", 14f, TextFlag.Left );
-		Gizmo.Draw.ScreenText( $"Desired Cursor: {debugDesiredCursorX:F0},{debugDesiredCursorY:F0}", new Vector2( 10, 180 ), "roboto", 14f, TextFlag.Left );
-		Gizmo.Draw.ScreenText( $"Needed Pan: {debugNeededPanX:F0},{debugNeededPanY:F0}", new Vector2( 10, 200 ), "roboto", 14f, TextFlag.Left );
+		Gizmo.Draw.ScreenText( $"Cursor: {debugCursorPosition}", new Vector2( 10, 100 ), "roboto", 14f, TextFlag.Left );
+		Gizmo.Draw.ScreenText( $"Piece Screen: {debugPieceScreenPos}", new Vector2( 10, 120 ), "roboto", 14f, TextFlag.Left );
+		Gizmo.Draw.ScreenText( $"Max Flick Dist: {debugMaxFlickDistance:F0}", new Vector2( 10, 140 ), "roboto", 14f, TextFlag.Left );
+		Gizmo.Draw.ScreenText( $"Edge Extent: {debugDesiredCursorX:F0},{debugDesiredCursorY:F0}", new Vector2( 10, 160 ), "roboto", 14f, TextFlag.Left );
+		Gizmo.Draw.ScreenText( $"Needed Pan: {debugNeededPanX:F0},{debugNeededPanY:F0}", new Vector2( 10, 180 ), "roboto", 14f, TextFlag.Left );
+		Gizmo.Draw.ScreenText( $"Pan Offset: {targetPanOffset}", new Vector2( 10, 200 ), "roboto", 14f, TextFlag.Left );
 	}
 
-	public void UpdatePan( Vector2 cursorPosition, Vector3 piecePosition, bool isDragging, float maxFlickDistance )
+	public void UpdatePan( Vector2 cursorPosition, Vector3 piecePosition, bool isDragging, float maxFlickDistance, float worldMaxFlickDistance )
 	{
 		if ( !isDragging )
 		{
 			// Reset to initial position when not dragging
 			targetPanOffset = Vector3.Zero;
+			debugPieceWorldPos = Vector3.Zero;
+			debugWorldMaxFlickDistance = 0;
 			return;
 		}
 
@@ -91,6 +125,10 @@ public sealed class CameraController : Component
 		debugDesiredCursorY = 0;
 		debugNeededPanX = 0;
 		debugNeededPanY = 0;
+		debugMaxFlickDistance = maxFlickDistance;
+		debugCursorPosition = cursorPosition;
+		debugPieceWorldPos = piecePosition;
+		debugWorldMaxFlickDistance = worldMaxFlickDistance;
 
 		Vector3 panOffset = Vector3.Zero;
 
