@@ -6,8 +6,23 @@ public sealed class CameraController : Component
 	[Property, Group( "Debug" )] public bool ShowDebug { get; set; } = false;
 	[Property, Group( "Debug" )] public float DebugPointSize { get; set; } = 2f;
 
+	[Property, Group( "Pan Settings" )] public float EdgeThreshold { get; set; } = 100f; // How close to edge before considering panning
+
 	private Vector3 debugPieceWorldPos;
 	private float debugWorldMaxFlickDistance;
+	private bool debugIsInPanZone;
+	private string debugPanDirection;
+	private Vector2 debugCursorPosition;
+	private string debugNearEdges;
+	private string debugOvalExtends;
+	private Vector2 debugMinScreenPoint;
+	private Vector2 debugMaxScreenPoint;
+
+	// Track where the oval intersects each edge (min/max along that edge)
+	private Vector2 leftEdgeRange;   // y range where oval touches left edge
+	private Vector2 rightEdgeRange;  // y range where oval touches right edge
+	private Vector2 topEdgeRange;    // x range where oval touches top edge
+	private Vector2 bottomEdgeRange; // x range where oval touches bottom edge
 
 	protected override void OnUpdate()
 	{
@@ -22,6 +37,8 @@ public sealed class CameraController : Component
 		// Draw the piece's max flick circle projected from world space to screen space
 		if ( debugPieceWorldPos != Vector3.Zero && debugWorldMaxFlickDistance > 0 )
 		{
+			Vector2 screenSize = new Vector2( Screen.Width, Screen.Height );
+
 			// Project world-space circle points to screen space to get accurate oval shape
 			int segments = 128;
 			for ( int i = 0; i < segments; i++ )
@@ -38,22 +55,80 @@ public sealed class CameraController : Component
 				// Project to screen space
 				Vector2 screenPoint = Scene.Camera.PointToScreenPixels( worldPoint );
 
-				// Draw a rect at each point
+				// Check if this point is at the edge (within 1 pixel threshold)
+				float edgeThreshold = 1f;
+				bool isAtEdge = screenPoint.x <= edgeThreshold || screenPoint.x >= screenSize.x - edgeThreshold ||
+								screenPoint.y <= edgeThreshold || screenPoint.y >= screenSize.y - edgeThreshold;
+
+				// Draw a rect at each point - red if at edge, cyan if not
 				float halfSize = DebugPointSize / 2f;
-				Gizmo.Draw.ScreenRect( new Rect( screenPoint.x - halfSize, screenPoint.y - halfSize, DebugPointSize, DebugPointSize ), Color.Cyan );
+				Color dotColor = isAtEdge ? Color.Red : Color.Cyan;
+				Gizmo.Draw.ScreenRect( new Rect( screenPoint.x - halfSize, screenPoint.y - halfSize, DebugPointSize, DebugPointSize ), dotColor );
 			}
 		}
 
-		// Placeholder for future debug text
-		Gizmo.Draw.ScreenText( $"Debug Info", new Vector2( 10, 100 ), "roboto", 14f, TextFlag.Left );
+		// Debug text showing pan zone status
+		Vector2 debugScreenSize = new Vector2( Screen.Width, Screen.Height );
+
+		string debugText = $"In Pan Zone: {debugIsInPanZone}";
+		if ( debugIsInPanZone )
+		{
+			debugText += $"\nDirection: {debugPanDirection}";
+		}
+		debugText += $"\nVirtual Cursor: ({debugCursorPosition.x:F0}, {debugCursorPosition.y:F0})";
+		debugText += $"\nMouse.Position: ({Mouse.Position.x:F0}, {Mouse.Position.y:F0})";
+		debugText += $"\nScreen: ({debugScreenSize.x:F0}, {debugScreenSize.y:F0})";
+		debugText += $"\nEdge Threshold: {EdgeThreshold}";
+		debugText += $"\n{debugNearEdges}";
+		debugText += $"\n{debugOvalExtends}";
+		debugText += $"\nOval screen bounds: ({debugMinScreenPoint.x:F0}, {debugMinScreenPoint.y:F0}) to ({debugMaxScreenPoint.x:F0}, {debugMaxScreenPoint.y:F0})";
+
+		Gizmo.Draw.ScreenText( debugText, new Vector2( 10, 100 ), "roboto", 14f, TextFlag.Left );
+
+		// TEST: Always draw a small test rectangle to verify drawing works
+		Gizmo.Draw.ScreenRect( new Rect( 50, 50, 50, 50 ), Color.Red );
+
+		// Highlight screen edges when in pan zone
+		if ( debugIsInPanZone )
+		{
+			float thickness = 8f; // Made thicker for visibility
+
+			Color edgeColor = Color.Yellow.WithAlpha( 0.3f );
+
+			if ( debugPanDirection.Contains( "left" ) )
+			{
+				float height = leftEdgeRange.y - leftEdgeRange.x;
+				Gizmo.Draw.ScreenRect( new Rect( 0, leftEdgeRange.x, thickness, height ), edgeColor );
+			}
+			if ( debugPanDirection.Contains( "right" ) )
+			{
+				float height = rightEdgeRange.y - rightEdgeRange.x;
+				Gizmo.Draw.ScreenRect( new Rect( debugScreenSize.x - thickness, rightEdgeRange.x, thickness, height ), edgeColor );
+			}
+			if ( debugPanDirection.Contains( "top" ) )
+			{
+				float width = topEdgeRange.y - topEdgeRange.x;
+				Gizmo.Draw.ScreenRect( new Rect( topEdgeRange.x, 0, width, thickness ), edgeColor );
+			}
+			if ( debugPanDirection.Contains( "bottom" ) )
+			{
+				float width = bottomEdgeRange.y - bottomEdgeRange.x;
+				Gizmo.Draw.ScreenRect( new Rect( bottomEdgeRange.x, debugScreenSize.y - thickness, width, thickness ), edgeColor );
+			}
+		}
 	}
 
 	public void UpdatePan( Vector2 cursorPosition, Vector3 piecePosition, bool isDragging, float worldMaxFlickDistance )
 	{
+		// Always store cursor position for debug
+		debugCursorPosition = cursorPosition;
+
 		if ( !isDragging )
 		{
 			debugPieceWorldPos = Vector3.Zero;
 			debugWorldMaxFlickDistance = 0;
+			debugIsInPanZone = false;
+			debugPanDirection = "";
 			return;
 		}
 
@@ -61,6 +136,146 @@ public sealed class CameraController : Component
 		debugPieceWorldPos = piecePosition;
 		debugWorldMaxFlickDistance = worldMaxFlickDistance;
 
+		// Simplified: just check if oval overlaps any edge
+		var ovalOverlap = CheckOvalEdgeOverlap( piecePosition, worldMaxFlickDistance );
+		debugIsInPanZone = ovalOverlap.overlaps;
+		debugPanDirection = ovalOverlap.direction;
+
 		// Camera panning logic will go here
+	}
+
+	private (bool overlaps, string direction) CheckOvalEdgeOverlap( Vector3 piecePosition, float worldMaxFlickDistance )
+	{
+		// Check each direction to see if the oval extends beyond the screen
+		bool leftExtends = DoesOvalExtendBeyondEdge( piecePosition, worldMaxFlickDistance, "left" );
+		bool rightExtends = DoesOvalExtendBeyondEdge( piecePosition, worldMaxFlickDistance, "right" );
+		bool topExtends = DoesOvalExtendBeyondEdge( piecePosition, worldMaxFlickDistance, "top" );
+		bool bottomExtends = DoesOvalExtendBeyondEdge( piecePosition, worldMaxFlickDistance, "bottom" );
+
+		debugNearEdges = $"(Cursor check disabled for now)";
+		debugOvalExtends = $"Oval extends - L:{leftExtends} R:{rightExtends} T:{topExtends} B:{bottomExtends}";
+
+		string direction = "";
+		bool overlaps = false;
+
+		if ( leftExtends )
+		{
+			overlaps = true;
+			direction = "left";
+		}
+		else if ( rightExtends )
+		{
+			overlaps = true;
+			direction = "right";
+		}
+
+		if ( topExtends )
+		{
+			overlaps = true;
+			direction = overlaps ? direction + "+top" : "top";
+		}
+		else if ( bottomExtends )
+		{
+			overlaps = true;
+			direction = overlaps ? direction + "+bottom" : "bottom";
+		}
+
+		return (overlaps, direction);
+	}
+
+	private bool DoesOvalExtendBeyondEdge( Vector3 piecePosition, float worldMaxFlickDistance, string edge )
+	{
+		Vector2 screenSize = new Vector2( Screen.Width, Screen.Height );
+
+		// Track min/max screen points for debugging
+		Vector2 minPoint = new Vector2( float.MaxValue, float.MaxValue );
+		Vector2 maxPoint = new Vector2( float.MinValue, float.MinValue );
+
+		// Track the range along each edge where the oval touches
+		float edgeMin = float.MaxValue;
+		float edgeMax = float.MinValue;
+
+		bool extends = false;
+		float edgeThreshold = 1f;
+
+		// Sample points around the entire circle
+		int samples = 64;
+		for ( int i = 0; i < samples; i++ )
+		{
+			float angle = (i / (float)samples) * MathF.PI * 2f;
+
+			Vector3 worldPoint = piecePosition + new Vector3(
+				MathF.Cos( angle ) * worldMaxFlickDistance,
+				MathF.Sin( angle ) * worldMaxFlickDistance,
+				0
+			);
+
+			Vector2 screenPoint = Scene.Camera.PointToScreenPixels( worldPoint );
+
+			// Track bounds
+			minPoint.x = MathF.Min( minPoint.x, screenPoint.x );
+			minPoint.y = MathF.Min( minPoint.y, screenPoint.y );
+			maxPoint.x = MathF.Max( maxPoint.x, screenPoint.x );
+			maxPoint.y = MathF.Max( maxPoint.y, screenPoint.y );
+
+			// Check if this point is at the specified screen edge (within threshold since points get clamped)
+			switch ( edge )
+			{
+				case "left":
+					if ( screenPoint.x <= edgeThreshold )
+					{
+						extends = true;
+						edgeMin = MathF.Min( edgeMin, screenPoint.y );
+						edgeMax = MathF.Max( edgeMax, screenPoint.y );
+					}
+					break;
+				case "right":
+					if ( screenPoint.x >= screenSize.x - edgeThreshold )
+					{
+						extends = true;
+						edgeMin = MathF.Min( edgeMin, screenPoint.y );
+						edgeMax = MathF.Max( edgeMax, screenPoint.y );
+					}
+					break;
+				case "top":
+					if ( screenPoint.y <= edgeThreshold )
+					{
+						extends = true;
+						edgeMin = MathF.Min( edgeMin, screenPoint.x );
+						edgeMax = MathF.Max( edgeMax, screenPoint.x );
+					}
+					break;
+				case "bottom":
+					if ( screenPoint.y >= screenSize.y - edgeThreshold )
+					{
+						extends = true;
+						edgeMin = MathF.Min( edgeMin, screenPoint.x );
+						edgeMax = MathF.Max( edgeMax, screenPoint.x );
+					}
+					break;
+			}
+		}
+
+		// Store the edge range for drawing
+		if ( extends )
+		{
+			Vector2 range = new Vector2( edgeMin, edgeMax );
+			switch ( edge )
+			{
+				case "left": leftEdgeRange = range; break;
+				case "right": rightEdgeRange = range; break;
+				case "top": topEdgeRange = range; break;
+				case "bottom": bottomEdgeRange = range; break;
+			}
+		}
+
+		// Store for debug display (only update once per check cycle)
+		if ( edge == "left" )
+		{
+			debugMinScreenPoint = minPoint;
+			debugMaxScreenPoint = maxPoint;
+		}
+
+		return extends;
 	}
 }
