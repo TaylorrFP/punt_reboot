@@ -107,7 +107,7 @@ public sealed class PuntPiece : Component, ISelectable
 		ShakeEffect?.Stop();
 
 		// Apply flick
-		Rigidbody.Velocity = flickVelocity;
+		Rigidbody.Velocity = flickVelocity*2f; //random value for now
 
 		// Start cooldown
 		State = PieceState.Ready;
