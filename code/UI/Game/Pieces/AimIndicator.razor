@@ -1,11 +1,15 @@
-@using System;
+﻿@using System;
 @using Sandbox;
 @using Sandbox.UI;
 @namespace Punt.UI
 @inherits PanelComponent
 
 <root class="aim-indicator @(IsVisible ? "visible" : "hidden")">
-    <div class="aim-line"></div>
+    <div class="aim-line">
+        <div class="aim-head"></div>
+        <div class="aim-body"></div>
+        <div class="aim-tail"></div>
+    </div>
 </root>
 
 @code
@@ -84,7 +88,7 @@
         float angleRadians = MathF.Atan2(offsetDirection.y, offsetDirection.x);
         float angleDegrees = angleRadians * (180f / MathF.PI);
 
-        // Set the rotation - combine the panel's default 90� pitch with the calculated yaw
+        // Set the rotation - combine the panel's default 90° pitch with the calculated yaw
         WorldPanel.GameObject.WorldRotation = Rotation.From(90, angleDegrees, 0);
 
         // Update the panel size - use the offset distance
