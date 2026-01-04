@@ -487,7 +487,6 @@ public sealed class PlayerController : Component
 
 	private void ReleaseControllerFlick()
 	{
-		// Use the existing flick vector calculated in UpdateSelection
 		if ( flickVector.Length < MinFlickDistance )
 		{
 			AbortSelection();
