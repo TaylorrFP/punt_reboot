@@ -184,8 +184,8 @@ public sealed class CameraController : Component
 			cursorOffset.y / screenCenter.y
 		);
 
-		// Convert to world offset (invert Y for screen-to-world conversion)
-		return new Vector3( normalized.x * PassivePanHorizontalMult, -normalized.y, 0 ) * PassivePanSpeed;
+		// Convert to world offset (screen X -> world -Y, screen Y -> world -X)
+		return new Vector3( -normalized.y, -normalized.x * PassivePanHorizontalMult, 0 ) * PassivePanSpeed;
 	}
 
 	#endregion
@@ -243,7 +243,8 @@ public sealed class CameraController : Component
 		{
 			lastPanDirection = panDirection;
 
-			Vector3 worldPanDir = new Vector3( panDirection.x, -panDirection.y, 0 );
+			// Convert screen pan direction to world (screen X -> world Y, screen Y -> world X)
+			Vector3 worldPanDir = new Vector3( -panDirection.y, -panDirection.x, 0 );
 			targetPosition += worldPanDir * totalPanAmount * PanSpeed;
 		}
 	}
