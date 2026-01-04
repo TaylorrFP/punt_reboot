@@ -1,3 +1,4 @@
+using Punt;
 using Sandbox;
 using System;
 
@@ -20,9 +21,12 @@ public sealed class PlayerController : Component
 	[Property, Group( "Cursor" )] public bool ShowCursor { get; set; } = true;
 	[Property, Group( "Cursor" )] public float Sensitivity { get; set; } = 1.0f;
 
+	[Property, Group( "Controller" )] public float ControllerDistanceWeight { get; set; } = 0.1f;
+
 	[Property, Group( "Debug" )] public bool ShowDebug { get; set; } = false;
 
 	[Property] public CameraController CameraController { get; set; }
+	[Property] public InputManager InputManager { get; set; }
 
 	#endregion
 
@@ -39,6 +43,10 @@ public sealed class PlayerController : Component
 	private ISelectable hoveredSelectable;
 	private ISelectable selectedSelectable;
 
+	// Controller mode - active piece
+	private ISelectable activeSelectable;
+	private ISelectable controllerHoverTarget; // Piece being previewed while stick is held
+
 	// Flick tracking
 	private Vector3 flickVector;
 	private float lastCursorDelta;
@@ -51,16 +59,16 @@ public sealed class PlayerController : Component
 	{
 		if ( IsProxy ) return;
 
-		UpdateCursor();
-		UpdateWorldPosition();
+		// Determine input mode
+		bool isControllerMode = InputManager != null && InputManager.CurrentMode == InputMode.Controller;
 
-		if ( selectedSelectable != null )
+		if ( isControllerMode )
 		{
-			UpdateSelection();
+			UpdateControllerMode();
 		}
 		else
 		{
-			UpdateHover();
+			UpdateMouseMode();
 		}
 
 		UpdateCamera();
@@ -72,6 +80,65 @@ public sealed class PlayerController : Component
 		if ( ShowDebug )
 		{
 			DrawDebug();
+		}
+	}
+
+	private void UpdateMouseMode()
+	{
+		UpdateCursor();
+		UpdateWorldPosition();
+
+		if ( selectedSelectable != null )
+		{
+			UpdateSelection();
+		}
+		else
+		{
+			UpdateHover();
+		}
+	}
+
+	private void UpdateControllerMode()
+	{
+		// Ensure we have an active piece
+		if ( activeSelectable == null || !IsValidTarget( activeSelectable ) || !activeSelectable.CanSelect )
+		{
+			activeSelectable = FindNearestSelectableToCamera();
+			if ( activeSelectable != null )
+			{
+				activeSelectable.OnHoverEnter();
+			}
+		}
+
+		// Handle right stick flick first
+		if ( selectedSelectable != null )
+		{
+			// Already flicking - update flick vector
+			UpdateControllerFlickVector();
+		}
+		else if ( InputManager.RightStick.IsHeld && activeSelectable != null && activeSelectable.CanSelect )
+		{
+			// Start flicking the active piece
+			SelectTarget( activeSelectable );
+		}
+		// Handle left stick piece selection (only when not flicking)
+		else if ( InputManager.LeftStick.IsHeld )
+		{
+			// Update search continuously as stick direction changes
+			UpdateControllerPieceSelection();
+		}
+		else if ( InputManager.LeftStick.WasReleased )
+		{
+			ConfirmControllerPieceSelection();
+		}
+		else
+		{
+			// Stick is neutral - clear hover target
+			if ( controllerHoverTarget != null )
+			{
+				controllerHoverTarget.OnHoverExit();
+				controllerHoverTarget = null;
+			}
 		}
 	}
 
@@ -260,15 +327,179 @@ public sealed class PlayerController : Component
 
 	#endregion
 
+	#region Controller Selection
+
+	private void UpdateControllerPieceSelection()
+	{
+		// Find the nearest piece in the direction of the left stick
+		Vector2 stickDirection = InputManager.LeftStick.Direction;
+
+		// Convert 2D stick direction to 3D world direction
+		// Stick: X (right), Y (up) -> World: -Y (forward), -X (right)
+		Vector3 worldDirection = new Vector3( -stickDirection.y, -stickDirection.x, 0 ).Normal;
+
+		var targetPiece = FindNearestSelectableInDirection( activeSelectable.SelectPosition, worldDirection );
+
+		if ( targetPiece != null && targetPiece != activeSelectable )
+		{
+			// Clear hover from current active
+			if ( activeSelectable != null && activeSelectable != selectedSelectable )
+			{
+				activeSelectable.OnHoverExit();
+			}
+
+			// Set hover target and hover it
+			controllerHoverTarget = targetPiece;
+			if ( selectedSelectable == null )
+			{
+				controllerHoverTarget.OnHoverEnter();
+			}
+		}
+	}
+
+	private void ConfirmControllerPieceSelection()
+	{
+		// Commit the hover target as the new active piece
+		if ( controllerHoverTarget != null )
+		{
+			activeSelectable = controllerHoverTarget;
+			controllerHoverTarget = null;
+
+			// Play confirmation sound
+			Sound.Play( "sounds/kenny/debugrelease.sound" );
+		}
+	}
+
+	private ISelectable FindNearestSelectableInDirection( Vector3 fromPosition, Vector3 direction )
+	{
+		var selectables = new List<ISelectable>();
+		selectables.AddRange( Scene.GetAllComponents<PuntPiece>() );
+		selectables.AddRange( Scene.GetAllComponents<ClickableProp>() );
+
+		ISelectable best = null;
+		float bestScore = float.MaxValue;
+
+		foreach ( var selectable in selectables )
+		{
+			if ( !IsValidTarget( selectable ) ) continue;
+			if ( selectable == activeSelectable ) continue; // Skip current active
+
+			Vector3 toSelectable = (selectable.SelectPosition - fromPosition).WithZ( 0 );
+			float distance = toSelectable.Length;
+
+			// Skip pieces that are too close (avoid self-selection issues)
+			if ( distance < 10f ) continue;
+
+			// Calculate the angle between stick direction and direction to piece
+			Vector3 toPieceDirection = toSelectable.Normal;
+			float dot = Vector3.Dot( direction, toPieceDirection );
+
+			// Convert dot product to angle (in degrees)
+			float angle = MathF.Acos( Math.Clamp( dot, -1f, 1f ) ) * (180f / MathF.PI);
+
+			// Combine angle and distance with tunable weight
+			// Lower score = better match
+			float score = angle + (distance * ControllerDistanceWeight);
+
+			if ( score < bestScore )
+			{
+				bestScore = score;
+				best = selectable;
+			}
+		}
+
+		return best;
+	}
+
+	private ISelectable FindNearestSelectableToCamera()
+	{
+		var selectables = new List<ISelectable>();
+		selectables.AddRange( Scene.GetAllComponents<PuntPiece>() );
+		selectables.AddRange( Scene.GetAllComponents<ClickableProp>() );
+
+		ISelectable best = null;
+		float bestDistance = float.MaxValue;
+
+		Vector3 cameraPosition = Scene.Camera.WorldPosition.WithZ( 0 );
+
+		foreach ( var selectable in selectables )
+		{
+			if ( !IsValidTarget( selectable ) ) continue;
+			if ( !selectable.CanSelect ) continue;
+
+			float distance = (selectable.SelectPosition - cameraPosition).WithZ( 0 ).Length;
+
+			if ( distance < bestDistance )
+			{
+				bestDistance = distance;
+				best = selectable;
+			}
+		}
+
+		return best;
+	}
+
+	#endregion
+
+	#region Controller Flick
+
+	private void UpdateControllerFlickVector()
+	{
+		// Convert right stick direction to world space
+		Vector2 stickDirection = InputManager.RightStick.Direction;
+		Vector3 worldDirection = new Vector3( -stickDirection.y, -stickDirection.x, 0 ).Normal;
+
+		// Calculate flick vector from stick direction and magnitude
+		// Use peak magnitude to get the strongest input during the gesture
+		float magnitude = InputManager.RightStick.PeakMagnitude;
+		Vector3 calculatedFlickVector = worldDirection * magnitude * MaxFlickDistance;
+		calculatedFlickVector = calculatedFlickVector.ClampLength( MaxFlickDistance );
+
+		flickVector = calculatedFlickVector;
+
+		// Calculate feedback data for the selectable
+		float intensity = flickVector.Length / MaxFlickDistance;
+		bool exceedsMinimum = flickVector.Length >= MinFlickDistance;
+
+		// Calculate clamped cursor position for aim indicator
+		Vector3 aimPosition = selectedSelectable.SelectPosition + flickVector;
+
+		selectedSelectable.OnDragUpdate( intensity, 0f, aimPosition, exceedsMinimum );
+
+		// Release on stick release
+		if ( InputManager.RightStick.WasReleased )
+		{
+			ReleaseControllerFlick();
+		}
+	}
+
+	private void ReleaseControllerFlick()
+	{
+		if ( flickVector.Length < MinFlickDistance )
+		{
+			AbortSelection();
+			return;
+		}
+
+		selectedSelectable?.OnDeselect( flickVector );
+		ClearSelectionState();
+	}
+
+	#endregion
+
 	#region Camera
 
 	private void UpdateCamera()
 	{
 		if ( CameraController == null ) return;
 
+		bool isControllerMode = InputManager != null && InputManager.CurrentMode == InputMode.Controller;
 		bool isDragging = selectedSelectable != null && selectedSelectable.CapturesSelection;
 		Vector3 piecePosition = isDragging ? selectedSelectable.SelectPosition : Vector3.Zero;
-		float worldFlickRadius = isDragging ? MaxFlickDistance / FlickStrength : 0f;
+
+		// In controller mode, flick vector is already in world units
+		// In mouse mode, we need to convert cursor distance to world units
+		float worldFlickRadius = isDragging ? (isControllerMode ? MaxFlickDistance : MaxFlickDistance / FlickStrength) : 0f;
 
 		CameraController.UpdatePan( cursorPosition, piecePosition, isDragging, worldFlickRadius );
 	}
@@ -318,11 +549,70 @@ public sealed class PlayerController : Component
 
 	private void DrawDebug()
 	{
-		DrawCursorDebug();
+		bool isControllerMode = InputManager != null && InputManager.CurrentMode == InputMode.Controller;
+
+		if ( isControllerMode )
+		{
+			DrawControllerDebug();
+		}
+		else
+		{
+			DrawCursorDebug();
+		}
 
 		if ( selectedSelectable != null && selectedSelectable.CapturesSelection )
 		{
 			DrawFlickDebug();
+		}
+	}
+
+	private void DrawControllerDebug()
+	{
+		// Draw active piece indicator (current selected piece)
+		if ( activeSelectable != null && selectedSelectable == null )
+		{
+			Gizmo.Draw.Color = Color.Green;
+			Gizmo.Draw.LineCircle( activeSelectable.SelectPosition, Vector3.Up, 80f, 0, 360, 32 );
+		}
+
+		// Draw hover target indicator (piece being previewed)
+		if ( controllerHoverTarget != null )
+		{
+			Gizmo.Draw.Color = Color.Cyan;
+			Gizmo.Draw.LineCircle( controllerHoverTarget.SelectPosition, Vector3.Up, 100f, 0, 360, 32 );
+		}
+
+		// Draw left stick direction if held
+		if ( InputManager.LeftStick.IsHeld && activeSelectable != null && selectedSelectable == null )
+		{
+			Vector2 stickDir = InputManager.LeftStick.Direction;
+			// Stick: X (right), Y (up) -> World: -Y (forward), -X (right)
+			Vector3 worldDir = new Vector3( -stickDir.y, -stickDir.x, 0 ).Normal * 200f;
+
+			Gizmo.Draw.Color = Color.Yellow;
+			Gizmo.Draw.Arrow( activeSelectable.SelectPosition, activeSelectable.SelectPosition + worldDir, 8f, 4f );
+		}
+
+		// Draw right stick flick vector if held
+		if ( InputManager.RightStick.IsHeld && selectedSelectable != null )
+		{
+			Vector2 stickDir = InputManager.RightStick.Direction;
+			Vector3 worldDir = new Vector3( -stickDir.y, -stickDir.x, 0 ).Normal;
+			float magnitude = InputManager.RightStick.PeakMagnitude;
+
+			// Draw flick direction arrow
+			Gizmo.Draw.Color = Color.Magenta;
+			Gizmo.Draw.Arrow( selectedSelectable.SelectPosition, selectedSelectable.SelectPosition + worldDir * 200f, 8f, 4f );
+
+			// Draw flick vector magnitude text at screen position
+			Vector2 textScreenPos = Scene.Camera.PointToScreenPixels( selectedSelectable.SelectPosition + Vector3.Up * 100f );
+			Gizmo.Draw.Color = Color.Black;
+			Gizmo.Draw.ScreenText(
+				$"Magnitude: {magnitude:F2}\nFlick: {flickVector.Length:F1}",
+				textScreenPos,
+				"roboto",
+				16f
+			);
 		}
 	}
 

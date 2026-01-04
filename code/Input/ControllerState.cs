@@ -44,6 +44,18 @@ public class AnalogStickState
 	public float ActivationThreshold { get; set; } = 0.3f;
 
 	/// <summary>
+	/// Maximum magnitude to consider the stick "released" (returned to neutral).
+	/// Should be close to deadzone for quick release detection.
+	/// </summary>
+	public float ReleaseThreshold { get; set; } = 0.25f;
+
+	/// <summary>
+	/// Minimum magnitude required to update the direction during a gesture.
+	/// Prevents direction jitter as stick returns to neutral.
+	/// </summary>
+	public float DirectionUpdateThreshold { get; set; } = 0.5f;
+
+	/// <summary>
 	/// Updates the stick state with new input.
 	/// </summary>
 	/// <param name="input">Raw stick input from controller</param>
@@ -78,11 +90,15 @@ public class AnalogStickState
 				PeakMagnitude = magnitude;
 			}
 
-			// Update direction (allow slight adjustments)
-			Direction = input.Normal;
+			// Only update direction if magnitude is strong enough
+			// This prevents direction jitter as the stick returns to neutral
+			if ( magnitude >= DirectionUpdateThreshold )
+			{
+				Direction = input.Normal;
+			}
 		}
-		// Release detected
-		else if ( IsHeld && magnitude < Deadzone )
+		// Release detected - stick returned to neutral
+		else if ( IsHeld && magnitude < ReleaseThreshold )
 		{
 			IsHeld = false;
 			WasReleased = true;

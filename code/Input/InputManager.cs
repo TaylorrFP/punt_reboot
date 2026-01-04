@@ -15,6 +15,8 @@ public sealed class InputManager : Component
 
 	[Property, Group( "Controller" )] public float StickDeadzone { get; set; } = 0.2f;
 	[Property, Group( "Controller" )] public float StickActivationThreshold { get; set; } = 0.3f;
+	[Property, Group( "Controller" )] public float StickReleaseThreshold { get; set; } = 0.25f;
+	[Property, Group( "Controller" )] public float StickDirectionUpdateThreshold { get; set; } = 0.5f;
 
 	#endregion
 
@@ -43,8 +45,12 @@ public sealed class InputManager : Component
 	{
 		LeftStick.Deadzone = StickDeadzone;
 		LeftStick.ActivationThreshold = StickActivationThreshold;
+		LeftStick.ReleaseThreshold = StickReleaseThreshold;
+		LeftStick.DirectionUpdateThreshold = StickDirectionUpdateThreshold;
 		RightStick.Deadzone = StickDeadzone;
 		RightStick.ActivationThreshold = StickActivationThreshold;
+		RightStick.ReleaseThreshold = StickReleaseThreshold;
+		RightStick.DirectionUpdateThreshold = StickDirectionUpdateThreshold;
 	}
 
 	protected override void OnUpdate()
