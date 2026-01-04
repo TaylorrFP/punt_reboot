@@ -99,6 +99,9 @@
 
 		currentCursorImage = texturePath;
 		CursorElement.Style.BackgroundImage = Texture.LoadFromFileSystem( texturePath, FileSystem.Mounted );
+
+		// Ensure cursor is visible when setting an image
+		CursorElement.Style.Display = DisplayMode.Flex;
 	}
 
 	// Convenience methods for setting cursor state
@@ -117,6 +120,13 @@
 				break;
 			case CursorState.Disabled:
 				SetCursorImage( DisabledCursorImage );
+				break;
+			case CursorState.Hidden:
+				// Hide the cursor element
+				if ( CursorElement != null )
+				{
+					CursorElement.Style.Display = DisplayMode.None;
+				}
 				break;
 		}
 	}

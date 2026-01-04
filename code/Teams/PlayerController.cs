@@ -116,18 +116,22 @@ public sealed class PlayerController : Component
 		// Handle right stick flick
 		if ( selectedSelectable != null )
 		{
-			// Already flicking - update flick with cursor position
-			UpdateSelection();
+			// Check for release first
+			if ( InputManager.RightStick.WasReleased )
+			{
+				// Release flick
+				ReleaseControllerFlick();
+			}
+			else
+			{
+				// Already flicking - update flick with cursor position
+				UpdateSelection();
+			}
 		}
 		else if ( InputManager.RightStick.IsHeld && activeSelectable != null && activeSelectable.CanSelect )
 		{
 			// Start flicking the active piece
 			SelectTarget( activeSelectable );
-		}
-		else if ( InputManager.RightStick.WasReleased && selectedSelectable != null )
-		{
-			// Release flick
-			ReleaseControllerFlick();
 		}
 		// Handle left stick piece selection (only when not flicking)
 		else if ( InputManager.LeftStick.IsHeld )
@@ -520,6 +524,15 @@ public sealed class PlayerController : Component
 	private void UpdateCursorVisuals()
 	{
 		if ( Hud.Instance == null ) return;
+
+		bool isControllerMode = InputManager != null && InputManager.CurrentMode == InputMode.Controller;
+
+		// Hide virtual cursor in controller mode
+		if ( isControllerMode )
+		{
+			Hud.Instance.SetCursorState( CursorState.Hidden );
+			return;
+		}
 
 		CursorState state;
 

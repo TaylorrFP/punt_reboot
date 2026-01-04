@@ -5,5 +5,6 @@ public enum CursorState
 	Default,
 	Hover,
 	Grabbing,
-	Disabled
+	Disabled,
+	Hidden
 }
