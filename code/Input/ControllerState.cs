@@ -30,20 +30,15 @@ public class AnalogStickState
 	public bool WasReleased { get; private set; }
 
 	/// <summary>
-	/// Deadzone threshold for stick input.
+	/// Deadzone threshold for stick input. Also used as the activation threshold for gestures.
 	/// </summary>
 	public float Deadzone { get; set; } = 0.2f;
 
 	/// <summary>
-	/// Minimum magnitude required to register as input.
-	/// </summary>
-	public float ActivationThreshold { get; set; } = 0.3f;
-
-	/// <summary>
 	/// Maximum magnitude to consider the stick "released" (returned to neutral).
-	/// Should be close to deadzone for quick release detection.
+	/// Should be below deadzone for hysteresis.
 	/// </summary>
-	public float ReleaseThreshold { get; set; } = 0.25f;
+	public float ReleaseThreshold { get; set; } = 0.15f;
 
 	/// <summary>
 	/// Tracks if the stick was in deadzone. Used to prevent double-flicks from springback.
@@ -98,7 +93,7 @@ public class AnalogStickState
 		float timeSinceRelease = Time.Now - lastReleaseTime;
 		bool cooldownExpired = timeSinceRelease >= GestureCooldown;
 
-		if ( !IsHeld && magnitude >= ActivationThreshold && wasInDeadzone )
+		if ( !IsHeld && magnitude >= Deadzone && wasInDeadzone )
 		{
 			Vector2 newDirection = input.Normal;
 

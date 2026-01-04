@@ -14,8 +14,7 @@ public sealed class InputManager : Component
 	[Property, Group( "Debug" )] public bool ShowDebug { get; set; } = false;
 
 	[Property, Group( "Controller" )] public float StickDeadzone { get; set; } = 0.2f;
-	[Property, Group( "Controller" )] public float StickActivationThreshold { get; set; } = 0.3f;
-	[Property, Group( "Controller" )] public float StickReleaseThreshold { get; set; } = 0.25f;
+	[Property, Group( "Controller" )] public float StickReleaseThreshold { get; set; } = 0.15f;
 
 	#endregion
 
@@ -43,10 +42,8 @@ public sealed class InputManager : Component
 	protected override void OnStart()
 	{
 		LeftStick.Deadzone = StickDeadzone;
-		LeftStick.ActivationThreshold = StickActivationThreshold;
 		LeftStick.ReleaseThreshold = StickReleaseThreshold;
 		RightStick.Deadzone = StickDeadzone;
-		RightStick.ActivationThreshold = StickActivationThreshold;
 		RightStick.ReleaseThreshold = StickReleaseThreshold;
 	}
 
@@ -172,13 +169,9 @@ public sealed class InputManager : Component
 		Gizmo.Draw.Color = Color.White.WithAlpha( 0.3f );
 		Gizmo.Draw.LineCircle( worldCenter, Vector3.Up, radius, 0, 360, 32 );
 
-		// Draw deadzone circle
+		// Draw deadzone circle (also the activation threshold)
 		Gizmo.Draw.Color = Color.Red.WithAlpha( 0.2f );
 		Gizmo.Draw.LineCircle( worldCenter, Vector3.Up, radius * stick.Deadzone, 0, 360, 16 );
-
-		// Draw activation threshold circle
-		Gizmo.Draw.Color = Color.Yellow.WithAlpha( 0.3f );
-		Gizmo.Draw.LineCircle( worldCenter, Vector3.Up, radius * stick.ActivationThreshold, 0, 360, 16 );
 
 		// Draw current stick position
 		Vector2 stickPos = center + stick.CurrentInput * radius;

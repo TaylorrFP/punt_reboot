@@ -52,7 +52,7 @@ public sealed class PlayerController : Component
 	private Vector3 flickVector;
 	private float lastCursorDelta;
 	private Vector2 lastValidStickDirection; // Tracks last valid stick direction for smooth rotation
-	private Vector3 smoothedWorldCursorPosition; // Smoothed cursor position for controller aiming
+	private Vector3 smoothedFlickDirection; // Smoothed direction for controller aiming (magnitude preserved)
 
 	#endregion
 
@@ -259,6 +259,7 @@ public sealed class PlayerController : Component
 		lastCursorDelta = Mouse.Delta.Length;
 
 		// Calculate flick vector from piece to cursor, scaled and clamped
+		// (Controller smoothing only affects direction, not magnitude, so worldCursorPosition is correct)
 		flickVector = (selectedSelectable.SelectPosition - worldCursorPosition).WithZ( 0 );
 		flickVector *= FlickStrength;
 		flickVector = flickVector.ClampLength( MaxFlickDistance );
@@ -267,7 +268,7 @@ public sealed class PlayerController : Component
 		float intensity = flickVector.Length / MaxFlickDistance;
 		bool exceedsMinimum = flickVector.Length >= MinFlickDistance;
 
-		// Calculate clamped cursor position for aim indicator
+		// Calculate clamped cursor position for aim indicator (use smoothed position for visuals)
 		Vector3 pieceToCursor = worldCursorPosition - selectedSelectable.SelectPosition;
 		pieceToCursor = pieceToCursor.WithZ( 0 );
 		Vector3 clampedOffset = pieceToCursor.ClampLength( MaxFlickDistance );
@@ -287,7 +288,7 @@ public sealed class PlayerController : Component
 		flickVector = Vector3.Zero;
 		lastCursorDelta = 0f;
 		lastValidStickDirection = InputManager.RightStick.CurrentInput.Normal;
-		smoothedWorldCursorPosition = worldCursorPosition; // Initialize smoothed position to current
+		smoothedFlickDirection = Vector3.Zero; // Will be initialized on first cursor update
 
 		// Some selectables don't capture (e.g. instant-click buttons)
 		if ( !selectedSelectable.CapturesSelection )
@@ -402,22 +403,22 @@ public sealed class PlayerController : Component
 		Vector3 worldOffset = new Vector3( -stickInput.y, -stickInput.x, 0 );
 
 		// Scale by max flick distance
-		worldOffset *= MaxFlickDistance;
+		float magnitude = worldOffset.Length * MaxFlickDistance;
+		Vector3 direction = worldOffset.Normal;
 
-		// Calculate target world cursor position relative to the center piece
-		Vector3 targetWorldCursorPosition = centerPiece.SelectPosition + worldOffset;
-
-		// Apply smoothing when flicking (controller aiming)
-		if ( selectedSelectable != null && ControllerAimSmoothing > 0f )
+		// Apply smoothing to direction only (not magnitude) when flicking
+		if ( selectedSelectable != null && ControllerAimSmoothing > 0f && direction.Length > 0.01f )
 		{
 			float smoothFactor = 1f - MathF.Exp( -ControllerAimSmoothing * Time.Delta );
-			smoothedWorldCursorPosition = Vector3.Lerp( smoothedWorldCursorPosition, targetWorldCursorPosition, smoothFactor );
-			worldCursorPosition = smoothedWorldCursorPosition;
+			smoothedFlickDirection = Vector3.Lerp( smoothedFlickDirection, direction, smoothFactor ).Normal;
+
+			// Recombine smoothed direction with unsmoothed magnitude
+			worldCursorPosition = centerPiece.SelectPosition + smoothedFlickDirection * magnitude;
 		}
 		else
 		{
-			worldCursorPosition = targetWorldCursorPosition;
-			smoothedWorldCursorPosition = targetWorldCursorPosition;
+			worldCursorPosition = centerPiece.SelectPosition + direction * magnitude;
+			smoothedFlickDirection = direction;
 		}
 
 		// Also update screen cursor position for camera panning
@@ -551,8 +552,10 @@ public sealed class PlayerController : Component
 			return;
 		}
 
+		Log.Info( flickVector.Length );
 		selectedSelectable?.OnDeselect( flickVector );
 		ClearSelectionState();
+
 	}
 
 	#endregion
