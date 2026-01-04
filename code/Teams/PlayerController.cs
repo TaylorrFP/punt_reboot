@@ -22,6 +22,7 @@ public sealed class PlayerController : Component
 	[Property, Group( "Cursor" )] public float Sensitivity { get; set; } = 1.0f;
 
 	[Property, Group( "Controller" )] public float ControllerDistanceWeight { get; set; } = 0.1f;
+	[Property, Group( "Controller" )] public float ControllerAimSmoothing { get; set; } = 10f;
 
 	[Property, Group( "Debug" )] public bool ShowDebug { get; set; } = false;
 
@@ -51,6 +52,7 @@ public sealed class PlayerController : Component
 	private Vector3 flickVector;
 	private float lastCursorDelta;
 	private Vector2 lastValidStickDirection; // Tracks last valid stick direction for smooth rotation
+	private Vector3 smoothedWorldCursorPosition; // Smoothed cursor position for controller aiming
 
 	#endregion
 
@@ -281,6 +283,7 @@ public sealed class PlayerController : Component
 		flickVector = Vector3.Zero;
 		lastCursorDelta = 0f;
 		lastValidStickDirection = InputManager.RightStick.CurrentInput.Normal;
+		smoothedWorldCursorPosition = worldCursorPosition; // Initialize smoothed position to current
 
 		// Some selectables don't capture (e.g. instant-click buttons)
 		if ( !selectedSelectable.CapturesSelection )
@@ -401,8 +404,21 @@ public sealed class PlayerController : Component
 		// Scale by max flick distance
 		worldOffset *= MaxFlickDistance;
 
-		// Set world cursor position relative to the center piece
-		worldCursorPosition = centerPiece.SelectPosition + worldOffset;
+		// Calculate target world cursor position relative to the center piece
+		Vector3 targetWorldCursorPosition = centerPiece.SelectPosition + worldOffset;
+
+		// Apply smoothing when flicking (controller aiming)
+		if ( selectedSelectable != null && ControllerAimSmoothing > 0f )
+		{
+			float smoothFactor = 1f - MathF.Exp( -ControllerAimSmoothing * Time.Delta );
+			smoothedWorldCursorPosition = Vector3.Lerp( smoothedWorldCursorPosition, targetWorldCursorPosition, smoothFactor );
+			worldCursorPosition = smoothedWorldCursorPosition;
+		}
+		else
+		{
+			worldCursorPosition = targetWorldCursorPosition;
+			smoothedWorldCursorPosition = targetWorldCursorPosition;
+		}
 
 		// Also update screen cursor position for camera panning
 		cursorPosition = Scene.Camera.PointToScreenPixels( worldCursorPosition );

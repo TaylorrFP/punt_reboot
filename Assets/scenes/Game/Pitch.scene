@@ -180,6 +180,7 @@
             "go": "96cdd6d5-293f-4b12-8ebd-76f82dde8d15",
             "component_type": "CameraController"
           },
+          "ControllerAimSmoothing": 20,
           "ControllerDistanceWeight": 0.1,
           "FlickStrength": 1,
           "InputManager": {
