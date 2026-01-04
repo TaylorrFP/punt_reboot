@@ -131,8 +131,8 @@ public sealed class InputManager : Component
 
 	private void DrawDebug()
 	{
-		DrawInputModeIndicator();
-		DrawStickVisualization();
+		//DrawInputModeIndicator();
+		//DrawStickVisualization();
 	}
 
 	private void DrawInputModeIndicator()

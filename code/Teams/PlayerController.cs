@@ -101,13 +101,16 @@ public sealed class PlayerController : Component
 
 	private void UpdateControllerMode()
 	{
-		// Ensure we have an active piece
-		if ( activeSelectable == null || !IsValidTarget( activeSelectable ) || !activeSelectable.CanSelect )
+		// Ensure we have an active piece (only when not currently flicking)
+		if ( selectedSelectable == null )
 		{
-			activeSelectable = FindNearestSelectableToCamera();
-			if ( activeSelectable != null )
+			if ( activeSelectable == null || !IsValidTarget( activeSelectable ) || !activeSelectable.CanSelect )
 			{
-				activeSelectable.OnHoverEnter();
+				activeSelectable = FindNearestSelectableToCamera();
+				if ( activeSelectable != null )
+				{
+					activeSelectable.OnHoverEnter();
+				}
 			}
 		}
 
