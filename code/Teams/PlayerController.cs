@@ -50,6 +50,7 @@ public sealed class PlayerController : Component
 	// Flick tracking
 	private Vector3 flickVector;
 	private float lastCursorDelta;
+	private Vector2 lastValidStickDirection; // Tracks last valid stick direction for smooth rotation
 
 	#endregion
 
@@ -258,6 +259,12 @@ public sealed class PlayerController : Component
 		Vector3 clampedCursorPos = selectedSelectable.SelectPosition + clampedOffset;
 
 		selectedSelectable.OnDragUpdate( intensity, lastCursorDelta, clampedCursorPos, exceedsMinimum );
+
+		// Debug logging
+		if ( ShowDebug )
+		{
+			Log.Info( $"UpdateFlickVector - worldCursor: {worldCursorPosition}, flickVector: {flickVector}, length: {flickVector.Length:F1}" );
+		}
 	}
 
 	private void SelectTarget( ISelectable target )
@@ -270,6 +277,7 @@ public sealed class PlayerController : Component
 
 		flickVector = Vector3.Zero;
 		lastCursorDelta = 0f;
+		lastValidStickDirection = InputManager.RightStick.CurrentInput.Normal;
 
 		// Some selectables don't capture (e.g. instant-click buttons)
 		if ( !selectedSelectable.CapturesSelection )
@@ -349,8 +357,38 @@ public sealed class PlayerController : Component
 		ISelectable centerPiece = selectedSelectable ?? activeSelectable;
 		if ( centerPiece == null ) return;
 
+		// Only update cursor from stick input while gesture is actively held
+		// This prevents springback from affecting the flick vector
+		if ( !InputManager.RightStick.IsHeld && selectedSelectable != null )
+		{
+			// Stick released during flick - freeze cursor position
+			return;
+		}
+
 		// Get right stick input
 		Vector2 stickInput = InputManager.RightStick.CurrentInput;
+
+		// When flicking, detect sudden direction reversal (springback while still held)
+		// Compare against last valid direction to allow smooth rotation but block sudden reversals
+		if ( selectedSelectable != null && InputManager.RightStick.IsHeld && stickInput.Length > 0.1f )
+		{
+			Vector2 currentDirection = stickInput.Normal;
+			float dot = Vector2.Dot( currentDirection, lastValidStickDirection );
+
+			// If dot product is very negative, this is a sudden reversal (springback)
+			// Allow gradual rotation (dot > -0.5 means less than ~120 degree change)
+			if ( dot < -0.5f )
+			{
+				if ( ShowDebug )
+				{
+					Log.Info( $"UpdateCursor - BLOCKED reversal: StickInput: {stickInput}, LastValid: {lastValidStickDirection}, dot: {dot:F2}" );
+				}
+				return;
+			}
+
+			// Update last valid direction for smooth tracking
+			lastValidStickDirection = currentDirection;
+		}
 
 		// Convert stick direction to world space with pull-back behavior
 		// Stick: X (right), Y (up) -> World: -Y (forward), -X (right)
@@ -365,6 +403,12 @@ public sealed class PlayerController : Component
 
 		// Also update screen cursor position for camera panning
 		cursorPosition = Scene.Camera.PointToScreenPixels( worldCursorPosition );
+
+		// Debug logging when flicking
+		if ( selectedSelectable != null && ShowDebug )
+		{
+			Log.Info( $"UpdateCursor - StickInput: {stickInput}, WorldOffset: {worldOffset}, IsHeld: {InputManager.RightStick.IsHeld}" );
+		}
 	}
 
 	#endregion
@@ -489,10 +533,12 @@ public sealed class PlayerController : Component
 	{
 		if ( flickVector.Length < MinFlickDistance )
 		{
+			Log.Info( $"Flick aborted - too weak: {flickVector.Length:F1} < {MinFlickDistance:F1}" );
 			AbortSelection();
 			return;
 		}
 
+		Log.Info( $"Flick executed - strength: {flickVector.Length:F1}, direction: {flickVector.Normal}" );
 		selectedSelectable?.OnDeselect( flickVector );
 		ClearSelectionState();
 	}
