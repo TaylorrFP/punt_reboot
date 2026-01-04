@@ -274,12 +274,6 @@ public sealed class PlayerController : Component
 		Vector3 clampedCursorPos = selectedSelectable.SelectPosition + clampedOffset;
 
 		selectedSelectable.OnDragUpdate( intensity, lastCursorDelta, clampedCursorPos, exceedsMinimum );
-
-		// Debug logging
-		if ( ShowDebug )
-		{
-			Log.Info( $"UpdateFlickVector - worldCursor: {worldCursorPosition}, flickVector: {flickVector}, length: {flickVector.Length:F1}" );
-		}
 	}
 
 	private void SelectTarget( ISelectable target )
@@ -395,10 +389,6 @@ public sealed class PlayerController : Component
 			// Allow gradual rotation (dot > -0.5 means less than ~120 degree change)
 			if ( dot < -0.5f )
 			{
-				if ( ShowDebug )
-				{
-					Log.Info( $"UpdateCursor - BLOCKED reversal: StickInput: {stickInput}, LastValid: {lastValidStickDirection}, dot: {dot:F2}" );
-				}
 				return;
 			}
 
@@ -433,11 +423,6 @@ public sealed class PlayerController : Component
 		// Also update screen cursor position for camera panning
 		cursorPosition = Scene.Camera.PointToScreenPixels( worldCursorPosition );
 
-		// Debug logging when flicking
-		if ( selectedSelectable != null && ShowDebug )
-		{
-			Log.Info( $"UpdateCursor - StickInput: {stickInput}, WorldOffset: {worldOffset}, IsHeld: {InputManager.RightStick.IsHeld}" );
-		}
 	}
 
 	#endregion
@@ -487,9 +472,9 @@ public sealed class PlayerController : Component
 
 	private ISelectable FindNearestSelectableInDirection( Vector3 fromPosition, Vector3 direction )
 	{
+		// Controller only interacts with PuntPieces (other selectables are mouse-only)
 		var selectables = new List<ISelectable>();
 		selectables.AddRange( Scene.GetAllComponents<PuntPiece>() );
-		selectables.AddRange( Scene.GetAllComponents<ClickableProp>() );
 
 		ISelectable best = null;
 		float bestScore = float.MaxValue;
@@ -528,9 +513,9 @@ public sealed class PlayerController : Component
 
 	private ISelectable FindNearestSelectableToCamera()
 	{
+		// Controller only interacts with PuntPieces (other selectables are mouse-only)
 		var selectables = new List<ISelectable>();
 		selectables.AddRange( Scene.GetAllComponents<PuntPiece>() );
-		selectables.AddRange( Scene.GetAllComponents<ClickableProp>() );
 
 		ISelectable best = null;
 		float bestDistance = float.MaxValue;
@@ -562,12 +547,10 @@ public sealed class PlayerController : Component
 	{
 		if ( flickVector.Length < MinFlickDistance )
 		{
-			Log.Info( $"Flick aborted - too weak: {flickVector.Length:F1} < {MinFlickDistance:F1}" );
 			AbortSelection();
 			return;
 		}
 
-		Log.Info( $"Flick executed - strength: {flickVector.Length:F1}, direction: {flickVector.Normal}" );
 		selectedSelectable?.OnDeselect( flickVector );
 		ClearSelectionState();
 	}

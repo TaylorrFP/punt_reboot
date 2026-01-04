@@ -94,7 +94,7 @@ public sealed class InputManager : Component
 			if ( CurrentMode != InputMode.Controller )
 			{
 				CurrentMode = InputMode.Controller;
-				Log.Info( $"Switched to Controller input - L: {leftStick.Length:F2}, R: {rightStick.Length:F2}" );
+				Log.Info( $"Switched to Controller input" );
 			}
 		}
 	}

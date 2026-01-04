@@ -1022,6 +1022,66 @@
         "1343be34-a779-42b5-bd86-189545139cb9": "32f8e763-0cce-408e-b87b-5510025df65d",
         "ca2199ce-677c-4bc6-82bc-12f793e6be92": "195a88a9-c083-47b0-bd9d-e13caceee20c"
       }
+    },
+    {
+      "__guid": "b7368868-4cf1-4c6f-9ca4-f4d7500d36d8",
+      "__version": 1,
+      "__Prefab": "prefabs/pitches/dev/rubberduck/rubberduckclickable.prefab",
+      "__PrefabInstancePatch": {
+        "AddedObjects": [],
+        "RemovedObjects": [],
+        "PropertyOverrides": [
+          {
+            "Target": {
+              "Type": "GameObject",
+              "IdValue": "25d6cc95-0a98-49d4-a64d-5c7e6bd5c2b4"
+            },
+            "Property": "Position",
+            "Value": "-805.0806,-817.8759,-0.0002286434"
+          },
+          {
+            "Target": {
+              "Type": "Component",
+              "IdValue": "7f16bbc9-284f-402d-ac6f-4ac7c55058d4"
+            },
+            "Property": "Radius",
+            "Value": 50
+          },
+          {
+            "Target": {
+              "Type": "Component",
+              "IdValue": "466ba5a7-e9fe-4b2d-a03b-314d903c65ae"
+            },
+            "Property": "__enabled",
+            "Value": false
+          },
+          {
+            "Target": {
+              "Type": "Component",
+              "IdValue": "ae7000da-612c-4cf5-a3bf-c994d262f8b0"
+            },
+            "Property": "HoverColor",
+            "Value": "0.71628,0.71628,0.71628,1"
+          },
+          {
+            "Target": {
+              "Type": "Component",
+              "IdValue": "ae7000da-612c-4cf5-a3bf-c994d262f8b0"
+            },
+            "Property": "SelectedColor",
+            "Value": "1,1,1,1"
+          }
+        ],
+        "MovedObjects": []
+      },
+      "__PrefabIdToInstanceId": {
+        "25d6cc95-0a98-49d4-a64d-5c7e6bd5c2b4": "b7368868-4cf1-4c6f-9ca4-f4d7500d36d8",
+        "b9f22fae-79dc-4d23-bd58-f77b47515744": "38db45b9-5763-42a5-b094-9108fa9779d4",
+        "7f16bbc9-284f-402d-ac6f-4ac7c55058d4": "eb4da226-e01c-485a-9e09-e3a38e581563",
+        "b2f922b0-4eeb-427e-a2ed-80a0a3a4d714": "c7a99ef3-c080-4bdd-85f3-6f87c5958991",
+        "466ba5a7-e9fe-4b2d-a03b-314d903c65ae": "66a28144-e65a-485e-b012-6e7c409f0dfe",
+        "ae7000da-612c-4cf5-a3bf-c994d262f8b0": "13ab6069-0cdb-4d16-8c90-8d081046fd37"
+      }
     }
   ],
   "SceneProperties": {

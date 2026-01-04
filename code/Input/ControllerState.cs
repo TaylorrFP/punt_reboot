@@ -111,7 +111,7 @@ public class AnalogStickState
 
 				if ( isLikelySpringback )
 				{
-					Log.Info( $"Gesture blocked - likely springback (dot: {directionDot:F2}, cooldown: {timeSinceRelease:F3}s)" );
+		
 				}
 			}
 
@@ -121,7 +121,6 @@ public class AnalogStickState
 				IsHeld = true;
 				Direction = newDirection;
 				wasInDeadzone = false;
-				Log.Info( $"Gesture started - magnitude: {magnitude:F2}, direction: {Direction}, timeSince: {timeSinceRelease:F3}s" );
 			}
 		}
 		// During existing gesture, direction is locked to initial direction
@@ -133,7 +132,6 @@ public class AnalogStickState
 			WasReleased = true;
 			lastReleaseTime = Time.Now;
 			previousGestureDirection = Direction; // Remember direction for springback detection
-			Log.Info( $"Gesture released - magnitude: {magnitude:F2}, direction was: {Direction}" );
 		}
 	}
 
