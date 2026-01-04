@@ -7,7 +7,7 @@
       "Flags": 0,
       "Name": "Sun",
       "Position": "0,0,0",
-      "Rotation": "-0.2074891,-0.9074883,0.1535173,-0.3314296",
+      "Rotation": "-0.788408,-0.4949742,0.3429092,-0.125803",
       "Scale": "1,1,1",
       "Tags": "light_directional,light",
       "Enabled": true,
@@ -195,6 +195,20 @@
           "ShowDebug": true,
           "ShowRealCursor": false,
           "Team": "Blue"
+        },
+        {
+          "__type": "Punt.InputManager",
+          "__guid": "647cd137-6cb1-4062-9856-0d8c08ad79d2",
+          "__enabled": true,
+          "OnComponentDestroy": null,
+          "OnComponentDisabled": null,
+          "OnComponentEnabled": null,
+          "OnComponentFixedUpdate": null,
+          "OnComponentStart": null,
+          "OnComponentUpdate": null,
+          "ShowDebug": true,
+          "StickActivationThreshold": 0.3,
+          "StickDeadzone": 0.2
         }
       ],
       "Children": []
@@ -204,8 +218,8 @@
       "__version": 1,
       "Flags": 0,
       "Name": "CameraController",
-      "Position": "0,-159.5539,0",
-      "Rotation": "-0.2418447,0.2418447,0.664463,0.664463",
+      "Position": "-180,0,0",
+      "Rotation": "0,0.34202,0,0.9396927",
       "Scale": "1,1,1",
       "Tags": "",
       "Enabled": true,
@@ -400,7 +414,7 @@
           "DebugDraw": true,
           "GoalDepth": 100,
           "GoalHeight": 150,
-          "GoalWidth": 650,
+          "GoalWidth": 640.84045,
           "OnComponentDestroy": null,
           "OnComponentDisabled": null,
           "OnComponentEnabled": null,
@@ -409,13 +423,13 @@
           "OnComponentUpdate": null,
           "PitchLength": 1900,
           "PitchWidth": 1700,
-          "ShowCeilingDebug": true,
-          "ShowGoalEnclosureDebug": true,
-          "ShowGoalsDebug": true,
+          "ShowCeilingDebug": false,
+          "ShowGoalEnclosureDebug": false,
+          "ShowGoalsDebug": false,
           "ShowGoalVolumeDebug": false,
-          "ShowWallsDebug": true,
+          "ShowWallsDebug": false,
           "WallHeight": 300,
-          "WallThickness": 96.02668
+          "WallThickness": 100
         }
       ],
       "Children": [
@@ -514,7 +528,7 @@
               "Name": "Plane",
               "Position": "0,0,0",
               "Rotation": "0,0,0,1",
-              "Scale": "22.2121,17.00334,40",
+              "Scale": "30.62738,36.44506,40",
               "Tags": "",
               "Enabled": true,
               "NetworkMode": 2,
@@ -912,7 +926,7 @@
               "IdValue": "ad8604dc-4731-4bf5-9544-f9bd106773c0"
             },
             "Property": "Position",
-            "Value": "-916.8384,-79.25669,5.508378"
+            "Value": "338.3624,-79.25669,5.508378"
           }
         ],
         "MovedObjects": []
@@ -1099,6 +1113,41 @@
               "RigidbodyFlags": 0,
               "StartAsleep": false
             }
+          },
+          {
+            "Id": {
+              "Type": "Component",
+              "IdValue": "68655e65-e43e-4496-963c-750dcf02d164"
+            },
+            "Parent": {
+              "Type": "GameObject",
+              "IdValue": "49785efd-e970-463f-9687-94e98b09ebb2"
+            },
+            "PreviousElement": {
+              "Type": "Component",
+              "IdValue": "e2b87bbb-bb9e-43ad-ba8c-46fab49dfb60"
+            },
+            "ContainerProperty": "Components",
+            "IsContainerArray": true,
+            "Data": {
+              "__type": "Sandbox.HighlightOutline",
+              "__guid": "68655e65-e43e-4496-963c-750dcf02d164",
+              "__enabled": true,
+              "Color": "1,1,1,1",
+              "InsideColor": "0,0,0,0",
+              "InsideObscuredColor": "0.75814,0.75814,0.75814,0.4",
+              "Material": null,
+              "ObscuredColor": "0.75814,0.75814,0.75814,0.4",
+              "OnComponentDestroy": null,
+              "OnComponentDisabled": null,
+              "OnComponentEnabled": null,
+              "OnComponentFixedUpdate": null,
+              "OnComponentStart": null,
+              "OnComponentUpdate": null,
+              "OverrideTargets": false,
+              "Targets": null,
+              "Width": 0.1
+            }
           }
         ],
         "RemovedObjects": [],
@@ -1117,7 +1166,7 @@
               "IdValue": "49785efd-e970-463f-9687-94e98b09ebb2"
             },
             "Property": "Position",
-            "Value": "-450.3908,-109.2229,238.7674"
+            "Value": "420.7963,-58.09325,95.98026"
           },
           {
             "Target": {
