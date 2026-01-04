@@ -108,11 +108,21 @@ public sealed class PlayerController : Component
 		{
 			if ( activeSelectable == null || !IsValidTarget( activeSelectable ) || !activeSelectable.CanSelect )
 			{
+				var previousActive = activeSelectable;
 				activeSelectable = FindNearestSelectableToCamera();
-				if ( activeSelectable != null )
+
+				// Update hover states when active piece changes
+				if ( activeSelectable != previousActive )
 				{
-					activeSelectable.OnHoverEnter();
+					previousActive?.OnHoverExit();
+					activeSelectable?.OnHoverEnter();
 				}
+			}
+
+			// Ensure active piece is always highlighted (in case hover was cleared elsewhere)
+			if ( activeSelectable != null && controllerHoverTarget == null )
+			{
+				activeSelectable.OnHoverEnter();
 			}
 		}
 

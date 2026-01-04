@@ -180,8 +180,8 @@
             "go": "96cdd6d5-293f-4b12-8ebd-76f82dde8d15",
             "component_type": "CameraController"
           },
-          "ControllerAimSmoothing": 20,
-          "ControllerDistanceWeight": 0.1,
+          "ControllerAimSmoothing": 50,
+          "ControllerDistanceWeight": 0.05,
           "FlickStrength": 1,
           "InputManager": {
             "_type": "component",
@@ -214,7 +214,7 @@
           "OnComponentFixedUpdate": null,
           "OnComponentStart": null,
           "OnComponentUpdate": null,
-          "ShowDebug": true,
+          "ShowDebug": false,
           "StickActivationThreshold": 0.3,
           "StickDeadzone": 0.2,
           "StickReleaseThreshold": 0.3

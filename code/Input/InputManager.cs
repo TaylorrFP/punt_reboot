@@ -131,8 +131,8 @@ public sealed class InputManager : Component
 
 	private void DrawDebug()
 	{
-		//DrawInputModeIndicator();
-		//DrawStickVisualization();
+		DrawInputModeIndicator();
+		DrawStickVisualization();
 	}
 
 	private void DrawInputModeIndicator()
@@ -156,7 +156,6 @@ public sealed class InputManager : Component
 		const float rightStickY = 80f;
 		const float stickX = 200f;
 		const float radius = 40f;
-		const float stickRadius = 8f;
 
 		// Left stick (on the left)
 		DrawStickCircle( new Vector2( leftStickY, stickX ), radius, LeftStick, "Left Stick" );
