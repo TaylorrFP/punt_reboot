@@ -110,16 +110,24 @@ public sealed class PlayerController : Component
 			}
 		}
 
-		// Handle right stick flick first
+		// Update world cursor position from right stick
+		UpdateControllerCursor();
+
+		// Handle right stick flick
 		if ( selectedSelectable != null )
 		{
-			// Already flicking - update flick vector
-			UpdateControllerFlickVector();
+			// Already flicking - update flick with cursor position
+			UpdateSelection();
 		}
 		else if ( InputManager.RightStick.IsHeld && activeSelectable != null && activeSelectable.CanSelect )
 		{
 			// Start flicking the active piece
 			SelectTarget( activeSelectable );
+		}
+		else if ( InputManager.RightStick.WasReleased && selectedSelectable != null )
+		{
+			// Release flick
+			ReleaseControllerFlick();
 		}
 		// Handle left stick piece selection (only when not flicking)
 		else if ( InputManager.LeftStick.IsHeld )
@@ -129,11 +137,13 @@ public sealed class PlayerController : Component
 		}
 		else if ( InputManager.LeftStick.WasReleased )
 		{
+			// Quick release detected - confirm the selection change
 			ConfirmControllerPieceSelection();
 		}
 		else
 		{
-			// Stick is neutral - clear hover target
+			// Stick returned to neutral (either slow drift or after confirmation)
+			// Clear hover target and stay on current active piece
 			if ( controllerHoverTarget != null )
 			{
 				controllerHoverTarget.OnHoverExit();
@@ -327,6 +337,34 @@ public sealed class PlayerController : Component
 
 	#endregion
 
+	#region Controller Cursor
+
+	private void UpdateControllerCursor()
+	{
+		// Use the selected piece if we're flicking, otherwise use the active piece
+		ISelectable centerPiece = selectedSelectable ?? activeSelectable;
+		if ( centerPiece == null ) return;
+
+		// Get right stick input
+		Vector2 stickInput = InputManager.RightStick.CurrentInput;
+
+		// Convert stick direction to world space with pull-back behavior
+		// Stick: X (right), Y (up) -> World: -Y (forward), -X (right)
+		// Negate both to create pull-back: pull down = aim up, pull right = aim left
+		Vector3 worldOffset = new Vector3( -stickInput.y, -stickInput.x, 0 );
+
+		// Scale by max flick distance
+		worldOffset *= MaxFlickDistance;
+
+		// Set world cursor position relative to the center piece
+		worldCursorPosition = centerPiece.SelectPosition + worldOffset;
+
+		// Also update screen cursor position for camera panning
+		cursorPosition = Scene.Camera.PointToScreenPixels( worldCursorPosition );
+	}
+
+	#endregion
+
 	#region Controller Selection
 
 	private void UpdateControllerPieceSelection()
@@ -443,38 +481,9 @@ public sealed class PlayerController : Component
 
 	#region Controller Flick
 
-	private void UpdateControllerFlickVector()
-	{
-		// Convert right stick direction to world space
-		Vector2 stickDirection = InputManager.RightStick.Direction;
-		Vector3 worldDirection = new Vector3( -stickDirection.y, -stickDirection.x, 0 ).Normal;
-
-		// Calculate flick vector from stick direction and magnitude
-		// Use peak magnitude to get the strongest input during the gesture
-		float magnitude = InputManager.RightStick.PeakMagnitude;
-		Vector3 calculatedFlickVector = worldDirection * magnitude * MaxFlickDistance;
-		calculatedFlickVector = calculatedFlickVector.ClampLength( MaxFlickDistance );
-
-		flickVector = calculatedFlickVector;
-
-		// Calculate feedback data for the selectable
-		float intensity = flickVector.Length / MaxFlickDistance;
-		bool exceedsMinimum = flickVector.Length >= MinFlickDistance;
-
-		// Calculate clamped cursor position for aim indicator
-		Vector3 aimPosition = selectedSelectable.SelectPosition + flickVector;
-
-		selectedSelectable.OnDragUpdate( intensity, 0f, aimPosition, exceedsMinimum );
-
-		// Release on stick release
-		if ( InputManager.RightStick.WasReleased )
-		{
-			ReleaseControllerFlick();
-		}
-	}
-
 	private void ReleaseControllerFlick()
 	{
+		// Use the existing flick vector calculated in UpdateSelection
 		if ( flickVector.Length < MinFlickDistance )
 		{
 			AbortSelection();
@@ -501,7 +510,7 @@ public sealed class PlayerController : Component
 		// In mouse mode, we need to convert cursor distance to world units
 		float worldFlickRadius = isDragging ? (isControllerMode ? MaxFlickDistance : MaxFlickDistance / FlickStrength) : 0f;
 
-		CameraController.UpdatePan( cursorPosition, piecePosition, isDragging, worldFlickRadius );
+		CameraController.UpdatePan( cursorPosition, piecePosition, isDragging, worldFlickRadius, isControllerMode );
 	}
 
 	#endregion

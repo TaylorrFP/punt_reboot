@@ -217,6 +217,7 @@
           "StickActivationThreshold": 0.7,
           "StickDeadzone": 0.2,
           "StickDirectionUpdateThreshold": 0.5,
+          "StickFlickSpeedThreshold": 0.01,
           "StickReleaseThreshold": 0.95
         }
       ],

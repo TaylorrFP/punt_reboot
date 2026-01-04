@@ -97,7 +97,8 @@ public sealed class CameraController : Component
 	/// <param name="piecePosition">World position of selected piece (or Zero if not dragging)</param>
 	/// <param name="isDraggingPiece">Whether a piece is currently being dragged</param>
 	/// <param name="flickRadius">World-space radius of the flick circle</param>
-	public void UpdatePan( Vector2 cursor, Vector3 piecePosition, bool isDraggingPiece, float flickRadius )
+	/// <param name="isControllerMode">Whether controller input is active</param>
+	public void UpdatePan( Vector2 cursor, Vector3 piecePosition, bool isDraggingPiece, float flickRadius, bool isControllerMode = false )
 	{
 		cursorPosition = cursor;
 
@@ -122,11 +123,11 @@ public sealed class CameraController : Component
 
 		if ( panDirection != Vector2.Zero )
 		{
-			ApplyEdgePan( panDirection );
+			ApplyEdgePan( panDirection, isControllerMode );
 		}
 		else
 		{
-			ReturnToInitialPosition();
+			ReturnToInitialPosition( isControllerMode );
 		}
 	}
 
@@ -230,14 +231,23 @@ public sealed class CameraController : Component
 		return value >= range.x && value <= range.y;
 	}
 
-	private void ApplyEdgePan( Vector2 panDirection )
+	private void ApplyEdgePan( Vector2 panDirection, bool isControllerMode )
 	{
-		Vector2 mouseDelta = Mouse.Delta;
+		float totalPanAmount;
 
-		// Only pan when mouse is pushing in the pan direction
-		float panAmountX = GetDirectionalPanAmount( panDirection.x, mouseDelta.x );
-		float panAmountY = GetDirectionalPanAmount( panDirection.y, mouseDelta.y );
-		float totalPanAmount = MathF.Max( panAmountX, panAmountY );
+		if ( isControllerMode )
+		{
+			// In controller mode, use a constant pan speed
+			totalPanAmount = 5f;
+		}
+		else
+		{
+			// In mouse mode, only pan when mouse is pushing in the pan direction
+			Vector2 mouseDelta = Mouse.Delta;
+			float panAmountX = GetDirectionalPanAmount( panDirection.x, mouseDelta.x );
+			float panAmountY = GetDirectionalPanAmount( panDirection.y, mouseDelta.y );
+			totalPanAmount = MathF.Max( panAmountX, panAmountY );
+		}
 
 		if ( totalPanAmount > 0 )
 		{
@@ -257,7 +267,7 @@ public sealed class CameraController : Component
 		return 0f;
 	}
 
-	private void ReturnToInitialPosition()
+	private void ReturnToInitialPosition( bool isControllerMode )
 	{
 		Vector3 diff = initialPosition - targetPosition;
 
@@ -267,8 +277,19 @@ public sealed class CameraController : Component
 			return;
 		}
 
-		Vector2 mouseDelta = Mouse.Delta;
-		float returnAmount = GetReturnAmount( mouseDelta );
+		float returnAmount;
+
+		if ( isControllerMode )
+		{
+			// In controller mode, always return at constant speed
+			returnAmount = 5f;
+		}
+		else
+		{
+			// In mouse mode, return when mouse moves opposite to last pan direction
+			Vector2 mouseDelta = Mouse.Delta;
+			returnAmount = GetReturnAmount( mouseDelta );
+		}
 
 		if ( returnAmount > 0 )
 		{
