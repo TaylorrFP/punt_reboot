@@ -216,85 +216,85 @@ public sealed class PitchGenerator : Component
 		goalPosts.Add( ceilingObj );
 	}
 
-	private void CreateGoalVolume(Vector3 topPost, Vector3 bottomPost, int goalIndex)
+	private void CreateGoalVolume(Vector3 leftPost, Vector3 rightPost, int goalIndex)
 	{
 		// Goal volume sits behind the goal line, used as a trigger to detect goals
-		var center = (topPost + bottomPost) / 2f;
+		var center = (leftPost + rightPost) / 2f;
 
 		// Direction to push the volume behind the goal (outward from pitch center)
-		var xDirection = (topPost.x < 0) ? -1f : 1f;
-		var volumeCenter = center + new Vector3(xDirection * (GoalDepth / 2f + WallThickness / 2f), 0, GoalHeight / 2f);
+		var yDirection = (leftPost.y > 0) ? 1f : -1f;
+		var volumeCenter = center + new Vector3(0, yDirection * (GoalDepth / 2f + WallThickness / 2f), GoalHeight / 2f);
 
 		var goalVolumeObj = new GameObject();
-		goalVolumeObj.Name = goalIndex == 0 ? "GoalVolume_Left" : "GoalVolume_Right";
+		goalVolumeObj.Name = goalIndex == 0 ? "GoalVolume_Top" : "GoalVolume_Bottom";
 		goalVolumeObj.Parent = collidersContainer;
 		goalVolumeObj.WorldPosition = volumeCenter;
 
 		var collider = goalVolumeObj.Components.Create<BoxCollider>();
-		collider.Scale = new Vector3(GoalDepth, GoalWidth, GoalHeight);
+		collider.Scale = new Vector3(GoalWidth, GoalDepth, GoalHeight);
 		collider.IsTrigger = true;
 
 		goalPosts.Add(goalVolumeObj);
 	}
 
-	private void CreateGoalEnclosure(Vector3 topPost, Vector3 bottomPost, int goalIndex)
+	private void CreateGoalEnclosure(Vector3 leftPost, Vector3 rightPost, int goalIndex)
 	{
-		// Create the 4 walls that enclose the goal: back, top, and two sides
-		var center = (topPost + bottomPost) / 2f;
-		var xDirection = (topPost.x < 0) ? -1f : 1f;
-		var sideName = goalIndex == 0 ? "Left" : "Right";
+		// Create the 4 walls that enclose the goal: back, ceiling, and two sides
+		var center = (leftPost + rightPost) / 2f;
+		var yDirection = (leftPost.y > 0) ? 1f : -1f;
+		var sideName = goalIndex == 0 ? "Top" : "Bottom";
 
 		// Back wall - at the far end of the goal depth
-		var backWallX = center.x + xDirection * (GoalDepth + WallThickness);
+		var backWallY = center.y + yDirection * (GoalDepth + WallThickness);
 		var backWallObj = new GameObject();
 		backWallObj.Name = $"GoalBack_{sideName}";
 		backWallObj.Parent = collidersContainer;
-		backWallObj.WorldPosition = new Vector3(backWallX, center.y, GoalHeight / 2f);
+		backWallObj.WorldPosition = new Vector3(center.x, backWallY, GoalHeight / 2f);
 
 		var backCollider = backWallObj.Components.Create<BoxCollider>();
-		backCollider.Scale = new Vector3(WallThickness, GoalWidth, GoalHeight);
+		backCollider.Scale = new Vector3(GoalWidth, WallThickness, GoalHeight);
 		goalPosts.Add(backWallObj);
 
-		// Top wall - ceiling of the goal
-		var topWallX = center.x + xDirection * (GoalDepth / 2f + WallThickness / 2f);
-		var topWallObj = new GameObject();
-		topWallObj.Name = $"GoalTop_{sideName}";
-		topWallObj.Parent = collidersContainer;
-		topWallObj.WorldPosition = new Vector3(topWallX, center.y, GoalHeight + WallThickness / 2f);
+		// Ceiling wall - top of the goal enclosure
+		var ceilingWallY = center.y + yDirection * (GoalDepth / 2f + WallThickness / 2f);
+		var ceilingWallObj = new GameObject();
+		ceilingWallObj.Name = $"GoalCeiling_{sideName}";
+		ceilingWallObj.Parent = collidersContainer;
+		ceilingWallObj.WorldPosition = new Vector3(center.x, ceilingWallY, GoalHeight + WallThickness / 2f);
 
-		var topCollider = topWallObj.Components.Create<BoxCollider>();
-		topCollider.Scale = new Vector3(GoalDepth + WallThickness, GoalWidth, WallThickness);
-		goalPosts.Add(topWallObj);
+		var ceilingCollider = ceilingWallObj.Components.Create<BoxCollider>();
+		ceilingCollider.Scale = new Vector3(GoalWidth, GoalDepth + WallThickness, WallThickness);
+		goalPosts.Add(ceilingWallObj);
 
 		// Side walls - left and right sides of the goal
-		var sideWallX = center.x + xDirection * (GoalDepth / 2f + WallThickness / 2f);
+		var sideWallY = center.y + yDirection * (GoalDepth / 2f + WallThickness / 2f);
 
-		// Top side (positive Y)
-		var topSideObj = new GameObject();
-		topSideObj.Name = $"GoalSideTop_{sideName}";
-		topSideObj.Parent = collidersContainer;
-		topSideObj.WorldPosition = new Vector3(sideWallX, center.y + GoalWidth / 2f + WallThickness / 2f, GoalHeight / 2f);
+		// Right side (positive X)
+		var rightSideObj = new GameObject();
+		rightSideObj.Name = $"GoalSideRight_{sideName}";
+		rightSideObj.Parent = collidersContainer;
+		rightSideObj.WorldPosition = new Vector3(center.x + GoalWidth / 2f + WallThickness / 2f, sideWallY, GoalHeight / 2f);
 
-		var topSideCollider = topSideObj.Components.Create<BoxCollider>();
-		topSideCollider.Scale = new Vector3(GoalDepth + WallThickness, WallThickness, GoalHeight);
-		goalPosts.Add(topSideObj);
+		var rightSideCollider = rightSideObj.Components.Create<BoxCollider>();
+		rightSideCollider.Scale = new Vector3(WallThickness, GoalDepth + WallThickness, GoalHeight);
+		goalPosts.Add(rightSideObj);
 
-		// Bottom side (negative Y)
-		var bottomSideObj = new GameObject();
-		bottomSideObj.Name = $"GoalSideBottom_{sideName}";
-		bottomSideObj.Parent = collidersContainer;
-		bottomSideObj.WorldPosition = new Vector3(sideWallX, center.y - GoalWidth / 2f - WallThickness / 2f, GoalHeight / 2f);
+		// Left side (negative X)
+		var leftSideObj = new GameObject();
+		leftSideObj.Name = $"GoalSideLeft_{sideName}";
+		leftSideObj.Parent = collidersContainer;
+		leftSideObj.WorldPosition = new Vector3(center.x - GoalWidth / 2f - WallThickness / 2f, sideWallY, GoalHeight / 2f);
 
-		var bottomSideCollider = bottomSideObj.Components.Create<BoxCollider>();
-		bottomSideCollider.Scale = new Vector3(GoalDepth + WallThickness, WallThickness, GoalHeight);
-		goalPosts.Add(bottomSideObj);
+		var leftSideCollider = leftSideObj.Components.Create<BoxCollider>();
+		leftSideCollider.Scale = new Vector3(WallThickness, GoalDepth + WallThickness, GoalHeight);
+		goalPosts.Add(leftSideObj);
 	}
 
 	private void CreateGoalPost(Vector3 position)
 	{
 		// Position goal post flush against the inner face of the adjacent wall
-		// Y offset is half wall thickness, direction flipped based on which side
-		var yDirection = (position.x < 0) ? -1f : 1f;
+		// Offset in Y direction, flipped based on which goal (top or bottom)
+		var yDirection = (position.y > 0) ? 1f : -1f;
 		var insetPosition = position + Vector3.Forward * (WallThickness / 2f) * yDirection;
 
 		// Create a GameObject for this goal post
@@ -313,14 +313,14 @@ public sealed class PitchGenerator : Component
 		goalPosts.Add(postObj);
 	}
 
-	private void CreateCrossbar(Vector3 topPost, Vector3 bottomPost)
+	private void CreateCrossbar(Vector3 leftPost, Vector3 rightPost)
 	{
 		// Crossbar sits above the goal at GoalHeight + half wall thickness
-		var center = (topPost + bottomPost) / 2f;
+		var center = (leftPost + rightPost) / 2f;
 		var crossbarHeight = GoalHeight + (WallThickness / 2f);
 
 		// Offset Y to align with goal posts (same logic as CreateGoalPost)
-		var yDirection = (topPost.x < 0) ? -1f : 1f;
+		var yDirection = (leftPost.y > 0) ? 1f : -1f;
 		var offsetCenter = center + Vector3.Forward * (WallThickness / 2f) * yDirection;
 
 		// Create a GameObject for the crossbar
@@ -332,18 +332,18 @@ public sealed class PitchGenerator : Component
 		// Add capsule collider - horizontal cylinder across the goal
 		var collider = crossbarObj.Components.Create<CapsuleCollider>();
 		collider.Radius = WallThickness / 2f;
-		// Crossbar runs along Y axis (between the two posts)
-		collider.Start = new Vector3(0, -GoalWidth / 2f, 0);
-		collider.End = new Vector3(0, GoalWidth / 2f, 0);
+		// Crossbar runs along X axis (between the two posts)
+		collider.Start = new Vector3(-GoalWidth / 2f, 0, 0);
+		collider.End = new Vector3(GoalWidth / 2f, 0, 0);
 
 		goalPosts.Add(crossbarObj);
 	}
 
-	private void CreateAboveCrossbarWall(Vector3 topPost, Vector3 bottomPost)
+	private void CreateAboveCrossbarWall(Vector3 leftPost, Vector3 rightPost)
 	{
 		// Wall above crossbar fills the gap from crossbar center to wall top
 		// Regular walls now sit on the floor and extend from 0 to WallHeight
-		var center = (topPost + bottomPost) / 2f;
+		var center = (leftPost + rightPost) / 2f;
 		var crossbarCenter = GoalHeight + WallThickness * 0.5f; // Center of the crossbar
 		var wallAboveHeight = WallHeight - crossbarCenter;
 
@@ -352,7 +352,7 @@ public sealed class PitchGenerator : Component
 			return;
 
 		// Offset Y to align with goal posts (same logic as CreateGoalPost)
-		var yDirection = (topPost.x < 0) ? -1f : 1f;
+		var yDirection = (leftPost.y > 0) ? 1f : -1f;
 		var offsetCenter = center + Vector3.Forward * (WallThickness / 2f) * yDirection;
 
 		// Create a GameObject for the wall above crossbar
@@ -363,7 +363,7 @@ public sealed class PitchGenerator : Component
 
 		// Add box collider
 		var collider = wallObj.Components.Create<BoxCollider>();
-		collider.Scale = new Vector3(WallThickness, GoalWidth, wallAboveHeight);
+		collider.Scale = new Vector3(GoalWidth, WallThickness, wallAboveHeight);
 
 		goalPosts.Add(wallObj);
 	}
@@ -403,17 +403,17 @@ public sealed class PitchGenerator : Component
 		var origin = WorldPosition;
 
 		// Calculate the dimensions
-		// Length is along X axis (where the goals are), Width is along Y axis
-		var halfLength = PitchLength / 2f;
+		// Width is along X axis, Length is along Y axis (where the goals are)
 		var halfWidth = PitchWidth / 2f;
+		var halfLength = PitchLength / 2f;
 		var bevel = MathF.Min(BevelAmount, MathF.Min(halfWidth, halfLength));
 
 		// Calculate corner centers (where the rounded corners will be)
-		// X axis = length (goals on left/right), Y axis = width (top/bottom edges)
-		var topLeftCenter = origin + new Vector3(-halfLength + bevel, halfWidth - bevel, 0);
-		var topRightCenter = origin + new Vector3(halfLength - bevel, halfWidth - bevel, 0);
-		var bottomLeftCenter = origin + new Vector3(-halfLength + bevel, -halfWidth + bevel, 0);
-		var bottomRightCenter = origin + new Vector3(halfLength - bevel, -halfWidth + bevel, 0);
+		// X axis = width (left/right edges), Y axis = length (goals on top/bottom)
+		var topLeftCenter = origin + new Vector3(-halfWidth + bevel, halfLength - bevel, 0);
+		var topRightCenter = origin + new Vector3(halfWidth - bevel, halfLength - bevel, 0);
+		var bottomLeftCenter = origin + new Vector3(-halfWidth + bevel, -halfLength + bevel, 0);
+		var bottomRightCenter = origin + new Vector3(halfWidth - bevel, -halfLength + bevel, 0);
 
 		// Generate all vertices
 		var vertices = new List<Vector3>();
@@ -421,9 +421,12 @@ public sealed class PitchGenerator : Component
 
 		var halfGoalWidth = GoalWidth / 2f;
 
-		// Top edge - no goal on this side
-		vertices.Add(origin + new Vector3(halfLength - bevel, halfWidth, 0));
-		vertices.Add(origin + new Vector3(-halfLength + bevel, halfWidth, 0));
+		// Top edge - split into 3 parts for the goal
+		int topGoalRight = vertices.Count;
+		vertices.Add(origin + new Vector3(halfGoalWidth, halfLength, 0)); // Right goal post
+		int topGoalLeft = vertices.Count;
+		vertices.Add(origin + new Vector3(-halfGoalWidth, halfLength, 0)); // Left goal post
+		goalLineIndices.Add((topGoalRight, topGoalLeft)); // Mark this as a goal line
 
 		// Top-left corner (starting at top edge, going to left edge)
 		for (int i = 1; i <= BevelResolution; i++)
@@ -433,12 +436,8 @@ public sealed class PitchGenerator : Component
 			vertices.Add(cornerPoint);
 		}
 
-		// Left edge - split into 3 parts for the goal
-		int leftGoalTop = vertices.Count;
-		vertices.Add(origin + new Vector3(-halfLength, halfGoalWidth, 0)); // Top goal post
-		int leftGoalBottom = vertices.Count;
-		vertices.Add(origin + new Vector3(-halfLength, -halfGoalWidth, 0)); // Bottom goal post
-		goalLineIndices.Add((leftGoalTop, leftGoalBottom)); // Mark this as a goal line
+		// Left edge - no goal on this side
+		vertices.Add(origin + new Vector3(-halfWidth, -halfLength + bevel, 0));
 
 		// Bottom-left corner (starting at left edge, going to bottom edge)
 		for (int i = 1; i <= BevelResolution; i++)
@@ -448,8 +447,12 @@ public sealed class PitchGenerator : Component
 			vertices.Add(cornerPoint);
 		}
 
-		// Bottom edge - no goal on this side
-		vertices.Add(origin + new Vector3(halfLength - bevel, -halfWidth, 0));
+		// Bottom edge - split into 3 parts for the goal
+		int bottomGoalLeft = vertices.Count;
+		vertices.Add(origin + new Vector3(-halfGoalWidth, -halfLength, 0)); // Left goal post
+		int bottomGoalRight = vertices.Count;
+		vertices.Add(origin + new Vector3(halfGoalWidth, -halfLength, 0)); // Right goal post
+		goalLineIndices.Add((bottomGoalLeft, bottomGoalRight)); // Mark this as a goal line
 
 		// Bottom-right corner (starting at bottom edge, going to right edge)
 		for (int i = 1; i <= BevelResolution; i++)
@@ -459,12 +462,8 @@ public sealed class PitchGenerator : Component
 			vertices.Add(cornerPoint);
 		}
 
-		// Right edge - split into 3 parts for the goal
-		int rightGoalBottom = vertices.Count;
-		vertices.Add(origin + new Vector3(halfLength, -halfGoalWidth, 0)); // Bottom goal post
-		int rightGoalTop = vertices.Count;
-		vertices.Add(origin + new Vector3(halfLength, halfGoalWidth, 0)); // Top goal post
-		goalLineIndices.Add((rightGoalBottom, rightGoalTop)); // Mark this as a goal line
+		// Right edge - no goal on this side
+		vertices.Add(origin + new Vector3(halfWidth, halfLength - bevel, 0));
 
 		// Top-right corner (starting at right edge, going to top edge)
 		for (int i = 1; i < BevelResolution; i++)
@@ -559,35 +558,35 @@ public sealed class PitchGenerator : Component
 	{
 		Gizmo.Draw.Color = Color.Orange.WithAlpha( 0.3f );
 
-		foreach ( var (topIdx, bottomIdx) in goalLineIndices )
+		foreach ( var (leftIdx, rightIdx) in goalLineIndices )
 		{
-			var topPost = vertices[topIdx];
-			var bottomPost = vertices[bottomIdx];
-			var center = ( topPost + bottomPost ) / 2f;
-			var xDirection = ( topPost.x < 0 ) ? -1f : 1f;
+			var leftPost = vertices[leftIdx];
+			var rightPost = vertices[rightIdx];
+			var center = ( leftPost + rightPost ) / 2f;
+			var yDirection = ( leftPost.y > 0 ) ? 1f : -1f;
 
 			// Back wall
-			var backWallX = center.x + xDirection * ( GoalDepth + WallThickness );
-			var backHalfExtents = new Vector3( WallThickness / 2f, GoalWidth / 2f, GoalHeight / 2f );
-			Gizmo.Transform = new Transform( new Vector3( backWallX, center.y, GoalHeight / 2f ), Rotation.Identity );
+			var backWallY = center.y + yDirection * ( GoalDepth + WallThickness );
+			var backHalfExtents = new Vector3( GoalWidth / 2f, WallThickness / 2f, GoalHeight / 2f );
+			Gizmo.Transform = new Transform( new Vector3( center.x, backWallY, GoalHeight / 2f ), Rotation.Identity );
 			Gizmo.Draw.LineBBox( new BBox( -backHalfExtents, backHalfExtents ) );
 
-			// Top wall
-			var topWallX = center.x + xDirection * ( GoalDepth / 2f + WallThickness / 2f );
-			var topHalfExtents = new Vector3( ( GoalDepth + WallThickness ) / 2f, GoalWidth / 2f, WallThickness / 2f );
-			Gizmo.Transform = new Transform( new Vector3( topWallX, center.y, GoalHeight + WallThickness / 2f ), Rotation.Identity );
-			Gizmo.Draw.LineBBox( new BBox( -topHalfExtents, topHalfExtents ) );
+			// Ceiling wall
+			var ceilingWallY = center.y + yDirection * ( GoalDepth / 2f + WallThickness / 2f );
+			var ceilingHalfExtents = new Vector3( GoalWidth / 2f, ( GoalDepth + WallThickness ) / 2f, WallThickness / 2f );
+			Gizmo.Transform = new Transform( new Vector3( center.x, ceilingWallY, GoalHeight + WallThickness / 2f ), Rotation.Identity );
+			Gizmo.Draw.LineBBox( new BBox( -ceilingHalfExtents, ceilingHalfExtents ) );
 
 			// Side walls
-			var sideWallX = center.x + xDirection * ( GoalDepth / 2f + WallThickness / 2f );
-			var sideHalfExtents = new Vector3( ( GoalDepth + WallThickness ) / 2f, WallThickness / 2f, GoalHeight / 2f );
+			var sideWallY = center.y + yDirection * ( GoalDepth / 2f + WallThickness / 2f );
+			var sideHalfExtents = new Vector3( WallThickness / 2f, ( GoalDepth + WallThickness ) / 2f, GoalHeight / 2f );
 
-			// Top side (positive Y)
-			Gizmo.Transform = new Transform( new Vector3( sideWallX, center.y + GoalWidth / 2f + WallThickness / 2f, GoalHeight / 2f ), Rotation.Identity );
+			// Right side (positive X)
+			Gizmo.Transform = new Transform( new Vector3( center.x + GoalWidth / 2f + WallThickness / 2f, sideWallY, GoalHeight / 2f ), Rotation.Identity );
 			Gizmo.Draw.LineBBox( new BBox( -sideHalfExtents, sideHalfExtents ) );
 
-			// Bottom side (negative Y)
-			Gizmo.Transform = new Transform( new Vector3( sideWallX, center.y - GoalWidth / 2f - WallThickness / 2f, GoalHeight / 2f ), Rotation.Identity );
+			// Left side (negative X)
+			Gizmo.Transform = new Transform( new Vector3( center.x - GoalWidth / 2f - WallThickness / 2f, sideWallY, GoalHeight / 2f ), Rotation.Identity );
 			Gizmo.Draw.LineBBox( new BBox( -sideHalfExtents, sideHalfExtents ) );
 
 			Gizmo.Transform = global::Transform.Zero;
@@ -598,16 +597,16 @@ public sealed class PitchGenerator : Component
 	{
 		Gizmo.Draw.Color = Color.Green.WithAlpha( 0.3f );
 
-		foreach ( var (topIdx, bottomIdx) in goalLineIndices )
+		foreach ( var (leftIdx, rightIdx) in goalLineIndices )
 		{
-			var topPost = vertices[topIdx];
-			var bottomPost = vertices[bottomIdx];
-			var center = ( topPost + bottomPost ) / 2f;
+			var leftPost = vertices[leftIdx];
+			var rightPost = vertices[rightIdx];
+			var center = ( leftPost + rightPost ) / 2f;
 
-			var xDirection = ( topPost.x < 0 ) ? -1f : 1f;
-			var volumeCenter = center + new Vector3( xDirection * ( GoalDepth / 2f + WallThickness / 2f ), 0, GoalHeight / 2f );
+			var yDirection = ( leftPost.y > 0 ) ? 1f : -1f;
+			var volumeCenter = center + new Vector3( 0, yDirection * ( GoalDepth / 2f + WallThickness / 2f ), GoalHeight / 2f );
 
-			var halfExtents = new Vector3( GoalDepth / 2f, GoalWidth / 2f, GoalHeight / 2f );
+			var halfExtents = new Vector3( GoalWidth / 2f, GoalDepth / 2f, GoalHeight / 2f );
 			var bbox = new BBox( -halfExtents, halfExtents );
 
 			Gizmo.Transform = new Transform( volumeCenter, Rotation.Identity );
@@ -698,7 +697,7 @@ public sealed class PitchGenerator : Component
 	private void DrawGoalPostCylinder(Vector3 position)
 	{
 		// Match actual goal post position
-		var yDirection = (position.x < 0) ? -1f : 1f;
+		var yDirection = (position.y > 0) ? 1f : -1f;
 		var insetPosition = position + Vector3.Forward * (WallThickness / 2f) * yDirection;
 
 		// Draw a cylinder using line segments
@@ -728,13 +727,13 @@ public sealed class PitchGenerator : Component
 		}
 	}
 
-	private void DrawCrossbarCylinder(Vector3 topPost, Vector3 bottomPost)
+	private void DrawCrossbarCylinder(Vector3 leftPost, Vector3 rightPost)
 	{
-		var center = (topPost + bottomPost) / 2f;
+		var center = (leftPost + rightPost) / 2f;
 		var crossbarHeight = GoalHeight + (WallThickness / 2f);
 
 		// Offset Y to align with goal posts
-		var yDirection = (topPost.x < 0) ? -1f : 1f;
+		var yDirection = (leftPost.y > 0) ? 1f : -1f;
 		var offsetCenter = center + Vector3.Forward * (WallThickness / 2f) * yDirection;
 		var crossbarCenter = offsetCenter.WithZ(crossbarHeight);
 
@@ -748,12 +747,12 @@ public sealed class PitchGenerator : Component
 			float angle1 = (i / (float)segments) * MathF.PI * 2f;
 			float angle2 = ((i + 1) / (float)segments) * MathF.PI * 2f;
 
-			// Circle points in XZ plane (crossbar runs along Y)
-			var p1Start = crossbarCenter + new Vector3(MathF.Cos(angle1) * radius, -halfLength, MathF.Sin(angle1) * radius);
-			var p2Start = crossbarCenter + new Vector3(MathF.Cos(angle2) * radius, -halfLength, MathF.Sin(angle2) * radius);
+			// Circle points in YZ plane (crossbar runs along X)
+			var p1Start = crossbarCenter + new Vector3(-halfLength, MathF.Cos(angle1) * radius, MathF.Sin(angle1) * radius);
+			var p2Start = crossbarCenter + new Vector3(-halfLength, MathF.Cos(angle2) * radius, MathF.Sin(angle2) * radius);
 
-			var p1End = crossbarCenter + new Vector3(MathF.Cos(angle1) * radius, halfLength, MathF.Sin(angle1) * radius);
-			var p2End = crossbarCenter + new Vector3(MathF.Cos(angle2) * radius, halfLength, MathF.Sin(angle2) * radius);
+			var p1End = crossbarCenter + new Vector3(halfLength, MathF.Cos(angle1) * radius, MathF.Sin(angle1) * radius);
+			var p2End = crossbarCenter + new Vector3(halfLength, MathF.Cos(angle2) * radius, MathF.Sin(angle2) * radius);
 
 			// Start circle
 			Gizmo.Draw.Line(p1Start, p2Start);
@@ -764,9 +763,9 @@ public sealed class PitchGenerator : Component
 		}
 	}
 
-	private void DrawAboveCrossbarWall(Vector3 topPost, Vector3 bottomPost)
+	private void DrawAboveCrossbarWall(Vector3 leftPost, Vector3 rightPost)
 	{
-		var center = (topPost + bottomPost) / 2f;
+		var center = (leftPost + rightPost) / 2f;
 		var crossbarCenterZ = GoalHeight + WallThickness * 0.5f; // Center of the crossbar
 		// Wall goes from crossbar center to wall top (regular walls now extend from 0 to WallHeight)
 		var wallAboveHeight = WallHeight - crossbarCenterZ;
@@ -776,14 +775,14 @@ public sealed class PitchGenerator : Component
 			return;
 
 		// Offset Y to align with goal posts
-		var yDirection = (topPost.x < 0) ? -1f : 1f;
+		var yDirection = (leftPost.y > 0) ? 1f : -1f;
 		var offsetCenter = center + Vector3.Forward * (WallThickness / 2f) * yDirection;
 		// Center the wall between crossbar center and wall top
 		var wallCenterZ = crossbarCenterZ + wallAboveHeight / 2f;
 		var wallCenter = offsetCenter.WithZ(wallCenterZ);
 
 		// Create bounding box for visualization
-		var halfExtents = new Vector3(WallThickness / 2f, GoalWidth / 2f, wallAboveHeight / 2f);
+		var halfExtents = new Vector3(GoalWidth / 2f, WallThickness / 2f, wallAboveHeight / 2f);
 		var bbox = new BBox(-halfExtents, halfExtents);
 
 		// Draw the box in cyan like other walls, then restore yellow
