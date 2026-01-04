@@ -617,13 +617,16 @@ public sealed class PlayerController : Component
 		// Draw right stick flick vector if held
 		if ( InputManager.RightStick.IsHeld && selectedSelectable != null )
 		{
-			Vector2 stickDir = InputManager.RightStick.Direction;
-			Vector3 worldDir = new Vector3( -stickDir.y, -stickDir.x, 0 ).Normal;
-			float magnitude = InputManager.RightStick.PeakMagnitude;
+			Vector2 stickInput = InputManager.RightStick.CurrentInput;
+			float magnitude = stickInput.Length;
 
 			// Draw flick direction arrow
-			Gizmo.Draw.Color = Color.Magenta;
-			Gizmo.Draw.Arrow( selectedSelectable.SelectPosition, selectedSelectable.SelectPosition + worldDir * 200f, 8f, 4f );
+			if ( magnitude > 0.01f )
+			{
+				Vector3 worldDir = new Vector3( -stickInput.y, -stickInput.x, 0 ).Normal;
+				Gizmo.Draw.Color = Color.Magenta;
+				Gizmo.Draw.Arrow( selectedSelectable.SelectPosition, selectedSelectable.SelectPosition + worldDir * 200f, 8f, 4f );
+			}
 
 			// Draw flick vector magnitude text at screen position
 			Vector2 textScreenPos = Scene.Camera.PointToScreenPixels( selectedSelectable.SelectPosition + Vector3.Up * 100f );

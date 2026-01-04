@@ -196,7 +196,7 @@ public sealed class InputManager : Component
 		// Draw direction arrow if held
 		if ( stick.IsHeld )
 		{
-			Vector2 directionEnd = center + stick.Direction * radius * stick.PeakMagnitude;
+			Vector2 directionEnd = center + stick.Direction * radius;
 			Gizmo.Draw.Color = Color.Cyan;
 			Gizmo.Draw.Arrow( ToWorldPos( center ), ToWorldPos( directionEnd ), 4f, 2f );
 		}

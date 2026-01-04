@@ -20,11 +20,6 @@ public class AnalogStickState
 	public Vector2 Direction { get; private set; }
 
 	/// <summary>
-	/// Maximum magnitude reached during this gesture.
-	/// </summary>
-	public float PeakMagnitude { get; private set; }
-
-	/// <summary>
 	/// Is the stick currently being held?
 	/// </summary>
 	public bool IsHeld { get; private set; }
@@ -80,17 +75,10 @@ public class AnalogStickState
 			// Start tracking
 			IsHeld = true;
 			Direction = input.Normal;
-			PeakMagnitude = magnitude;
 		}
 		// Update existing gesture
 		else if ( IsHeld && magnitude >= Deadzone )
 		{
-			// Update peak magnitude
-			if ( magnitude > PeakMagnitude )
-			{
-				PeakMagnitude = magnitude;
-			}
-
 			// Only update direction if magnitude is strong enough
 			// This prevents direction jitter as the stick returns to neutral
 			if ( magnitude >= DirectionUpdateThreshold )
@@ -113,7 +101,6 @@ public class AnalogStickState
 	{
 		CurrentInput = Vector2.Zero;
 		Direction = Vector2.Zero;
-		PeakMagnitude = 0f;
 		IsHeld = false;
 		WasReleased = false;
 	}
