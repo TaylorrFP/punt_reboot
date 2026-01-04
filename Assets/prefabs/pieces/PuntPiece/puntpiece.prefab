@@ -36,7 +36,7 @@
         "OnTriggerExit": null,
         "RollingResistance": null,
         "Static": false,
-        "Surface": null,
+        "Surface": "prefabs/pieces/puntpiece/surface_puntpiece.surface",
         "SurfaceVelocity": "0,0,0"
       },
       {
@@ -62,7 +62,7 @@
         "RollingResistance": null,
         "Start": "0,0,18.067",
         "Static": false,
-        "Surface": null,
+        "Surface": "prefabs/pieces/puntpiece/surface_puntpiece.surface",
         "SurfaceVelocity": "0,0,0"
       },
       {

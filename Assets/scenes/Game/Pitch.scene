@@ -230,9 +230,9 @@
           "OnComponentUpdate": null,
           "PanSpeed": 1,
           "PassivePanHorizontalMult": 2.5,
-          "PassivePanSpeed": 50,
+          "PassivePanSpeed": 30,
           "ShowDebug": true,
-          "Smoothing": 10,
+          "Smoothing": 5,
           "SmoothPan": true
         }
       ],
@@ -356,6 +356,19 @@
               "OnComponentFixedUpdate": null,
               "OnComponentStart": null,
               "OnComponentUpdate": null
+            },
+            {
+              "__type": "Sandbox.ChromaticAberration",
+              "__guid": "16ab383b-c50a-44fb-aca7-afe85cffdf3d",
+              "__enabled": true,
+              "Offset": "6,2,4",
+              "OnComponentDestroy": null,
+              "OnComponentDisabled": null,
+              "OnComponentEnabled": null,
+              "OnComponentFixedUpdate": null,
+              "OnComponentStart": null,
+              "OnComponentUpdate": null,
+              "Scale": 0.05
             }
           ],
           "Children": []
@@ -385,8 +398,8 @@
           "BevelAmount": 515,
           "BevelResolution": 32,
           "DebugDraw": true,
-          "GoalDepth": 200,
-          "GoalHeight": 296.98773,
+          "GoalDepth": 100,
+          "GoalHeight": 150,
           "GoalWidth": 650,
           "OnComponentDestroy": null,
           "OnComponentDisabled": null,
@@ -394,14 +407,14 @@
           "OnComponentFixedUpdate": null,
           "OnComponentStart": null,
           "OnComponentUpdate": null,
-          "PitchLength": 2000,
+          "PitchLength": 1900,
           "PitchWidth": 1700,
           "ShowCeilingDebug": true,
           "ShowGoalEnclosureDebug": true,
           "ShowGoalsDebug": true,
-          "ShowGoalVolumeDebug": true,
+          "ShowGoalVolumeDebug": false,
           "ShowWallsDebug": true,
-          "WallHeight": 500,
+          "WallHeight": 300,
           "WallThickness": 96.02668
         }
       ],
@@ -410,7 +423,7 @@
           "__guid": "772bf645-5d2c-426e-8407-8edfead6d8e3",
           "__version": 1,
           "Flags": 0,
-          "Name": "Collider",
+          "Name": "FloorCollider",
           "Position": "0,0,0",
           "Rotation": "0,0,0,1",
           "Scale": "1,1,1",
@@ -444,7 +457,7 @@
               "RollingResistance": null,
               "Scale": "4000,4000,10",
               "Static": false,
-              "Surface": null,
+              "Surface": "prefabs/pitches/physicssurfaces/floorsurface.surface",
               "SurfaceVelocity": "0,0,0"
             }
           ],
@@ -1031,6 +1044,98 @@
         "dd32ce13-e62c-473e-8080-b0e725c0f061": "898ece34-c5c4-4b63-8ab7-2b3524569c90",
         "f0acf77d-3321-4560-9c30-c0017ade40ac": "dcff510a-f41c-406c-b4c6-65d43683511c",
         "4834d9d2-6246-4914-be23-9380b627292c": "29dfa583-e653-4f1a-8cbc-6f3ec2d286c2"
+      }
+    },
+    {
+      "__guid": "798fdc07-a2ed-48d8-b7d8-e2af23d65044",
+      "__version": 1,
+      "__Prefab": "prefabs/pieces/ball/puntball.prefab",
+      "__PrefabInstancePatch": {
+        "AddedObjects": [
+          {
+            "Id": {
+              "Type": "Component",
+              "IdValue": "e2b87bbb-bb9e-43ad-ba8c-46fab49dfb60"
+            },
+            "Parent": {
+              "Type": "GameObject",
+              "IdValue": "49785efd-e970-463f-9687-94e98b09ebb2"
+            },
+            "PreviousElement": {
+              "Type": "Component",
+              "IdValue": "5cef741f-ee18-46de-a56b-181f713c61a6"
+            },
+            "ContainerProperty": "Components",
+            "IsContainerArray": true,
+            "Data": {
+              "__type": "Sandbox.Rigidbody",
+              "__guid": "e2b87bbb-bb9e-43ad-ba8c-46fab49dfb60",
+              "__enabled": true,
+              "AngularDamping": 0,
+              "EnableImpactDamage": true,
+              "Gravity": true,
+              "GravityScale": 1,
+              "ImpactDamage": 0,
+              "LinearDamping": 0.2,
+              "Locking": {
+                "X": false,
+                "Y": false,
+                "Z": false,
+                "Pitch": false,
+                "Yaw": false,
+                "Roll": false
+              },
+              "MassCenterOverride": "0,0,0",
+              "MassOverride": 0,
+              "MinImpactDamageSpeed": 500,
+              "MotionEnabled": true,
+              "OnComponentDestroy": null,
+              "OnComponentDisabled": null,
+              "OnComponentEnabled": null,
+              "OnComponentFixedUpdate": null,
+              "OnComponentStart": null,
+              "OnComponentUpdate": null,
+              "OverrideMassCenter": false,
+              "RigidbodyFlags": 0,
+              "StartAsleep": false
+            }
+          }
+        ],
+        "RemovedObjects": [],
+        "PropertyOverrides": [
+          {
+            "Target": {
+              "Type": "GameObject",
+              "IdValue": "49785efd-e970-463f-9687-94e98b09ebb2"
+            },
+            "Property": "Name",
+            "Value": "PuntBall"
+          },
+          {
+            "Target": {
+              "Type": "GameObject",
+              "IdValue": "49785efd-e970-463f-9687-94e98b09ebb2"
+            },
+            "Property": "Position",
+            "Value": "-450.3908,-109.2229,238.7674"
+          },
+          {
+            "Target": {
+              "Type": "Component",
+              "IdValue": "5cef741f-ee18-46de-a56b-181f713c61a6"
+            },
+            "Property": "Surface",
+            "Value": "prefabs/pieces/ball/ballsurface.surface"
+          }
+        ],
+        "MovedObjects": []
+      },
+      "__PrefabIdToInstanceId": {
+        "49785efd-e970-463f-9687-94e98b09ebb2": "798fdc07-a2ed-48d8-b7d8-e2af23d65044",
+        "5cef741f-ee18-46de-a56b-181f713c61a6": "c5a20227-0f5c-460a-923c-2efb4cffa513",
+        "a132b233-aee2-440c-877f-56584a8435c1": "a7b71c68-5d29-4bae-8f36-274eb23fa215",
+        "1343be34-a779-42b5-bd86-189545139cb9": "32f8e763-0cce-408e-b87b-5510025df65d",
+        "ca2199ce-677c-4bc6-82bc-12f793e6be92": "195a88a9-c083-47b0-bd9d-e13caceee20c"
       }
     }
   ],

@@ -1,0 +1,21 @@
+{
+  "BaseSurface": null,
+  "AudioSurface": "Generic",
+  "Description": null,
+  "Friction": 3,
+  "Elasticity": 0.25,
+  "Density": 2000,
+  "Thickness": -1,
+  "RollingResistance": 0,
+  "BounceThreshold": 0.01,
+  "ImpactEffects": {},
+  "ScrapeEffects": {
+    "RoughnessFactor": 0.25,
+    "RoughThreshold": 0.5
+  },
+  "Sounds": {},
+  "Breakables": {},
+  "Tags": null,
+  "__references": [],
+  "__version": 0
+}

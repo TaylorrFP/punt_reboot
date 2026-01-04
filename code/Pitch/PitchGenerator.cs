@@ -611,7 +611,7 @@ public sealed class PitchGenerator : Component
 			var bbox = new BBox( -halfExtents, halfExtents );
 
 			Gizmo.Transform = new Transform( volumeCenter, Rotation.Identity );
-			Gizmo.Draw.LineBBox( bbox );
+			Gizmo.Draw.SolidBox( bbox );
 			Gizmo.Transform = global::Transform.Zero;
 		}
 	}

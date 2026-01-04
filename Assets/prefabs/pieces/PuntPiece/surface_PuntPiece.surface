@@ -1,0 +1,21 @@
+{
+  "BaseSurface": "assets/models/player/socettoplayersurface.surface",
+  "AudioSurface": "Generic",
+  "Description": "",
+  "Friction": 0.13,
+  "Elasticity": 0.5,
+  "Density": 4000,
+  "Thickness": -1,
+  "RollingResistance": 0,
+  "BounceThreshold": 0.01,
+  "ImpactEffects": {},
+  "ScrapeEffects": {
+    "RoughnessFactor": 0.25,
+    "RoughThreshold": 0.5
+  },
+  "Sounds": {},
+  "Breakables": {},
+  "Tags": null,
+  "__references": [],
+  "__version": 0
+}

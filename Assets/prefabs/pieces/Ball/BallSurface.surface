@@ -1,0 +1,58 @@
+{
+  "BaseSurface": null,
+  "AudioSurface": "Generic",
+  "Description": "",
+  "Friction": 0.01,
+  "Elasticity": 0.75,
+  "Density": 503.88,
+  "RollingResistance": 0,
+  "BounceThreshold": 0.01,
+  "Dampening": 0,
+  "ImpactEffects": {
+    "Regular": [],
+    "Bullet": [],
+    "BulletDecal": [],
+    "SoftParticles": [],
+    "SoftDecal": [],
+    "HardParticles": [],
+    "HardDecal": []
+  },
+  "ScrapeEffects": {
+    "RoughnessFactor": 0.25,
+    "RoughThreshold": 0.5,
+    "SmoothParticles": null,
+    "RoughParticles": null,
+    "SmoothDecal": null,
+    "RoughDecal": null
+  },
+  "Sounds": {
+    "FootLeft": null,
+    "FootRight": null,
+    "FootLaunch": null,
+    "FootLand": null,
+    "Bullet": null,
+    "ImpactHard": "sounds/ball/ball.sound",
+    "ImpactSoft": null,
+    "ScrapeRough": null,
+    "ScrapeSmooth": null
+  },
+  "PrefabCollection": {
+    "BulletImpact": null,
+    "BluntImpact": null
+  },
+  "SoundCollection": {
+    "FootLeft": null,
+    "FootRight": null,
+    "FootLaunch": null,
+    "FootLand": null,
+    "Bullet": null,
+    "ImpactHard": "prefabs/pieces/ball/default/sounds/ball.sound",
+    "ImpactSoft": "prefabs/pieces/ball/default/sounds/ball.sound",
+    "ScrapeRough": null,
+    "ScrapeSmooth": null,
+    "Break": null
+  },
+  "Tags": null,
+  "__references": [],
+  "__version": 0
+}
