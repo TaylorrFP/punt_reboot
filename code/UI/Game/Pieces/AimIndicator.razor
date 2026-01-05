@@ -6,9 +6,9 @@
 
 <root class="aim-indicator @(IsVisible ? "visible" : "hidden")">
     <div class="aim-line">
-        <div class="aim-head"></div>
-        <div class="aim-body"></div>
-        <div class="aim-tail"></div>
+        <div class="aim-tail aim-block" style="@GetBackgroundStyle(TailImage)"></div>
+        <div class="aim-body aim-block" style="@GetBackgroundStyle(BodyImage)"></div>
+        <div class="aim-head aim-block" style="@GetBackgroundStyle(HeadImage)"></div>
     </div>
 </root>
 
@@ -43,6 +43,29 @@
     /// Distance to offset the start of the line away from the piece center (in world units)
     /// </summary>
     [Property] public float StartOffset { get; set; } = 30f;
+
+    /// <summary>
+    /// Optional image path for the head block
+    /// </summary>
+    [Property] public string HeadImage { get; set; }
+
+    /// <summary>
+    /// Optional image path for the tail block
+    /// </summary>
+    [Property] public string TailImage { get; set; }
+
+    /// <summary>
+    /// Optional image path for the body block
+    /// </summary>
+    [Property] public string BodyImage { get; set; }
+
+    private string GetBackgroundStyle(string imagePath)
+    {
+        if (string.IsNullOrWhiteSpace(imagePath))
+            return null;
+
+        return $"background-image: url('{imagePath}');";
+    }
 
     protected override void OnStart()
     {

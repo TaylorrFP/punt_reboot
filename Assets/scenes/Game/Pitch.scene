@@ -200,7 +200,7 @@
           "OnComponentUpdate": null,
           "Sensitivity": 1,
           "ShowCursor": true,
-          "ShowDebug": true,
+          "ShowDebug": false,
           "ShowRealCursor": false,
           "Team": "Blue"
         },
@@ -253,7 +253,7 @@
           "PanSpeed": 1,
           "PassivePanHorizontalMult": 2.5,
           "PassivePanSpeed": 30,
-          "ShowDebug": true,
+          "ShowDebug": false,
           "Smoothing": 5,
           "SmoothPan": true
         }
@@ -666,14 +666,6 @@
             },
             "Property": "Position",
             "Value": "-268.2334,67.15658,5.508378"
-          },
-          {
-            "Target": {
-              "Type": "Component",
-              "IdValue": "4834d9d2-6246-4914-be23-9380b627292c"
-            },
-            "Property": "Width",
-            "Value": 2000
           }
         ],
         "MovedObjects": []
@@ -701,6 +693,214 @@
         "dd32ce13-e62c-473e-8080-b0e725c0f061": "db856b54-2b20-4c23-bb7f-2b64337218b0",
         "f0acf77d-3321-4560-9c30-c0017ade40ac": "a3a96fc3-492e-411d-90b3-0468fe69d0f4",
         "4834d9d2-6246-4914-be23-9380b627292c": "06c2eccc-88b4-4cca-9621-17ff02f2c6a9"
+      }
+    },
+    {
+      "__guid": "8e0d02a1-769a-4c26-b6ff-98413125a0bf",
+      "__version": 1,
+      "__Prefab": "prefabs/pieces/puntpiece/puntpiece.prefab",
+      "__PrefabInstancePatch": {
+        "AddedObjects": [],
+        "RemovedObjects": [],
+        "PropertyOverrides": [
+          {
+            "Target": {
+              "Type": "GameObject",
+              "IdValue": "ad8604dc-4731-4bf5-9544-f9bd106773c0"
+            },
+            "Property": "Name",
+            "Value": "puntpiece (2)"
+          },
+          {
+            "Target": {
+              "Type": "GameObject",
+              "IdValue": "ad8604dc-4731-4bf5-9544-f9bd106773c0"
+            },
+            "Property": "Position",
+            "Value": "-12.4828,363.4565,5.508378"
+          }
+        ],
+        "MovedObjects": []
+      },
+      "__PrefabIdToInstanceId": {
+        "ad8604dc-4731-4bf5-9544-f9bd106773c0": "8e0d02a1-769a-4c26-b6ff-98413125a0bf",
+        "860a1dc4-0b11-4b29-9fa2-0761e954d29d": "e35636e9-9846-4245-93d9-fcc15ed3aa39",
+        "6908b8f6-276c-4317-9f22-61902ad35137": "afc7c3d0-117c-4594-a98c-534b48f76762",
+        "557a9a38-57a3-4178-8b8a-089424db388a": "7499294e-e437-498d-b161-365ac62a0ffd",
+        "9804d496-f0f0-486e-b6e1-0692acc7dcfd": "cc20b45a-c333-4a44-8275-2a8d5dee3ec4",
+        "38bc432e-dcb1-4edb-81ed-472b549f59e1": "f2f9f7f3-1b86-4408-a1f7-cd2b3891906d",
+        "02f9dbf4-2d8b-425b-9d43-67fd66f98461": "77b505e8-165b-4cad-a720-072485d1142f",
+        "667741e6-99c4-4607-b886-3b9002761cff": "b2e78b04-57f3-4e86-b92c-21ee09d26cdc",
+        "4d05c825-915a-47f5-ab8c-d38838417f21": "62bdcf9f-3805-4577-8566-4b47d3f6706e",
+        "2750d0aa-df49-443f-af2a-51ef62929f79": "a557a72c-8db5-47bb-a05d-3ce605607784",
+        "d42e5e7d-3d5f-4eaf-b677-41fb7a18f09a": "6b8646b1-32eb-4dd8-ac15-2e913e9dd9b5",
+        "011e0ad9-9f74-4495-a243-152fc90f6bc6": "302b0fe2-f8ae-41a2-9e24-12ef2e94026d",
+        "5efe1f01-19ee-4413-b9e8-31300e849382": "4f032f0f-6f5b-47b9-96e2-df272dc2cc47",
+        "6560871c-c32b-473d-ba3b-4bb11aab1c17": "449b311c-d26a-4d79-ba1a-16ff8fec44d1",
+        "797caf46-9bc2-4e26-b71b-94468ede104c": "7861af9e-c94b-4836-8ca1-e58d6f23bd7b",
+        "b7c8c7f9-d403-4d36-b7bb-66983aa71e68": "a9a098e8-7814-4084-81c2-6e177c2d95ce",
+        "475ad2b9-6832-42a5-87db-b7b99dcf1a8b": "ab913c12-a863-48d3-bd2c-e356e2862c10",
+        "a94cf439-2d29-4c01-9fb2-a25deb17f4e7": "66fe9c93-3aef-4d6c-bfe1-69d363412b12",
+        "20a16300-e9f1-46a0-a328-037e78582cc1": "34406508-693f-449d-8c4f-ec3bf63ae4f7",
+        "dd32ce13-e62c-473e-8080-b0e725c0f061": "88107202-0afa-47c2-bbf2-94cd592e4040",
+        "f0acf77d-3321-4560-9c30-c0017ade40ac": "ffbfc2d8-da74-4a72-b68e-5a7427250f62",
+        "4834d9d2-6246-4914-be23-9380b627292c": "ef299018-b933-4a5b-b901-c01c55b0f454"
+      }
+    },
+    {
+      "__guid": "c87d4339-07b6-44eb-ba6e-43ea6ed070a7",
+      "__version": 1,
+      "__Prefab": "prefabs/pieces/puntpiece/puntpiece.prefab",
+      "__PrefabInstancePatch": {
+        "AddedObjects": [],
+        "RemovedObjects": [],
+        "PropertyOverrides": [
+          {
+            "Target": {
+              "Type": "GameObject",
+              "IdValue": "ad8604dc-4731-4bf5-9544-f9bd106773c0"
+            },
+            "Property": "Name",
+            "Value": "puntpiece (3)"
+          },
+          {
+            "Target": {
+              "Type": "GameObject",
+              "IdValue": "ad8604dc-4731-4bf5-9544-f9bd106773c0"
+            },
+            "Property": "Position",
+            "Value": "-12.4828,902.3865,5.508378"
+          }
+        ],
+        "MovedObjects": []
+      },
+      "__PrefabIdToInstanceId": {
+        "ad8604dc-4731-4bf5-9544-f9bd106773c0": "c87d4339-07b6-44eb-ba6e-43ea6ed070a7",
+        "860a1dc4-0b11-4b29-9fa2-0761e954d29d": "8ba0a8cd-439e-4d6b-b1a3-5ab04651b557",
+        "6908b8f6-276c-4317-9f22-61902ad35137": "add7231c-b97a-46c9-b082-204547846e21",
+        "557a9a38-57a3-4178-8b8a-089424db388a": "714ffcd2-fbb2-408c-9967-c52734fa9fff",
+        "9804d496-f0f0-486e-b6e1-0692acc7dcfd": "56578450-da51-497c-8765-789f3ad75cb3",
+        "38bc432e-dcb1-4edb-81ed-472b549f59e1": "b98f6711-2293-4a40-9f53-b60a053afa64",
+        "02f9dbf4-2d8b-425b-9d43-67fd66f98461": "a6a87c4b-2714-427f-b247-9693dc992d7f",
+        "667741e6-99c4-4607-b886-3b9002761cff": "5e90cead-e389-4468-8eff-77d7f520bd6b",
+        "4d05c825-915a-47f5-ab8c-d38838417f21": "c6aed9cc-819c-4d01-8b16-c88adbca7dc2",
+        "2750d0aa-df49-443f-af2a-51ef62929f79": "50cf4827-b697-4c64-a6e4-91134b91be36",
+        "d42e5e7d-3d5f-4eaf-b677-41fb7a18f09a": "f3456763-d641-4431-93e8-1e9710f5306f",
+        "011e0ad9-9f74-4495-a243-152fc90f6bc6": "03da3b02-df23-47f7-97d4-172db8daf9d0",
+        "5efe1f01-19ee-4413-b9e8-31300e849382": "d6d3ac24-ecbe-4197-8b2b-aef1875d976d",
+        "6560871c-c32b-473d-ba3b-4bb11aab1c17": "7ec5f1cd-3c45-41ab-bf62-51c46605e6ed",
+        "797caf46-9bc2-4e26-b71b-94468ede104c": "5593c0c1-70dd-40dc-9b37-4cf838b51919",
+        "b7c8c7f9-d403-4d36-b7bb-66983aa71e68": "36070d6f-d778-4a24-b220-7dc95f98b721",
+        "475ad2b9-6832-42a5-87db-b7b99dcf1a8b": "ea892bc5-e7d4-4256-834f-848b0c2519d2",
+        "a94cf439-2d29-4c01-9fb2-a25deb17f4e7": "0728f6b5-591b-4080-9f1e-820665cf4476",
+        "20a16300-e9f1-46a0-a328-037e78582cc1": "810873cf-f6d7-4f4c-bd26-96201c1ba6a8",
+        "dd32ce13-e62c-473e-8080-b0e725c0f061": "ed4d1639-0d8a-4fc2-866b-46824bf946f5",
+        "f0acf77d-3321-4560-9c30-c0017ade40ac": "40f7f1a3-26e6-4026-9bc1-323386111471",
+        "4834d9d2-6246-4914-be23-9380b627292c": "5357b834-5451-477a-9dbe-8fb594fa86b5"
+      }
+    },
+    {
+      "__guid": "d020a9e8-f8a7-4428-8d92-02b0c90d2169",
+      "__version": 1,
+      "__Prefab": "prefabs/pieces/puntpiece/puntpiece.prefab",
+      "__PrefabInstancePatch": {
+        "AddedObjects": [],
+        "RemovedObjects": [],
+        "PropertyOverrides": [
+          {
+            "Target": {
+              "Type": "GameObject",
+              "IdValue": "ad8604dc-4731-4bf5-9544-f9bd106773c0"
+            },
+            "Property": "Name",
+            "Value": "puntpiece (4)"
+          },
+          {
+            "Target": {
+              "Type": "GameObject",
+              "IdValue": "ad8604dc-4731-4bf5-9544-f9bd106773c0"
+            },
+            "Property": "Position",
+            "Value": "176.5962,104.8696,5.508378"
+          }
+        ],
+        "MovedObjects": []
+      },
+      "__PrefabIdToInstanceId": {
+        "ad8604dc-4731-4bf5-9544-f9bd106773c0": "d020a9e8-f8a7-4428-8d92-02b0c90d2169",
+        "860a1dc4-0b11-4b29-9fa2-0761e954d29d": "87ae75d9-cdfa-4bc3-a736-747fdf5358b4",
+        "6908b8f6-276c-4317-9f22-61902ad35137": "de56c137-df9f-4a8e-9c7b-9f419746835c",
+        "557a9a38-57a3-4178-8b8a-089424db388a": "9610ade6-96a0-4006-b159-dee960c5e90f",
+        "9804d496-f0f0-486e-b6e1-0692acc7dcfd": "f39ed9d2-9142-48bf-955b-5e0ee2650b65",
+        "38bc432e-dcb1-4edb-81ed-472b549f59e1": "49ec853e-abbc-471b-a08a-581b91466f5e",
+        "02f9dbf4-2d8b-425b-9d43-67fd66f98461": "97b899e6-1d88-424e-9d8a-34a242f5cd05",
+        "667741e6-99c4-4607-b886-3b9002761cff": "eaa85e85-b070-42e1-8304-ca13cc7eeabf",
+        "4d05c825-915a-47f5-ab8c-d38838417f21": "b2a0572f-dc74-4769-a7b7-464b69a3f6f5",
+        "2750d0aa-df49-443f-af2a-51ef62929f79": "48642cc8-f1f2-40ec-a3ad-624f4a2e431a",
+        "d42e5e7d-3d5f-4eaf-b677-41fb7a18f09a": "5e685966-7cf0-4f18-8123-4ace3bd3a3e5",
+        "011e0ad9-9f74-4495-a243-152fc90f6bc6": "b500dc72-b6f4-48cb-b8bb-5506704f1fbc",
+        "5efe1f01-19ee-4413-b9e8-31300e849382": "e8e97f66-04b7-4676-903a-4b77db4d18c2",
+        "6560871c-c32b-473d-ba3b-4bb11aab1c17": "abf5f87c-bd76-4967-a24b-da9fefaa9c0b",
+        "797caf46-9bc2-4e26-b71b-94468ede104c": "91994e71-6a19-4eb3-92ae-4f87073f6c01",
+        "b7c8c7f9-d403-4d36-b7bb-66983aa71e68": "ec463911-2d79-44d4-bbc0-85935eb0600b",
+        "475ad2b9-6832-42a5-87db-b7b99dcf1a8b": "94a33926-2e69-455e-800c-6e61c47e8652",
+        "a94cf439-2d29-4c01-9fb2-a25deb17f4e7": "06b7a685-4e20-4bc6-b976-5bf519298f08",
+        "20a16300-e9f1-46a0-a328-037e78582cc1": "bf9d1cad-0e1e-440f-9361-e404eac685bf",
+        "dd32ce13-e62c-473e-8080-b0e725c0f061": "7e9200c0-077f-4ed9-bf91-c046e9157f5a",
+        "f0acf77d-3321-4560-9c30-c0017ade40ac": "2e5bae98-3858-4cc2-9e2c-3830e153b193",
+        "4834d9d2-6246-4914-be23-9380b627292c": "a3b837a6-544a-4fde-9e8f-bfc47604a003"
+      }
+    },
+    {
+      "__guid": "466c989e-0155-4ac2-a15e-3b4c29e4a24a",
+      "__version": 1,
+      "__Prefab": "prefabs/pieces/puntpiece/puntpiece.prefab",
+      "__PrefabInstancePatch": {
+        "AddedObjects": [],
+        "RemovedObjects": [],
+        "PropertyOverrides": [
+          {
+            "Target": {
+              "Type": "GameObject",
+              "IdValue": "ad8604dc-4731-4bf5-9544-f9bd106773c0"
+            },
+            "Property": "Name",
+            "Value": "puntpiece (5)"
+          },
+          {
+            "Target": {
+              "Type": "GameObject",
+              "IdValue": "ad8604dc-4731-4bf5-9544-f9bd106773c0"
+            },
+            "Property": "Position",
+            "Value": "176.5962,599.671,5.508378"
+          }
+        ],
+        "MovedObjects": []
+      },
+      "__PrefabIdToInstanceId": {
+        "ad8604dc-4731-4bf5-9544-f9bd106773c0": "466c989e-0155-4ac2-a15e-3b4c29e4a24a",
+        "860a1dc4-0b11-4b29-9fa2-0761e954d29d": "6f33b2cc-eaad-4d2e-9ce2-b160baabcb73",
+        "6908b8f6-276c-4317-9f22-61902ad35137": "e557386f-3b3d-4325-bf8c-303ba8816ce5",
+        "557a9a38-57a3-4178-8b8a-089424db388a": "21d60a91-d8c5-4108-a57d-ca9bf0ce7c3a",
+        "9804d496-f0f0-486e-b6e1-0692acc7dcfd": "3b5aaf0c-535b-4843-9e74-fa9f749c8001",
+        "38bc432e-dcb1-4edb-81ed-472b549f59e1": "f83f550f-7132-44c5-ab95-58fcb860bec8",
+        "02f9dbf4-2d8b-425b-9d43-67fd66f98461": "7ccccd96-7642-4ddc-a31f-0f791d479f48",
+        "667741e6-99c4-4607-b886-3b9002761cff": "46233a00-f918-459f-b3a1-94946a452d79",
+        "4d05c825-915a-47f5-ab8c-d38838417f21": "539e43db-a44a-4f00-9f7e-dae3da4df29f",
+        "2750d0aa-df49-443f-af2a-51ef62929f79": "f895891c-a0c5-4bf9-966c-d403ff170353",
+        "d42e5e7d-3d5f-4eaf-b677-41fb7a18f09a": "77177847-291b-4280-ae3a-d22a9406db59",
+        "011e0ad9-9f74-4495-a243-152fc90f6bc6": "63b9415f-a028-4298-b874-2c328c1f7b90",
+        "5efe1f01-19ee-4413-b9e8-31300e849382": "d674449d-c6db-4bd3-abfd-db9e8d3de5d8",
+        "6560871c-c32b-473d-ba3b-4bb11aab1c17": "c7019605-8994-4803-91e5-895d769f4dc3",
+        "797caf46-9bc2-4e26-b71b-94468ede104c": "fa8692da-5232-49c6-b650-9280b39b3c8e",
+        "b7c8c7f9-d403-4d36-b7bb-66983aa71e68": "cae6e4ff-9d28-4481-9595-92f63d98fd92",
+        "475ad2b9-6832-42a5-87db-b7b99dcf1a8b": "9be1be32-0b00-4c62-80d2-805ff5e3675a",
+        "a94cf439-2d29-4c01-9fb2-a25deb17f4e7": "1cbbb422-9ed7-4042-b2ed-ebbef587dbfa",
+        "20a16300-e9f1-46a0-a328-037e78582cc1": "f7f2dd79-210e-4347-a375-4473038be9cc",
+        "dd32ce13-e62c-473e-8080-b0e725c0f061": "9463cad6-4149-4755-a71a-425d6d0f798f",
+        "f0acf77d-3321-4560-9c30-c0017ade40ac": "8b305b08-caae-448b-b1d6-966610e43d47",
+        "4834d9d2-6246-4914-be23-9380b627292c": "b3464da9-4c2b-42d5-af77-0db5a08bbaee"
       }
     },
     {
