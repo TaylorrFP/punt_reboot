@@ -1,0 +1,912 @@
+{
+  "IsSubgraph": false,
+  "Path": "shaders/pieces/squashstretch.shdrgrph",
+  "Model": null,
+  "Title": null,
+  "Description": "",
+  "Category": null,
+  "Icon": null,
+  "AddToNodeLibrary": false,
+  "BlendMode": "Opaque",
+  "ShadingModel": "Lit",
+  "Domain": "Surface",
+  "PreviewSettings": {
+    "RenderBackfaces": false,
+    "EnableShadows": true,
+    "ShowGround": false,
+    "ShowSkybox": true,
+    "BackgroundColor": "0,0,0,1",
+    "Tint": "1,1,1,1"
+  },
+  "Version": 1,
+  "nodes": [
+    {
+      "_class": "Result",
+      "DefaultOpacity": 1,
+      "DefaultRoughness": 1,
+      "DefaultMetalness": 0,
+      "DefaultAmbientOcclusion": 1,
+      "Identifier": "0",
+      "Position": "2316,-708",
+      "HandleOffsets": {},
+      "Albedo": {
+        "Identifier": "28",
+        "Output": "Result"
+      },
+      "Roughness": {
+        "Identifier": "30",
+        "Output": "Result"
+      },
+      "Metalness": {
+        "Identifier": "31",
+        "Output": "Result"
+      },
+      "PositionOffset": {
+        "Identifier": "41",
+        "Output": "Result"
+      }
+    },
+    {
+      "_class": "CommentNode",
+      "Size": "136,176",
+      "Color": "Green",
+      "Title": "pPar2",
+      "Description": "",
+      "Layer": 4,
+      "Identifier": "1",
+      "Position": "300,-240",
+      "HandleOffsets": {}
+    },
+    {
+      "_class": "Float3",
+      "Min": "0,0,0",
+      "Max": "1,1,1",
+      "Value": "0,0,0",
+      "Name": "Axis",
+      "IsAttribute": true,
+      "UI": {
+        "Type": "Default",
+        "Step": 0,
+        "Priority": 0,
+        "PrimaryGroup": {
+          "Name": null,
+          "Priority": 0
+        },
+        "SecondaryGroup": {
+          "Name": null,
+          "Priority": 0
+        }
+      },
+      "Identifier": "2",
+      "Position": "-948,-216",
+      "HandleOffsets": {}
+    },
+    {
+      "_class": "Float",
+      "Min": 0,
+      "Max": 5,
+      "Value": 1,
+      "Name": "StretchAmount",
+      "IsAttribute": true,
+      "UI": {
+        "Type": "Default",
+        "Step": 0,
+        "Priority": 0,
+        "PrimaryGroup": {
+          "Name": null,
+          "Priority": 0
+        },
+        "SecondaryGroup": {
+          "Name": null,
+          "Priority": 0
+        }
+      },
+      "Identifier": "3",
+      "Position": "-948,36",
+      "HandleOffsets": {}
+    },
+    {
+      "_class": "CommentNode",
+      "Size": "136,176",
+      "Color": "Green",
+      "Title": "P",
+      "Description": "",
+      "Layer": 4,
+      "Identifier": "4",
+      "Position": "-660,-600",
+      "HandleOffsets": {}
+    },
+    {
+      "_class": "CommentNode",
+      "Size": "220,224",
+      "Color": "Green",
+      "Title": "A",
+      "Description": "",
+      "Layer": 1,
+      "Identifier": "5",
+      "Position": "-984,-288",
+      "HandleOffsets": {}
+    },
+    {
+      "_class": "CommentNode",
+      "Size": "220,152",
+      "Color": "Green",
+      "Title": "k",
+      "Description": "",
+      "Layer": 2,
+      "Identifier": "6",
+      "Position": "-984,-36",
+      "HandleOffsets": {}
+    },
+    {
+      "_class": "DotProduct",
+      "Identifier": "7",
+      "Position": "-444,-384",
+      "HandleOffsets": {},
+      "InputA": {
+        "Identifier": "32",
+        "Output": "Result"
+      },
+      "InputB": {
+        "Identifier": "38",
+        "Output": "Result"
+      }
+    },
+    {
+      "_class": "CommentNode",
+      "Size": "220,164",
+      "Color": "Green",
+      "Title": "d",
+      "Description": "",
+      "Layer": 2,
+      "Identifier": "8",
+      "Position": "-480,-444",
+      "HandleOffsets": {}
+    },
+    {
+      "_class": "Multiply",
+      "DefaultA": 0,
+      "DefaultB": 1,
+      "Identifier": "9",
+      "Position": "-36,-240",
+      "HandleOffsets": {},
+      "A": {
+        "Identifier": "7",
+        "Output": "Result"
+      },
+      "B": {
+        "Identifier": "38",
+        "Output": "Result"
+      }
+    },
+    {
+      "_class": "CommentNode",
+      "Size": "136,176",
+      "Color": "Green",
+      "Title": "pPar",
+      "Description": "",
+      "Layer": 2,
+      "Identifier": "10",
+      "Position": "-72,-312",
+      "HandleOffsets": {}
+    },
+    {
+      "_class": "Subtract",
+      "DefaultA": 0,
+      "DefaultB": 1,
+      "Identifier": "11",
+      "Position": "324,-516",
+      "HandleOffsets": {},
+      "A": {
+        "Identifier": "12",
+        "Output": "Result"
+      },
+      "B": {
+        "Identifier": "9",
+        "Output": "Result"
+      }
+    },
+    {
+      "_class": "Reroute",
+      "Comment": null,
+      "Identifier": "12",
+      "Position": "120,-480",
+      "HandleOffsets": {},
+      "Input": {
+        "Identifier": "32",
+        "Output": "Result"
+      }
+    },
+    {
+      "_class": "CommentNode",
+      "Size": "136,176",
+      "Color": "Green",
+      "Title": "pPerp",
+      "Description": "",
+      "Layer": 2,
+      "Identifier": "13",
+      "Position": "288,-588",
+      "HandleOffsets": {}
+    },
+    {
+      "_class": "Multiply",
+      "DefaultA": 0,
+      "DefaultB": 1,
+      "Identifier": "14",
+      "Position": "336,-168",
+      "HandleOffsets": {},
+      "A": {
+        "Identifier": "24",
+        "Output": "Result"
+      },
+      "B": {
+        "Identifier": "21",
+        "Output": "Result"
+      }
+    },
+    {
+      "_class": "Multiply",
+      "DefaultA": 0,
+      "DefaultB": 1,
+      "Identifier": "15",
+      "Position": "780,12",
+      "HandleOffsets": {},
+      "A": {
+        "Identifier": "23",
+        "Output": "Result"
+      },
+      "B": {
+        "Identifier": "18",
+        "Output": "Result"
+      }
+    },
+    {
+      "_class": "Float",
+      "Min": 0,
+      "Max": 1,
+      "Value": 1,
+      "Name": "",
+      "IsAttribute": false,
+      "UI": {
+        "Type": "Default",
+        "Step": 0,
+        "Priority": 0,
+        "PrimaryGroup": {
+          "Name": null,
+          "Priority": 0
+        },
+        "SecondaryGroup": {
+          "Name": null,
+          "Priority": 0
+        }
+      },
+      "Identifier": "16",
+      "Position": "12,228",
+      "HandleOffsets": {}
+    },
+    {
+      "_class": "Sqrt",
+      "Identifier": "17",
+      "Position": "120,300",
+      "HandleOffsets": {},
+      "Input": {
+        "Identifier": "20",
+        "Output": "Result"
+      }
+    },
+    {
+      "_class": "Divide",
+      "DefaultA": 0,
+      "DefaultB": 1,
+      "Identifier": "18",
+      "Position": "252,252",
+      "HandleOffsets": {},
+      "A": {
+        "Identifier": "16",
+        "Output": "Result"
+      },
+      "B": {
+        "Identifier": "17",
+        "Output": "Result"
+      }
+    },
+    {
+      "_class": "CommentNode",
+      "Size": "136,176",
+      "Color": "Green",
+      "Title": "s",
+      "Description": "",
+      "Layer": 2,
+      "Identifier": "19",
+      "Position": "216,180",
+      "HandleOffsets": {}
+    },
+    {
+      "_class": "Reroute",
+      "Comment": null,
+      "Identifier": "20",
+      "Position": "-180,336",
+      "HandleOffsets": {},
+      "Input": {
+        "Identifier": "3",
+        "Output": "Result"
+      }
+    },
+    {
+      "_class": "Reroute",
+      "Comment": null,
+      "Identifier": "21",
+      "Position": "84,96",
+      "HandleOffsets": {},
+      "Input": {
+        "Identifier": "3",
+        "Output": "Result"
+      }
+    },
+    {
+      "_class": "CommentNode",
+      "Size": "136,176",
+      "Color": "Green",
+      "Title": "pPerp2",
+      "Description": "",
+      "Layer": 4,
+      "Identifier": "22",
+      "Position": "744,-60",
+      "HandleOffsets": {}
+    },
+    {
+      "_class": "Reroute",
+      "Comment": null,
+      "Identifier": "23",
+      "Position": "492,-480",
+      "HandleOffsets": {},
+      "Input": {
+        "Identifier": "11",
+        "Output": "Result"
+      }
+    },
+    {
+      "_class": "Reroute",
+      "Comment": null,
+      "Identifier": "24",
+      "Position": "228,-204",
+      "HandleOffsets": {},
+      "Input": {
+        "Identifier": "9",
+        "Output": "Result"
+      }
+    },
+    {
+      "_class": "Add",
+      "DefaultA": 0,
+      "DefaultB": 1,
+      "Identifier": "25",
+      "Position": "1056,-168",
+      "HandleOffsets": {},
+      "A": {
+        "Identifier": "14",
+        "Output": "Result"
+      },
+      "B": {
+        "Identifier": "15",
+        "Output": "Result"
+      }
+    },
+    {
+      "_class": "Add",
+      "DefaultA": 0,
+      "DefaultB": 1,
+      "Identifier": "26",
+      "Position": "1416,-168",
+      "HandleOffsets": {},
+      "A": {
+        "Identifier": "25",
+        "Output": "Result"
+      },
+      "B": {
+        "Identifier": "42",
+        "Output": "Result"
+      }
+    },
+    {
+      "_class": "TextureSampler",
+      "Image": "materials/dev/white_color.tga",
+      "Sampler": {
+        "Filter": "Aniso",
+        "AddressU": "Wrap",
+        "AddressV": "Wrap"
+      },
+      "UI": {
+        "Name": "Albedo",
+        "IsAttribute": false,
+        "Default": "1,1,1,1",
+        "Extension": "Color",
+        "CustomExtension": null,
+        "ShowExtension": true,
+        "Processor": "None",
+        "ColorSpace": "Srgb",
+        "ImageFormat": "DXT5",
+        "SrgbRead": true,
+        "Priority": 0,
+        "PrimaryGroup": {
+          "Name": null,
+          "Priority": 0
+        },
+        "SecondaryGroup": {
+          "Name": null,
+          "Priority": 0
+        }
+      },
+      "Identifier": "27",
+      "Position": "1092,-648",
+      "HandleOffsets": {}
+    },
+    {
+      "_class": "Multiply",
+      "DefaultA": 0,
+      "DefaultB": 1,
+      "Identifier": "28",
+      "Position": "1356,-528",
+      "HandleOffsets": {},
+      "A": {
+        "Identifier": "27",
+        "Output": "Result"
+      },
+      "B": {
+        "Identifier": "29",
+        "Output": "Result"
+      }
+    },
+    {
+      "_class": "Float4",
+      "Value": "1,1,1,1",
+      "Name": "TintColour",
+      "IsAttribute": false,
+      "UI": {
+        "Type": "Color",
+        "Step": 0,
+        "Priority": 0,
+        "PrimaryGroup": {
+          "Name": null,
+          "Priority": 0
+        },
+        "SecondaryGroup": {
+          "Name": null,
+          "Priority": 0
+        }
+      },
+      "Identifier": "29",
+      "Position": "1092,-456",
+      "HandleOffsets": {}
+    },
+    {
+      "_class": "Float",
+      "Min": 0,
+      "Max": 1,
+      "Value": 0,
+      "Name": "Roughness",
+      "IsAttribute": false,
+      "UI": {
+        "Type": "Default",
+        "Step": 0,
+        "Priority": 0,
+        "PrimaryGroup": {
+          "Name": null,
+          "Priority": 0
+        },
+        "SecondaryGroup": {
+          "Name": null,
+          "Priority": 0
+        }
+      },
+      "Identifier": "30",
+      "Position": "1344,-432",
+      "HandleOffsets": {}
+    },
+    {
+      "_class": "Float",
+      "Min": 0,
+      "Max": 1,
+      "Value": 0,
+      "Name": "Metalness",
+      "IsAttribute": false,
+      "UI": {
+        "Type": "Default",
+        "Step": 0,
+        "Priority": 0,
+        "PrimaryGroup": {
+          "Name": null,
+          "Priority": 0
+        },
+        "SecondaryGroup": {
+          "Name": null,
+          "Priority": 0
+        }
+      },
+      "Identifier": "31",
+      "Position": "1344,-360",
+      "HandleOffsets": {}
+    },
+    {
+      "_class": "Subtract",
+      "DefaultA": 0,
+      "DefaultB": 1,
+      "Identifier": "32",
+      "Position": "-624,-528",
+      "HandleOffsets": {},
+      "A": {
+        "Identifier": "35",
+        "Output": "Result"
+      },
+      "B": {
+        "Identifier": "42",
+        "Output": "Result"
+      }
+    },
+    {
+      "_class": "CommentNode",
+      "Size": "136,176",
+      "Color": "Green",
+      "Title": "p2",
+      "Description": "",
+      "Layer": 4,
+      "Identifier": "33",
+      "Position": "1020,-240",
+      "HandleOffsets": {}
+    },
+    {
+      "_class": "DotProduct",
+      "Identifier": "34",
+      "Position": "-144,-1020",
+      "HandleOffsets": {},
+      "InputA": {
+        "Identifier": "36",
+        "Output": "Result"
+      },
+      "InputB": {
+        "Identifier": "38",
+        "Output": "Result"
+      }
+    },
+    {
+      "_class": "WorldPosition",
+      "Identifier": "35",
+      "Position": "-936,-588",
+      "HandleOffsets": {}
+    },
+    {
+      "_class": "WorldNormal",
+      "Identifier": "36",
+      "Position": "-432,-1140",
+      "HandleOffsets": {}
+    },
+    {
+      "_class": "CommentNode",
+      "Size": "220,152",
+      "Color": "Green",
+      "Title": "WP",
+      "Description": "",
+      "Layer": 3,
+      "Identifier": "37",
+      "Position": "-972,-660",
+      "HandleOffsets": {}
+    },
+    {
+      "_class": "Normalize",
+      "Identifier": "38",
+      "Position": "-696,-216",
+      "HandleOffsets": {},
+      "Input": {
+        "Identifier": "2",
+        "Output": "Result"
+      }
+    },
+    {
+      "_class": "CommentNode",
+      "Size": "136,176",
+      "Color": "Green",
+      "Title": "WP2",
+      "Description": "",
+      "Layer": 4,
+      "Identifier": "39",
+      "Position": "1380,-240",
+      "HandleOffsets": {}
+    },
+    {
+      "_class": "WorldPosition",
+      "Identifier": "40",
+      "Position": "1368,-36",
+      "HandleOffsets": {}
+    },
+    {
+      "_class": "Subtract",
+      "DefaultA": 0,
+      "DefaultB": 1,
+      "Identifier": "41",
+      "Position": "1620,-120",
+      "HandleOffsets": {},
+      "A": {
+        "Identifier": "26",
+        "Output": "Result"
+      },
+      "B": {
+        "Identifier": "40",
+        "Output": "Result"
+      }
+    },
+    {
+      "_class": "Float3",
+      "Min": "0,0,0",
+      "Max": "0,0,0",
+      "Value": "0,0,0",
+      "Name": "ObjectPivot",
+      "IsAttribute": true,
+      "UI": {
+        "Type": "Default",
+        "Step": 0,
+        "Priority": 0,
+        "PrimaryGroup": {
+          "Name": null,
+          "Priority": 0
+        },
+        "SecondaryGroup": {
+          "Name": null,
+          "Priority": 0
+        }
+      },
+      "Identifier": "42",
+      "Position": "-984,-444",
+      "HandleOffsets": {}
+    },
+    {
+      "_class": "Multiply",
+      "DefaultA": 0,
+      "DefaultB": 1,
+      "Identifier": "43",
+      "Position": "144,-936",
+      "HandleOffsets": {},
+      "A": {
+        "Identifier": "38",
+        "Output": "Result"
+      },
+      "B": {
+        "Identifier": "34",
+        "Output": "Result"
+      }
+    },
+    {
+      "_class": "Subtract",
+      "DefaultA": 0,
+      "DefaultB": 1,
+      "Identifier": "44",
+      "Position": "336,-1140",
+      "HandleOffsets": {},
+      "A": {
+        "Identifier": "36",
+        "Output": "Result"
+      },
+      "B": {
+        "Identifier": "43",
+        "Output": "Result"
+      }
+    },
+    {
+      "_class": "CommentNode",
+      "Size": "220,176",
+      "Color": "Green",
+      "Title": "dN",
+      "Description": "",
+      "Layer": 4,
+      "Identifier": "45",
+      "Position": "-180,-1092",
+      "HandleOffsets": {}
+    },
+    {
+      "_class": "CommentNode",
+      "Size": "220,152",
+      "Color": "Green",
+      "Title": "N",
+      "Description": "",
+      "Layer": 4,
+      "Identifier": "46",
+      "Position": "-468,-1212",
+      "HandleOffsets": {}
+    },
+    {
+      "_class": "CommentNode",
+      "Size": "136,176",
+      "Color": "Green",
+      "Title": "nPar",
+      "Description": "",
+      "Layer": 4,
+      "Identifier": "47",
+      "Position": "108,-1008",
+      "HandleOffsets": {}
+    },
+    {
+      "_class": "CommentNode",
+      "Size": "136,176",
+      "Color": "Green",
+      "Title": "nPerp",
+      "Description": "",
+      "Layer": 5,
+      "Identifier": "48",
+      "Position": "300,-1212",
+      "HandleOffsets": {}
+    },
+    {
+      "_class": "Float",
+      "Min": 0,
+      "Max": 1,
+      "Value": 1,
+      "Name": "",
+      "IsAttribute": false,
+      "UI": {
+        "Type": "Default",
+        "Step": 0,
+        "Priority": 0,
+        "PrimaryGroup": {
+          "Name": null,
+          "Priority": 0
+        },
+        "SecondaryGroup": {
+          "Name": null,
+          "Priority": 0
+        }
+      },
+      "Identifier": "49",
+      "Position": "300,-804",
+      "HandleOffsets": {}
+    },
+    {
+      "_class": "Divide",
+      "DefaultA": 0,
+      "DefaultB": 1,
+      "Identifier": "50",
+      "Position": "504,-804",
+      "HandleOffsets": {},
+      "A": {
+        "Identifier": "49",
+        "Output": "Result"
+      },
+      "B": {
+        "Identifier": "3",
+        "Output": "Result"
+      }
+    },
+    {
+      "_class": "Multiply",
+      "DefaultA": 0,
+      "DefaultB": 1,
+      "Identifier": "51",
+      "Position": "720,-960",
+      "HandleOffsets": {},
+      "A": {
+        "Identifier": "43",
+        "Output": "Result"
+      },
+      "B": {
+        "Identifier": "50",
+        "Output": "Result"
+      }
+    },
+    {
+      "_class": "CommentNode",
+      "Size": "136,176",
+      "Color": "Green",
+      "Title": "nPar2",
+      "Description": "",
+      "Layer": 5,
+      "Identifier": "52",
+      "Position": "684,-1032",
+      "HandleOffsets": {}
+    },
+    {
+      "_class": "Float",
+      "Min": 0,
+      "Max": 1,
+      "Value": 1,
+      "Name": "",
+      "IsAttribute": false,
+      "UI": {
+        "Type": "Default",
+        "Step": 0,
+        "Priority": 0,
+        "PrimaryGroup": {
+          "Name": null,
+          "Priority": 0
+        },
+        "SecondaryGroup": {
+          "Name": null,
+          "Priority": 0
+        }
+      },
+      "Identifier": "53",
+      "Position": "828,-1140",
+      "HandleOffsets": {}
+    },
+    {
+      "_class": "Divide",
+      "DefaultA": 0,
+      "DefaultB": 1,
+      "Identifier": "54",
+      "Position": "1092,-1140",
+      "HandleOffsets": {},
+      "A": {
+        "Identifier": "53",
+        "Output": "Result"
+      },
+      "B": {
+        "Identifier": "18",
+        "Output": "Result"
+      }
+    },
+    {
+      "_class": "Multiply",
+      "DefaultA": 0,
+      "DefaultB": 1,
+      "Identifier": "55",
+      "Position": "1224,-1260",
+      "HandleOffsets": {},
+      "A": {
+        "Identifier": "44",
+        "Output": "Result"
+      },
+      "B": {
+        "Identifier": "54",
+        "Output": "Result"
+      }
+    },
+    {
+      "_class": "Add",
+      "DefaultA": 0,
+      "DefaultB": 1,
+      "Identifier": "56",
+      "Position": "1440,-996",
+      "HandleOffsets": {},
+      "A": {
+        "Identifier": "55",
+        "Output": "Result"
+      },
+      "B": {
+        "Identifier": "51",
+        "Output": "Result"
+      }
+    },
+    {
+      "_class": "CommentNode",
+      "Size": "136,176",
+      "Color": "Green",
+      "Title": "nPerp2",
+      "Description": "",
+      "Layer": 5,
+      "Identifier": "57",
+      "Position": "1188,-1332",
+      "HandleOffsets": {}
+    },
+    {
+      "_class": "Normalize",
+      "Identifier": "58",
+      "Position": "1668,-996",
+      "HandleOffsets": {},
+      "Input": {
+        "Identifier": "56",
+        "Output": "Result"
+      }
+    },
+    {
+      "_class": "WorldTangent",
+      "Identifier": "59",
+      "Position": "1908,-1248",
+      "HandleOffsets": {}
+    },
+    {
+      "_class": "CrossProduct",
+      "DefaultA": "0,0,0",
+      "DefaultB": "0,0,0",
+      "Identifier": "60",
+      "Position": "2148,-1140",
+      "HandleOffsets": {}
+    }
+  ]
+}

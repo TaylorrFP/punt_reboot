@@ -433,11 +433,11 @@
           "PitchWidth": 1700,
           "ShowCeilingDebug": false,
           "ShowGoalEnclosureDebug": false,
-          "ShowGoalsDebug": false,
+          "ShowGoalsDebug": true,
           "ShowGoalVolumeDebug": false,
           "ShowWallsDebug": false,
           "WallHeight": 300,
-          "WallThickness": 100
+          "WallThickness": 30
         }
       ],
       "Children": [
@@ -943,7 +943,7 @@
                 "Roll": false
               },
               "MassCenterOverride": "0,0,0",
-              "MassOverride": 0,
+              "MassOverride": 933,
               "MinImpactDamageSpeed": 500,
               "MotionEnabled": true,
               "OnComponentDestroy": null,
@@ -975,7 +975,7 @@
             "Data": {
               "__type": "Sandbox.HighlightOutline",
               "__guid": "68655e65-e43e-4496-963c-750dcf02d164",
-              "__enabled": true,
+              "__enabled": false,
               "Color": "1,1,1,1",
               "InsideColor": "0,0,0,0",
               "InsideObscuredColor": "0.75814,0.75814,0.75814,0.4",
@@ -991,9 +991,340 @@
               "Targets": null,
               "Width": 0.1
             }
+          },
+          {
+            "Id": {
+              "Type": "Component",
+              "IdValue": "c2e8c31e-7477-4f06-b70e-b060e6c0bb3e"
+            },
+            "Parent": {
+              "Type": "GameObject",
+              "IdValue": "49785efd-e970-463f-9687-94e98b09ebb2"
+            },
+            "PreviousElement": {
+              "Type": "Component",
+              "IdValue": "68655e65-e43e-4496-963c-750dcf02d164"
+            },
+            "ContainerProperty": "Components",
+            "IsContainerArray": true,
+            "Data": {
+              "__type": "PuntBall",
+              "__guid": "c2e8c31e-7477-4f06-b70e-b060e6c0bb3e",
+              "__enabled": true,
+              "ballGuide": {
+                "_type": "component",
+                "component_id": "b12ed937-be24-45af-b679-345ff18ef0d5",
+                "go": "e3a758f7-094d-4ed7-a98b-4254acbbadd3",
+                "component_type": "WorldPanel"
+              },
+              "ballModel": {
+                "_type": "gameobject",
+                "go": "a132b233-aee2-440c-877f-56584a8435c1"
+              },
+              "ballRB": {
+                "_type": "component",
+                "component_id": "e2b87bbb-bb9e-43ad-ba8c-46fab49dfb60",
+                "go": "49785efd-e970-463f-9687-94e98b09ebb2",
+                "component_type": "Rigidbody"
+              },
+              "ballRenderer": {
+                "_type": "component",
+                "component_id": "195a88a9-c083-47b0-bd9d-e13caceee20c",
+                "go": "32f8e763-0cce-408e-b87b-5510025df65d",
+                "component_type": "ModelRenderer"
+              },
+              "OnComponentDestroy": null,
+              "OnComponentDisabled": null,
+              "OnComponentEnabled": null,
+              "OnComponentFixedUpdate": null,
+              "OnComponentStart": null,
+              "OnComponentUpdate": null,
+              "SquashAmount": 1
+            }
+          },
+          {
+            "Id": {
+              "Type": "Component",
+              "IdValue": "2ea93ec8-f795-47b9-b424-d5e733552d27"
+            },
+            "Parent": {
+              "Type": "GameObject",
+              "IdValue": "49785efd-e970-463f-9687-94e98b09ebb2"
+            },
+            "PreviousElement": {
+              "Type": "Component",
+              "IdValue": "c2e8c31e-7477-4f06-b70e-b060e6c0bb3e"
+            },
+            "ContainerProperty": "Components",
+            "IsContainerArray": true,
+            "Data": {
+              "__type": "Sandbox.TrailRenderer",
+              "__guid": "2ea93ec8-f795-47b9-b424-d5e733552d27",
+              "__enabled": true,
+              "BlendMode": "Normal",
+              "CastShadows": false,
+              "Color": {
+                "blend": "Linear",
+                "color": [
+                  {
+                    "t": 0,
+                    "c": "1,1,1,1"
+                  },
+                  {
+                    "t": 1,
+                    "c": "1,1,1,1"
+                  }
+                ],
+                "alpha": [
+                  {
+                    "t": 0,
+                    "a": 0.6
+                  },
+                  {
+                    "t": 1,
+                    "a": 0
+                  }
+                ]
+              },
+              "Emitting": true,
+              "Face": "Camera",
+              "LifeTime": 2,
+              "MaxPoints": 64,
+              "OnComponentDestroy": null,
+              "OnComponentDisabled": null,
+              "OnComponentEnabled": null,
+              "OnComponentFixedUpdate": null,
+              "OnComponentStart": null,
+              "OnComponentUpdate": null,
+              "Opaque": false,
+              "PointDistance": 2,
+              "RenderOptions": {
+                "GameLayer": true,
+                "OverlayLayer": false,
+                "BloomLayer": false,
+                "AfterUILayer": false
+              },
+              "Texturing": {
+                "Texture": null,
+                "Material": null,
+                "WorldSpace": true,
+                "UnitsPerTexture": 10,
+                "Scale": 1,
+                "Offset": 0,
+                "Scroll": 0,
+                "Clamp": false
+              },
+              "Width": {
+                "rangex": "0.0000002384186,1",
+                "rangey": "0,15",
+                "frames": [
+                  {
+                    "x": 0,
+                    "y": 1,
+                    "in": 0,
+                    "out": 0,
+                    "mode": "Linear"
+                  },
+                  {
+                    "x": 1,
+                    "y": 0,
+                    "in": 0,
+                    "out": 0,
+                    "mode": "Linear"
+                  }
+                ]
+              },
+              "Wireframe": false
+            }
+          },
+          {
+            "Id": {
+              "Type": "GameObject",
+              "IdValue": "32f8e763-0cce-408e-b87b-5510025df65d"
+            },
+            "Parent": {
+              "Type": "GameObject",
+              "IdValue": "a132b233-aee2-440c-877f-56584a8435c1"
+            },
+            "PreviousElement": null,
+            "ContainerProperty": "Children",
+            "IsContainerArray": true,
+            "Data": {
+              "__guid": "32f8e763-0cce-408e-b87b-5510025df65d",
+              "__version": 1,
+              "Flags": 0,
+              "Name": "puntball_default",
+              "Position": "0,0,0",
+              "Rotation": "0,0,0,1",
+              "Scale": "1.04193,1.04193,1.04193",
+              "Tags": "",
+              "Enabled": true,
+              "NetworkMode": 2,
+              "NetworkInterpolation": true,
+              "NetworkOrphaned": 0,
+              "NetworkTransmit": true,
+              "OwnerTransfer": 1,
+              "Components": [],
+              "Children": []
+            }
+          },
+          {
+            "Id": {
+              "Type": "Component",
+              "IdValue": "195a88a9-c083-47b0-bd9d-e13caceee20c"
+            },
+            "Parent": {
+              "Type": "GameObject",
+              "IdValue": "32f8e763-0cce-408e-b87b-5510025df65d"
+            },
+            "PreviousElement": null,
+            "ContainerProperty": "Components",
+            "IsContainerArray": true,
+            "Data": {
+              "__type": "Sandbox.ModelRenderer",
+              "__guid": "195a88a9-c083-47b0-bd9d-e13caceee20c",
+              "__enabled": true,
+              "BodyGroups": 18446744073709551615,
+              "CreateAttachments": false,
+              "LodOverride": null,
+              "MaterialGroup": null,
+              "MaterialOverride": "prefabs/pieces/ball/default/materials/puntball_white_squash.vmat",
+              "Materials": null,
+              "Model": "prefabs/pieces/ball/default/puntball_default.vmdl",
+              "OnComponentDestroy": null,
+              "OnComponentDisabled": null,
+              "OnComponentEnabled": null,
+              "OnComponentFixedUpdate": null,
+              "OnComponentStart": null,
+              "OnComponentUpdate": null,
+              "RenderOptions": {
+                "GameLayer": true,
+                "OverlayLayer": false,
+                "BloomLayer": false,
+                "AfterUILayer": false
+              },
+              "RenderType": "On",
+              "Tint": "1,1,1,1"
+            }
+          },
+          {
+            "Id": {
+              "Type": "GameObject",
+              "IdValue": "e3a758f7-094d-4ed7-a98b-4254acbbadd3"
+            },
+            "Parent": {
+              "Type": "GameObject",
+              "IdValue": "49785efd-e970-463f-9687-94e98b09ebb2"
+            },
+            "PreviousElement": {
+              "Type": "GameObject",
+              "IdValue": "a132b233-aee2-440c-877f-56584a8435c1"
+            },
+            "ContainerProperty": "Children",
+            "IsContainerArray": true,
+            "Data": {
+              "__guid": "e3a758f7-094d-4ed7-a98b-4254acbbadd3",
+              "__version": 1,
+              "Flags": 0,
+              "Name": "BallGuide",
+              "Position": "0,0,0",
+              "Rotation": "0,-0.7071068,0,0.7071068",
+              "Scale": "1,1,1",
+              "Tags": "",
+              "Enabled": true,
+              "NetworkMode": 2,
+              "NetworkInterpolation": true,
+              "NetworkOrphaned": 0,
+              "NetworkTransmit": true,
+              "OwnerTransfer": 1,
+              "Components": [],
+              "Children": []
+            }
+          },
+          {
+            "Id": {
+              "Type": "Component",
+              "IdValue": "b12ed937-be24-45af-b679-345ff18ef0d5"
+            },
+            "Parent": {
+              "Type": "GameObject",
+              "IdValue": "e3a758f7-094d-4ed7-a98b-4254acbbadd3"
+            },
+            "PreviousElement": null,
+            "ContainerProperty": "Components",
+            "IsContainerArray": true,
+            "Data": {
+              "__type": "Sandbox.WorldPanel",
+              "__guid": "b12ed937-be24-45af-b679-345ff18ef0d5",
+              "__enabled": true,
+              "HorizontalAlign": "Center",
+              "InteractionRange": 1000,
+              "LookAtCamera": false,
+              "OnComponentDestroy": null,
+              "OnComponentDisabled": null,
+              "OnComponentEnabled": null,
+              "OnComponentFixedUpdate": null,
+              "OnComponentStart": null,
+              "OnComponentUpdate": null,
+              "PanelSize": "2000,2000",
+              "RenderOptions": {
+                "GameLayer": true,
+                "OverlayLayer": false,
+                "BloomLayer": false,
+                "AfterUILayer": false
+              },
+              "RenderScale": 1,
+              "VerticalAlign": "Center"
+            }
+          },
+          {
+            "Id": {
+              "Type": "Component",
+              "IdValue": "773dcad9-eca3-4067-930d-85db825195a7"
+            },
+            "Parent": {
+              "Type": "GameObject",
+              "IdValue": "e3a758f7-094d-4ed7-a98b-4254acbbadd3"
+            },
+            "PreviousElement": {
+              "Type": "Component",
+              "IdValue": "b12ed937-be24-45af-b679-345ff18ef0d5"
+            },
+            "ContainerProperty": "Components",
+            "IsContainerArray": true,
+            "Data": {
+              "__type": "Sandbox.UI.Game.Pieces.BallGuide",
+              "__guid": "773dcad9-eca3-4067-930d-85db825195a7",
+              "__enabled": true,
+              "ball": {
+                "_type": "component",
+                "component_id": "c2e8c31e-7477-4f06-b70e-b060e6c0bb3e",
+                "go": "49785efd-e970-463f-9687-94e98b09ebb2",
+                "component_type": "PuntBall"
+              },
+              "OnComponentDestroy": null,
+              "OnComponentDisabled": null,
+              "OnComponentEnabled": null,
+              "OnComponentFixedUpdate": null,
+              "OnComponentStart": null,
+              "OnComponentUpdate": null
+            }
           }
         ],
-        "RemovedObjects": [],
+        "RemovedObjects": [
+          {
+            "Id": {
+              "Type": "GameObject",
+              "IdValue": "1343be34-a779-42b5-bd86-189545139cb9"
+            }
+          },
+          {
+            "Id": {
+              "Type": "Component",
+              "IdValue": "ca2199ce-677c-4bc6-82bc-12f793e6be92"
+            }
+          }
+        ],
         "PropertyOverrides": [
           {
             "Target": {
@@ -1009,7 +1340,23 @@
               "IdValue": "49785efd-e970-463f-9687-94e98b09ebb2"
             },
             "Property": "Position",
-            "Value": "420.7963,-58.09325,95.98026"
+            "Value": "0,0,136.9279"
+          },
+          {
+            "Target": {
+              "Type": "GameObject",
+              "IdValue": "49785efd-e970-463f-9687-94e98b09ebb2"
+            },
+            "Property": "Rotation",
+            "Value": "0,-0.00000001490116,0,1"
+          },
+          {
+            "Target": {
+              "Type": "Component",
+              "IdValue": "5cef741f-ee18-46de-a56b-181f713c61a6"
+            },
+            "Property": "Radius",
+            "Value": 45
           },
           {
             "Target": {
@@ -1026,8 +1373,8 @@
         "49785efd-e970-463f-9687-94e98b09ebb2": "798fdc07-a2ed-48d8-b7d8-e2af23d65044",
         "5cef741f-ee18-46de-a56b-181f713c61a6": "c5a20227-0f5c-460a-923c-2efb4cffa513",
         "a132b233-aee2-440c-877f-56584a8435c1": "a7b71c68-5d29-4bae-8f36-274eb23fa215",
-        "1343be34-a779-42b5-bd86-189545139cb9": "32f8e763-0cce-408e-b87b-5510025df65d",
-        "ca2199ce-677c-4bc6-82bc-12f793e6be92": "195a88a9-c083-47b0-bd9d-e13caceee20c"
+        "1343be34-a779-42b5-bd86-189545139cb9": "3ce5e913-f5ac-434f-a5ef-f6cb1fbcc1db",
+        "ca2199ce-677c-4bc6-82bc-12f793e6be92": "385db84a-556e-4bda-b262-dbc068b3a90e"
       }
     },
     {

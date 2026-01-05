@@ -1,0 +1,14 @@
+// THIS FILE IS AUTO-GENERATED
+
+Layer0
+{
+	shader "shaders/pieces/squashstretch.shader"
+
+	Albedo "materials/dev/white_color.tga"
+	g_flMetalness "0.000"
+	g_flRoughness "0.415"
+	g_vTintColour "[0.403922 0.403922 0.403922 1.000000]"
+
+	//---- Fog ----
+	g_bFogEnabled "1"
+}
