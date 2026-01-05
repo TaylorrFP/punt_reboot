@@ -1,6 +1,17 @@
 AimIndicator {
 	pointer-events: none;
-	transition: opacity 0.1s ease;
+	transition: none;
+
+	&.visible {
+		opacity: 1;
+		transition: opacity 2s ease;
+	}
+
+	&.hidden {
+		opacity: 0;
+		transition: none;
+	}
+
 
 	&.hidden {
 		opacity: 0;
@@ -16,8 +27,34 @@ AimIndicator {
 		top: 0;
 		width: 100%;
 		height: 100%;
-		background-color: white;
+		display: flex;
+		flex-direction: column;
 		box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 		transform-origin: left center;
+	}
+
+	.aim-head {
+		width: 100%;
+		height: 900px;
+	}
+
+	.aim-tail {
+		width: 100%;
+		height: 225px;
+	}
+
+	.aim-body {
+		width: 100%;
+		flex: 1 1 auto;
+	}
+
+	.aim-block {
+		width: 100%;
+		background-repeat: no-repeat;
+		background-position: center;
+		background-size: 100% 100%;
+		background-image-tint: white;
+		opacity: 0.8;
+
 	}
 }

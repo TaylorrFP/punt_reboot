@@ -1,0 +1,16 @@
+BallGuide {
+	/* Optional: Define a size for the BallGuide container */
+	width: 100%;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.circle {
+	width: 100%; /* Set width relative to the parent container */
+	height: 100%; /* Set height relative to the parent container */
+	background-color: transparent; /* Transparent background */
+	border-radius: 50%; /* This creates the circle */
+	border: 100px rgba(255,255,255,0.2f); /* White outline with 5px thickness */
+}

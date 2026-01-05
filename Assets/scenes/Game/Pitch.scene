@@ -7,7 +7,7 @@
       "Flags": 0,
       "Name": "Sun",
       "Position": "0,0,0",
-      "Rotation": "-0.2074891,-0.9074883,0.1535173,-0.3314296",
+      "Rotation": "-0.788408,-0.4949742,0.3429092,-0.125803",
       "Scale": "1,1,1",
       "Tags": "light_directional,light",
       "Enabled": true,
@@ -180,7 +180,15 @@
             "go": "96cdd6d5-293f-4b12-8ebd-76f82dde8d15",
             "component_type": "CameraController"
           },
+          "ControllerAimSmoothing": 10,
+          "ControllerDistanceWeight": 0.05,
           "FlickStrength": 1,
+          "InputManager": {
+            "_type": "component",
+            "component_id": "647cd137-6cb1-4062-9856-0d8c08ad79d2",
+            "go": "fd506fa4-4d4f-4140-baf8-271ddf8dc050",
+            "component_type": "InputManager"
+          },
           "MaxFlickDistance": 450,
           "MaxFlickStrength": 650,
           "MinFlickDistance": 100,
@@ -192,9 +200,23 @@
           "OnComponentUpdate": null,
           "Sensitivity": 1,
           "ShowCursor": true,
-          "ShowDebug": true,
+          "ShowDebug": false,
           "ShowRealCursor": false,
           "Team": "Blue"
+        },
+        {
+          "__type": "Punt.InputManager",
+          "__guid": "647cd137-6cb1-4062-9856-0d8c08ad79d2",
+          "__enabled": true,
+          "OnComponentDestroy": null,
+          "OnComponentDisabled": null,
+          "OnComponentEnabled": null,
+          "OnComponentFixedUpdate": null,
+          "OnComponentStart": null,
+          "OnComponentUpdate": null,
+          "ShowDebug": false,
+          "StickDeadzone": 0.2,
+          "StickReleaseThreshold": 0.15
         }
       ],
       "Children": []
@@ -204,8 +226,8 @@
       "__version": 1,
       "Flags": 0,
       "Name": "CameraController",
-      "Position": "0,-159.5539,0",
-      "Rotation": "-0.2418447,0.2418447,0.664463,0.664463",
+      "Position": "-180,0,0",
+      "Rotation": "0,0.34202,0,0.9396927",
       "Scale": "1,1,1",
       "Tags": "",
       "Enabled": true,
@@ -231,7 +253,7 @@
           "PanSpeed": 1,
           "PassivePanHorizontalMult": 2.5,
           "PassivePanSpeed": 30,
-          "ShowDebug": true,
+          "ShowDebug": false,
           "Smoothing": 5,
           "SmoothPan": true
         }
@@ -400,7 +422,7 @@
           "DebugDraw": true,
           "GoalDepth": 100,
           "GoalHeight": 150,
-          "GoalWidth": 650,
+          "GoalWidth": 640.84045,
           "OnComponentDestroy": null,
           "OnComponentDisabled": null,
           "OnComponentEnabled": null,
@@ -409,13 +431,13 @@
           "OnComponentUpdate": null,
           "PitchLength": 1900,
           "PitchWidth": 1700,
-          "ShowCeilingDebug": true,
-          "ShowGoalEnclosureDebug": true,
+          "ShowCeilingDebug": false,
+          "ShowGoalEnclosureDebug": false,
           "ShowGoalsDebug": true,
           "ShowGoalVolumeDebug": false,
-          "ShowWallsDebug": true,
+          "ShowWallsDebug": false,
           "WallHeight": 300,
-          "WallThickness": 96.02668
+          "WallThickness": 30
         }
       ],
       "Children": [
@@ -514,7 +536,7 @@
               "Name": "Plane",
               "Position": "0,0,0",
               "Rotation": "0,0,0,1",
-              "Scale": "22.2121,17.00334,40",
+              "Scale": "30.62738,36.44506,40",
               "Tags": "",
               "Enabled": true,
               "NetworkMode": 2,
@@ -622,223 +644,6 @@
       "Children": []
     },
     {
-      "__guid": "88cf8335-a311-454a-8dc6-c228522e67e3",
-      "__version": 1,
-      "__Prefab": "prefabs/pitches/dev/rubberduck/rubberduckclickable.prefab",
-      "__PrefabInstancePatch": {
-        "AddedObjects": [
-          {
-            "Id": {
-              "Type": "Component",
-              "IdValue": "992963d8-88c8-4210-a8ce-ff236b5a5e14"
-            },
-            "Parent": {
-              "Type": "GameObject",
-              "IdValue": "25d6cc95-0a98-49d4-a64d-5c7e6bd5c2b4"
-            },
-            "PreviousElement": {
-              "Type": "Component",
-              "IdValue": "b15bc3fd-e55f-4f79-8ede-0cdc25104144"
-            },
-            "ContainerProperty": "Components",
-            "IsContainerArray": true,
-            "Data": {
-              "__type": "SelectableHighlight",
-              "__guid": "992963d8-88c8-4210-a8ce-ff236b5a5e14",
-              "__enabled": true,
-              "DisabledColor": "0.5,0.5,0.5,1",
-              "HoverColor": "1,1,1,0.1",
-              "HoverWidth": 0.25,
-              "OnComponentDestroy": null,
-              "OnComponentDisabled": null,
-              "OnComponentEnabled": null,
-              "OnComponentFixedUpdate": null,
-              "OnComponentStart": null,
-              "OnComponentUpdate": null,
-              "Outline": {
-                "_type": "component",
-                "component_id": "ba20b0a1-88ab-420b-87ec-1232ac3e9819",
-                "go": "25d6cc95-0a98-49d4-a64d-5c7e6bd5c2b4",
-                "component_type": "HighlightOutline"
-              },
-              "SelectedColor": "0,1,0,1",
-              "SelectedWidth": 0.4
-            }
-          },
-          {
-            "Id": {
-              "Type": "Component",
-              "IdValue": "ba20b0a1-88ab-420b-87ec-1232ac3e9819"
-            },
-            "Parent": {
-              "Type": "GameObject",
-              "IdValue": "25d6cc95-0a98-49d4-a64d-5c7e6bd5c2b4"
-            },
-            "PreviousElement": {
-              "Type": "Component",
-              "IdValue": "992963d8-88c8-4210-a8ce-ff236b5a5e14"
-            },
-            "ContainerProperty": "Components",
-            "IsContainerArray": true,
-            "Data": {
-              "__type": "Sandbox.HighlightOutline",
-              "__guid": "ba20b0a1-88ab-420b-87ec-1232ac3e9819",
-              "__enabled": false,
-              "Color": "1,1,1,1",
-              "InsideColor": "0,0,0,0",
-              "InsideObscuredColor": "0,0,0,0",
-              "Material": null,
-              "ObscuredColor": "0,0,0,0.4",
-              "OnComponentDestroy": null,
-              "OnComponentDisabled": null,
-              "OnComponentEnabled": null,
-              "OnComponentFixedUpdate": null,
-              "OnComponentStart": null,
-              "OnComponentUpdate": null,
-              "OverrideTargets": false,
-              "Targets": null,
-              "Width": 0.25
-            }
-          },
-          {
-            "Id": {
-              "Type": "Component",
-              "IdValue": "5ac7c384-ac54-4c40-bdd6-1d4bf7dbca57"
-            },
-            "Parent": {
-              "Type": "GameObject",
-              "IdValue": "25d6cc95-0a98-49d4-a64d-5c7e6bd5c2b4"
-            },
-            "PreviousElement": {
-              "Type": "Component",
-              "IdValue": "ba20b0a1-88ab-420b-87ec-1232ac3e9819"
-            },
-            "ContainerProperty": "Components",
-            "IsContainerArray": true,
-            "Data": {
-              "__type": "ClickableDuck",
-              "__guid": "5ac7c384-ac54-4c40-bdd6-1d4bf7dbca57",
-              "__enabled": true,
-              "DuckModel": {
-                "_type": "component",
-                "component_id": "b15bc3fd-e55f-4f79-8ede-0cdc25104144",
-                "go": "25d6cc95-0a98-49d4-a64d-5c7e6bd5c2b4",
-                "component_type": "ModelRenderer"
-              },
-              "Highlight": {
-                "_type": "component",
-                "component_id": "992963d8-88c8-4210-a8ce-ff236b5a5e14",
-                "go": "25d6cc95-0a98-49d4-a64d-5c7e6bd5c2b4",
-                "component_type": "SelectableHighlight"
-              },
-              "OnComponentDestroy": null,
-              "OnComponentDisabled": null,
-              "OnComponentEnabled": null,
-              "OnComponentFixedUpdate": null,
-              "OnComponentStart": null,
-              "OnComponentUpdate": null,
-              "QuackSound": "sounds/custom/duckquack.sound",
-              "Radius": 30,
-              "WobbleAmount": 15,
-              "WobbleDuration": 0.3
-            }
-          }
-        ],
-        "RemovedObjects": [
-          {
-            "Id": {
-              "Type": "Component",
-              "IdValue": "b58d4a8f-cbca-40b2-8c39-49a5d90e009b"
-            }
-          }
-        ],
-        "PropertyOverrides": [
-          {
-            "Target": {
-              "Type": "GameObject",
-              "IdValue": "25d6cc95-0a98-49d4-a64d-5c7e6bd5c2b4"
-            },
-            "Property": "Name",
-            "Value": "RubberDuckClickable"
-          },
-          {
-            "Target": {
-              "Type": "GameObject",
-              "IdValue": "25d6cc95-0a98-49d4-a64d-5c7e6bd5c2b4"
-            },
-            "Property": "Position",
-            "Value": "-48.97165,-120.9335,0"
-          },
-          {
-            "Target": {
-              "Type": "GameObject",
-              "IdValue": "25d6cc95-0a98-49d4-a64d-5c7e6bd5c2b4"
-            },
-            "Property": "Rotation",
-            "Value": "0,0,-0.9659258,0.2588192"
-          },
-          {
-            "Target": {
-              "Type": "GameObject",
-              "IdValue": "25d6cc95-0a98-49d4-a64d-5c7e6bd5c2b4"
-            },
-            "Property": "Scale",
-            "Value": "0.4,0.4,0.4"
-          }
-        ],
-        "MovedObjects": []
-      },
-      "__PrefabIdToInstanceId": {
-        "25d6cc95-0a98-49d4-a64d-5c7e6bd5c2b4": "88cf8335-a311-454a-8dc6-c228522e67e3",
-        "b15bc3fd-e55f-4f79-8ede-0cdc25104144": "bac81627-9e92-48a3-a17f-7eb083565d4e",
-        "b58d4a8f-cbca-40b2-8c39-49a5d90e009b": "1af3a708-26e9-4166-a053-2e5251dac889"
-      }
-    },
-    {
-      "__guid": "35819378-ca70-4686-82b5-5d48b36aef5f",
-      "__version": 1,
-      "__Prefab": "prefabs/pieces/puntpiece/puntpiece.prefab",
-      "__PrefabInstancePatch": {
-        "AddedObjects": [],
-        "RemovedObjects": [],
-        "PropertyOverrides": [
-          {
-            "Target": {
-              "Type": "GameObject",
-              "IdValue": "ad8604dc-4731-4bf5-9544-f9bd106773c0"
-            },
-            "Property": "Position",
-            "Value": "25.5581,67.15658,5.508378"
-          }
-        ],
-        "MovedObjects": []
-      },
-      "__PrefabIdToInstanceId": {
-        "ad8604dc-4731-4bf5-9544-f9bd106773c0": "35819378-ca70-4686-82b5-5d48b36aef5f",
-        "860a1dc4-0b11-4b29-9fa2-0761e954d29d": "7f3c485c-9e0f-488d-92a5-462c261414a9",
-        "6908b8f6-276c-4317-9f22-61902ad35137": "acc10fad-867c-42bf-bf00-b63d347444da",
-        "557a9a38-57a3-4178-8b8a-089424db388a": "18c27b8f-f84e-4b97-817f-6e092fda2175",
-        "9804d496-f0f0-486e-b6e1-0692acc7dcfd": "f785608e-fc67-48ba-8b4b-bd0e6b27a939",
-        "38bc432e-dcb1-4edb-81ed-472b549f59e1": "b3f8fff2-6a25-4114-9ae3-b57697afae95",
-        "02f9dbf4-2d8b-425b-9d43-67fd66f98461": "17bacddf-24e0-4a3b-972d-6722cbb9f767",
-        "667741e6-99c4-4607-b886-3b9002761cff": "bc56d42b-e903-4ccc-ad00-0ffb5edcfda8",
-        "4d05c825-915a-47f5-ab8c-d38838417f21": "f2bc3554-98a3-4e9c-831d-0e08ecd67fee",
-        "2750d0aa-df49-443f-af2a-51ef62929f79": "a8935ade-91d8-475d-9556-78e44f71a1a1",
-        "d42e5e7d-3d5f-4eaf-b677-41fb7a18f09a": "fddb4d94-c59e-4ade-bbab-a3b01be1d0cf",
-        "011e0ad9-9f74-4495-a243-152fc90f6bc6": "c56514cf-41f7-451d-b380-ae9f32811220",
-        "5efe1f01-19ee-4413-b9e8-31300e849382": "a04a264e-bb5c-43cc-9097-b46d837d6532",
-        "6560871c-c32b-473d-ba3b-4bb11aab1c17": "4a679757-f25a-4a68-bd8e-2492b7256d1f",
-        "797caf46-9bc2-4e26-b71b-94468ede104c": "c2f4ef1d-4e23-4ccf-98ca-2ab38bbc51cd",
-        "b7c8c7f9-d403-4d36-b7bb-66983aa71e68": "be307447-50af-4c54-86bf-5afbed9b65c8",
-        "475ad2b9-6832-42a5-87db-b7b99dcf1a8b": "ae2dba64-22d2-4a33-9dfd-057c4a3ef6b8",
-        "a94cf439-2d29-4c01-9fb2-a25deb17f4e7": "ff413d22-247c-498c-8cb9-6bc3533c3ef6",
-        "20a16300-e9f1-46a0-a328-037e78582cc1": "9e6ed673-c711-41f8-b350-9635a0c70e97",
-        "dd32ce13-e62c-473e-8080-b0e725c0f061": "be369d30-c089-4e52-90a4-4bb09ed968a7",
-        "f0acf77d-3321-4560-9c30-c0017ade40ac": "73bafc8b-cccf-4c26-80cc-73d85c202020",
-        "4834d9d2-6246-4914-be23-9380b627292c": "cebde046-e52b-4088-b3e0-d47347ff69de"
-      }
-    },
-    {
       "__guid": "443e5c6b-e0d5-405b-8152-f17f120c6bed",
       "__version": 1,
       "__Prefab": "prefabs/pieces/puntpiece/puntpiece.prefab",
@@ -891,7 +696,7 @@
       }
     },
     {
-      "__guid": "84039a1b-2901-4230-8d4c-e3a6d4836590",
+      "__guid": "8e0d02a1-769a-4c26-b6ff-98413125a0bf",
       "__version": 1,
       "__Prefab": "prefabs/pieces/puntpiece/puntpiece.prefab",
       "__PrefabInstancePatch": {
@@ -912,38 +717,38 @@
               "IdValue": "ad8604dc-4731-4bf5-9544-f9bd106773c0"
             },
             "Property": "Position",
-            "Value": "-916.8384,-79.25669,5.508378"
+            "Value": "-12.4828,363.4565,5.508378"
           }
         ],
         "MovedObjects": []
       },
       "__PrefabIdToInstanceId": {
-        "ad8604dc-4731-4bf5-9544-f9bd106773c0": "84039a1b-2901-4230-8d4c-e3a6d4836590",
-        "860a1dc4-0b11-4b29-9fa2-0761e954d29d": "afb71e8f-51e0-49e7-9906-85d435171993",
-        "6908b8f6-276c-4317-9f22-61902ad35137": "7195d1a0-66e6-4527-a867-164637f71c41",
-        "557a9a38-57a3-4178-8b8a-089424db388a": "a5e3ec20-aa49-4493-9308-2a0302ddae03",
-        "9804d496-f0f0-486e-b6e1-0692acc7dcfd": "4eb8fe76-e95f-447a-971a-9fd6c5fe660a",
-        "38bc432e-dcb1-4edb-81ed-472b549f59e1": "b7624cd3-b195-43fd-a6df-f7ad6108475d",
-        "02f9dbf4-2d8b-425b-9d43-67fd66f98461": "4be20bb3-5751-4f72-a036-5ad499f27057",
-        "667741e6-99c4-4607-b886-3b9002761cff": "443d384a-b57e-405f-8f46-841df430a9fe",
-        "4d05c825-915a-47f5-ab8c-d38838417f21": "7835c4cd-1df5-459a-952b-fbb5b46bc682",
-        "2750d0aa-df49-443f-af2a-51ef62929f79": "784e872c-8f4b-4e01-a025-e3137d35f5ec",
-        "d42e5e7d-3d5f-4eaf-b677-41fb7a18f09a": "55dd6efc-2b8a-44af-bdae-7bb9874688dc",
-        "011e0ad9-9f74-4495-a243-152fc90f6bc6": "31127a85-422d-4475-93fc-6a9f7d3e0992",
-        "5efe1f01-19ee-4413-b9e8-31300e849382": "97975105-82e0-4be8-b6f9-026e6a36cff8",
-        "6560871c-c32b-473d-ba3b-4bb11aab1c17": "310577a1-0ea1-467e-b608-a3f509978979",
-        "797caf46-9bc2-4e26-b71b-94468ede104c": "5bded5ef-c87f-43e0-8edd-f58d270963f9",
-        "b7c8c7f9-d403-4d36-b7bb-66983aa71e68": "8b09b9c8-a74a-4d23-ad5b-20cfaf9b6610",
-        "475ad2b9-6832-42a5-87db-b7b99dcf1a8b": "56d3d59e-7fc1-42a0-9bde-4afd516f6498",
-        "a94cf439-2d29-4c01-9fb2-a25deb17f4e7": "f86c4c71-7e8c-41d7-8a8f-017b670dcad7",
-        "20a16300-e9f1-46a0-a328-037e78582cc1": "839b3c6e-3e9a-44da-8f90-7ca31f4a82bb",
-        "dd32ce13-e62c-473e-8080-b0e725c0f061": "c0df1359-6f77-44d4-b781-ca4b7fcbb382",
-        "f0acf77d-3321-4560-9c30-c0017ade40ac": "6910b980-e5b8-4fea-a530-01dec9bdb52d",
-        "4834d9d2-6246-4914-be23-9380b627292c": "c266256a-489d-47b2-b470-765af74bfdd5"
+        "ad8604dc-4731-4bf5-9544-f9bd106773c0": "8e0d02a1-769a-4c26-b6ff-98413125a0bf",
+        "860a1dc4-0b11-4b29-9fa2-0761e954d29d": "e35636e9-9846-4245-93d9-fcc15ed3aa39",
+        "6908b8f6-276c-4317-9f22-61902ad35137": "afc7c3d0-117c-4594-a98c-534b48f76762",
+        "557a9a38-57a3-4178-8b8a-089424db388a": "7499294e-e437-498d-b161-365ac62a0ffd",
+        "9804d496-f0f0-486e-b6e1-0692acc7dcfd": "cc20b45a-c333-4a44-8275-2a8d5dee3ec4",
+        "38bc432e-dcb1-4edb-81ed-472b549f59e1": "f2f9f7f3-1b86-4408-a1f7-cd2b3891906d",
+        "02f9dbf4-2d8b-425b-9d43-67fd66f98461": "77b505e8-165b-4cad-a720-072485d1142f",
+        "667741e6-99c4-4607-b886-3b9002761cff": "b2e78b04-57f3-4e86-b92c-21ee09d26cdc",
+        "4d05c825-915a-47f5-ab8c-d38838417f21": "62bdcf9f-3805-4577-8566-4b47d3f6706e",
+        "2750d0aa-df49-443f-af2a-51ef62929f79": "a557a72c-8db5-47bb-a05d-3ce605607784",
+        "d42e5e7d-3d5f-4eaf-b677-41fb7a18f09a": "6b8646b1-32eb-4dd8-ac15-2e913e9dd9b5",
+        "011e0ad9-9f74-4495-a243-152fc90f6bc6": "302b0fe2-f8ae-41a2-9e24-12ef2e94026d",
+        "5efe1f01-19ee-4413-b9e8-31300e849382": "4f032f0f-6f5b-47b9-96e2-df272dc2cc47",
+        "6560871c-c32b-473d-ba3b-4bb11aab1c17": "449b311c-d26a-4d79-ba1a-16ff8fec44d1",
+        "797caf46-9bc2-4e26-b71b-94468ede104c": "7861af9e-c94b-4836-8ca1-e58d6f23bd7b",
+        "b7c8c7f9-d403-4d36-b7bb-66983aa71e68": "a9a098e8-7814-4084-81c2-6e177c2d95ce",
+        "475ad2b9-6832-42a5-87db-b7b99dcf1a8b": "ab913c12-a863-48d3-bd2c-e356e2862c10",
+        "a94cf439-2d29-4c01-9fb2-a25deb17f4e7": "66fe9c93-3aef-4d6c-bfe1-69d363412b12",
+        "20a16300-e9f1-46a0-a328-037e78582cc1": "34406508-693f-449d-8c4f-ec3bf63ae4f7",
+        "dd32ce13-e62c-473e-8080-b0e725c0f061": "88107202-0afa-47c2-bbf2-94cd592e4040",
+        "f0acf77d-3321-4560-9c30-c0017ade40ac": "ffbfc2d8-da74-4a72-b68e-5a7427250f62",
+        "4834d9d2-6246-4914-be23-9380b627292c": "ef299018-b933-4a5b-b901-c01c55b0f454"
       }
     },
     {
-      "__guid": "31984a4f-4799-4f2f-b464-688799e7fc81",
+      "__guid": "c87d4339-07b6-44eb-ba6e-43ea6ed070a7",
       "__version": 1,
       "__Prefab": "prefabs/pieces/puntpiece/puntpiece.prefab",
       "__PrefabInstancePatch": {
@@ -964,38 +769,38 @@
               "IdValue": "ad8604dc-4731-4bf5-9544-f9bd106773c0"
             },
             "Property": "Position",
-            "Value": "-421.1283,-438.4365,5.508378"
+            "Value": "-12.4828,902.3865,5.508378"
           }
         ],
         "MovedObjects": []
       },
       "__PrefabIdToInstanceId": {
-        "ad8604dc-4731-4bf5-9544-f9bd106773c0": "31984a4f-4799-4f2f-b464-688799e7fc81",
-        "860a1dc4-0b11-4b29-9fa2-0761e954d29d": "e0a6bedf-9699-4244-bb21-3ee07cfdc647",
-        "6908b8f6-276c-4317-9f22-61902ad35137": "77600da9-403b-4f03-9636-ecba5522c0aa",
-        "557a9a38-57a3-4178-8b8a-089424db388a": "d69b2263-b483-4f02-a5af-369f5dd1252a",
-        "9804d496-f0f0-486e-b6e1-0692acc7dcfd": "67b5d704-3066-4bec-aa5e-c78d69b4fb0a",
-        "38bc432e-dcb1-4edb-81ed-472b549f59e1": "759c4287-c25c-4079-b24d-f4d56c5dd5c0",
-        "02f9dbf4-2d8b-425b-9d43-67fd66f98461": "edd70602-875b-40f3-8177-77af01efd712",
-        "667741e6-99c4-4607-b886-3b9002761cff": "be1ea70d-11d6-446f-90ed-8e9fe147971c",
-        "4d05c825-915a-47f5-ab8c-d38838417f21": "ca338133-a9ca-4ecb-b7b8-bbb32bd9f551",
-        "2750d0aa-df49-443f-af2a-51ef62929f79": "9b3178b6-71e9-4203-9c24-1ff424d7e4a2",
-        "d42e5e7d-3d5f-4eaf-b677-41fb7a18f09a": "288c1552-2374-4664-97f7-0c51f17d87d1",
-        "011e0ad9-9f74-4495-a243-152fc90f6bc6": "e31c01e8-cb6b-475f-8cf2-f4234ae3cb82",
-        "5efe1f01-19ee-4413-b9e8-31300e849382": "1195aeff-e158-4d40-96f0-e3009ca3cd26",
-        "6560871c-c32b-473d-ba3b-4bb11aab1c17": "2e6577bf-2f39-4357-b98e-b3f08be0eafc",
-        "797caf46-9bc2-4e26-b71b-94468ede104c": "f9ebf410-97c8-42e8-a2bb-c3247fd97c44",
-        "b7c8c7f9-d403-4d36-b7bb-66983aa71e68": "557b1cd4-7344-4813-86b0-a11683e73e62",
-        "475ad2b9-6832-42a5-87db-b7b99dcf1a8b": "da632e78-0f36-493a-a8dd-4acd6afac676",
-        "a94cf439-2d29-4c01-9fb2-a25deb17f4e7": "658db9ea-e4f1-446f-a439-3fd74ea8826b",
-        "20a16300-e9f1-46a0-a328-037e78582cc1": "45c9f4c3-b1be-47b8-9cbd-e0fb4344bf7f",
-        "dd32ce13-e62c-473e-8080-b0e725c0f061": "72e53c13-7bc0-4b8e-92c1-a91915a814e9",
-        "f0acf77d-3321-4560-9c30-c0017ade40ac": "6f1903e1-066a-449b-8451-e643e32081dd",
-        "4834d9d2-6246-4914-be23-9380b627292c": "c7c324d9-fede-4f94-a648-dc47171dcd13"
+        "ad8604dc-4731-4bf5-9544-f9bd106773c0": "c87d4339-07b6-44eb-ba6e-43ea6ed070a7",
+        "860a1dc4-0b11-4b29-9fa2-0761e954d29d": "8ba0a8cd-439e-4d6b-b1a3-5ab04651b557",
+        "6908b8f6-276c-4317-9f22-61902ad35137": "add7231c-b97a-46c9-b082-204547846e21",
+        "557a9a38-57a3-4178-8b8a-089424db388a": "714ffcd2-fbb2-408c-9967-c52734fa9fff",
+        "9804d496-f0f0-486e-b6e1-0692acc7dcfd": "56578450-da51-497c-8765-789f3ad75cb3",
+        "38bc432e-dcb1-4edb-81ed-472b549f59e1": "b98f6711-2293-4a40-9f53-b60a053afa64",
+        "02f9dbf4-2d8b-425b-9d43-67fd66f98461": "a6a87c4b-2714-427f-b247-9693dc992d7f",
+        "667741e6-99c4-4607-b886-3b9002761cff": "5e90cead-e389-4468-8eff-77d7f520bd6b",
+        "4d05c825-915a-47f5-ab8c-d38838417f21": "c6aed9cc-819c-4d01-8b16-c88adbca7dc2",
+        "2750d0aa-df49-443f-af2a-51ef62929f79": "50cf4827-b697-4c64-a6e4-91134b91be36",
+        "d42e5e7d-3d5f-4eaf-b677-41fb7a18f09a": "f3456763-d641-4431-93e8-1e9710f5306f",
+        "011e0ad9-9f74-4495-a243-152fc90f6bc6": "03da3b02-df23-47f7-97d4-172db8daf9d0",
+        "5efe1f01-19ee-4413-b9e8-31300e849382": "d6d3ac24-ecbe-4197-8b2b-aef1875d976d",
+        "6560871c-c32b-473d-ba3b-4bb11aab1c17": "7ec5f1cd-3c45-41ab-bf62-51c46605e6ed",
+        "797caf46-9bc2-4e26-b71b-94468ede104c": "5593c0c1-70dd-40dc-9b37-4cf838b51919",
+        "b7c8c7f9-d403-4d36-b7bb-66983aa71e68": "36070d6f-d778-4a24-b220-7dc95f98b721",
+        "475ad2b9-6832-42a5-87db-b7b99dcf1a8b": "ea892bc5-e7d4-4256-834f-848b0c2519d2",
+        "a94cf439-2d29-4c01-9fb2-a25deb17f4e7": "0728f6b5-591b-4080-9f1e-820665cf4476",
+        "20a16300-e9f1-46a0-a328-037e78582cc1": "810873cf-f6d7-4f4c-bd26-96201c1ba6a8",
+        "dd32ce13-e62c-473e-8080-b0e725c0f061": "ed4d1639-0d8a-4fc2-866b-46824bf946f5",
+        "f0acf77d-3321-4560-9c30-c0017ade40ac": "40f7f1a3-26e6-4026-9bc1-323386111471",
+        "4834d9d2-6246-4914-be23-9380b627292c": "5357b834-5451-477a-9dbe-8fb594fa86b5"
       }
     },
     {
-      "__guid": "7ecf294a-c0ec-4b59-aa84-a5d9b8d7dc63",
+      "__guid": "d020a9e8-f8a7-4428-8d92-02b0c90d2169",
       "__version": 1,
       "__Prefab": "prefabs/pieces/puntpiece/puntpiece.prefab",
       "__PrefabInstancePatch": {
@@ -1016,34 +821,86 @@
               "IdValue": "ad8604dc-4731-4bf5-9544-f9bd106773c0"
             },
             "Property": "Position",
-            "Value": "-492.3422,461.1443,5.508378"
+            "Value": "176.5962,104.8696,5.508378"
           }
         ],
         "MovedObjects": []
       },
       "__PrefabIdToInstanceId": {
-        "ad8604dc-4731-4bf5-9544-f9bd106773c0": "7ecf294a-c0ec-4b59-aa84-a5d9b8d7dc63",
-        "860a1dc4-0b11-4b29-9fa2-0761e954d29d": "35c6813f-f553-474b-aa98-9792254b909d",
-        "6908b8f6-276c-4317-9f22-61902ad35137": "c384f2b7-e071-4fd7-b61e-7f16b01eee31",
-        "557a9a38-57a3-4178-8b8a-089424db388a": "35472c39-95b9-46c7-8de3-6282858da3ba",
-        "9804d496-f0f0-486e-b6e1-0692acc7dcfd": "07d46314-155b-459c-8fd8-cdac4f53d784",
-        "38bc432e-dcb1-4edb-81ed-472b549f59e1": "02538849-12ef-416c-92e9-f4bdb73866e7",
-        "02f9dbf4-2d8b-425b-9d43-67fd66f98461": "e5f98268-1f35-42fd-ad93-3a2b99f959a5",
-        "667741e6-99c4-4607-b886-3b9002761cff": "de0ef36a-13b7-448d-842d-6cb93b40cbaa",
-        "4d05c825-915a-47f5-ab8c-d38838417f21": "9dfbae51-ea6c-4190-b609-ef03e4a17f65",
-        "2750d0aa-df49-443f-af2a-51ef62929f79": "43d9a4f3-cfec-4b5d-be98-e6a8bcd2d742",
-        "d42e5e7d-3d5f-4eaf-b677-41fb7a18f09a": "62fb72bd-4c67-487e-920b-49a167581bec",
-        "011e0ad9-9f74-4495-a243-152fc90f6bc6": "702c0bd8-111f-4551-a600-2e6bdcfcc85a",
-        "5efe1f01-19ee-4413-b9e8-31300e849382": "64b381c1-0068-420d-b559-d14e81f57d49",
-        "6560871c-c32b-473d-ba3b-4bb11aab1c17": "db2853a3-d35a-495a-9291-4e4491855e9a",
-        "797caf46-9bc2-4e26-b71b-94468ede104c": "49ec59a8-55d6-4d09-93f5-ec9dac40b563",
-        "b7c8c7f9-d403-4d36-b7bb-66983aa71e68": "c0ee97a5-f523-4c37-a367-cbe52afbbce9",
-        "475ad2b9-6832-42a5-87db-b7b99dcf1a8b": "222712f2-2ae1-49ba-a358-5f40053c5bd3",
-        "a94cf439-2d29-4c01-9fb2-a25deb17f4e7": "6166faa7-0a17-4432-97bd-73f44c4b839a",
-        "20a16300-e9f1-46a0-a328-037e78582cc1": "52cf43fb-3bbe-45ab-9bd8-bc146c456e0b",
-        "dd32ce13-e62c-473e-8080-b0e725c0f061": "898ece34-c5c4-4b63-8ab7-2b3524569c90",
-        "f0acf77d-3321-4560-9c30-c0017ade40ac": "dcff510a-f41c-406c-b4c6-65d43683511c",
-        "4834d9d2-6246-4914-be23-9380b627292c": "29dfa583-e653-4f1a-8cbc-6f3ec2d286c2"
+        "ad8604dc-4731-4bf5-9544-f9bd106773c0": "d020a9e8-f8a7-4428-8d92-02b0c90d2169",
+        "860a1dc4-0b11-4b29-9fa2-0761e954d29d": "87ae75d9-cdfa-4bc3-a736-747fdf5358b4",
+        "6908b8f6-276c-4317-9f22-61902ad35137": "de56c137-df9f-4a8e-9c7b-9f419746835c",
+        "557a9a38-57a3-4178-8b8a-089424db388a": "9610ade6-96a0-4006-b159-dee960c5e90f",
+        "9804d496-f0f0-486e-b6e1-0692acc7dcfd": "f39ed9d2-9142-48bf-955b-5e0ee2650b65",
+        "38bc432e-dcb1-4edb-81ed-472b549f59e1": "49ec853e-abbc-471b-a08a-581b91466f5e",
+        "02f9dbf4-2d8b-425b-9d43-67fd66f98461": "97b899e6-1d88-424e-9d8a-34a242f5cd05",
+        "667741e6-99c4-4607-b886-3b9002761cff": "eaa85e85-b070-42e1-8304-ca13cc7eeabf",
+        "4d05c825-915a-47f5-ab8c-d38838417f21": "b2a0572f-dc74-4769-a7b7-464b69a3f6f5",
+        "2750d0aa-df49-443f-af2a-51ef62929f79": "48642cc8-f1f2-40ec-a3ad-624f4a2e431a",
+        "d42e5e7d-3d5f-4eaf-b677-41fb7a18f09a": "5e685966-7cf0-4f18-8123-4ace3bd3a3e5",
+        "011e0ad9-9f74-4495-a243-152fc90f6bc6": "b500dc72-b6f4-48cb-b8bb-5506704f1fbc",
+        "5efe1f01-19ee-4413-b9e8-31300e849382": "e8e97f66-04b7-4676-903a-4b77db4d18c2",
+        "6560871c-c32b-473d-ba3b-4bb11aab1c17": "abf5f87c-bd76-4967-a24b-da9fefaa9c0b",
+        "797caf46-9bc2-4e26-b71b-94468ede104c": "91994e71-6a19-4eb3-92ae-4f87073f6c01",
+        "b7c8c7f9-d403-4d36-b7bb-66983aa71e68": "ec463911-2d79-44d4-bbc0-85935eb0600b",
+        "475ad2b9-6832-42a5-87db-b7b99dcf1a8b": "94a33926-2e69-455e-800c-6e61c47e8652",
+        "a94cf439-2d29-4c01-9fb2-a25deb17f4e7": "06b7a685-4e20-4bc6-b976-5bf519298f08",
+        "20a16300-e9f1-46a0-a328-037e78582cc1": "bf9d1cad-0e1e-440f-9361-e404eac685bf",
+        "dd32ce13-e62c-473e-8080-b0e725c0f061": "7e9200c0-077f-4ed9-bf91-c046e9157f5a",
+        "f0acf77d-3321-4560-9c30-c0017ade40ac": "2e5bae98-3858-4cc2-9e2c-3830e153b193",
+        "4834d9d2-6246-4914-be23-9380b627292c": "a3b837a6-544a-4fde-9e8f-bfc47604a003"
+      }
+    },
+    {
+      "__guid": "466c989e-0155-4ac2-a15e-3b4c29e4a24a",
+      "__version": 1,
+      "__Prefab": "prefabs/pieces/puntpiece/puntpiece.prefab",
+      "__PrefabInstancePatch": {
+        "AddedObjects": [],
+        "RemovedObjects": [],
+        "PropertyOverrides": [
+          {
+            "Target": {
+              "Type": "GameObject",
+              "IdValue": "ad8604dc-4731-4bf5-9544-f9bd106773c0"
+            },
+            "Property": "Name",
+            "Value": "puntpiece (5)"
+          },
+          {
+            "Target": {
+              "Type": "GameObject",
+              "IdValue": "ad8604dc-4731-4bf5-9544-f9bd106773c0"
+            },
+            "Property": "Position",
+            "Value": "176.5962,599.671,5.508378"
+          }
+        ],
+        "MovedObjects": []
+      },
+      "__PrefabIdToInstanceId": {
+        "ad8604dc-4731-4bf5-9544-f9bd106773c0": "466c989e-0155-4ac2-a15e-3b4c29e4a24a",
+        "860a1dc4-0b11-4b29-9fa2-0761e954d29d": "6f33b2cc-eaad-4d2e-9ce2-b160baabcb73",
+        "6908b8f6-276c-4317-9f22-61902ad35137": "e557386f-3b3d-4325-bf8c-303ba8816ce5",
+        "557a9a38-57a3-4178-8b8a-089424db388a": "21d60a91-d8c5-4108-a57d-ca9bf0ce7c3a",
+        "9804d496-f0f0-486e-b6e1-0692acc7dcfd": "3b5aaf0c-535b-4843-9e74-fa9f749c8001",
+        "38bc432e-dcb1-4edb-81ed-472b549f59e1": "f83f550f-7132-44c5-ab95-58fcb860bec8",
+        "02f9dbf4-2d8b-425b-9d43-67fd66f98461": "7ccccd96-7642-4ddc-a31f-0f791d479f48",
+        "667741e6-99c4-4607-b886-3b9002761cff": "46233a00-f918-459f-b3a1-94946a452d79",
+        "4d05c825-915a-47f5-ab8c-d38838417f21": "539e43db-a44a-4f00-9f7e-dae3da4df29f",
+        "2750d0aa-df49-443f-af2a-51ef62929f79": "f895891c-a0c5-4bf9-966c-d403ff170353",
+        "d42e5e7d-3d5f-4eaf-b677-41fb7a18f09a": "77177847-291b-4280-ae3a-d22a9406db59",
+        "011e0ad9-9f74-4495-a243-152fc90f6bc6": "63b9415f-a028-4298-b874-2c328c1f7b90",
+        "5efe1f01-19ee-4413-b9e8-31300e849382": "d674449d-c6db-4bd3-abfd-db9e8d3de5d8",
+        "6560871c-c32b-473d-ba3b-4bb11aab1c17": "c7019605-8994-4803-91e5-895d769f4dc3",
+        "797caf46-9bc2-4e26-b71b-94468ede104c": "fa8692da-5232-49c6-b650-9280b39b3c8e",
+        "b7c8c7f9-d403-4d36-b7bb-66983aa71e68": "cae6e4ff-9d28-4481-9595-92f63d98fd92",
+        "475ad2b9-6832-42a5-87db-b7b99dcf1a8b": "9be1be32-0b00-4c62-80d2-805ff5e3675a",
+        "a94cf439-2d29-4c01-9fb2-a25deb17f4e7": "1cbbb422-9ed7-4042-b2ed-ebbef587dbfa",
+        "20a16300-e9f1-46a0-a328-037e78582cc1": "f7f2dd79-210e-4347-a375-4473038be9cc",
+        "dd32ce13-e62c-473e-8080-b0e725c0f061": "9463cad6-4149-4755-a71a-425d6d0f798f",
+        "f0acf77d-3321-4560-9c30-c0017ade40ac": "8b305b08-caae-448b-b1d6-966610e43d47",
+        "4834d9d2-6246-4914-be23-9380b627292c": "b3464da9-4c2b-42d5-af77-0db5a08bbaee"
       }
     },
     {
@@ -1086,7 +943,7 @@
                 "Roll": false
               },
               "MassCenterOverride": "0,0,0",
-              "MassOverride": 0,
+              "MassOverride": 933,
               "MinImpactDamageSpeed": 500,
               "MotionEnabled": true,
               "OnComponentDestroy": null,
@@ -1099,9 +956,375 @@
               "RigidbodyFlags": 0,
               "StartAsleep": false
             }
+          },
+          {
+            "Id": {
+              "Type": "Component",
+              "IdValue": "68655e65-e43e-4496-963c-750dcf02d164"
+            },
+            "Parent": {
+              "Type": "GameObject",
+              "IdValue": "49785efd-e970-463f-9687-94e98b09ebb2"
+            },
+            "PreviousElement": {
+              "Type": "Component",
+              "IdValue": "e2b87bbb-bb9e-43ad-ba8c-46fab49dfb60"
+            },
+            "ContainerProperty": "Components",
+            "IsContainerArray": true,
+            "Data": {
+              "__type": "Sandbox.HighlightOutline",
+              "__guid": "68655e65-e43e-4496-963c-750dcf02d164",
+              "__enabled": false,
+              "Color": "1,1,1,1",
+              "InsideColor": "0,0,0,0",
+              "InsideObscuredColor": "0.75814,0.75814,0.75814,0.4",
+              "Material": null,
+              "ObscuredColor": "0.75814,0.75814,0.75814,0.4",
+              "OnComponentDestroy": null,
+              "OnComponentDisabled": null,
+              "OnComponentEnabled": null,
+              "OnComponentFixedUpdate": null,
+              "OnComponentStart": null,
+              "OnComponentUpdate": null,
+              "OverrideTargets": false,
+              "Targets": null,
+              "Width": 0.1
+            }
+          },
+          {
+            "Id": {
+              "Type": "Component",
+              "IdValue": "c2e8c31e-7477-4f06-b70e-b060e6c0bb3e"
+            },
+            "Parent": {
+              "Type": "GameObject",
+              "IdValue": "49785efd-e970-463f-9687-94e98b09ebb2"
+            },
+            "PreviousElement": {
+              "Type": "Component",
+              "IdValue": "68655e65-e43e-4496-963c-750dcf02d164"
+            },
+            "ContainerProperty": "Components",
+            "IsContainerArray": true,
+            "Data": {
+              "__type": "PuntBall",
+              "__guid": "c2e8c31e-7477-4f06-b70e-b060e6c0bb3e",
+              "__enabled": true,
+              "ballGuide": {
+                "_type": "component",
+                "component_id": "b12ed937-be24-45af-b679-345ff18ef0d5",
+                "go": "e3a758f7-094d-4ed7-a98b-4254acbbadd3",
+                "component_type": "WorldPanel"
+              },
+              "ballModel": {
+                "_type": "gameobject",
+                "go": "a132b233-aee2-440c-877f-56584a8435c1"
+              },
+              "ballRB": {
+                "_type": "component",
+                "component_id": "e2b87bbb-bb9e-43ad-ba8c-46fab49dfb60",
+                "go": "49785efd-e970-463f-9687-94e98b09ebb2",
+                "component_type": "Rigidbody"
+              },
+              "ballRenderer": {
+                "_type": "component",
+                "component_id": "195a88a9-c083-47b0-bd9d-e13caceee20c",
+                "go": "32f8e763-0cce-408e-b87b-5510025df65d",
+                "component_type": "ModelRenderer"
+              },
+              "OnComponentDestroy": null,
+              "OnComponentDisabled": null,
+              "OnComponentEnabled": null,
+              "OnComponentFixedUpdate": null,
+              "OnComponentStart": null,
+              "OnComponentUpdate": null,
+              "SquashAmount": 1
+            }
+          },
+          {
+            "Id": {
+              "Type": "Component",
+              "IdValue": "2ea93ec8-f795-47b9-b424-d5e733552d27"
+            },
+            "Parent": {
+              "Type": "GameObject",
+              "IdValue": "49785efd-e970-463f-9687-94e98b09ebb2"
+            },
+            "PreviousElement": {
+              "Type": "Component",
+              "IdValue": "c2e8c31e-7477-4f06-b70e-b060e6c0bb3e"
+            },
+            "ContainerProperty": "Components",
+            "IsContainerArray": true,
+            "Data": {
+              "__type": "Sandbox.TrailRenderer",
+              "__guid": "2ea93ec8-f795-47b9-b424-d5e733552d27",
+              "__enabled": true,
+              "BlendMode": "Normal",
+              "CastShadows": false,
+              "Color": {
+                "blend": "Linear",
+                "color": [
+                  {
+                    "t": 0,
+                    "c": "1,1,1,1"
+                  },
+                  {
+                    "t": 1,
+                    "c": "1,1,1,1"
+                  }
+                ],
+                "alpha": [
+                  {
+                    "t": 0,
+                    "a": 0.6
+                  },
+                  {
+                    "t": 1,
+                    "a": 0
+                  }
+                ]
+              },
+              "Emitting": true,
+              "Face": "Camera",
+              "LifeTime": 2,
+              "MaxPoints": 64,
+              "OnComponentDestroy": null,
+              "OnComponentDisabled": null,
+              "OnComponentEnabled": null,
+              "OnComponentFixedUpdate": null,
+              "OnComponentStart": null,
+              "OnComponentUpdate": null,
+              "Opaque": false,
+              "PointDistance": 2,
+              "RenderOptions": {
+                "GameLayer": true,
+                "OverlayLayer": false,
+                "BloomLayer": false,
+                "AfterUILayer": false
+              },
+              "Texturing": {
+                "Texture": null,
+                "Material": null,
+                "WorldSpace": true,
+                "UnitsPerTexture": 10,
+                "Scale": 1,
+                "Offset": 0,
+                "Scroll": 0,
+                "Clamp": false
+              },
+              "Width": {
+                "rangex": "0.0000002384186,1",
+                "rangey": "0,15",
+                "frames": [
+                  {
+                    "x": 0,
+                    "y": 1,
+                    "in": 0,
+                    "out": 0,
+                    "mode": "Linear"
+                  },
+                  {
+                    "x": 1,
+                    "y": 0,
+                    "in": 0,
+                    "out": 0,
+                    "mode": "Linear"
+                  }
+                ]
+              },
+              "Wireframe": false
+            }
+          },
+          {
+            "Id": {
+              "Type": "GameObject",
+              "IdValue": "32f8e763-0cce-408e-b87b-5510025df65d"
+            },
+            "Parent": {
+              "Type": "GameObject",
+              "IdValue": "a132b233-aee2-440c-877f-56584a8435c1"
+            },
+            "PreviousElement": null,
+            "ContainerProperty": "Children",
+            "IsContainerArray": true,
+            "Data": {
+              "__guid": "32f8e763-0cce-408e-b87b-5510025df65d",
+              "__version": 1,
+              "Flags": 0,
+              "Name": "puntball_default",
+              "Position": "0,0,0",
+              "Rotation": "0,0,0,1",
+              "Scale": "1.04193,1.04193,1.04193",
+              "Tags": "",
+              "Enabled": true,
+              "NetworkMode": 2,
+              "NetworkInterpolation": true,
+              "NetworkOrphaned": 0,
+              "NetworkTransmit": true,
+              "OwnerTransfer": 1,
+              "Components": [],
+              "Children": []
+            }
+          },
+          {
+            "Id": {
+              "Type": "Component",
+              "IdValue": "195a88a9-c083-47b0-bd9d-e13caceee20c"
+            },
+            "Parent": {
+              "Type": "GameObject",
+              "IdValue": "32f8e763-0cce-408e-b87b-5510025df65d"
+            },
+            "PreviousElement": null,
+            "ContainerProperty": "Components",
+            "IsContainerArray": true,
+            "Data": {
+              "__type": "Sandbox.ModelRenderer",
+              "__guid": "195a88a9-c083-47b0-bd9d-e13caceee20c",
+              "__enabled": true,
+              "BodyGroups": 18446744073709551615,
+              "CreateAttachments": false,
+              "LodOverride": null,
+              "MaterialGroup": null,
+              "MaterialOverride": "prefabs/pieces/ball/default/materials/puntball_white_squash.vmat",
+              "Materials": null,
+              "Model": "prefabs/pieces/ball/default/puntball_default.vmdl",
+              "OnComponentDestroy": null,
+              "OnComponentDisabled": null,
+              "OnComponentEnabled": null,
+              "OnComponentFixedUpdate": null,
+              "OnComponentStart": null,
+              "OnComponentUpdate": null,
+              "RenderOptions": {
+                "GameLayer": true,
+                "OverlayLayer": false,
+                "BloomLayer": false,
+                "AfterUILayer": false
+              },
+              "RenderType": "On",
+              "Tint": "1,1,1,1"
+            }
+          },
+          {
+            "Id": {
+              "Type": "GameObject",
+              "IdValue": "e3a758f7-094d-4ed7-a98b-4254acbbadd3"
+            },
+            "Parent": {
+              "Type": "GameObject",
+              "IdValue": "49785efd-e970-463f-9687-94e98b09ebb2"
+            },
+            "PreviousElement": {
+              "Type": "GameObject",
+              "IdValue": "a132b233-aee2-440c-877f-56584a8435c1"
+            },
+            "ContainerProperty": "Children",
+            "IsContainerArray": true,
+            "Data": {
+              "__guid": "e3a758f7-094d-4ed7-a98b-4254acbbadd3",
+              "__version": 1,
+              "Flags": 0,
+              "Name": "BallGuide",
+              "Position": "0,0,0",
+              "Rotation": "0,-0.7071068,0,0.7071068",
+              "Scale": "1,1,1",
+              "Tags": "",
+              "Enabled": true,
+              "NetworkMode": 2,
+              "NetworkInterpolation": true,
+              "NetworkOrphaned": 0,
+              "NetworkTransmit": true,
+              "OwnerTransfer": 1,
+              "Components": [],
+              "Children": []
+            }
+          },
+          {
+            "Id": {
+              "Type": "Component",
+              "IdValue": "b12ed937-be24-45af-b679-345ff18ef0d5"
+            },
+            "Parent": {
+              "Type": "GameObject",
+              "IdValue": "e3a758f7-094d-4ed7-a98b-4254acbbadd3"
+            },
+            "PreviousElement": null,
+            "ContainerProperty": "Components",
+            "IsContainerArray": true,
+            "Data": {
+              "__type": "Sandbox.WorldPanel",
+              "__guid": "b12ed937-be24-45af-b679-345ff18ef0d5",
+              "__enabled": true,
+              "HorizontalAlign": "Center",
+              "InteractionRange": 1000,
+              "LookAtCamera": false,
+              "OnComponentDestroy": null,
+              "OnComponentDisabled": null,
+              "OnComponentEnabled": null,
+              "OnComponentFixedUpdate": null,
+              "OnComponentStart": null,
+              "OnComponentUpdate": null,
+              "PanelSize": "2000,2000",
+              "RenderOptions": {
+                "GameLayer": true,
+                "OverlayLayer": false,
+                "BloomLayer": false,
+                "AfterUILayer": false
+              },
+              "RenderScale": 1,
+              "VerticalAlign": "Center"
+            }
+          },
+          {
+            "Id": {
+              "Type": "Component",
+              "IdValue": "773dcad9-eca3-4067-930d-85db825195a7"
+            },
+            "Parent": {
+              "Type": "GameObject",
+              "IdValue": "e3a758f7-094d-4ed7-a98b-4254acbbadd3"
+            },
+            "PreviousElement": {
+              "Type": "Component",
+              "IdValue": "b12ed937-be24-45af-b679-345ff18ef0d5"
+            },
+            "ContainerProperty": "Components",
+            "IsContainerArray": true,
+            "Data": {
+              "__type": "Sandbox.UI.Game.Pieces.BallGuide",
+              "__guid": "773dcad9-eca3-4067-930d-85db825195a7",
+              "__enabled": true,
+              "ball": {
+                "_type": "component",
+                "component_id": "c2e8c31e-7477-4f06-b70e-b060e6c0bb3e",
+                "go": "49785efd-e970-463f-9687-94e98b09ebb2",
+                "component_type": "PuntBall"
+              },
+              "OnComponentDestroy": null,
+              "OnComponentDisabled": null,
+              "OnComponentEnabled": null,
+              "OnComponentFixedUpdate": null,
+              "OnComponentStart": null,
+              "OnComponentUpdate": null
+            }
           }
         ],
-        "RemovedObjects": [],
+        "RemovedObjects": [
+          {
+            "Id": {
+              "Type": "GameObject",
+              "IdValue": "1343be34-a779-42b5-bd86-189545139cb9"
+            }
+          },
+          {
+            "Id": {
+              "Type": "Component",
+              "IdValue": "ca2199ce-677c-4bc6-82bc-12f793e6be92"
+            }
+          }
+        ],
         "PropertyOverrides": [
           {
             "Target": {
@@ -1117,7 +1340,23 @@
               "IdValue": "49785efd-e970-463f-9687-94e98b09ebb2"
             },
             "Property": "Position",
-            "Value": "-450.3908,-109.2229,238.7674"
+            "Value": "0,0,136.9279"
+          },
+          {
+            "Target": {
+              "Type": "GameObject",
+              "IdValue": "49785efd-e970-463f-9687-94e98b09ebb2"
+            },
+            "Property": "Rotation",
+            "Value": "0,-0.00000001490116,0,1"
+          },
+          {
+            "Target": {
+              "Type": "Component",
+              "IdValue": "5cef741f-ee18-46de-a56b-181f713c61a6"
+            },
+            "Property": "Radius",
+            "Value": 45
           },
           {
             "Target": {
@@ -1134,8 +1373,68 @@
         "49785efd-e970-463f-9687-94e98b09ebb2": "798fdc07-a2ed-48d8-b7d8-e2af23d65044",
         "5cef741f-ee18-46de-a56b-181f713c61a6": "c5a20227-0f5c-460a-923c-2efb4cffa513",
         "a132b233-aee2-440c-877f-56584a8435c1": "a7b71c68-5d29-4bae-8f36-274eb23fa215",
-        "1343be34-a779-42b5-bd86-189545139cb9": "32f8e763-0cce-408e-b87b-5510025df65d",
-        "ca2199ce-677c-4bc6-82bc-12f793e6be92": "195a88a9-c083-47b0-bd9d-e13caceee20c"
+        "1343be34-a779-42b5-bd86-189545139cb9": "3ce5e913-f5ac-434f-a5ef-f6cb1fbcc1db",
+        "ca2199ce-677c-4bc6-82bc-12f793e6be92": "385db84a-556e-4bda-b262-dbc068b3a90e"
+      }
+    },
+    {
+      "__guid": "b7368868-4cf1-4c6f-9ca4-f4d7500d36d8",
+      "__version": 1,
+      "__Prefab": "prefabs/pitches/dev/rubberduck/rubberduckclickable.prefab",
+      "__PrefabInstancePatch": {
+        "AddedObjects": [],
+        "RemovedObjects": [],
+        "PropertyOverrides": [
+          {
+            "Target": {
+              "Type": "GameObject",
+              "IdValue": "25d6cc95-0a98-49d4-a64d-5c7e6bd5c2b4"
+            },
+            "Property": "Position",
+            "Value": "-805.0806,-817.8759,-0.0002286434"
+          },
+          {
+            "Target": {
+              "Type": "Component",
+              "IdValue": "7f16bbc9-284f-402d-ac6f-4ac7c55058d4"
+            },
+            "Property": "Radius",
+            "Value": 50
+          },
+          {
+            "Target": {
+              "Type": "Component",
+              "IdValue": "466ba5a7-e9fe-4b2d-a03b-314d903c65ae"
+            },
+            "Property": "__enabled",
+            "Value": false
+          },
+          {
+            "Target": {
+              "Type": "Component",
+              "IdValue": "ae7000da-612c-4cf5-a3bf-c994d262f8b0"
+            },
+            "Property": "HoverColor",
+            "Value": "0.71628,0.71628,0.71628,1"
+          },
+          {
+            "Target": {
+              "Type": "Component",
+              "IdValue": "ae7000da-612c-4cf5-a3bf-c994d262f8b0"
+            },
+            "Property": "SelectedColor",
+            "Value": "1,1,1,1"
+          }
+        ],
+        "MovedObjects": []
+      },
+      "__PrefabIdToInstanceId": {
+        "25d6cc95-0a98-49d4-a64d-5c7e6bd5c2b4": "b7368868-4cf1-4c6f-9ca4-f4d7500d36d8",
+        "b9f22fae-79dc-4d23-bd58-f77b47515744": "38db45b9-5763-42a5-b094-9108fa9779d4",
+        "7f16bbc9-284f-402d-ac6f-4ac7c55058d4": "eb4da226-e01c-485a-9e09-e3a38e581563",
+        "b2f922b0-4eeb-427e-a2ed-80a0a3a4d714": "c7a99ef3-c080-4bdd-85f3-6f87c5958991",
+        "466ba5a7-e9fe-4b2d-a03b-314d903c65ae": "66a28144-e65a-485e-b012-6e7c409f0dfe",
+        "ae7000da-612c-4cf5-a3bf-c994d262f8b0": "13ab6069-0cdb-4d16-8c90-8d081046fd37"
       }
     }
   ],

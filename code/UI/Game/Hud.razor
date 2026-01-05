@@ -27,6 +27,7 @@
 	private Panel CursorElement { get; set; }
 	private Vector2 cursorPosition;
 	private string currentCursorImage;
+	private bool isCursorHidden = false;
 
 	protected override void OnTreeBuilt()
 	{
@@ -86,8 +87,11 @@
 		CursorElement.Style.Width = Length.Pixels( scaledSize );
 		CursorElement.Style.Height = Length.Pixels( scaledSize );
 
-		// Update visibility based on ShowCursor property
-		CursorElement.Style.Display = ShowCursor ? DisplayMode.Flex : DisplayMode.None;
+		// Only update visibility if cursor hasn't been explicitly hidden
+		if ( !isCursorHidden )
+		{
+			CursorElement.Style.Display = ShowCursor ? DisplayMode.Flex : DisplayMode.None;
+		}
 	}
 
 	public void SetCursorImage( string texturePath )
@@ -99,6 +103,10 @@
 
 		currentCursorImage = texturePath;
 		CursorElement.Style.BackgroundImage = Texture.LoadFromFileSystem( texturePath, FileSystem.Mounted );
+
+		// Ensure cursor is visible when setting an image
+		isCursorHidden = false;
+		CursorElement.Style.Display = DisplayMode.Flex;
 	}
 
 	// Convenience methods for setting cursor state
@@ -117,6 +125,14 @@
 				break;
 			case CursorState.Disabled:
 				SetCursorImage( DisabledCursorImage );
+				break;
+			case CursorState.Hidden:
+				// Hide the cursor element and set flag
+				isCursorHidden = true;
+				if ( CursorElement != null )
+				{
+					CursorElement.Style.Display = DisplayMode.None;
+				}
 				break;
 		}
 	}
