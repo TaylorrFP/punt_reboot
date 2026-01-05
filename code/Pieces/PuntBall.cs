@@ -11,18 +11,19 @@ public sealed class PuntBall : Component
 
 	[Property] public ModelRenderer ballRenderer;
 
-	[Property, Group( "Squash & Stretch" )] public float StretchSpeedThreshold { get; set; } = 200f;
-	[Property, Group( "Squash & Stretch" )] public float MaxStretch { get; set; } = 1.4f;
-	[Property, Group( "Squash & Stretch" )] public float MaxSquash { get; set; } = 0.6f;
 	[Property, Group( "Squash & Stretch" )] public float ImpactThreshold { get; set; } = 50f;
-	[Property, Group( "Squash & Stretch" )] public float ImpactSquashMultiplier { get; set; } = 0.002f;
-	[Property, Group( "Squash & Stretch" )] public float RecoverySpeed { get; set; } = 5f;
-	[Property, Group( "Squash & Stretch" )] public float AxisSmoothSpeed { get; set; } = 10f;
+	[Property, Group( "Squash & Stretch" )] public float ImpactStrength { get; set; } = 0.003f;
+	[Property, Group( "Squash & Stretch" )] public float SpringFrequency { get; set; } = 8f;
+	[Property, Group( "Squash & Stretch" )] public float SpringDamping { get; set; } = 0.5f;
+	[Property, Group( "Squash & Stretch" )] public float MaxSquash { get; set; } = 0.5f;
+	[Property, Group( "Squash & Stretch" )] public float MaxStretch { get; set; } = 1.5f;
+	[Property, Group( "Squash & Stretch" )] public float AxisBlendSpeed { get; set; } = 15f;
 
 	private Vector3 lastVelocity;
 	private float currentStretchAmount = 1f;
+	private float stretchVelocity = 0f;
 	private Vector3 currentAxis = Vector3.Up;
-	private float impactStretch = 1f;
+	private Vector3 targetAxis = Vector3.Up;
 
 	protected override void OnUpdate()
 	{
@@ -39,43 +40,37 @@ public sealed class PuntBall : Component
 		var velocityChange = velocity - lastVelocity;
 		var impactMagnitude = velocityChange.Length;
 
-		// On impact, squash in the direction of velocity change
+		// On impact, apply an impulse to the spring (pushes toward squash)
 		if ( impactMagnitude > ImpactThreshold )
 		{
-			float squashAmount = 1f - (impactMagnitude * ImpactSquashMultiplier);
-			impactStretch = MathF.Max( squashAmount, MaxSquash );
+			// Calculate squash impulse based on impact strength
+			float impulse = impactMagnitude * ImpactStrength;
+			stretchVelocity -= impulse;
 
-			// Set axis to the impact direction
+			// Set target axis to the impact direction
 			if ( velocityChange.Length > 0.1f )
 			{
-				currentAxis = velocityChange.Normal;
+				targetAxis = velocityChange.Normal;
 			}
 		}
 
-		// Calculate velocity-based stretch
-		float speed = velocity.Length;
-		float velocityStretch = 1f;
-		if ( speed > StretchSpeedThreshold )
-		{
-			float stretchFactor = (speed - StretchSpeedThreshold) / StretchSpeedThreshold;
-			velocityStretch = 1f + stretchFactor * (MaxStretch - 1f);
-			velocityStretch = MathF.Min( velocityStretch, MaxStretch );
-		}
+		// Smoothly blend axis toward target
+		currentAxis = currentAxis.LerpTo( targetAxis, deltaTime * AxisBlendSpeed ).Normal;
 
-		// Smoothly recover impact squash back to 1
-		impactStretch = impactStretch.LerpTo( 1f, deltaTime * RecoverySpeed );
+		// Damped spring simulation toward rest (1.0)
+		// Spring force pulls toward 1.0
+		float displacement = currentStretchAmount - 1f;
+		float springForce = -displacement * SpringFrequency * SpringFrequency;
+		float dampingForce = -stretchVelocity * 2f * SpringDamping * SpringFrequency;
 
-		// Combine: use the more extreme value (squash wins over stretch during impact)
-		float targetStretch = impactStretch < 1f ? impactStretch : velocityStretch;
+		// Apply forces to velocity
+		stretchVelocity += (springForce + dampingForce) * deltaTime;
 
-		// Smoothly interpolate to target for spongy feel
-		currentStretchAmount = currentStretchAmount.LerpTo( targetStretch, deltaTime * RecoverySpeed );
+		// Update position
+		currentStretchAmount += stretchVelocity * deltaTime;
 
-		// Smoothly interpolate axis direction
-		if ( speed > 10f )
-		{
-			currentAxis = currentAxis.LerpTo( velocity.Normal, deltaTime * AxisSmoothSpeed ).Normal;
-		}
+		// Clamp to limits
+		currentStretchAmount = MathF.Max( MaxSquash, MathF.Min( MaxStretch, currentStretchAmount ) );
 
 		// Apply to shader
 		if ( ballRenderer != null && ballRenderer.SceneObject != null )

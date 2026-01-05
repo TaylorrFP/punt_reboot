@@ -253,7 +253,7 @@ public sealed class PitchGenerator : Component
 		};
 
 		var collider = ceilingObj.Components.Create<BoxCollider>();
-		collider.Scale = new Vector3( PitchLength, PitchWidth, WallThickness );
+		collider.Scale = new Vector3( PitchWidth, PitchLength, WallThickness );
 		goalObjects.Add( ceilingObj );
 	}
 
@@ -690,7 +690,7 @@ public sealed class PitchGenerator : Component
 	{
 		Gizmo.Draw.Color = Color.Magenta.WithAlpha( 0.3f );
 		var ceilingPosition = WorldPosition + Vector3.Up * (WallHeight + WallThickness / 2f);
-		DrawDebugBox( ceilingPosition, Rotation.Identity, new Vector3( PitchLength, PitchWidth, WallThickness ) );
+		DrawDebugBox( ceilingPosition, Rotation.Identity, new Vector3( PitchWidth, PitchLength, WallThickness ) );
 	}
 
 	#endregion

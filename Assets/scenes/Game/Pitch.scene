@@ -431,11 +431,11 @@
           "OnComponentUpdate": null,
           "PitchLength": 1900,
           "PitchWidth": 1700,
-          "ShowCeilingDebug": false,
+          "ShowCeilingDebug": true,
           "ShowGoalEnclosureDebug": false,
           "ShowGoalsDebug": true,
           "ShowGoalVolumeDebug": false,
-          "ShowWallsDebug": false,
+          "ShowWallsDebug": true,
           "WallHeight": 300,
           "WallThickness": 30
         }
@@ -1003,7 +1003,7 @@
               "__type": "PuntBall",
               "__guid": "1193b5b4-8c67-4486-b066-315c45f1e53c",
               "__enabled": true,
-              "AxisSmoothSpeed": 5,
+              "AxisBlendSpeed": 20,
               "ballGuide": {
                 "_type": "component",
                 "component_id": "b12ed937-be24-45af-b679-345ff18ef0d5",
@@ -1026,18 +1026,18 @@
                 "go": "32f8e763-0cce-408e-b87b-5510025df65d",
                 "component_type": "ModelRenderer"
               },
-              "ImpactSquashMultiplier": 1,
-              "ImpactThreshold": 400,
-              "MaxSquash": 0.1,
-              "MaxStretch": 1,
+              "ImpactStrength": 0.015,
+              "ImpactThreshold": 600,
+              "MaxSquash": 0.6,
+              "MaxStretch": 3,
               "OnComponentDestroy": null,
               "OnComponentDisabled": null,
               "OnComponentEnabled": null,
               "OnComponentFixedUpdate": null,
               "OnComponentStart": null,
               "OnComponentUpdate": null,
-              "RecoverySpeed": 15,
-              "StretchSpeedThreshold": 400
+              "SpringDamping": 0.1,
+              "SpringFrequency": 25
             }
           },
           {
