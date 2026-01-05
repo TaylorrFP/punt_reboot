@@ -54,6 +54,11 @@ public sealed class PlayerController : Component
 	private Vector2 lastValidStickDirection; // Tracks last valid stick direction for smooth rotation
 	private Vector3 smoothedFlickDirection; // Smoothed direction for controller aiming (magnitude preserved)
 
+	// Controller flick magnitude buffer - stores recent magnitudes to capture peak flick strength
+	private const int FlickBufferSize = 8;
+	private float[] flickMagnitudeBuffer = new float[FlickBufferSize];
+	private int flickBufferIndex = 0;
+
 	#endregion
 
 	#region Lifecycle
@@ -264,6 +269,14 @@ public sealed class PlayerController : Component
 		flickVector *= FlickStrength;
 		flickVector = flickVector.ClampLength( MaxFlickDistance );
 
+		// Buffer the magnitude for controller mode (captures peak strength before stick returns to center)
+		bool isControllerMode = InputManager != null && InputManager.CurrentMode == InputMode.Controller;
+		if ( isControllerMode )
+		{
+			flickMagnitudeBuffer[flickBufferIndex] = flickVector.Length;
+			flickBufferIndex = (flickBufferIndex + 1) % FlickBufferSize;
+		}
+
 		// Calculate feedback data for the selectable
 		float intensity = flickVector.Length / MaxFlickDistance;
 		bool exceedsMinimum = flickVector.Length >= MinFlickDistance;
@@ -289,6 +302,10 @@ public sealed class PlayerController : Component
 		lastCursorDelta = 0f;
 		lastValidStickDirection = InputManager.RightStick.CurrentInput.Normal;
 		smoothedFlickDirection = Vector3.Zero; // Will be initialized on first cursor update
+
+		// Clear magnitude buffer for fresh flick tracking
+		Array.Clear( flickMagnitudeBuffer, 0, FlickBufferSize );
+		flickBufferIndex = 0;
 
 		// Some selectables don't capture (e.g. instant-click buttons)
 		if ( !selectedSelectable.CapturesSelection )
@@ -546,16 +563,28 @@ public sealed class PlayerController : Component
 
 	private void ReleaseControllerFlick()
 	{
+		// Find peak magnitude from buffer (captures true flick strength before stick returned to center)
+		float peakMagnitude = 0f;
+		for ( int i = 0; i < FlickBufferSize; i++ )
+		{
+			if ( flickMagnitudeBuffer[i] > peakMagnitude )
+				peakMagnitude = flickMagnitudeBuffer[i];
+		}
+
+		// Use peak magnitude if stronger than current
+		if ( peakMagnitude > flickVector.Length )
+		{
+			flickVector = flickVector.Normal * peakMagnitude;
+		}
+
 		if ( flickVector.Length < MinFlickDistance )
 		{
 			AbortSelection();
 			return;
 		}
 
-		Log.Info( flickVector.Length );
 		selectedSelectable?.OnDeselect( flickVector );
 		ClearSelectionState();
-
 	}
 
 	#endregion
