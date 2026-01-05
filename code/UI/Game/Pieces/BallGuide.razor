@@ -8,8 +8,16 @@
 
 @code
 {
+    [Property] public GameObject Target { get; set; }
+    [Property] public float Height { get; set; } = 10f;
+    [Property] public Sandbox.WorldPanel WorldPanel { get; set; }
 
-    [Property] public PuntBall ball { get; set; }
+    protected override void OnUpdate()
+    {
+        if ( Target == null ) return;
 
-
+        var pos = Target.WorldPosition;
+        WorldPanel.WorldPosition = new Vector3( pos.x, pos.y, Height );
+        WorldPanel.WorldRotation = Rotation.From( new Angles( -90f, 0, 0 ) );
+    }
 }

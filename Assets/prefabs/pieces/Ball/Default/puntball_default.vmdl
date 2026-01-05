@@ -14,12 +14,8 @@
 						remaps = 
 						[
 							{
-								from = "black.vmat"
-								to = "prefabs/pieces/ball/default/materials/puntball_black.vmat"
-							},
-							{
-								from = "white.vmat"
-								to = "prefabs/pieces/ball/default/materials/puntball_white.vmat"
+								from = "defaultpolygonshader.vmat"
+								to = "prefabs/pieces/ball/default/materials/puntball_white_squash.vmat"
 							},
 						]
 						use_global_default = false
