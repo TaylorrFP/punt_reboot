@@ -185,7 +185,7 @@
           "FlickStrength": 1,
           "InputManager": {
             "_type": "component",
-            "component_id": "647cd137-6cb1-4062-9856-0d8c08ad79d2",
+            "component_id": "58db1fb2-df1e-4da9-ac14-0da5a0cd6ff4",
             "go": "fd506fa4-4d4f-4140-baf8-271ddf8dc050",
             "component_type": "InputManager"
           },
@@ -206,7 +206,7 @@
         },
         {
           "__type": "Punt.InputManager",
-          "__guid": "647cd137-6cb1-4062-9856-0d8c08ad79d2",
+          "__guid": "58db1fb2-df1e-4da9-ac14-0da5a0cd6ff4",
           "__enabled": true,
           "OnComponentDestroy": null,
           "OnComponentDisabled": null,
@@ -656,14 +656,6 @@
               "Type": "GameObject",
               "IdValue": "ad8604dc-4731-4bf5-9544-f9bd106773c0"
             },
-            "Property": "Name",
-            "Value": "puntpiece (1)"
-          },
-          {
-            "Target": {
-              "Type": "GameObject",
-              "IdValue": "ad8604dc-4731-4bf5-9544-f9bd106773c0"
-            },
             "Property": "Position",
             "Value": "-268.2334,67.15658,5.508378"
           }
@@ -696,7 +688,7 @@
       }
     },
     {
-      "__guid": "8e0d02a1-769a-4c26-b6ff-98413125a0bf",
+      "__guid": "4e272dd7-39eb-4752-b540-7f762551dd2a",
       "__version": 1,
       "__Prefab": "prefabs/pieces/puntpiece/puntpiece.prefab",
       "__PrefabInstancePatch": {
@@ -717,38 +709,38 @@
               "IdValue": "ad8604dc-4731-4bf5-9544-f9bd106773c0"
             },
             "Property": "Position",
-            "Value": "-12.4828,363.4565,5.508378"
+            "Value": "193.4907,242.3594,5.508378"
           }
         ],
         "MovedObjects": []
       },
       "__PrefabIdToInstanceId": {
-        "ad8604dc-4731-4bf5-9544-f9bd106773c0": "8e0d02a1-769a-4c26-b6ff-98413125a0bf",
-        "860a1dc4-0b11-4b29-9fa2-0761e954d29d": "e35636e9-9846-4245-93d9-fcc15ed3aa39",
-        "6908b8f6-276c-4317-9f22-61902ad35137": "afc7c3d0-117c-4594-a98c-534b48f76762",
-        "557a9a38-57a3-4178-8b8a-089424db388a": "7499294e-e437-498d-b161-365ac62a0ffd",
-        "9804d496-f0f0-486e-b6e1-0692acc7dcfd": "cc20b45a-c333-4a44-8275-2a8d5dee3ec4",
-        "38bc432e-dcb1-4edb-81ed-472b549f59e1": "f2f9f7f3-1b86-4408-a1f7-cd2b3891906d",
-        "02f9dbf4-2d8b-425b-9d43-67fd66f98461": "77b505e8-165b-4cad-a720-072485d1142f",
-        "667741e6-99c4-4607-b886-3b9002761cff": "b2e78b04-57f3-4e86-b92c-21ee09d26cdc",
-        "4d05c825-915a-47f5-ab8c-d38838417f21": "62bdcf9f-3805-4577-8566-4b47d3f6706e",
-        "2750d0aa-df49-443f-af2a-51ef62929f79": "a557a72c-8db5-47bb-a05d-3ce605607784",
-        "d42e5e7d-3d5f-4eaf-b677-41fb7a18f09a": "6b8646b1-32eb-4dd8-ac15-2e913e9dd9b5",
-        "011e0ad9-9f74-4495-a243-152fc90f6bc6": "302b0fe2-f8ae-41a2-9e24-12ef2e94026d",
-        "5efe1f01-19ee-4413-b9e8-31300e849382": "4f032f0f-6f5b-47b9-96e2-df272dc2cc47",
-        "6560871c-c32b-473d-ba3b-4bb11aab1c17": "449b311c-d26a-4d79-ba1a-16ff8fec44d1",
-        "797caf46-9bc2-4e26-b71b-94468ede104c": "7861af9e-c94b-4836-8ca1-e58d6f23bd7b",
-        "b7c8c7f9-d403-4d36-b7bb-66983aa71e68": "a9a098e8-7814-4084-81c2-6e177c2d95ce",
-        "475ad2b9-6832-42a5-87db-b7b99dcf1a8b": "ab913c12-a863-48d3-bd2c-e356e2862c10",
-        "a94cf439-2d29-4c01-9fb2-a25deb17f4e7": "66fe9c93-3aef-4d6c-bfe1-69d363412b12",
-        "20a16300-e9f1-46a0-a328-037e78582cc1": "34406508-693f-449d-8c4f-ec3bf63ae4f7",
-        "dd32ce13-e62c-473e-8080-b0e725c0f061": "88107202-0afa-47c2-bbf2-94cd592e4040",
-        "f0acf77d-3321-4560-9c30-c0017ade40ac": "ffbfc2d8-da74-4a72-b68e-5a7427250f62",
-        "4834d9d2-6246-4914-be23-9380b627292c": "ef299018-b933-4a5b-b901-c01c55b0f454"
+        "ad8604dc-4731-4bf5-9544-f9bd106773c0": "4e272dd7-39eb-4752-b540-7f762551dd2a",
+        "860a1dc4-0b11-4b29-9fa2-0761e954d29d": "a1c706d5-f620-43ed-98d7-f0c29a04f39f",
+        "6908b8f6-276c-4317-9f22-61902ad35137": "51c60272-f4f3-42c2-859a-d29a2ad003c9",
+        "557a9a38-57a3-4178-8b8a-089424db388a": "eb4813be-17c7-46e0-8054-b0a81783101d",
+        "9804d496-f0f0-486e-b6e1-0692acc7dcfd": "dbbe7740-99ad-410c-83c6-d4c83999dd93",
+        "38bc432e-dcb1-4edb-81ed-472b549f59e1": "cd2d2a03-daf6-4314-bb66-1d85eeb5452a",
+        "02f9dbf4-2d8b-425b-9d43-67fd66f98461": "97bbbffd-0378-4c04-932e-0faf35ea7af1",
+        "667741e6-99c4-4607-b886-3b9002761cff": "f086a70c-adb4-45bb-b6ce-66e738a1aeab",
+        "4d05c825-915a-47f5-ab8c-d38838417f21": "036c4ad5-3dd2-4486-9727-fc9e441ccca4",
+        "2750d0aa-df49-443f-af2a-51ef62929f79": "789ff437-a330-4939-9d56-c8e851f3f6c5",
+        "d42e5e7d-3d5f-4eaf-b677-41fb7a18f09a": "a278e4a0-bf5f-4dc0-a5c8-183878b21529",
+        "011e0ad9-9f74-4495-a243-152fc90f6bc6": "5e7f4cdc-70b4-48e1-b432-e58d1dfe4c04",
+        "5efe1f01-19ee-4413-b9e8-31300e849382": "14848541-f10b-4ee7-9807-c9dd55897c06",
+        "6560871c-c32b-473d-ba3b-4bb11aab1c17": "5caeb3f4-eb82-4f8d-8c21-fb102ed29028",
+        "797caf46-9bc2-4e26-b71b-94468ede104c": "1b108434-7932-43b8-b43e-2e2afda9494d",
+        "b7c8c7f9-d403-4d36-b7bb-66983aa71e68": "dd25dfa5-cc2c-4571-918c-ea4bd4932b8a",
+        "475ad2b9-6832-42a5-87db-b7b99dcf1a8b": "d48c46ec-0b1e-4e82-8892-8a6023249e3c",
+        "a94cf439-2d29-4c01-9fb2-a25deb17f4e7": "fefc7498-0c6d-4cf9-8248-95706fbb779e",
+        "20a16300-e9f1-46a0-a328-037e78582cc1": "5343276d-1721-4930-8df8-0702ee9667a1",
+        "dd32ce13-e62c-473e-8080-b0e725c0f061": "61347fd8-0d17-4a16-ba76-15ea452134b7",
+        "f0acf77d-3321-4560-9c30-c0017ade40ac": "c5de2e3a-f33f-49a3-bcc3-40dd71aa8017",
+        "4834d9d2-6246-4914-be23-9380b627292c": "7b2fe3e6-dc07-48c6-9ec5-bdd3498486c3"
       }
     },
     {
-      "__guid": "c87d4339-07b6-44eb-ba6e-43ea6ed070a7",
+      "__guid": "63930231-401b-4506-862c-49168b33c0a1",
       "__version": 1,
       "__Prefab": "prefabs/pieces/puntpiece/puntpiece.prefab",
       "__PrefabInstancePatch": {
@@ -769,38 +761,38 @@
               "IdValue": "ad8604dc-4731-4bf5-9544-f9bd106773c0"
             },
             "Property": "Position",
-            "Value": "-12.4828,902.3865,5.508378"
+            "Value": "-277.1673,522.025,5.508378"
           }
         ],
         "MovedObjects": []
       },
       "__PrefabIdToInstanceId": {
-        "ad8604dc-4731-4bf5-9544-f9bd106773c0": "c87d4339-07b6-44eb-ba6e-43ea6ed070a7",
-        "860a1dc4-0b11-4b29-9fa2-0761e954d29d": "8ba0a8cd-439e-4d6b-b1a3-5ab04651b557",
-        "6908b8f6-276c-4317-9f22-61902ad35137": "add7231c-b97a-46c9-b082-204547846e21",
-        "557a9a38-57a3-4178-8b8a-089424db388a": "714ffcd2-fbb2-408c-9967-c52734fa9fff",
-        "9804d496-f0f0-486e-b6e1-0692acc7dcfd": "56578450-da51-497c-8765-789f3ad75cb3",
-        "38bc432e-dcb1-4edb-81ed-472b549f59e1": "b98f6711-2293-4a40-9f53-b60a053afa64",
-        "02f9dbf4-2d8b-425b-9d43-67fd66f98461": "a6a87c4b-2714-427f-b247-9693dc992d7f",
-        "667741e6-99c4-4607-b886-3b9002761cff": "5e90cead-e389-4468-8eff-77d7f520bd6b",
-        "4d05c825-915a-47f5-ab8c-d38838417f21": "c6aed9cc-819c-4d01-8b16-c88adbca7dc2",
-        "2750d0aa-df49-443f-af2a-51ef62929f79": "50cf4827-b697-4c64-a6e4-91134b91be36",
-        "d42e5e7d-3d5f-4eaf-b677-41fb7a18f09a": "f3456763-d641-4431-93e8-1e9710f5306f",
-        "011e0ad9-9f74-4495-a243-152fc90f6bc6": "03da3b02-df23-47f7-97d4-172db8daf9d0",
-        "5efe1f01-19ee-4413-b9e8-31300e849382": "d6d3ac24-ecbe-4197-8b2b-aef1875d976d",
-        "6560871c-c32b-473d-ba3b-4bb11aab1c17": "7ec5f1cd-3c45-41ab-bf62-51c46605e6ed",
-        "797caf46-9bc2-4e26-b71b-94468ede104c": "5593c0c1-70dd-40dc-9b37-4cf838b51919",
-        "b7c8c7f9-d403-4d36-b7bb-66983aa71e68": "36070d6f-d778-4a24-b220-7dc95f98b721",
-        "475ad2b9-6832-42a5-87db-b7b99dcf1a8b": "ea892bc5-e7d4-4256-834f-848b0c2519d2",
-        "a94cf439-2d29-4c01-9fb2-a25deb17f4e7": "0728f6b5-591b-4080-9f1e-820665cf4476",
-        "20a16300-e9f1-46a0-a328-037e78582cc1": "810873cf-f6d7-4f4c-bd26-96201c1ba6a8",
-        "dd32ce13-e62c-473e-8080-b0e725c0f061": "ed4d1639-0d8a-4fc2-866b-46824bf946f5",
-        "f0acf77d-3321-4560-9c30-c0017ade40ac": "40f7f1a3-26e6-4026-9bc1-323386111471",
-        "4834d9d2-6246-4914-be23-9380b627292c": "5357b834-5451-477a-9dbe-8fb594fa86b5"
+        "ad8604dc-4731-4bf5-9544-f9bd106773c0": "63930231-401b-4506-862c-49168b33c0a1",
+        "860a1dc4-0b11-4b29-9fa2-0761e954d29d": "e649fc11-d7d0-416c-bac5-65e9e091d7a4",
+        "6908b8f6-276c-4317-9f22-61902ad35137": "9e7eb267-ee9e-4424-8251-c51592a2007d",
+        "557a9a38-57a3-4178-8b8a-089424db388a": "b03ee914-c5fb-44ee-95a0-f9d77e489b38",
+        "9804d496-f0f0-486e-b6e1-0692acc7dcfd": "496e6cd2-4895-4cbf-b370-42991a82f64a",
+        "38bc432e-dcb1-4edb-81ed-472b549f59e1": "c2606691-6a37-45b9-9e96-9d4007b53072",
+        "02f9dbf4-2d8b-425b-9d43-67fd66f98461": "65c33b4b-1f4a-4ce9-9690-e8fa04479b60",
+        "667741e6-99c4-4607-b886-3b9002761cff": "933822d9-e7d4-4d82-96f0-0f5dd9c8926d",
+        "4d05c825-915a-47f5-ab8c-d38838417f21": "2c43a78f-1aff-4602-8a6c-2bbc5b2d488b",
+        "2750d0aa-df49-443f-af2a-51ef62929f79": "859ffd53-0bfa-4b7d-b616-efc163c3975d",
+        "d42e5e7d-3d5f-4eaf-b677-41fb7a18f09a": "d6941d26-f818-4830-9fe5-baa33697d0ea",
+        "011e0ad9-9f74-4495-a243-152fc90f6bc6": "7094b293-8069-4101-a03b-a5fa1f32586d",
+        "5efe1f01-19ee-4413-b9e8-31300e849382": "1e0cc0a1-848c-48f2-85d4-f82c63786937",
+        "6560871c-c32b-473d-ba3b-4bb11aab1c17": "75ac2262-f943-415a-bbad-afba3c03dcbd",
+        "797caf46-9bc2-4e26-b71b-94468ede104c": "f8c25b3a-c61b-4240-b4d9-1230f8f711a1",
+        "b7c8c7f9-d403-4d36-b7bb-66983aa71e68": "4affd5d5-b8f2-40a3-b55e-f3c8bbc8e71d",
+        "475ad2b9-6832-42a5-87db-b7b99dcf1a8b": "2d9eef4b-b986-4b2c-94fd-c6bc71997c48",
+        "a94cf439-2d29-4c01-9fb2-a25deb17f4e7": "213d8cd1-b0f9-4344-ab7c-c3c4bf958cf0",
+        "20a16300-e9f1-46a0-a328-037e78582cc1": "34a8b5a0-df7e-4e11-afc9-b1b03a65dbc7",
+        "dd32ce13-e62c-473e-8080-b0e725c0f061": "3924a47c-ee48-4998-8f71-8b1d5bf28b0f",
+        "f0acf77d-3321-4560-9c30-c0017ade40ac": "8b2faa73-2dc5-45c4-8f0e-b887b1186d89",
+        "4834d9d2-6246-4914-be23-9380b627292c": "f1a760e0-93e1-4cf7-ac54-3d569f59d32a"
       }
     },
     {
-      "__guid": "d020a9e8-f8a7-4428-8d92-02b0c90d2169",
+      "__guid": "885ba659-347e-478d-87f5-2d4e7144dc3a",
       "__version": 1,
       "__Prefab": "prefabs/pieces/puntpiece/puntpiece.prefab",
       "__PrefabInstancePatch": {
@@ -821,38 +813,38 @@
               "IdValue": "ad8604dc-4731-4bf5-9544-f9bd106773c0"
             },
             "Property": "Position",
-            "Value": "176.5962,104.8696,5.508378"
+            "Value": "278.519,522.025,5.508378"
           }
         ],
         "MovedObjects": []
       },
       "__PrefabIdToInstanceId": {
-        "ad8604dc-4731-4bf5-9544-f9bd106773c0": "d020a9e8-f8a7-4428-8d92-02b0c90d2169",
-        "860a1dc4-0b11-4b29-9fa2-0761e954d29d": "87ae75d9-cdfa-4bc3-a736-747fdf5358b4",
-        "6908b8f6-276c-4317-9f22-61902ad35137": "de56c137-df9f-4a8e-9c7b-9f419746835c",
-        "557a9a38-57a3-4178-8b8a-089424db388a": "9610ade6-96a0-4006-b159-dee960c5e90f",
-        "9804d496-f0f0-486e-b6e1-0692acc7dcfd": "f39ed9d2-9142-48bf-955b-5e0ee2650b65",
-        "38bc432e-dcb1-4edb-81ed-472b549f59e1": "49ec853e-abbc-471b-a08a-581b91466f5e",
-        "02f9dbf4-2d8b-425b-9d43-67fd66f98461": "97b899e6-1d88-424e-9d8a-34a242f5cd05",
-        "667741e6-99c4-4607-b886-3b9002761cff": "eaa85e85-b070-42e1-8304-ca13cc7eeabf",
-        "4d05c825-915a-47f5-ab8c-d38838417f21": "b2a0572f-dc74-4769-a7b7-464b69a3f6f5",
-        "2750d0aa-df49-443f-af2a-51ef62929f79": "48642cc8-f1f2-40ec-a3ad-624f4a2e431a",
-        "d42e5e7d-3d5f-4eaf-b677-41fb7a18f09a": "5e685966-7cf0-4f18-8123-4ace3bd3a3e5",
-        "011e0ad9-9f74-4495-a243-152fc90f6bc6": "b500dc72-b6f4-48cb-b8bb-5506704f1fbc",
-        "5efe1f01-19ee-4413-b9e8-31300e849382": "e8e97f66-04b7-4676-903a-4b77db4d18c2",
-        "6560871c-c32b-473d-ba3b-4bb11aab1c17": "abf5f87c-bd76-4967-a24b-da9fefaa9c0b",
-        "797caf46-9bc2-4e26-b71b-94468ede104c": "91994e71-6a19-4eb3-92ae-4f87073f6c01",
-        "b7c8c7f9-d403-4d36-b7bb-66983aa71e68": "ec463911-2d79-44d4-bbc0-85935eb0600b",
-        "475ad2b9-6832-42a5-87db-b7b99dcf1a8b": "94a33926-2e69-455e-800c-6e61c47e8652",
-        "a94cf439-2d29-4c01-9fb2-a25deb17f4e7": "06b7a685-4e20-4bc6-b976-5bf519298f08",
-        "20a16300-e9f1-46a0-a328-037e78582cc1": "bf9d1cad-0e1e-440f-9361-e404eac685bf",
-        "dd32ce13-e62c-473e-8080-b0e725c0f061": "7e9200c0-077f-4ed9-bf91-c046e9157f5a",
-        "f0acf77d-3321-4560-9c30-c0017ade40ac": "2e5bae98-3858-4cc2-9e2c-3830e153b193",
-        "4834d9d2-6246-4914-be23-9380b627292c": "a3b837a6-544a-4fde-9e8f-bfc47604a003"
+        "ad8604dc-4731-4bf5-9544-f9bd106773c0": "885ba659-347e-478d-87f5-2d4e7144dc3a",
+        "860a1dc4-0b11-4b29-9fa2-0761e954d29d": "6fa08c76-b5a9-4e38-839f-5691cf820b9b",
+        "6908b8f6-276c-4317-9f22-61902ad35137": "d8296723-9e5a-4c36-9278-1be678827639",
+        "557a9a38-57a3-4178-8b8a-089424db388a": "cdecd71c-9e0f-4679-82c9-788da08fcd42",
+        "9804d496-f0f0-486e-b6e1-0692acc7dcfd": "109a41f7-ce28-4ce6-b31b-35aa60d8df67",
+        "38bc432e-dcb1-4edb-81ed-472b549f59e1": "16004275-61ae-4eac-9150-b3da0932aaf9",
+        "02f9dbf4-2d8b-425b-9d43-67fd66f98461": "02cac57f-62ee-4d8c-a716-9496f9110dfa",
+        "667741e6-99c4-4607-b886-3b9002761cff": "b5250651-ed61-4dbe-be21-f112d7df522a",
+        "4d05c825-915a-47f5-ab8c-d38838417f21": "5305c384-1312-48aa-b3a0-f936aeaf0cb2",
+        "2750d0aa-df49-443f-af2a-51ef62929f79": "47966011-fa86-4ba3-979d-9aba60cc7fb3",
+        "d42e5e7d-3d5f-4eaf-b677-41fb7a18f09a": "7ecf0beb-53b6-442f-a793-109f7c10fa78",
+        "011e0ad9-9f74-4495-a243-152fc90f6bc6": "2087b29c-d465-4acf-b9a8-99f85c58d35a",
+        "5efe1f01-19ee-4413-b9e8-31300e849382": "2fa18b5e-cca3-40e8-9616-ed5c572e7a95",
+        "6560871c-c32b-473d-ba3b-4bb11aab1c17": "80e0ee57-1c49-4cbc-8cd2-2893724df2c1",
+        "797caf46-9bc2-4e26-b71b-94468ede104c": "855e9ff9-481b-40bf-838b-de690e172bb6",
+        "b7c8c7f9-d403-4d36-b7bb-66983aa71e68": "522878eb-6c41-4034-a524-326df70685f9",
+        "475ad2b9-6832-42a5-87db-b7b99dcf1a8b": "6519abfc-2630-4bb3-a92a-e76074b89276",
+        "a94cf439-2d29-4c01-9fb2-a25deb17f4e7": "b0696cc1-4982-426a-a09d-6061cee6493e",
+        "20a16300-e9f1-46a0-a328-037e78582cc1": "50ba71db-a6bc-4aea-8740-e48105005feb",
+        "dd32ce13-e62c-473e-8080-b0e725c0f061": "990dffd8-e198-4db4-8775-69ba5ba384fa",
+        "f0acf77d-3321-4560-9c30-c0017ade40ac": "15f9e9b1-ebb0-4469-8811-82686c2a5592",
+        "4834d9d2-6246-4914-be23-9380b627292c": "cf0dd029-117a-4cf0-86a8-112e02b5998d"
       }
     },
     {
-      "__guid": "466c989e-0155-4ac2-a15e-3b4c29e4a24a",
+      "__guid": "df8d4b31-7129-4f42-b094-87820b78b980",
       "__version": 1,
       "__Prefab": "prefabs/pieces/puntpiece/puntpiece.prefab",
       "__PrefabInstancePatch": {
@@ -873,34 +865,34 @@
               "IdValue": "ad8604dc-4731-4bf5-9544-f9bd106773c0"
             },
             "Property": "Position",
-            "Value": "176.5962,599.671,5.508378"
+            "Value": "-14.89386,867.1069,5.508378"
           }
         ],
         "MovedObjects": []
       },
       "__PrefabIdToInstanceId": {
-        "ad8604dc-4731-4bf5-9544-f9bd106773c0": "466c989e-0155-4ac2-a15e-3b4c29e4a24a",
-        "860a1dc4-0b11-4b29-9fa2-0761e954d29d": "6f33b2cc-eaad-4d2e-9ce2-b160baabcb73",
-        "6908b8f6-276c-4317-9f22-61902ad35137": "e557386f-3b3d-4325-bf8c-303ba8816ce5",
-        "557a9a38-57a3-4178-8b8a-089424db388a": "21d60a91-d8c5-4108-a57d-ca9bf0ce7c3a",
-        "9804d496-f0f0-486e-b6e1-0692acc7dcfd": "3b5aaf0c-535b-4843-9e74-fa9f749c8001",
-        "38bc432e-dcb1-4edb-81ed-472b549f59e1": "f83f550f-7132-44c5-ab95-58fcb860bec8",
-        "02f9dbf4-2d8b-425b-9d43-67fd66f98461": "7ccccd96-7642-4ddc-a31f-0f791d479f48",
-        "667741e6-99c4-4607-b886-3b9002761cff": "46233a00-f918-459f-b3a1-94946a452d79",
-        "4d05c825-915a-47f5-ab8c-d38838417f21": "539e43db-a44a-4f00-9f7e-dae3da4df29f",
-        "2750d0aa-df49-443f-af2a-51ef62929f79": "f895891c-a0c5-4bf9-966c-d403ff170353",
-        "d42e5e7d-3d5f-4eaf-b677-41fb7a18f09a": "77177847-291b-4280-ae3a-d22a9406db59",
-        "011e0ad9-9f74-4495-a243-152fc90f6bc6": "63b9415f-a028-4298-b874-2c328c1f7b90",
-        "5efe1f01-19ee-4413-b9e8-31300e849382": "d674449d-c6db-4bd3-abfd-db9e8d3de5d8",
-        "6560871c-c32b-473d-ba3b-4bb11aab1c17": "c7019605-8994-4803-91e5-895d769f4dc3",
-        "797caf46-9bc2-4e26-b71b-94468ede104c": "fa8692da-5232-49c6-b650-9280b39b3c8e",
-        "b7c8c7f9-d403-4d36-b7bb-66983aa71e68": "cae6e4ff-9d28-4481-9595-92f63d98fd92",
-        "475ad2b9-6832-42a5-87db-b7b99dcf1a8b": "9be1be32-0b00-4c62-80d2-805ff5e3675a",
-        "a94cf439-2d29-4c01-9fb2-a25deb17f4e7": "1cbbb422-9ed7-4042-b2ed-ebbef587dbfa",
-        "20a16300-e9f1-46a0-a328-037e78582cc1": "f7f2dd79-210e-4347-a375-4473038be9cc",
-        "dd32ce13-e62c-473e-8080-b0e725c0f061": "9463cad6-4149-4755-a71a-425d6d0f798f",
-        "f0acf77d-3321-4560-9c30-c0017ade40ac": "8b305b08-caae-448b-b1d6-966610e43d47",
-        "4834d9d2-6246-4914-be23-9380b627292c": "b3464da9-4c2b-42d5-af77-0db5a08bbaee"
+        "ad8604dc-4731-4bf5-9544-f9bd106773c0": "df8d4b31-7129-4f42-b094-87820b78b980",
+        "860a1dc4-0b11-4b29-9fa2-0761e954d29d": "9aabe999-b60f-4087-a4d5-b694a76b1b62",
+        "6908b8f6-276c-4317-9f22-61902ad35137": "b47d48c6-27d4-414b-91f0-8df216bfaf87",
+        "557a9a38-57a3-4178-8b8a-089424db388a": "c3cf9608-183e-47df-86b8-d3356707de1e",
+        "9804d496-f0f0-486e-b6e1-0692acc7dcfd": "9a51d5a8-e110-41b7-bd03-6d4fa176c37a",
+        "38bc432e-dcb1-4edb-81ed-472b549f59e1": "c806a2d4-92e0-4a3b-b777-b0303fdd15b3",
+        "02f9dbf4-2d8b-425b-9d43-67fd66f98461": "5cd0bce3-716c-4edd-8f07-f1c2a7b38e68",
+        "667741e6-99c4-4607-b886-3b9002761cff": "2f4b4f1a-5725-4cdd-90b3-4c7531fc89bd",
+        "4d05c825-915a-47f5-ab8c-d38838417f21": "75db041e-f4f1-4cf7-a400-9c2fec51eb02",
+        "2750d0aa-df49-443f-af2a-51ef62929f79": "15c0574b-35c1-465c-bb6a-380539e711fd",
+        "d42e5e7d-3d5f-4eaf-b677-41fb7a18f09a": "24cabe96-b2f1-4f96-b800-c28bcd76378e",
+        "011e0ad9-9f74-4495-a243-152fc90f6bc6": "98b9b84b-4379-42a0-a237-0efd900a839b",
+        "5efe1f01-19ee-4413-b9e8-31300e849382": "3a83560e-877f-4a62-b6b4-220470763b76",
+        "6560871c-c32b-473d-ba3b-4bb11aab1c17": "22648064-a030-4ad2-998a-e2a9204d6cf0",
+        "797caf46-9bc2-4e26-b71b-94468ede104c": "787090ee-5d6e-4a1d-a913-1d376eacb394",
+        "b7c8c7f9-d403-4d36-b7bb-66983aa71e68": "78c72f8c-c3cd-4027-87ac-109d0bde0cc5",
+        "475ad2b9-6832-42a5-87db-b7b99dcf1a8b": "4bf70401-4833-4619-8372-318bf843f293",
+        "a94cf439-2d29-4c01-9fb2-a25deb17f4e7": "232aef9c-c72b-4753-83da-00e7b3edb6c3",
+        "20a16300-e9f1-46a0-a328-037e78582cc1": "df9665ef-b801-4ce7-ba38-64027d313021",
+        "dd32ce13-e62c-473e-8080-b0e725c0f061": "9e772925-6c87-4f91-913f-e2160f5e5765",
+        "f0acf77d-3321-4560-9c30-c0017ade40ac": "2d62040e-2f11-4d9e-b0ec-6df861054447",
+        "4834d9d2-6246-4914-be23-9380b627292c": "7b008844-4cfd-4833-949b-e5de39d68d3f"
       }
     },
     {
@@ -995,7 +987,7 @@
           {
             "Id": {
               "Type": "Component",
-              "IdValue": "c2e8c31e-7477-4f06-b70e-b060e6c0bb3e"
+              "IdValue": "1193b5b4-8c67-4486-b066-315c45f1e53c"
             },
             "Parent": {
               "Type": "GameObject",
@@ -1009,8 +1001,9 @@
             "IsContainerArray": true,
             "Data": {
               "__type": "PuntBall",
-              "__guid": "c2e8c31e-7477-4f06-b70e-b060e6c0bb3e",
+              "__guid": "1193b5b4-8c67-4486-b066-315c45f1e53c",
               "__enabled": true,
+              "AxisSmoothSpeed": 5,
               "ballGuide": {
                 "_type": "component",
                 "component_id": "b12ed937-be24-45af-b679-345ff18ef0d5",
@@ -1033,13 +1026,18 @@
                 "go": "32f8e763-0cce-408e-b87b-5510025df65d",
                 "component_type": "ModelRenderer"
               },
+              "ImpactSquashMultiplier": 1,
+              "ImpactThreshold": 400,
+              "MaxSquash": 0.1,
+              "MaxStretch": 1,
               "OnComponentDestroy": null,
               "OnComponentDisabled": null,
               "OnComponentEnabled": null,
               "OnComponentFixedUpdate": null,
               "OnComponentStart": null,
               "OnComponentUpdate": null,
-              "SquashAmount": 1
+              "RecoverySpeed": 15,
+              "StretchSpeedThreshold": 400
             }
           },
           {
@@ -1053,7 +1051,7 @@
             },
             "PreviousElement": {
               "Type": "Component",
-              "IdValue": "c2e8c31e-7477-4f06-b70e-b060e6c0bb3e"
+              "IdValue": "1193b5b4-8c67-4486-b066-315c45f1e53c"
             },
             "ContainerProperty": "Components",
             "IsContainerArray": true,
@@ -1156,7 +1154,7 @@
               "Name": "puntball_default",
               "Position": "0,0,0",
               "Rotation": "0,0,0,1",
-              "Scale": "1.04193,1.04193,1.04193",
+              "Scale": "1,1,1",
               "Tags": "",
               "Enabled": true,
               "NetworkMode": 2,
@@ -1280,7 +1278,7 @@
           {
             "Id": {
               "Type": "Component",
-              "IdValue": "773dcad9-eca3-4067-930d-85db825195a7"
+              "IdValue": "b4b0b143-ad49-4de1-b123-44285845eb34"
             },
             "Parent": {
               "Type": "GameObject",
@@ -1294,11 +1292,11 @@
             "IsContainerArray": true,
             "Data": {
               "__type": "Sandbox.UI.Game.Pieces.BallGuide",
-              "__guid": "773dcad9-eca3-4067-930d-85db825195a7",
+              "__guid": "b4b0b143-ad49-4de1-b123-44285845eb34",
               "__enabled": true,
               "ball": {
                 "_type": "component",
-                "component_id": "c2e8c31e-7477-4f06-b70e-b060e6c0bb3e",
+                "component_id": "1193b5b4-8c67-4486-b066-315c45f1e53c",
                 "go": "49785efd-e970-463f-9687-94e98b09ebb2",
                 "component_type": "PuntBall"
               },
@@ -1340,15 +1338,7 @@
               "IdValue": "49785efd-e970-463f-9687-94e98b09ebb2"
             },
             "Property": "Position",
-            "Value": "0,0,136.9279"
-          },
-          {
-            "Target": {
-              "Type": "GameObject",
-              "IdValue": "49785efd-e970-463f-9687-94e98b09ebb2"
-            },
-            "Property": "Rotation",
-            "Value": "0,-0.00000001490116,0,1"
+            "Value": "420.7963,-58.09325,95.98026"
           },
           {
             "Target": {
