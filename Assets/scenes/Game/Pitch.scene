@@ -265,7 +265,7 @@
           "__version": 1,
           "Flags": 0,
           "Name": "MainCamera",
-          "Position": "-3700,0,15",
+          "Position": "-2800,0,15",
           "Rotation": "0,0,0,1",
           "Scale": "1,1,1",
           "Tags": "maincamera",
@@ -283,7 +283,7 @@
               "BackgroundColor": "0.33333,0.46275,0.52157,1",
               "ClearFlags": "All",
               "EnablePostProcessing": true,
-              "FieldOfView": 32,
+              "FieldOfView": 42,
               "FovAxis": "Horizontal",
               "IsMainCamera": true,
               "OnComponentDestroy": null,
@@ -918,7 +918,7 @@
               "IdValue": "49785efd-e970-463f-9687-94e98b09ebb2"
             },
             "Property": "Position",
-            "Value": "420.7963,-58.09325,95.98026"
+            "Value": "-10.95905,-58.09325,95.98026"
           }
         ],
         "MovedObjects": []
@@ -998,6 +998,45 @@
         "466ba5a7-e9fe-4b2d-a03b-314d903c65ae": "66a28144-e65a-485e-b012-6e7c409f0dfe",
         "ae7000da-612c-4cf5-a3bf-c994d262f8b0": "13ab6069-0cdb-4d16-8c90-8d081046fd37"
       }
+    },
+    {
+      "__guid": "c5eef3ef-4bff-4692-b246-39a5c16bc197",
+      "__version": 1,
+      "Flags": 0,
+      "Name": "Spot Light",
+      "Position": "-507.5228,-769.4186,1504.502",
+      "Rotation": "0.07695039,0.6038784,0.1002837,0.7869896",
+      "Scale": "1,1,1",
+      "Tags": "light_spot,light",
+      "Enabled": true,
+      "NetworkMode": 2,
+      "NetworkInterpolation": true,
+      "NetworkOrphaned": 0,
+      "NetworkTransmit": true,
+      "OwnerTransfer": 1,
+      "Components": [
+        {
+          "__type": "Sandbox.SpotLight",
+          "__guid": "e0561383-a4fa-4dcc-b1e7-1d242b7313f8",
+          "__enabled": false,
+          "Attenuation": 0,
+          "ConeInner": 300,
+          "ConeOuter": 45.666668,
+          "Cookie": null,
+          "FogMode": "Enabled",
+          "FogStrength": 1,
+          "LightColor": "0.07442,0.07442,0.07442,1",
+          "OnComponentDestroy": null,
+          "OnComponentDisabled": null,
+          "OnComponentEnabled": null,
+          "OnComponentFixedUpdate": null,
+          "OnComponentStart": null,
+          "OnComponentUpdate": null,
+          "Radius": 2000,
+          "Shadows": true
+        }
+      ],
+      "Children": []
     }
   ],
   "SceneProperties": {
