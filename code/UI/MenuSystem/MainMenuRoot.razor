@@ -2,6 +2,7 @@
 @using Sandbox.Menu
 @using Sandbox.UI;
 @using Sandbox.UI.Navigation;
+@using Punt.Systems;
 
 @inherits NavigationHost
 
@@ -11,6 +12,51 @@
 
     <div class="navigator-canvas" slot="navigator-canvas" />
 
+    <!-- Persistent UI elements that appear on all menu pages -->
+    <div class="version-number">v0.1.0</div>
+
+    <div class="party-display">
+        @if (PartyManager.Instance != null)
+        {
+            <!-- Render other party members (no names) -->
+            @* @foreach (var member in PartyManager.Instance.GetOtherMembers()) *@
+            {
+                <div class="party-member">
+                    <img src="@PartyManager.Instance.LocalMember.GetAvatarUrl()" class="profile-picture" /> @* use local player for now *@
+                </div>
+            }
+
+            <!-- Local player (with name) -->
+            @if (PartyManager.Instance.LocalMember != null)
+            {
+                <div class="party-member local-player">
+                    <img src="@PartyManager.Instance.LocalMember.GetAvatarUrl()" class="profile-picture" />
+                    <span class="player-name">@PartyManager.Instance.LocalMember.DisplayName</span>
+                </div>
+            }
+        }
+    </div>
+
+    <div class="chat-button" onclick=@(() => ToggleChat())>
+        <span class="key-indicator">enter</span>
+        Chat
+    </div>
+
+    @if (CurrentUrl == "/")
+    {
+        <div class="back-button" onclick=@(() => ExitGame())>
+            <span class="key-indicator">escape</span>
+            Exit 
+        </div>
+    }
+    else
+    {
+        <a class="back-button" href="/">
+            <span class="key-indicator">escape</span>
+            Back
+        </a>
+    }
+
 @*     <MatchmakingStatus /> *@
 
 </root>
@@ -18,6 +64,7 @@
 @code
 {
     public static MainMenuRoot Instance { get; set; }
+    private bool isChatOpen = false;
 
     public MainMenuRoot()
     {
@@ -25,10 +72,33 @@
         DefaultUrl = "/";
         AddDestination("/", typeof(LandingPage));
         AddDestination("/play", typeof(Play));
-        // AddDestination("/leaderboard", typeof(Leaderboard));
+        AddDestination("/collection", typeof(Collection));
+        AddDestination("/shop", typeof(Shop));
+        AddDestination("/leaderboard", typeof(Leaderboard));
         // AddDestination("/gamebrowser", typeof(GameBrowser));
         // AddDestination("/createcustomgame", typeof(CreateCustomGame));
         // AddDestination("/lobby", typeof(Lobby));
+
+        // Initialize PartyManager singleton
+        PartyManager.Initialize();
+
+        // Subscribe to party changes for UI updates
+        if (PartyManager.Instance != null)
+        {
+            PartyManager.Instance.OnPartyChanged += StateHasChanged;
+        }
+    }
+
+    void ToggleChat()
+    {
+        isChatOpen = !isChatOpen;
+        // TODO: Implement chat panel visibility toggle
+        Log.Info($"Chat toggled: {isChatOpen}");
+    }
+
+    void ExitGame()
+    {
+        Game.Close();
     }
 }
 

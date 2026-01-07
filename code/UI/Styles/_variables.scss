@@ -4,10 +4,19 @@ $font-body: 'Poppins';
 
 // Colors
 $color-text: #fff;
+$color-text-black: rgb(39, 39, 39);
+$color-text-border: rgba(255, 255, 255, 0.64); // White with 64% opacity
 $color-text-disabled: #888;
 $color-primary: #2ecc71;
 $color-danger: #e74c3c;
 
 // Spacing
-$menu-padding: 64px;
+$menu-padding: 80px;
 $button-gap: 8px;
+$ui-edge-padding-small: 8px;
+$ui-edge-padding-medium: 32px;
+$ui-edge-padding-large: 64px;
+$outline-profile-picture: 4px;
+//Font sizes
+$font-size-button-medium: 32px;
+$font-size-key-indicator: 20px;

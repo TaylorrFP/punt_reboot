@@ -16,3 +16,71 @@
 	justify-content: center;
 	max-width: 600px;
 }
+
+// Persistent UI elements - positioning only (styling in _buttons.scss and _typography.scss)
+.version-number {
+	position: absolute;
+	top: $ui-edge-padding-small;
+	left: $ui-edge-padding-small;
+	font-family: $font-body;
+	font-size: 16px;
+	color: $color-text-disabled;
+	pointer-events: none;
+}
+
+.chat-button {
+	position: absolute;
+	bottom: $ui-edge-padding-medium;
+	left: $ui-edge-padding-medium;
+}
+
+.back-button {
+	position: absolute;
+	bottom: $ui-edge-padding-medium;
+	right: $ui-edge-padding-medium;
+}
+
+.party-display {
+	position: absolute;
+	top: $ui-edge-padding-medium;
+	right: $ui-edge-padding-medium;
+	display: flex;
+	flex-direction: row;
+	gap: 12px;
+	align-items: center;
+}
+
+.party-member {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+
+	.profile-picture {
+		width: 48px;
+		height: 48px;
+		border-radius: 100%;
+	}
+	// Style for local player with name (pill/capsule shape)
+	&.local-player {
+		background: $color-text;
+		border-radius: 100px; // Large radius creates pill shape
+		padding: $outline-profile-picture 16px $outline-profile-picture $outline-profile-picture; // More padding on right for name
+		gap: 12px;
+
+		.player-name {
+			font-family: $font-body;
+			font-size: 20px;
+			color: $color-text-black;
+			font-weight: bold;
+			text-transform: uppercase;
+		}
+	}
+	// Add outline to non-local player profile pictures
+	&:not(.local-player) .profile-picture {
+		box-shadow: 0 0 0 $outline-profile-picture $color-text;
+	}
+	// Hide name for non-local players
+	&:not(.local-player) .player-name {
+		display: none;
+	}
+}

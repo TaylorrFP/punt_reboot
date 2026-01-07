@@ -13,14 +13,15 @@
     <div class="menu-options">
         <a class="menu-button" href="/play">Play</a>
         <a class="menu-button" href="/leaderboard">Leaderboard</a>
-        <a class="menu-button wip" href="/settings">Settings</a>
-        <div class="menu-button" onclick=@(() => Quit())>Quit</div>
+        <a class="menu-button" href="/collection">Collection</a>
+        <a class="menu-button" href="/shop">Shop</a>
+        
     </div>
 </root>
 
 @code
 {
-    void Quit()
+    void Exit()
     {
         Game.Close();
     }

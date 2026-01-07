@@ -20,3 +20,51 @@
 		transform: none;
 	}
 }
+
+// Persistent UI buttons
+.chat-button {
+	display: flex;
+	align-items: center;
+	gap: 8px; // Space between icon and text
+	font-family: $font-header;
+	font-size: $font-size-button-medium;
+	color: $color-text;
+	cursor: pointer;
+	pointer-events: all;
+	transition: all 0.1s ease;
+	transform-origin: left center;
+
+	&:hover {
+		transform: scale(1.1);
+		sound-in: ui.button.over;
+	}
+}
+
+.back-button {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	font-family: $font-header;
+	font-size: $font-size-button-medium;
+	color: $color-text;
+	cursor: pointer;
+	pointer-events: all;
+	transition: all 0.1s ease;
+	transform-origin: right center;
+
+	&:hover {
+		transform: scale(1.1);
+		sound-in: ui.button.over;
+	}
+}
+
+// Keyboard key indicator
+.key-indicator {
+	padding: 4px 8px;
+	border: 2px solid $color-text-border;
+	border-radius: 8px;
+	font-family: $font-body;
+	font-size: $font-size-key-indicator;
+	font-weight: bold;
+	text-transform: uppercase;
+}
