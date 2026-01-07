@@ -730,7 +730,7 @@
       "__version": 1,
       "Flags": 0,
       "Name": "MainCamera",
-      "Position": "34.43107,-201.3296,43.72203",
+      "Position": "34.34024,-201.4986,46.89453",
       "Rotation": "0.01549705,-0.02591965,0.5129282,0.8579001",
       "Scale": "1,1,1",
       "Tags": "maincamera",
@@ -856,16 +856,16 @@
           "OnComponentFixedUpdate": null,
           "OnComponentStart": null,
           "OnComponentUpdate": null,
-          "Scale": 0.05970149
+          "Scale": 0.15
         },
         {
           "__type": "Sandbox.DepthOfField",
           "__guid": "6a7ec218-8ff4-4c51-9e1a-730e6dbb472d",
           "__enabled": true,
           "BackBlur": true,
-          "BlurSize": 5,
-          "FocalDistance": 340.5039,
-          "FocusRange": 1000,
+          "BlurSize": 9.375,
+          "FocalDistance": 75.14453,
+          "FocusRange": 574.21875,
           "FrontBlur": false,
           "OnComponentDestroy": null,
           "OnComponentDisabled": null,
@@ -1113,6 +1113,141 @@
           ]
         }
       ]
+    },
+    {
+      "__guid": "51ed4bd0-202d-4cf7-a282-8e19ab138c2a",
+      "__version": 1,
+      "Flags": 0,
+      "Name": "puffparticle_01",
+      "Position": "333.6057,86.97281,23.78913",
+      "Rotation": "0,0,0,1",
+      "Scale": "0.8974083,0.8974083,0.8974083",
+      "Tags": "",
+      "Enabled": true,
+      "NetworkMode": 2,
+      "NetworkInterpolation": true,
+      "NetworkOrphaned": 0,
+      "NetworkTransmit": true,
+      "OwnerTransfer": 1,
+      "Components": [
+        {
+          "__type": "Sandbox.ModelRenderer",
+          "__guid": "064e6d3e-fe61-49c4-8cdc-c4e7a02f59ef",
+          "__enabled": true,
+          "BodyGroups": 18446744073709551615,
+          "CreateAttachments": false,
+          "LodOverride": null,
+          "MaterialGroup": null,
+          "MaterialOverride": null,
+          "Materials": null,
+          "Model": "prefabs/pieces/dashfx/defaultpuff/puffparticle_01.vmdl",
+          "OnComponentDestroy": null,
+          "OnComponentDisabled": null,
+          "OnComponentEnabled": null,
+          "OnComponentFixedUpdate": null,
+          "OnComponentStart": null,
+          "OnComponentUpdate": null,
+          "RenderOptions": {
+            "GameLayer": true,
+            "OverlayLayer": false,
+            "BloomLayer": false,
+            "AfterUILayer": false
+          },
+          "RenderType": "On",
+          "Tint": "1,1,1,1"
+        }
+      ],
+      "Children": []
+    },
+    {
+      "__guid": "1e901332-5885-4407-bf4c-8417c5524b63",
+      "__version": 1,
+      "Flags": 0,
+      "Name": "puffparticle_02",
+      "Position": "298.9137,75.44968,37.06508",
+      "Rotation": "0,0,0,1",
+      "Scale": "0.9104288,0.9104288,0.9104288",
+      "Tags": "",
+      "Enabled": true,
+      "NetworkMode": 2,
+      "NetworkInterpolation": true,
+      "NetworkOrphaned": 0,
+      "NetworkTransmit": true,
+      "OwnerTransfer": 1,
+      "Components": [
+        {
+          "__type": "Sandbox.ModelRenderer",
+          "__guid": "87ca2cc5-caed-46e2-b055-84b401051c1c",
+          "__enabled": true,
+          "BodyGroups": 18446744073709551615,
+          "CreateAttachments": false,
+          "LodOverride": null,
+          "MaterialGroup": null,
+          "MaterialOverride": null,
+          "Materials": null,
+          "Model": "prefabs/pieces/dashfx/defaultpuff/puffparticle_02.vmdl",
+          "OnComponentDestroy": null,
+          "OnComponentDisabled": null,
+          "OnComponentEnabled": null,
+          "OnComponentFixedUpdate": null,
+          "OnComponentStart": null,
+          "OnComponentUpdate": null,
+          "RenderOptions": {
+            "GameLayer": true,
+            "OverlayLayer": false,
+            "BloomLayer": false,
+            "AfterUILayer": false
+          },
+          "RenderType": "On",
+          "Tint": "1,1,1,1"
+        }
+      ],
+      "Children": []
+    },
+    {
+      "__guid": "f482a817-38db-4935-ad98-d62f74a7bc01",
+      "__version": 1,
+      "Flags": 0,
+      "Name": "puffparticle_03",
+      "Position": "369.1368,100.9031,46.15845",
+      "Rotation": "0,0,0,1",
+      "Scale": "0.500776,0.500776,0.500776",
+      "Tags": "",
+      "Enabled": true,
+      "NetworkMode": 2,
+      "NetworkInterpolation": true,
+      "NetworkOrphaned": 0,
+      "NetworkTransmit": true,
+      "OwnerTransfer": 1,
+      "Components": [
+        {
+          "__type": "Sandbox.ModelRenderer",
+          "__guid": "fde8b18d-047f-4d8f-827c-97641755ed85",
+          "__enabled": true,
+          "BodyGroups": 18446744073709551615,
+          "CreateAttachments": false,
+          "LodOverride": null,
+          "MaterialGroup": null,
+          "MaterialOverride": null,
+          "Materials": null,
+          "Model": "prefabs/pieces/dashfx/defaultpuff/puffparticle_03.vmdl",
+          "OnComponentDestroy": null,
+          "OnComponentDisabled": null,
+          "OnComponentEnabled": null,
+          "OnComponentFixedUpdate": null,
+          "OnComponentStart": null,
+          "OnComponentUpdate": null,
+          "RenderOptions": {
+            "GameLayer": true,
+            "OverlayLayer": false,
+            "BloomLayer": false,
+            "AfterUILayer": false
+          },
+          "RenderType": "On",
+          "Tint": "1,1,1,1"
+        }
+      ],
+      "Children": []
     }
   ],
   "SceneProperties": {
