@@ -19,10 +19,10 @@
         @if (PartyManager.Instance != null)
         {
             <!-- Render other party members (no names) -->
-            @* @foreach (var member in PartyManager.Instance.GetOtherMembers()) *@
+            @foreach (var member in PartyManager.Instance.GetOtherMembers())
             {
                 <div class="party-member">
-                    <img src="@PartyManager.Instance.LocalMember.GetAvatarUrl()" class="profile-picture" /> @* use local player for now *@
+                    <img src="@member.GetAvatarUrl()" class="profile-picture" />
                 </div>
             }
 
@@ -72,9 +72,12 @@
         DefaultUrl = "/";
         AddDestination("/", typeof(LandingPage));
         AddDestination("/play", typeof(Play));
+        AddDestination("/practise", typeof(Practise));
+        AddDestination("/tutorial", typeof(Tutorial));
         AddDestination("/collection", typeof(Collection));
         AddDestination("/shop", typeof(Shop));
         AddDestination("/leaderboard", typeof(Leaderboard));
+
         // AddDestination("/gamebrowser", typeof(GameBrowser));
         // AddDestination("/createcustomgame", typeof(CreateCustomGame));
         // AddDestination("/lobby", typeof(Lobby));

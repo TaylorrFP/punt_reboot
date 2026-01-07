@@ -1,4 +1,4 @@
-@using Sandbox.Menu
+﻿@using Sandbox.Menu
 @using Sandbox.UI;
 @using Sandbox.UI.Navigation;
 @using Sandbox.Network;
@@ -12,16 +12,12 @@
 
     <div class="menu-options">
 
+        <a class="menu-button" href="/tutorial">Tutorial</a>
+
         <div class="menu-button">
-            <button class="button" onclick=@PlayGame>1v1</button>
+            <button class="button" onclick=@PlayGame>Bot Game</button>
         </div>
-        <div class="menu-button">
-            <button class="button" onclick=@PlayGame>2v2</button>
-        </div>
-        <div class="menu-button">
-            <button class="button" onclick=@PlayGame>Custom Games</button>
-        </div>
-        <a class="menu-button" href="/practise">Practise</a>
+
     </div>
 </root>
 
