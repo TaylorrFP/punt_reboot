@@ -1,0 +1,58 @@
+﻿@using Sandbox;
+@using Sandbox.UI;
+@using Sandbox.UI.Construct;
+@namespace Sandbox
+
+<root class="party-display">
+    <!-- Other party members (if in a party) -->
+    @if (PartyRoom.Current != null)
+    {
+        @foreach (var member in PartyRoom.Current.Members)
+        {
+            @if (member.Id != Game.SteamId)
+            {
+                <div class="party-member @(!member.IsPlayingThisGame ? "offline" : "")">
+                    <img src="avatar:@member.Id" class="profile-picture" />
+                    @if (PartyRoom.Current.Owner.Id == member.Id)
+                    {
+                        <Button Icon="star" class="party-crown"></Button>
+                    }
+                </div>
+            }
+        }
+    }
+
+    <!-- Local player (always displayed) -->
+    <div class="party-member local-player">
+        <img src="avatar:@Game.SteamId" class="profile-picture" />
+        <span class="player-name">@Connection.Local.DisplayName</span>
+        @if (PartyRoom.Current != null && PartyRoom.Current.Owner.Id == Game.SteamId)
+        {
+            <Button Icon="star" class="party-crown"></Button>
+        }
+    </div>
+</root>
+
+@code
+{
+
+
+
+
+    protected override int BuildHash()
+    {
+        // Include party state in hash to trigger re-renders when party changes
+        var hash = System.HashCode.Combine(base.BuildHash());
+
+        if (PartyRoom.Current != null)
+        {
+            hash = System.HashCode.Combine(hash, PartyRoom.Current.Members.Count());
+            foreach (var member in PartyRoom.Current.Members)
+            {
+                hash = System.HashCode.Combine(hash, member.Id);
+            }
+        }
+
+        return hash;
+    }
+}

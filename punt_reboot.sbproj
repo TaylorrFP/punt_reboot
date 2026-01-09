@@ -23,7 +23,7 @@
     "PerMapRanking": false,
     "LeaderboardType": "None",
     "CsProjName": "",
-    "StartupScene": "scenes/game/pitch.scene",
+    "StartupScene": "scenes/menusystem/mainmenu.scene",
     "ControlModes": {
       "Keyboard": false,
       "VR": false,

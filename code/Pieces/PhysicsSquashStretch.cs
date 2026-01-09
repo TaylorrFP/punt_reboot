@@ -6,6 +6,8 @@ public sealed class PhysicsSquashStretch : Component
 	[Property] public Rigidbody Rigidbody { get; set; }
 	[Property] public ModelRenderer Renderer { get; set; }
 
+	[Sync] public Vector3 NetworkedVelocity { get; set; }
+
 	[Property, Group( "Spring" )] public float ImpactThreshold { get; set; } = 50f;
 	[Property, Group( "Spring" )] public float ImpactStrength { get; set; } = 0.003f;
 	[Property, Group( "Spring" )] public float SpringFrequency { get; set; } = 8f;
@@ -24,7 +26,13 @@ public sealed class PhysicsSquashStretch : Component
 	{
 		if ( Rigidbody == null ) return;
 
-		var velocity = Rigidbody.Velocity;
+		// Update networked velocity from authority
+		if ( !IsProxy )
+		{
+			NetworkedVelocity = Rigidbody.Velocity;
+		}
+
+		var velocity = NetworkedVelocity;
 		var deltaTime = Time.Delta;
 
 		// Detect sharp velocity changes (impacts)

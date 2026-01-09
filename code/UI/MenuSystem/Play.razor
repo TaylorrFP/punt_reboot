@@ -13,14 +13,9 @@
     <div class="menu-options">
 
         <div class="menu-button">
-            <button class="button" onclick=@PlayGame>1v1</button>
+            <button class="button" onclick=@PlayGame>Competitive</button>
         </div>
-        <div class="menu-button">
-            <button class="button" onclick=@PlayGame>2v2</button>
-        </div>
-        <div class="menu-button">
-            <button class="button" onclick=@PlayGame>Custom Games</button>
-        </div>
+        <a class="menu-button" href="/customgames">Custom Games</a>
         <a class="menu-button" href="/practise">Practise</a>
     </div>
 </root>
@@ -29,6 +24,28 @@
 {
     void PlayGame()
     {
-        Scene.LoadFromFile("scenes/game/pitch.scene");
+
+        var sceneOptions = new SceneLoadOptions();
+        sceneOptions.ShowLoadingScreen = false;
+        sceneOptions.SetScene("scenes/game/pitch.scene");
+
+        Game.ChangeScene(sceneOptions);
+    }
+
+    void StartLobby()
+    {
+
+        Networking.CreateLobby(new LobbyConfig()
+        {
+            MaxPlayers = 8,
+            Privacy = LobbyPrivacy.Private,
+            Name = "My Lobby Name"
+        });
+
+    }
+
+    void DestroyLobby()
+    {
+        Networking.Disconnect();
     }
 }
