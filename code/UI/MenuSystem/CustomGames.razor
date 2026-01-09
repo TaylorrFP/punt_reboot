@@ -12,7 +12,7 @@
 
     <div class="menu-options">
 
-        <a class="menu-button" href="/CreateGame">Create Game</a>
+        <div class="menu-button" onclick=@OnCreateGameClick>Create Game</div>
 
         <a class="menu-button" href="/BrowseGames">Browse</a>
 
@@ -21,5 +21,18 @@
 
 @code
 {
+    void OnCreateGameClick()
+    {
+        // Check if in a party and not the leader
+        if (PartyRoom.Current == null)
+        {
+            Log.Info("not in a party");
+            WarningPanel.Instance?.Show("Only the party leader can create a custom game");
+            return;
+        }
 
+        // If party leader or not in party, navigate to create game
+        // TODO: Navigate to /CreateGame when the page is implemented
+        Log.Info("Navigating to Create Game...");
+    }
 }

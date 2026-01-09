@@ -3,7 +3,7 @@ using System;
 
 public sealed class PartyManager : SingletonComponent<PartyManager>
 {
-	private PartyRoom _currentParty;
+	public PartyRoom _currentParty;
 
 	protected override void OnAwake()
 	{

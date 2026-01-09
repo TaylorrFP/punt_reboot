@@ -5,6 +5,7 @@
 	right: 0;
 	bottom: 0;
 	flex-direction: column;
+	pointer-events: none; // Disable by default, children enable as needed
 
 	&.hidden {
 		display: none;
@@ -15,6 +16,7 @@
 	flex-direction: column;
 	justify-content: center;
 	max-width: 600px;
+	pointer-events: none; // Disable by default, children enable as needed
 }
 
 // Persistent UI elements - positioning only (styling in _buttons.scss and _typography.scss)
@@ -48,6 +50,7 @@
 	flex-direction: row;
 	gap: 12px;
 	align-items: center;
+	pointer-events: none; // Display only, no interactions
 }
 
 .party-member {

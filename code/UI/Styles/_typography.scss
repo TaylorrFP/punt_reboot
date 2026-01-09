@@ -3,4 +3,5 @@ menu-header {
 	font-size: 256px;
 	font-weight: bold;
 	color: $color-text;
+	pointer-events: none; // Visual element only, no interactions
 }

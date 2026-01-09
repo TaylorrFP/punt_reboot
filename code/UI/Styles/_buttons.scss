@@ -67,4 +67,5 @@
 	font-size: $font-size-key-indicator;
 	font-weight: bold;
 	text-transform: uppercase;
+	pointer-events: none; // Visual indicator only, parent button handles clicks
 }
