@@ -1,0 +1,26 @@
+﻿@using Sandbox.Menu
+@using Sandbox.UI;
+@using Sandbox.UI.Navigation;
+@using Sandbox.Network;
+
+@inherits Panel
+@implements INavigatorPage
+@namespace Punt.UI
+
+<root class="main-menu">
+    <menu-header>Browse Custom Games</menu-header>
+
+    <div class="menu-options">
+        <div class="menu-button wip">
+            Purchase items here
+        </div>
+    </div>
+</root>
+
+@code
+{
+    public void OnNavigationOpen()
+    {
+        // Logic when navigating to this page
+    }
+}

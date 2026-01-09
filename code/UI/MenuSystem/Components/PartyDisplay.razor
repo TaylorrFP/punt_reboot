@@ -4,6 +4,11 @@
 @namespace Sandbox
 
 <root class="party-display">
+
+
+    <!-- put a plus here for adding to party maybe? -->
+
+
     <!-- Other party members (if in a party) -->
     @if (PartyRoom.Current != null)
     {
@@ -26,7 +31,7 @@
     <div class="party-member local-player">
         <img src="avatar:@Game.SteamId" class="profile-picture" />
         <span class="player-name">@Connection.Local.DisplayName</span>
-        @if (PartyRoom.Current != null && PartyRoom.Current.Owner.Id == Game.SteamId)
+        @if (PartyRoom.Current != null && PartyRoom.Current.Owner.Id == Game.SteamId && PartyRoom.Current.Members.Count()>1)
         {
             <Button Icon="star" class="party-crown"></Button>
         }

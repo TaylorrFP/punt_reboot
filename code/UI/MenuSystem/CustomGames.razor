@@ -14,7 +14,7 @@
 
         <div class="menu-button" onclick=@OnCreateGameClick>Create Game</div>
 
-        <a class="menu-button" href="/BrowseGames">Browse</a>
+        <a class="menu-button" href="/browsecustomgame">Browse</a>
 
     </div>
 </root>
@@ -24,15 +24,14 @@
     void OnCreateGameClick()
     {
         // Check if in a party and not the leader
-        if (PartyRoom.Current == null)
+        if (PartyRoom.Current != null && PartyRoom.Current.Owner.Id != Game.SteamId)
         {
-            Log.Info("not in a party");
             WarningPanel.Instance?.Show("Only the party leader can create a custom game");
+            Sound.Play("sounds/kenney/ui/ui.navigate.deny.sound_c");
             return;
         }
 
-        // If party leader or not in party, navigate to create game
-        // TODO: Navigate to /CreateGame when the page is implemented
-        Log.Info("Navigating to Create Game...");
+        // Navigate to create custom game page
+        MainMenuRoot.Instance?.Navigate("/createcustomgame");
     }
 }

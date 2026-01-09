@@ -3,7 +3,7 @@ using System;
 
 public sealed class PartyManager : SingletonComponent<PartyManager>
 {
-	public PartyRoom _currentParty;
+	private PartyRoom _currentParty;
 
 	protected override void OnAwake()
 	{
@@ -100,6 +100,7 @@ public sealed class PartyManager : SingletonComponent<PartyManager>
 	private void HandlePlayerLeft( Friend friend )
 	{
 		Log.Info( $"[Party] {friend.Name} left the party!" );
+		
 	}
 
 	private void HandleChatMessage( Friend friend, string message )

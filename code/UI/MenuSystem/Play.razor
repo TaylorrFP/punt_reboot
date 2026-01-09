@@ -13,7 +13,7 @@
     <div class="menu-options">
 
         <div class="menu-button">
-            <button class="button" onclick=@PlayGame>Competitive</button>
+            <button class="button" onclick=@OnPlayGame>Competitive</button>
         </div>
         <a class="menu-button" href="/customgames">Custom Games</a>
         <a class="menu-button" href="/practise">Practise</a>
@@ -22,6 +22,25 @@
 
 @code
 {
+
+
+    void OnPlayGame()
+    {
+        // Check if in a party and not the leader
+        if (PartyRoom.Current != null && PartyRoom.Current.Owner.Id != Game.SteamId)
+        {
+            WarningPanel.Instance?.Show("Only the party leader can queue for competitive games");
+            Sound.Play("sounds/kenney/ui/ui.navigate.deny.sound_c");
+            return;
+        }
+        else
+        {
+            //Create lobby.
+
+        }
+
+
+
     void PlayGame()
     {
 

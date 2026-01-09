@@ -18,21 +18,21 @@
 
     <WarningPanel />
 
-    <div class="chat-button" onclick=@(() => ToggleChat())>
+    <div class="chat-button" onclick=@ToggleChat>
         <span class="key-indicator">enter</span>
         Chat
     </div>
 
     @if (CurrentUrl == "/")
     {
-        <div class="back-button" onclick=@(() => ExitGame())>
+        <div class="back-button" onclick=@ExitGame>
             <span class="key-indicator">escape</span>
             Exit
         </div>
     }
     else
     {
-        <div class="back-button" onclick=@(() => NavigateBack())>
+        <div class="back-button" onclick=@NavigateBack>
             <span class="key-indicator">escape</span>
             Back
         </div>
@@ -54,6 +54,8 @@
         AddDestination("/", typeof(LandingPage));
         AddDestination("/play", typeof(Play));
         AddDestination("/customgames", typeof(CustomGames));
+        AddDestination("/createcustomgame", typeof(CreateCustomGame));
+        AddDestination("/browsecustomgame", typeof(BrowseCustomGame));
         AddDestination("/practise", typeof(Practise));
         AddDestination("/tutorial", typeof(Tutorial));
         AddDestination("/collection", typeof(Collection));
