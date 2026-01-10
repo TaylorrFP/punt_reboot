@@ -1,7 +1,7 @@
 .main-menu {
 	position: absolute;
 	top: 0;
-	left: $menu-padding;
+	left: 0;
 	right: 0;
 	bottom: 0;
 	flex-direction: column;
@@ -15,6 +15,7 @@
 .menu-options {
 	flex-direction: column;
 	justify-content: center;
+	margin-left: $menu-paddingpx;
 	max-width: 600px;
 	pointer-events: none; // Disable by default, children enable as needed
 }

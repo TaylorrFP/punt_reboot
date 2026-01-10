@@ -1,0 +1,10 @@
+@import "/UI/Styles/punt.scss";
+
+.landing-page {
+    main-menu-header {
+        margin-top: 20px;
+        margin-left: $menu-paddingpx;
+        margin-bottom: 0px;
+        // Font size, color, family come from _typography.scss automatically
+    }
+}

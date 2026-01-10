@@ -7,17 +7,37 @@
 @implements INavigatorPage
 @namespace Punt.UI
 
-<root class="main-menu">
-    <menu-header>Punt!</menu-header>
+<root class="main-menu play-page">
+    <page-header>Play</page-header>
 
-    <div class="menu-options">
-
-        <div class="menu-button">
-            <button class="button" onclick=@OnPlayGame>Competitive</button>
+    <div class="play-cards">
+        <div class="play-card" onclick=@OnPlayGame style="background-image: url('ui/playcards/playcard.png');">
+            <div class="card-title">
+                <div class="card-title-text">Competitive</div>
+                <div class="card-text">Compete against other players of your skill level to climb the leaderboard</div>
+            </div>
         </div>
-        <a class="menu-button" href="/customgames">Custom Games</a>
-        <a class="menu-button" href="/practise">Practise</a>
-        <a class="menu-button" href="/ tutorial">Tutorial</a>
+
+        <div class="play-card" onclick=@OnPlayGame style="background-image: url('ui/playcards/playcard.png');">
+            <div class="card-title">
+                <div class="card-title-text">Custom Games</div>
+                <div class="card-text">Find and create custom games with friends, or new rivals </div>
+            </div>
+        </div>
+
+        <div class="play-card" onclick=@OnPlayGame style="background-image: url('ui/playcards/playcard.png');">
+            <div class="card-title">
+                <div class="card-title-text">Practise</div>
+                <div class="card-text">Train your skills at your own pace with no pressure</div>
+            </div>
+        </div>
+
+        <div class="play-card" onclick=@OnPlayGame style="background-image: url('ui/playcards/playcard.png');">
+            <div class="card-title">
+                <div class="card-title-text">Tutorial</div>
+                <div class="card-text">Learn the basics and get ready to play</div>
+            </div>
+        </div>
     </div>
 </root>
 
