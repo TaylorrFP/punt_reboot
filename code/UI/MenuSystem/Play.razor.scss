@@ -20,7 +20,7 @@
         width: 300px;
         height: 700px;
         flex-shrink: 0;
-        border-radius: 72px;
+        border-radius: 32px;
         cursor: pointer;
         pointer-events: all;
         position: relative;
@@ -66,5 +66,6 @@
             font-weight: bold;
             text-align: center;
         }
+
     }
 }
