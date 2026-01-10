@@ -14,8 +14,9 @@
  *    - Each Razor component should have its own .razor.scss file next to it
  *    - Example: MainMenuPanel.razor → MainMenuPanel.razor.scss
  *    - These files contain ALL styles specific to that component
- *    - Import this global stylesheet if you need variables/shared styles:
- *      <style>@import "/UI/Styles/punt.scss";</style>
+ *    - S&box automatically imports .razor.scss files - no manual import needed!
+ *    - To use global variables in your component styles:
+ *      @import "/UI/Styles/punt.scss"; (at the top of your .razor.scss file)
  *
  * 2. GLOBAL STYLES → This file (punt.scss) and its partials
  *    - Contains ONLY truly shared/reusable styles
