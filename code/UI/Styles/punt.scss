@@ -1,6 +1,76 @@
+/*
+ * ================================
+ * PUNT REBOOT - GLOBAL STYLES
+ * ================================
+ *
+ * This is the main stylesheet entry point for the Punt Reboot project.
+ * It contains ONLY global, shared styles that are used across multiple components.
+ *
+ * STYLING ARCHITECTURE:
+ * ---------------------
+ * This project follows a COMPONENT-SCOPED styling approach:
+ *
+ * 1. COMPONENT-SPECIFIC STYLES → Co-located .razor.scss files
+ *    - Each Razor component should have its own .razor.scss file next to it
+ *    - Example: MainMenuPanel.razor → MainMenuPanel.razor.scss
+ *    - These files contain ALL styles specific to that component
+ *    - Import this global stylesheet if you need variables/shared styles:
+ *      <style>@import "/UI/Styles/punt.scss";</style>
+ *
+ * 2. GLOBAL STYLES → This file (punt.scss) and its partials
+ *    - Contains ONLY truly shared/reusable styles
+ *    - Variables, base typography, shared button styles, layout utilities
+ *    - If a style is used by only ONE component, it belongs in that component's .razor.scss
+ *
+ * WHERE TO PUT STYLES:
+ * --------------------
+ *
+ * Ask yourself: "Is this style used by multiple components?"
+ *
+ * ✓ YES → Put it in the appropriate global partial below
+ *   - Colors, spacing, fonts → _variables.scss
+ *   - Shared button styles → _buttons.scss
+ *   - Base typography (h1, h2, body) → _typography.scss
+ *   - Layout utilities (flexbox helpers, grid) → _layout.scss
+ *
+ * ✗ NO → Put it in the component's .razor.scss file
+ *   - Menu-specific styles → MenuPanel.razor.scss
+ *   - HUD-specific styles → Hud.razor.scss
+ *   - Game piece styles → BallGuide.razor.scss
+ *
+ * MIGRATION NOTES:
+ * ----------------
+ * This project is transitioning to component-scoped styles.
+ * Legacy global files (_components.scss, _pages.scss) are being phased out.
+ * New components should ALWAYS use co-located .razor.scss files.
+ *
+ * BEST PRACTICES:
+ * ---------------
+ * 1. Keep global styles minimal - only add truly shared styles
+ * 2. Use CSS variables from _variables.scss for consistency
+ * 3. Avoid deep nesting (max 3 levels) for performance
+ * 4. Use semantic class names (e.g., .menu-button, not .btn-blue)
+ * 5. Co-locate component styles with their .razor files for easy maintenance
+ *
+ * IMPORT ORDER:
+ * -------------
+ * The order matters! Variables must come first, then base styles, then specifics.
+ */
+
+// Design tokens (colors, fonts, spacing, etc.)
 @import "variables";
+
+// Base typography (headings, body text)
 @import "typography";
+
+// Shared button styles used across multiple components
 @import "buttons";
+
+// Layout utilities and positioning helpers
 @import "layout";
+
+// LEGACY: Being phased out - migrate component styles to .razor.scss files
 @import "components";
+
+// LEGACY: Being phased out - migrate page styles to .razor.scss files
 @import "pages"; 

@@ -1,0 +1,67 @@
+@import "/UI/Styles/punt.scss";
+
+.party-display {
+	position: absolute;
+	top: $ui-edge-padding-medium;
+	right: $ui-edge-padding-medium;
+	display: flex;
+	flex-direction: row;
+	gap: 12px;
+	align-items: center;
+	pointer-events: none; // Display only, no interactions
+}
+
+.party-member {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    position: relative; // Needed for absolute positioning of crown
+
+    .profile-picture {
+        width: 48px;
+        height: 48px;
+        border-radius: 100%;
+    }
+
+    .party-crown {
+        position: absolute;
+        top: -15px;
+        right: -15px;
+        font-size: 32px;
+        pointer-events: none;
+        z-index: 10;
+        color: rgb(255, 190, 0); // Gold/yellow color for the crown
+        text-stroke: 5px, black;
+    }
+
+    // Style for local player with name (pill/capsule shape)
+    &.local-player {
+        background: $color-text;
+        border-radius: 100px; // Large radius creates pill shape
+        padding: $outline-profile-picture 16px $outline-profile-picture $outline-profile-picture; // More padding on right for name
+        gap: 12px;
+
+        .player-name {
+            font-family: $font-body;
+            font-size: 20px;
+            color: $color-text-black;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        // Adjust crown position for local player to be over the profile picture
+        .party-crown {
+            left: 32px; // Position over the profile picture specifically
+            right: auto;
+        }
+    }
+
+    // Add outline to non-local player profile pictures (default white)
+    &:not(.local-player) .profile-picture {
+        box-shadow: 0 0 0 $outline-profile-picture $color-text;
+    }
+
+    // Hide name for non-local players
+    &:not(.local-player) .player-name {
+        display: none;
+    }
+}

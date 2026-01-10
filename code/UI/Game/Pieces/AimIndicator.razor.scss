@@ -12,15 +12,6 @@ AimIndicator {
 		transition: none;
 	}
 
-
-	&.hidden {
-		opacity: 0;
-	}
-
-	&.visible {
-		opacity: 1;
-	}
-
 	.aim-line {
 		position: absolute;
 		left: 0;
