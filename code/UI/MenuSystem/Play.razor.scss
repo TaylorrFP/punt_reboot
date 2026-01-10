@@ -34,11 +34,26 @@
         filter: drop-shadow(0px 0px 20px rgba(black, 0.5));
         transition: all 0.1s ease;
 
+
+
         &:hover {
             transform: scale(1.1); // Expand the card
             filter: drop-shadow(0px 0px 20px rgba(white, 0.8)); // White glow
             border: 3px solid white;
             z-index: 10; // Bring to front
+            // Gradient overlay
+            &::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: linear-gradient(rgba(0, 0, 0, 0.00), rgba(255, 0, 77, 0.99));
+                mix-blend-mode: multiply; // Additive-like blending? Doesn't work?
+                pointer-events: none;
+                z-index: 1;
+            }
 
             .card-title {
                 background: #ffffff00; // Transparent background (white with 0 alpha)
@@ -62,6 +77,8 @@
             justify-content: flex-start;
             align-items: center;
             transition: background 0.1s ease;
+            position: relative;
+            z-index: 2;
         }
 
         .card-title-text {
@@ -72,6 +89,8 @@
             font-weight: bold;
             text-align: center;
             transition: color 0.1s ease;
+            position: relative;
+            z-index: 3;
         }
 
         .card-text {
@@ -83,6 +102,8 @@
             font-weight: bold;
             text-align: center;
             transition: color 0.1s ease;
+            position: relative;
+            z-index: 3;
         }
 
         .destination-text {
@@ -95,6 +116,8 @@
             margin-top: auto; // Pushes to bottom
             align-self: flex-end; // Aligns to right
             transition: color 0.3s ease;
+            position: relative;
+            z-index: 3;
         }
     }
 }
