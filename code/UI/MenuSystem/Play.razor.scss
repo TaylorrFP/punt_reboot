@@ -34,25 +34,26 @@
         filter: drop-shadow(0px 0px 20px rgba(black, 0.5));
         transition: all 0.1s ease;
 
-
+        .card-gradient {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            opacity: 0;
+            transition: opacity 0.1s ease;
+            pointer-events: none;
+            z-index: 1;
+        }
 
         &:hover {
             transform: scale(1.1); // Expand the card
             filter: drop-shadow(0px 0px 20px rgba(white, 0.8)); // White glow
             border: 3px solid white;
             z-index: 10; // Bring to front
-            // Gradient overlay
-            &::before {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background: linear-gradient(rgba(0, 0, 0, 0.00), rgba(255, 0, 77, 0.99));
-                mix-blend-mode: multiply; // Additive-like blending? Doesn't work?
-                pointer-events: none;
-                z-index: 1;
+
+            .card-gradient {
+                opacity: 1; // Show gradient on hover
             }
 
             .card-title {
