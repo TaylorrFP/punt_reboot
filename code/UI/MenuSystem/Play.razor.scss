@@ -2,9 +2,9 @@
 
 .play-page {
     page-header {
-        margin-top: 64px;
+        margin-top: 24px;
         margin-left: $menu-paddingpx;
-        margin-bottom: 20px;
+        margin-bottom: 32px;
     }
 
     .play-cards {
@@ -28,24 +28,40 @@
         display: flex;
         flex-direction: column;
         justify-content: flex-end;
-        // Background image (you can set this per card)
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
-        filter: drop-shadow(0px 0px 20px rgba( black, 0.5 ));
-        filter: grayscale(0);
-        filter: brightness(1);
+        filter: drop-shadow(0px 0px 20px rgba(black, 0.5));
+        transition: all 0.1s ease;
+
+        &:hover {
+            transform: scale(1.1); // Expand the card
+            filter: drop-shadow(0px 0px 20px rgba(white, 0.8)); // White glow
+            border: 3px solid white;
+            z-index: 10; // Bring to front
+
+            .card-title {
+                background: #ffffff00; // Transparent background (white with 0 alpha)
+            }
+
+            .card-title-text,
+            .card-text,
+            .destination-text {
+                color: white; // All text becomes white
+            }
+        }
 
 
 
         .card-title {
-            background: $color-text;
+            background: #fff;
             height: 200px;
             padding: 12px;
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
             align-items: center;
+            transition: background 0.1s ease;
         }
 
         .card-title-text {
@@ -55,6 +71,7 @@
             text-transform: uppercase;
             font-weight: bold;
             text-align: center;
+            transition: color 0.1s ease;
         }
 
         .card-text {
@@ -65,7 +82,19 @@
             text-transform: uppercase;
             font-weight: bold;
             text-align: center;
+            transition: color 0.1s ease;
         }
 
+        .destination-text {
+            font-family: $font-header;
+            font-size: 24px;
+            color: $color-text-black;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-weight: bold;
+            margin-top: auto; // Pushes to bottom
+            align-self: flex-end; // Aligns to right
+            transition: color 0.3s ease;
+        }
     }
 }
