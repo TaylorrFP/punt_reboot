@@ -67,6 +67,10 @@
             }
         }
 
+        &:active {
+            transform: scale(1.05); // Shrink slightly when clicked
+        }
+
 
 
         .card-title {

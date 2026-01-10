@@ -11,25 +11,25 @@
     <page-header>Play</page-header>
 
     <div class="play-cards">
-        <div class="play-card" onclick=@OnPlayGame style="background-image: url('ui/playcards/playcard.png');">
+        <a class="play-card" href="/Competitive" style="background-image: url('ui/playcards/playcard.png');">
             <div class="card-gradient" style="background: linear-gradient(rgba(0, 0, 0, 0.00), rgba(255, 0, 77, @GradientTransparency));"></div>
             <div class="card-title">
                 <div class="card-title-text">Competitive</div>
                 <div class="card-text">Compete against other players of your skill level to climb the leaderboard</div>
 
             </div>
-        </div>
+        </a>
 
-        <div class="play-card" onclick=@OnPlayGame style="background-image: url('ui/playcards/playcard.png');">
+        <a class="play-card" href="/BrowseCustomGames" style="background-image: url('ui/playcards/playcard.png');">
             <div class="card-gradient" style="background: linear-gradient(rgba(0, 0, 0, 0.00), rgba(0, 200, 255,  @GradientTransparency));"></div>
             <div class="card-title">
                 <div class="card-title-text">Custom Games</div>
                 <div class="card-text">Find and create custom games with friends, or new rivals </div>
 
             </div>
-        </div>
+        </a>
 
-        <div class="play-card" onclick=@OnPlayGame style="background-image: url('ui/playcards/playcard.png');">
+        <div class="play-card" onclick="@PlayGame" style="background-image: url('ui/playcards/playcard.png');">
             <div class="card-gradient" style="background: linear-gradient(rgba(0, 0, 0, 0.00), rgba(120, 255, 0,  @GradientTransparency));"></div>
             <div class="card-title">
                 <div class="card-title-text">Practise</div>
@@ -37,36 +37,38 @@
             </div>
         </div>
 
-        <div class="play-card" onclick=@OnPlayGame style="background-image: url('ui/playcards/playcard.png');">
+        <a class="play-card" href="/Tutorial" style="background-image: url('ui/playcards/playcard.png');">
             <div class="card-gradient" style="background: linear-gradient(rgba(0, 0, 0, 0.00), rgba(255, 255, 0,  @GradientTransparency));"></div>
             <div class="card-title">
                 <div class="card-title-text">Tutorial</div>
                 <div class="card-text">Learn the basics and get ready to play</div>
             </div>
-        </div>
+        </a>
     </div>
 </root>
 
 @code
 {
-    float GradientTransparency = 0.6f;
+    float GradientTransparency = 0.75f;
 
        
 
     void OnPlayGame()
     {
-        // Check if in a party and not the leader
-        if (PartyRoom.Current != null && PartyRoom.Current.Owner.Id != Game.SteamId)
-        {
-            WarningPanel.Instance?.Show("Only the party leader can queue for competitive games");
-            Sound.Play("sounds/kenney/ui/ui.navigate.deny.sound_c");
-            return;
-        }
-        else
-        {
-            //Create lobby.
+        // // Check if in a party and not the leader
+        // if (PartyRoom.Current != null && PartyRoom.Current.Owner.Id != Game.SteamId)
+        // {
+        //     WarningPanel.Instance?.Show("Only the party leader can queue for competitive games");
+        //     Sound.Play("sounds/kenney/ui/ui.navigate.deny.sound_c");
+        //     return;
+        // }
+        // else
+        // {
+        //     //Create lobby.
 
-        }
+        // }
+
+    }
 
 
 
@@ -97,4 +99,4 @@
         Networking.Disconnect();
     }
 }
-}
+
