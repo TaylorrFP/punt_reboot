@@ -102,14 +102,6 @@
         box-shadow: 0 0 0 $outline-profile-picture $color-text;
     }
 
-    // Offline state styling
-    &.offline {
-        .profile-picture {
-            filter: grayscale(100%) brightness(0.7); // Desaturate and darken
-            box-shadow: 0 0 0 $outline-profile-picture rgba(150, 150, 150, 1); // Grey outline
-        }
-    }
-
     // Hide name for non-local players
     &:not(.local-player) .player-name {
         display: none;

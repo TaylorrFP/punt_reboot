@@ -1,0 +1,52 @@
+@using System;
+@using Sandbox;
+@using Sandbox.UI;
+@inherits Panel
+@namespace Punt.UI
+
+<root class="custom-game-setting-panel">
+    <div class="setting-label">@Label</div>
+    <div class="setting-controls">
+        <button class="arrow-button" onclick=@OnPrevious>◀</button>
+        <div class="setting-value">@CurrentValue</div>
+        <button class="arrow-button" onclick=@OnNext>▶</button>
+    </div>
+</root>
+
+@code
+{
+    [Property] public string Label { get; set; } = "";
+    [Property] public List<string> Options { get; set; } = new();
+    [Property] public int SelectedIndex { get; set; } = 0;
+
+    private string CurrentValue => Options != null && Options.Count > 0 && SelectedIndex >= 0 && SelectedIndex < Options.Count
+        ? Options[SelectedIndex]
+        : "";
+
+    private void OnPrevious()
+    {
+        if (Options == null || Options.Count == 0) return;
+
+        SelectedIndex--;
+        if (SelectedIndex < 0)
+            SelectedIndex = Options.Count - 1;
+
+        StateHasChanged();
+    }
+
+    private void OnNext()
+    {
+        if (Options == null || Options.Count == 0) return;
+
+        SelectedIndex++;
+        if (SelectedIndex >= Options.Count)
+            SelectedIndex = 0;
+
+        StateHasChanged();
+    }
+
+    protected override int BuildHash()
+    {
+        return System.HashCode.Combine(base.BuildHash(), Label, SelectedIndex, Options?.Count ?? 0);
+    }
+}

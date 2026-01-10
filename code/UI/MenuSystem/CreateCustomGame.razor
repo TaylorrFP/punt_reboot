@@ -1,4 +1,4 @@
-﻿@using Sandbox.Menu
+@using Sandbox.Menu
 @using Sandbox.UI;
 @using Sandbox.UI.Navigation;
 @using Sandbox.Network;
@@ -7,14 +7,86 @@
 @implements INavigatorPage
 @namespace Punt.UI
 
-<root class="main-menu">
-    <menu-header>Custom Game</menu-header>
+<root class="main-menu create-custom-game">
+    <div class="header">Custom Game</div>
+
+    <div class="settings-container">
+        <CustomGameSettingPanel @ref=VisibilitySetting
+            Label="Visibility"
+            Options=@VisibilityOptions
+            SelectedIndex=@VisibilityIndex />
+
+        <CustomGameSettingPanel @ref=MaxPlayersSetting
+            Label="Max Players"
+            Options=@MaxPlayersOptions
+            SelectedIndex=@MaxPlayersIndex />
+
+        <CustomGameSettingPanel @ref=PitchSetting
+            Label="Pitch"
+            Options=@PitchOptions
+            SelectedIndex=@PitchIndex />
+
+        <CustomGameSettingPanel @ref=AllowJoiningSetting
+            Label="Allow Joining"
+            Options=@AllowJoiningOptions
+            SelectedIndex=@AllowJoiningIndex />
+    </div>
+
+    <div class="button-container">
+        <button class="create-button" onclick=@OnCreateMatch>Create Match</button>
+    </div>
 </root>
 
 @code
 {
+    // Component references
+    private CustomGameSettingPanel VisibilitySetting;
+    private CustomGameSettingPanel MaxPlayersSetting;
+    private CustomGameSettingPanel PitchSetting;
+    private CustomGameSettingPanel AllowJoiningSetting;
+
+    // Visibility settings
+    private List<string> VisibilityOptions = new() { "Public", "Party Only" };
+    private int VisibilityIndex = 0;
+
+    // Max Players settings
+    private List<string> MaxPlayersOptions = new() { "1", "2", "3", "4" };
+    private int MaxPlayersIndex = 3;
+
+    // Pitch settings
+    private List<string> PitchOptions = new() { "Default", "Default 2", "Default 3" };
+    private int PitchIndex = 0;
+
+    // Allow Joining settings
+    private List<string> AllowJoiningOptions = new() { "Mid-Game", "Spectators Only", "None" };
+    private int AllowJoiningIndex = 0;
+
     public void OnNavigationOpen()
     {
         // Logic when navigating to this page
+    }
+
+    private void OnCreateMatch()
+    {
+        // Read current values from the components
+        var visibility = VisibilityOptions[VisibilitySetting?.SelectedIndex ?? 0];
+        var maxPlayers = MaxPlayersOptions[MaxPlayersSetting?.SelectedIndex ?? 3];
+        var pitch = PitchOptions[PitchSetting?.SelectedIndex ?? 0];
+        var allowJoining = AllowJoiningOptions[AllowJoiningSetting?.SelectedIndex ?? 0];
+
+        Log.Info($"Creating match: Visibility={visibility}, MaxPlayers={maxPlayers}, Pitch={pitch}, AllowJoining={allowJoining}");
+
+        // TODO: Implement match creation logic
+    }
+
+    protected override int BuildHash()
+    {
+        return System.HashCode.Combine(
+            base.BuildHash(),
+            VisibilitySetting?.SelectedIndex ?? 0,
+            MaxPlayersSetting?.SelectedIndex ?? 0,
+            PitchSetting?.SelectedIndex ?? 0,
+            AllowJoiningSetting?.SelectedIndex ?? 0
+        );
     }
 }
