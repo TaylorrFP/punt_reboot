@@ -7,4 +7,84 @@
         margin-left: $menu-paddingpx;
         margin-bottom: 32px;
     }
+
+    .game-browser {
+        margin-left: $menu-paddingpx;
+        margin-right: $menu-paddingpx;
+        display: flex;
+        flex-direction: column;
+        height: calc(100% - 200px); // Leave space for header and footer
+        pointer-events: all;
+    }
+
+    .browser-header {
+        display: flex;
+        flex-direction: row;
+        padding: 16px 24px;
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 8px 8px 0 0;
+        font-family: $font-body;
+        font-size: 18px;
+        font-weight: 600;
+        color: $color-text;
+        border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .browser-list {
+        display: flex;
+        flex-direction: column;
+        overflow: scroll;
+        background-color: rgba(0, 0, 0, 0.3);
+        border-radius: 0 0 8px 8px;
+        flex-grow: 1;
+    }
+
+    .browser-entry {
+        display: flex;
+        flex-direction: row;
+        padding: 12px 24px;
+        font-family: $font-body;
+        font-size: 16px;
+        color: $color-text;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        transition: background-color 0.1s ease;
+        cursor: pointer;
+
+        &:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        &:last-child {
+            border-bottom: none;
+        }
+    }
+
+    // Column widths
+    .column-name {
+        flex: 2;
+        min-width: 0;
+    }
+
+    .column-team-size {
+        flex: 1;
+        min-width: 0;
+        text-align: center;
+    }
+
+    .column-map {
+        flex: 1.5;
+        min-width: 0;
+    }
+
+    .column-ping {
+        flex: 0.8;
+        min-width: 0;
+        text-align: center;
+    }
+
+    .column-players {
+        flex: 1;
+        min-width: 0;
+        text-align: center;
+    }
 }

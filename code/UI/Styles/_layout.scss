@@ -1,15 +1,39 @@
-.main-menu {
+// MainMenuRoot component styling
+mainmenuroot {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	height: 100%;
 	position: absolute;
 	top: 0;
 	left: 0;
 	right: 0;
 	bottom: 0;
+
+	> root {
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+		height: 100%;
+	}
+}
+
+.main-menu {
+	width: 100%;
+	height: 100%;
 	flex-direction: column;
 	pointer-events: none; // Disable by default, children enable as needed
 
 	&.hidden {
 		display: none;
 	}
+}
+
+.navigator-canvas {
+	flex: 1 1 auto;
+	overflow: hidden;
+	position: relative;
+	width: 100%;
 }
 
 .menu-options {
@@ -29,14 +53,20 @@
 	font-size: 16px;
 	color: $color-text-disabled;
 	pointer-events: none;
+	z-index: 100;
+}
+
+// Party display and warning panel - absolutely positioned to not interfere with flex layout
+party-display, warning-panel {
+	position: absolute;
+	pointer-events: all;
+	z-index: 100;
 }
 
 // Menu footer - consistent footer across all pages
 .menu-footer {
-	position: absolute;
-	bottom: $ui-edge-padding-medium;
-	left: $ui-edge-padding-medium;
-	right: $ui-edge-padding-medium;
+	flex: 0 0 auto;
+	padding: $ui-edge-padding-medium;
 	display: flex;
 	flex-direction: row;
 	align-items: center;

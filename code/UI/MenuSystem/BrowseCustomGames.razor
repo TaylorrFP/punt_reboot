@@ -2,7 +2,7 @@
 @using Sandbox.UI;
 @using Sandbox.UI.Navigation;
 @using Sandbox.Network;
-
+@using System;
 @inherits Panel
 @implements INavigatorPage
 @namespace Punt.UI
@@ -10,10 +10,68 @@
 <root class="main-menu browse-custom-games-page">
     <page-header>Browse</page-header>
 
+    <div class="game-browser">
+        <div class="browser-header">
+            <div class="column-name">Name</div>
+            <div class="column-team-size">Team Size</div>
+            <div class="column-map">Current Map</div>
+            <div class="column-ping">Ping</div>
+            <div class="column-players">Players</div>
+        </div>
+
+        <div class="browser-list">
+            @foreach (var game in PlaceholderGames)
+            {
+                <div class="browser-entry">
+                    <div class="column-name">@game.Name</div>
+                    <div class="column-team-size">@game.TeamSize</div>
+                    <div class="column-map">@game.Map</div>
+                    <div class="column-ping">@game.Ping</div>
+                    <div class="column-players">@game.Players</div>
+                </div>
+            }
+        </div>
+    </div>
+
 </root>
 
 @code
 {
+    public class GameLobby
+    {
+        public string Name { get; set; }
+        public string TeamSize { get; set; }
+        public string Map { get; set; }
+        public string Ping { get; set; }
+        public string Players { get; set; }
+    }
+
+    private List<GameLobby> PlaceholderGames
+    {
+        get
+        {
+            if (_placeholderGames == null)
+            {
+                _placeholderGames = new List<GameLobby>();
+                // Generate 100 placeholder entries
+                for (int i = 1; i <= 100; i++)
+                {
+                    _placeholderGames.Add(new GameLobby
+                    {
+                        Name = $"Game Server {i}",
+                        TeamSize = $"{Random.Shared.Next(1, 5)}v{Random.Shared.Next(1, 5)}",
+                        Map = $"Map_{Random.Shared.Next(1, 10)}",
+                        Ping = $"{Random.Shared.Next(10, 200)}ms",
+                        Players = $"{Random.Shared.Next(1, 20)}/{Random.Shared.Next(10, 20)}"
+                    });
+                }
+            }
+            return _placeholderGames;
+        }
+    }
+
+    private List<GameLobby> _placeholderGames;
+
     public void OnNavigationOpen()
     {
         // Clear any existing page buttons first, then set this page's buttons
