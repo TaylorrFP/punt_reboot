@@ -7,4 +7,22 @@
         margin-left: $menu-paddingpx;
         margin-bottom: 32px;
     }
+
+    .content-panels {
+        flex-grow: 1;
+        flex-direction: row;
+        gap: 16px;
+        margin-left: $menu-paddingpx;
+        margin-right: $menu-paddingpx;
+
+        .game-panel {
+            flex-basis: 30%;
+            background-color: rgba(black, 0.2);
+        }
+
+        .team-panel {
+            flex-basis: 70%;
+            background-color: rgba(black, 0.2);
+        }
+    }
 }
