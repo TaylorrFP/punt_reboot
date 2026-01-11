@@ -23,7 +23,7 @@
         flex-direction: row;
         align-items: center;
         padding: 16px 0;
-        background-color: rgba(0, 0, 0, 0.6);
+        background-color: rgba(0, 0, 0, 0.8);
         border-radius: 24px;
         font-family: $font-body;
         font-size: 28px;
@@ -69,7 +69,9 @@
 
 
         &:hover {
-            background-color: rgba(255, 255, 255, 0.1);
+            background-color: rgba(255, 255, 255, 0.5);
+            color: $color-text-black;
+            border: 2px, $color-text;
         }
 
         > div:first-child {
@@ -83,34 +85,27 @@
     // Column widths
     .column-name {
         flex: 1 1 0;
-        overflow: hidden;
-        border: 1px, black;
     }
 
     .column-team-size {
         flex: 1 1 0;
         text-align: center;
-        overflow: hidden;
-        border: 1px, black;
     }
 
     .column-map {
         flex: 1 1 0;
         overflow: hidden;
-        border: 1px, black;
     }
 
     .column-ping {
-        flex: 0.1 1 0;
+        flex: 1 1 0;
         text-align: center;
-        overflow: hidden;
-        border: 1px, black;
+        max-width: 150px;
     }
 
     .column-players {
-        flex: 0.1 1 0;
+        flex: 1 1 0;
         text-align: center;
-        overflow: hidden;
-        border: 1px, black;
+        max-width: 150px;
     }
 }
