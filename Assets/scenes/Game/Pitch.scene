@@ -408,6 +408,24 @@
               "OnComponentStart": null,
               "OnComponentUpdate": null,
               "Scale": 0.05
+            },
+            {
+              "__type": "Sandbox.GradientFog",
+              "__guid": "750a27ba-2ad2-4d2c-adb0-8db0bc4c68e4",
+              "__enabled": true,
+              "Flags": 0,
+              "Color": "0.47907,0.93922,1,1",
+              "EndDistance": 10000,
+              "FalloffExponent": 1.3733321,
+              "Height": 100,
+              "OnComponentDestroy": null,
+              "OnComponentDisabled": null,
+              "OnComponentEnabled": null,
+              "OnComponentFixedUpdate": null,
+              "OnComponentStart": null,
+              "OnComponentUpdate": null,
+              "StartDistance": 2000,
+              "VerticalFalloffExponent": 1
             }
           ],
           "Children": []
