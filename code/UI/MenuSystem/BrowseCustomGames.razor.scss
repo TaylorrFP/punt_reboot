@@ -52,11 +52,12 @@
     }
 
     .browser-entry {
+        flex: 0 0 auto;
         display: flex;
         background-color: rgba(0, 0, 0, 0.3);
         flex-direction: row;
         align-items: center;
-        padding: 16px 0;
+        padding: 4px 0;
         font-family: $font-body;
         font-size: 24px;
         color: $color-text;
@@ -65,6 +66,7 @@
         border-radius: 16px;
         text-transform: uppercase;
         font-weight: bold;
+
 
         &:hover {
             background-color: rgba(255, 255, 255, 0.1);
@@ -80,30 +82,35 @@
     }
     // Column widths
     .column-name {
-        flex: 1;
-        min-width: 0;
+        flex: 1 1 0;
+        overflow: hidden;
+        border: 1px, black;
     }
 
     .column-team-size {
-        flex: 1;
-        min-width: 0;
+        flex: 1 1 0;
         text-align: center;
+        overflow: hidden;
+        border: 1px, black;
     }
 
     .column-map {
-        flex: 1;
-        min-width: 0;
+        flex: 1 1 0;
+        overflow: hidden;
+        border: 1px, black;
     }
 
     .column-ping {
-        flex: 1;
-        min-width: 0;
+        flex: 0.1 1 0;
         text-align: center;
+        overflow: hidden;
+        border: 1px, black;
     }
 
     .column-players {
-        flex: 1;
-        min-width: 0;
+        flex: 0.1 1 0;
         text-align: center;
+        overflow: hidden;
+        border: 1px, black;
     }
 }
