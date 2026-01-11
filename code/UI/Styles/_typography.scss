@@ -12,4 +12,5 @@ page-header {
 	font-weight: bold;
 	color: $color-text;
 	pointer-events: none; // Visual element only, no interactions
+	flex: 0 0 auto; // Prevent shrinking in flex containers on re-navigation
 }

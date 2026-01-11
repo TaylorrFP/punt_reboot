@@ -235,8 +235,8 @@
       "__version": 2,
       "Flags": 0,
       "Name": "CameraController",
-      "Position": "-180,0,0",
-      "Rotation": "0,0.34202,0,0.9396927",
+      "Position": "-210,0,0",
+      "Rotation": "0,0.3826835,0,0.9238795",
       "Scale": "1,1,1",
       "Tags": "",
       "Enabled": true,
@@ -263,7 +263,7 @@
           "PanSpeed": 1,
           "PassivePanHorizontalMult": 2.5,
           "PassivePanSpeed": 30,
-          "ShowDebug": false,
+          "ShowDebug": true,
           "Smoothing": 5,
           "SmoothPan": true
         }

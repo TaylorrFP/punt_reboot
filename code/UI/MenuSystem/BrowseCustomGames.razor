@@ -3,6 +3,7 @@
 @using Sandbox.UI.Navigation;
 @using Sandbox.Network;
 @using System;
+@using Sandbox;
 @inherits Panel
 @implements INavigatorPage
 @namespace Punt.UI
@@ -13,10 +14,10 @@
     <div class="game-browser">
         <div class="browser-header">
             <div class="column-name">Name</div>
-            <div class="column-team-size">Team</div>
+            <div class="column-team-size">Teams</div>
             <div class="column-map">Current Map</div>
             <div class="column-ping">Ping</div>
-            <div class="column-players">Players</div>
+            <div class="column-players">Players </div> @* WHY THE FUCK IS <i>person</i> NOT WORKING HERE *@
         </div>
 
         <div class="browser-list">
@@ -58,7 +59,7 @@
                 {
                     _placeholderGames.Add(new GameLobby
                     {
-                        Name = $"Game Server {i}",
+                        Name = $"Server {i}",
                         TeamSize = $"{Random.Shared.Next(1, 5)}v{Random.Shared.Next(1, 5)}",
                         Map = $"Map_{Random.Shared.Next(1, 10)}",
                         Ping = $"{Random.Shared.Next(10, 200)}ms",
@@ -91,10 +92,10 @@
                 Refresh
             </div>
 
-             <div class="footer-button" onclick=@CreateGame>
+                <a class="footer-button" href="/CreateGame" onclick=@CreateGame>
                  <span class="key-indicator">C</span>
                  Create
-             </div>
+             </a>
 
         </text>);
     }
@@ -109,6 +110,9 @@
     {
         // TODO: Navigate to create game page
         Log.Info("Create game clicked");
+
+        NetworkManager.Instance?.CreateLobby();
+
     }
 
     void RefreshList()

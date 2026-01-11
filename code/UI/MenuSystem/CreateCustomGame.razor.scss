@@ -1,57 +1,10 @@
 @import "/UI/Styles/punt.scss";
 
-.create-custom-game {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-    max-width: 1200px;
+.create-custom-games-page {
 
-    .header {
-        font-family: $font-header;
-        font-size: 48px;
-        color: $color-text;
-        margin-bottom: 16px;
-        text-transform: uppercase;
-    }
-
-    .settings-container {
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-        pointer-events: all;
-    }
-
-    .button-container {
+    page-header {
         margin-top: 24px;
-        pointer-events: all;
-        display: flex;
-        justify-content: flex-end;
-
-        .create-button {
-            width: 350px;
-            padding: 16px 32px;
-            background: $color-primary;
-            border-radius: 100%;
-            font-family: $font-header;
-            font-size: 24px;
-            font-weight: 700;
-            color: $color-text;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            pointer-events: all;
-            display: flex;
-            justify-content: center;
-
-            &:hover {
-                transform: scale(1.05);
-                sound-in: ui.button.over;
-            }
-
-            &:active {
-                transform: scale(0.98);
-            }
-        }
+        margin-left: $menu-paddingpx;
+        margin-bottom: 32px;
     }
 }
