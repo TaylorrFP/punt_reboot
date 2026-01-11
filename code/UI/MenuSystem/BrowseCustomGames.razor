@@ -74,6 +74,13 @@
 
     public void OnNavigationOpen()
     {
+        // Reset scroll position on the browser list
+        var browserList = Descendants.FirstOrDefault(x => x.HasClass("browser-list"));
+        if (browserList != null)
+        {
+            browserList.ScrollOffset = Vector2.Zero;
+        }
+
         // Clear any existing page buttons first, then set this page's buttons
         MainMenuRoot.Instance?.ClearPageFooterButtons();
 
