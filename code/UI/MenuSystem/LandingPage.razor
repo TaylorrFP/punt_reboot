@@ -28,6 +28,9 @@
 
     public void OnNavigationOpen()
     {
+        // Clear any page-specific footer buttons on the landing page
+        MainMenuRoot.Instance?.ClearPageFooterButtons();
+
         //check here were we should be
 
         //if we are in a custom lobby, do

@@ -14,6 +14,43 @@
 
 @code
 {
+    public void OnNavigationOpen()
+    {
+        // Clear any existing page buttons first, then set this page's buttons
+        MainMenuRoot.Instance?.ClearPageFooterButtons();
+
+        MainMenuRoot.Instance?.SetPageFooterButtons(@<text>
+
+            <div class="footer-button" onclick=@RefreshList>
+                <span class="key-indicator">R</span>
+                Refresh
+            </div>
+
+             <div class="footer-button" onclick=@CreateGame>
+                 <span class="key-indicator">C</span>
+                 Create
+             </div>
+
+        </text>);
+    }
+
+    public void OnNavigationClose()
+    {
+        // Clear page buttons when leaving this page
+        MainMenuRoot.Instance?.ClearPageFooterButtons();
+    }
+
+    void CreateGame()
+    {
+        // TODO: Navigate to create game page
+        Log.Info("Create game clicked");
+    }
+
+    void RefreshList()
+    {
+        // TODO: Refresh the game list
+        Log.Info("Refresh list clicked");
+    }
  
 
 

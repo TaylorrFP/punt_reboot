@@ -18,25 +18,40 @@
 
     <WarningPanel />
 
-    <div class="chat-button" onclick=@ToggleChat>
-        <span class="key-indicator">enter</span>
-        Chat
-    </div>
+    <!-- Footer that appears on all menu pages -->
+    <div class="menu-footer">
+        <!-- Left side: Page-specific buttons -->
+        <div class="footer-left">
+            <div class="footer-button" onclick=@ToggleChat>
+                <span class="key-indicator">enter</span>
+                Chat
+            </div>
 
-    @if (CurrentUrl == "/")
-    {
-        <div class="back-button" onclick=@ExitGame>
-            <span class="key-indicator">escape</span>
-            Exit
+            @if (PageFooterButtons != null)
+            {
+                @PageFooterButtons
+            }
         </div>
-    }
-    else
-    {
-        <div class="back-button" onclick=@NavigateBack>
-            <span class="key-indicator">escape</span>
-            Back
+
+        <!-- Right side: Global buttons (chat, back/exit) -->
+        <div class="footer-right">
+
+            @if (CurrentUrl == "/")
+            {
+                <div class="footer-button" onclick=@ExitGame>
+                    <span class="key-indicator">escape</span>
+                    Exit
+                </div>
+            }
+            else
+            {
+                <div class="footer-button" onclick=@NavigateBack>
+                    <span class="key-indicator">escape</span>
+                    Back
+                </div>
+            }
         </div>
-    }
+    </div>
 
 @*     <MatchmakingStatus /> *@
 
@@ -46,6 +61,7 @@
 {
     public static MainMenuRoot Instance { get; set; }
     private bool isChatOpen = false;
+    public RenderFragment PageFooterButtons { get; private set; }
 
     public MainMenuRoot()
     {
@@ -60,9 +76,18 @@
         AddDestination("/shop", typeof(Shop));
         AddDestination("/leaderboard", typeof(Leaderboard));
 
-        // AddDestination("/gamebrowser", typeof(GameBrowser));
-        // AddDestination("/createcustomgame", typeof(CreateCustomGame));
-        // AddDestination("/lobby", typeof(Lobby));
+    }
+
+    public void SetPageFooterButtons(RenderFragment buttons)
+    {
+        PageFooterButtons = buttons;
+        StateHasChanged();
+    }
+
+    public void ClearPageFooterButtons()
+    {
+        PageFooterButtons = null;
+        StateHasChanged();
     }
 
     void NavigateBack()

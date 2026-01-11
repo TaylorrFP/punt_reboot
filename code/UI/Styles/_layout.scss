@@ -31,16 +31,42 @@
 	pointer-events: none;
 }
 
-.chat-button {
+// Menu footer - consistent footer across all pages
+.menu-footer {
 	position: absolute;
 	bottom: $ui-edge-padding-medium;
 	left: $ui-edge-padding-medium;
+	right: $ui-edge-padding-medium;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	pointer-events: none; // Disable by default, children enable as needed
 }
 
-.back-button {
-	position: absolute;
-	bottom: $ui-edge-padding-medium;
-	right: $ui-edge-padding-medium;
+// Footer sections for organizing buttons
+.footer-left {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	gap: $button-gap;
+
+/*	// Buttons in left section scale from left
+	.footer-button {
+		transform-origin: left center;
+	}*/
+}
+
+.footer-right {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	gap: $button-gap;
+
+/*	// Buttons in right section scale from right
+	.footer-button {
+		transform-origin: right center;
+	}*/
 }
 
 // PartyDisplay styles migrated to PartyDisplay.razor.scss
