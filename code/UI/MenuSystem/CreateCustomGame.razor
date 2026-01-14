@@ -111,6 +111,47 @@
 
 @code
 {
+    // ===================================================================================
+    // DRAG-AND-DROP PLAYER SLOT SYSTEM
+    // ===================================================================================
+    //
+    // OVERVIEW:
+    // Players can be dragged between team slots (Red, Blue, Spectator). Click-hold to
+    // pick up a player, drag to a team panel, release to drop into first available slot.
+    //
+    // KEY DESIGN DECISIONS:
+    //
+    // 1. SOURCE SLOT STAYS IN DOM (Critical!)
+    //    When dragging starts, we DON'T hide the source element. Instead, we mark it with
+    //    IsBeingDragged=true and use CSS (.being-dragged) to make it LOOK empty while
+    //    keeping it in the DOM. This is essential because removing/hiding the element
+    //    that received mousedown breaks the mouse event chain - OnMouseUp would never fire.
+    //
+    // 2. DROP TARGETS ARE TEAM PANELS, NOT INDIVIDUAL SLOTS
+    //    We hit-test against the team panel (@ref="RedTeamPanel" etc), not individual slots.
+    //    When dropping on a team, we find the first available slot automatically.
+    //    This simplifies the UX - just drag to the team area, don't need pixel-perfect aim.
+    //
+    // 3. SLOT COMPACTION
+    //    After each drop, CompactSlots() shifts all players to fill from index 0.
+    //    This prevents gaps (e.g., if you drag out of slot 0, slot 1 becomes slot 0).
+    //
+    // 4. SOURCE SLOT TREATED AS AVAILABLE
+    //    When finding drop targets, FindFirstAvailableSlot() treats the source slot as
+    //    empty. This means dragging within the same team targets the source position,
+    //    effectively a no-op (player stays in same spot).
+    //
+    // DRAG FLOW:
+    // 1. OnSlotMouseDown: User clicks occupied slot -> IsDragging=true, slot.IsBeingDragged=true
+    // 2. Tick: Every frame updates drag position and highlights target slot
+    // 3. OnMouseUp: User releases -> EndDrag() moves player data to target, compacts slots
+    //
+    // VISUAL FEEDBACK:
+    // - Source slot: Shows "Empty" via CSS ::after (hides avatar/name with display:none)
+    // - Target slot: Gets "drop-target" class for highlight styling
+    // - Dragged element: Floating div that follows cursor (transformed to panel coordinates)
+    // ===================================================================================
+
     public enum Team { Red, Blue, Spectator }
 
     public class PlayerSlot
@@ -180,12 +221,30 @@
             RedTeamSlots[0].DisplayName = Connection.Local.DisplayName;
             Log.Info($"[DragDrop] Placed local player: {Connection.Local.DisplayName} in RedTeamSlots[0]");
 
+            // Add other party members to remaining red team slots
+            if (PartyRoom.Current != null)
+            {
+                int slotIndex = 1;
+                foreach (var member in PartyRoom.Current.Members)
+                {
+                    // Skip ourselves (already added above)
+                    if (member.Id == Game.SteamId)
+                        continue;
 
-            RedTeamSlots[1].IsOccupied = true;
-            RedTeamSlots[1].SteamId = Game.SteamId;
-            RedTeamSlots[1].DisplayName = Connection.Local.DisplayName;
-            Log.Info($"[DragDrop] Placed local player: {Connection.Local.DisplayName} in RedTeamSlots[1]");
+                    // Make sure we have available slots
+                    if (slotIndex >= RedTeamSlots.Length)
+                    {
+                        Log.Info($"[DragDrop] No more red team slots available for {member.Name}");
+                        break;
+                    }
 
+                    RedTeamSlots[slotIndex].IsOccupied = true;
+                    RedTeamSlots[slotIndex].SteamId = (long)member.Id;
+                    RedTeamSlots[slotIndex].DisplayName = member.Name;
+                    Log.Info($"[DragDrop] Placed party member: {member.Name} in RedTeamSlots[{slotIndex}]");
+                    slotIndex++;
+                }
+            }
         }
         else
         {
@@ -314,6 +373,11 @@
             sourceSlot.IsBeingDragged = false;
         }
 
+        // Compact all team slots so they fill from the top
+        CompactSlots(RedTeamSlots);
+        CompactSlots(BlueTeamSlots);
+        CompactSlots(SpectatorSlots);
+
         IsDragging = false;
         HighlightedTeam = null;
         HighlightedIndex = null;
@@ -350,11 +414,40 @@
 
         for (int i = 0; i < slots.Length; i++)
         {
-            if (!slots[i].IsOccupied)
+            // Treat slot as available if it's empty OR if it's the source slot being dragged
+            bool isSourceSlot = IsDragging && team == DragSourceTeam && i == DragSourceIndex;
+            if (!slots[i].IsOccupied || isSourceSlot)
                 return i;
         }
 
         return null; // No available slots
+    }
+
+    private void CompactSlots(PlayerSlot[] slots)
+    {
+        // Move all occupied slots to the front, maintaining order
+        int writeIndex = 0;
+        for (int readIndex = 0; readIndex < slots.Length; readIndex++)
+        {
+            if (slots[readIndex].IsOccupied)
+            {
+                if (writeIndex != readIndex)
+                {
+                    // Move this slot to the write position
+                    slots[writeIndex].IsOccupied = true;
+                    slots[writeIndex].SteamId = slots[readIndex].SteamId;
+                    slots[writeIndex].DisplayName = slots[readIndex].DisplayName;
+                    slots[writeIndex].IsBeingDragged = slots[readIndex].IsBeingDragged;
+
+                    // Clear the old position
+                    slots[readIndex].IsOccupied = false;
+                    slots[readIndex].SteamId = 0;
+                    slots[readIndex].DisplayName = null;
+                    slots[readIndex].IsBeingDragged = false;
+                }
+                writeIndex++;
+            }
+        }
     }
 
     private bool IsMouseOverPanel(Panel panel, Vector2 mousePos)

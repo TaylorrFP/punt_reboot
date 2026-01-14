@@ -135,10 +135,14 @@ $color-team-spectator: #666666;
                         justify-content: center;
                         text-transform: uppercase;
                         font-size: 22px;
+                        // Match the border and padding of occupied slots to keep consistent sizing
+                        border: $outline-profile-picture solid transparent;
+                        padding: $outline-profile-picture;
+                        padding-right: 16px;
 
                         &.drop-target {
                             background-color: rgba(white, 0.3);
-                            border: 3px solid rgba(white, 0.6);
+                            border: $outline-profile-picture solid rgba(white, 0.6);
                         }
                     }
 
@@ -167,9 +171,8 @@ $color-team-spectator: #666666;
                         // Placed after team colors to ensure it overrides them
                         &.being-dragged {
                             background-color: rgba(black, 0.65);
-                            border: none;
+                            border: $outline-profile-picture solid transparent;
                             justify-content: center;
-                            padding: 0;
 
                             .profile-picture,
                             .player-name {
