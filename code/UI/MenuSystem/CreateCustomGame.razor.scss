@@ -1,11 +1,58 @@
 @import "/UI/Styles/punt.scss";
 
+$color-team-spectator: #666666;
+
 .create-custom-games-page {
 
     page-header {
         margin-top: 24px;
         margin-left: $menu-paddingpx;
         margin-bottom: 32px;
+    }
+    // Dragged player element - follows cursor
+    .dragged-player {
+        position: absolute;
+        pointer-events: none;
+        z-index: 1000;
+        height: 60px;
+        border-radius: 100px;
+        flex-direction: row;
+        align-items: center;
+        padding: $outline-profile-picture;
+        padding-right: 16px;
+        gap: 12px;
+        border: $outline-profile-picture solid $color-text;
+        transform: translate(-50%, -50%);
+        opacity: 0.9;
+        box-shadow: 0 8px 32px rgba(black, 0.4);
+
+        &.team-red {
+            background-color: $color-team-red;
+        }
+
+        &.team-blue {
+            background-color: $color-team-blue;
+        }
+
+        &.team-spectator {
+            background-color: $color-team-spectator;
+        }
+
+        .profile-picture {
+            width: 52px;
+            height: 52px;
+            border-radius: 100%;
+            box-shadow: 0 0 0 $outline-profile-picture $color-text;
+            margin-left: -$outline-profile-picture;
+        }
+
+        .player-name {
+            font-family: $font-body;
+            font-size: 20px;
+            color: $color-text;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
     }
 
     .content-panels {
@@ -17,6 +64,7 @@
         font-family: $font-body;
         color: $color-text-black;
         font-weight: bold;
+        pointer-events: all;
 
         .panel {
             background-color: $panel-background-dark;
@@ -87,15 +135,59 @@
                         justify-content: center;
                         text-transform: uppercase;
                         font-size: 22px;
+
+                        &.drop-target {
+                            background-color: rgba(white, 0.3);
+                            border: 3px solid rgba(white, 0.6);
+                        }
                     }
 
                     &.occupied {
-                        background-color: $color-team-blue;
                         padding: $outline-profile-picture;
                         padding-right: 16px;
                         gap: 12px;
                         border: $outline-profile-picture solid $color-text;
+                        cursor: pointer;
+                        pointer-events: all;
+                        transition: transform 0.1s ease, box-shadow 0.1s ease;
 
+                        &.team-red {
+                            background-color: $color-team-red;
+                        }
+
+                        &.team-blue {
+                            background-color: $color-team-blue;
+                        }
+
+                        &.team-spectator {
+                            background-color: $color-team-spectator;
+                        }
+
+                        // When being dragged, look exactly like an empty slot
+                        // Placed after team colors to ensure it overrides them
+                        &.being-dragged {
+                            background-color: rgba(black, 0.65);
+                            border: none;
+                            justify-content: center;
+                            padding: 0;
+
+                            .profile-picture,
+                            .player-name {
+                                display: none;
+                            }
+
+                            &::after {
+                                content: "Empty";
+                                color: $color-text;
+                                text-transform: uppercase;
+                                font-size: 22px;
+                            }
+                        }
+
+                        &:hover {
+                            transform: scale(1.02);
+                            box-shadow: 0 4px 16px rgba(black, 0.3);
+                        }
 
                         .profile-picture {
                             width: 52px;

@@ -28,51 +28,385 @@
             <div class="right-column">
                 <div class="team-settings-panel panel">
                     <div class="teams-panel">
-                        <div class="team-panel red">
+                        <div class="team-panel red" @ref="RedTeamPanel">
                             <div class="panel-header">Red Team</div>
                             <div class="team-slots">
-                                <div class="player-slot occupied">
-                                    <img src="avatar:@Game.SteamId" class="profile-picture" />
-                                    <span class="player-name">@Connection.Local.DisplayName</span>
-                                </div>
-                                <div class="player-slot empty">Empty</div>
-                                <div class="player-slot empty">Empty</div>
-                                <div class="player-slot empty">Empty</div>
-                                <div class="player-slot empty">Empty</div>
+                                @for (int i = 0; i < RedTeamSlots.Length; i++)
+                                {
+                                    var slot = RedTeamSlots[i];
+                                    var index = i;
+                                    @if (slot.IsOccupied)
+                                    {
+                                        <div class="player-slot occupied team-red @(slot.IsBeingDragged ? "being-dragged" : "")" onmousedown="@(() => OnSlotMouseDown(Team.Red, index))">
+                                            <img src="avatar:@slot.SteamId" class="profile-picture" />
+                                            <span class="player-name">@slot.DisplayName</span>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="player-slot empty @(HighlightedTeam == Team.Red && HighlightedIndex == index ? "drop-target" : "")">Empty</div>
+                                    }
+                                }
                             </div>
                         </div>
                         <div class="vs-panel">
                             VS
                         </div>
-                        <div class="team-panel blue">
+                        <div class="team-panel blue" @ref="BlueTeamPanel">
                             <div class="panel-header">Blue Team</div>
                             <div class="team-slots">
-                                <div class="player-slot empty">Empty</div>
-                                <div class="player-slot empty">Empty</div>
-                                <div class="player-slot empty">Empty</div>
-                                <div class="player-slot empty">Empty</div>
-                                <div class="player-slot empty">Empty</div>
+                                @for (int i = 0; i < BlueTeamSlots.Length; i++)
+                                {
+                                    var slot = BlueTeamSlots[i];
+                                    var index = i;
+                                    @if (slot.IsOccupied)
+                                    {
+                                        <div class="player-slot occupied team-blue @(slot.IsBeingDragged ? "being-dragged" : "")" onmousedown="@(() => OnSlotMouseDown(Team.Blue, index))">
+                                            <img src="avatar:@slot.SteamId" class="profile-picture" />
+                                            <span class="player-name">@slot.DisplayName</span>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="player-slot empty @(HighlightedTeam == Team.Blue && HighlightedIndex == index ? "drop-target" : "")">Empty</div>
+                                    }
+                                }
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="spectators-panel panel">
+                <div class="spectators-panel panel" @ref="SpectatorPanel">
                     <div class="panel-header">Spectators</div>
                     <div class="spectator-slots">
-                        <div class="player-slot empty">Empty</div>
-                        <div class="player-slot empty">Empty</div>
+                        @for (int i = 0; i < SpectatorSlots.Length; i++)
+                        {
+                            var slot = SpectatorSlots[i];
+                            var index = i;
+                            @if (slot.IsOccupied)
+                            {
+                                <div class="player-slot occupied team-spectator @(slot.IsBeingDragged ? "being-dragged" : "")" onmousedown="@(() => OnSlotMouseDown(Team.Spectator, index))">
+                                    <img src="avatar:@slot.SteamId" class="profile-picture" />
+                                    <span class="player-name">@slot.DisplayName</span>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="player-slot empty @(HighlightedTeam == Team.Spectator && HighlightedIndex == index ? "drop-target" : "")">Empty</div>
+                            }
+                        }
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    @if (IsDragging)
+    {
+        <div class="dragged-player @GetDraggedTeamClass()" @ref="DraggedElement">
+            <img src="avatar:@DraggedSteamId" class="profile-picture" />
+            <span class="player-name">@DraggedDisplayName</span>
+        </div>
+    }
 </root>
 
 @code
 {
+    public enum Team { Red, Blue, Spectator }
+
+    public class PlayerSlot
+    {
+        public bool IsOccupied { get; set; }
+        public long SteamId { get; set; }
+        public string DisplayName { get; set; }
+        public bool IsBeingDragged { get; set; }
+    }
+
+    // Slot data - initialize with empty PlayerSlot objects immediately
+    private PlayerSlot[] RedTeamSlots = CreateEmptySlots(5);
+    private PlayerSlot[] BlueTeamSlots = CreateEmptySlots(5);
+    private PlayerSlot[] SpectatorSlots = CreateEmptySlots(2);
+    private bool SlotsInitialized = false;
+
+    // Panel references for hit-testing (team panels, not individual slots)
+    private Panel RedTeamPanel;
+    private Panel BlueTeamPanel;
+    private Panel SpectatorPanel;
+
+    // Drag state
+    private bool IsDragging = false;
+    private Team DragSourceTeam;
+    private int DragSourceIndex;
+    private long DraggedSteamId;
+    private string DraggedDisplayName;
+    private Vector2 DragPosition;
+    private Panel DraggedElement;
+
+    // Drop target highlighting
+    private Team? HighlightedTeam = null;
+    private int? HighlightedIndex = null;
+
+    private static PlayerSlot[] CreateEmptySlots(int count)
+    {
+        var slots = new PlayerSlot[count];
+        for (int i = 0; i < count; i++)
+        {
+            slots[i] = new PlayerSlot();
+        }
+        return slots;
+    }
+
+    protected override void OnAfterTreeRender(bool firstTime)
+    {
+        base.OnAfterTreeRender(firstTime);
+
+        if (!SlotsInitialized)
+        {
+            InitializeSlots();
+            SlotsInitialized = true;
+        }
+
+        UpdateDraggedElementPosition();
+    }
+
+    private void InitializeSlots()
+    {
+        Log.Info("[DragDrop] InitializeSlots called");
+
+        // Place local player in first red team slot
+        if (Connection.Local != null)
+        {
+            RedTeamSlots[0].IsOccupied = true;
+            RedTeamSlots[0].SteamId = Game.SteamId;
+            RedTeamSlots[0].DisplayName = Connection.Local.DisplayName;
+            Log.Info($"[DragDrop] Placed local player: {Connection.Local.DisplayName} in RedTeamSlots[0]");
+
+
+            RedTeamSlots[1].IsOccupied = true;
+            RedTeamSlots[1].SteamId = Game.SteamId;
+            RedTeamSlots[1].DisplayName = Connection.Local.DisplayName;
+            Log.Info($"[DragDrop] Placed local player: {Connection.Local.DisplayName} in RedTeamSlots[1]");
+
+        }
+        else
+        {
+            Log.Info("[DragDrop] Connection.Local is null!");
+        }
+    }
+
+    private void OnSlotMouseDown(Team team, int index)
+    {
+        Log.Info($"[DragDrop] OnSlotMouseDown called - Team: {team}, Index: {index}");
+
+        var slot = GetSlot(team, index);
+        if (slot == null)
+        {
+            Log.Info("[DragDrop] Slot is null!");
+            return;
+        }
+        if (!slot.IsOccupied)
+        {
+            Log.Info("[DragDrop] Slot is not occupied!");
+            return;
+        }
+
+        Log.Info($"[DragDrop] Starting drag for player: {slot.DisplayName}");
+
+        // Start dragging
+        IsDragging = true;
+        DragSourceTeam = team;
+        DragSourceIndex = index;
+        DraggedSteamId = slot.SteamId;
+        DraggedDisplayName = slot.DisplayName;
+        DragPosition = Mouse.Position;
+
+        // Mark source slot as being dragged (shows as empty)
+        slot.IsBeingDragged = true;
+
+        StateHasChanged();
+        Log.Info("[DragDrop] Drag started, StateHasChanged called");
+    }
+
+
+
+    public override void Tick()
+    {
+        base.Tick();
+
+        if (IsDragging)
+        {
+            // Continuously update position while dragging
+            DragPosition = Mouse.Position;
+            UpdateDraggedElementPosition();
+
+            // Update drop target highlighting
+            var targetTeam = FindTeamUnderMouse();
+            var targetIndex = targetTeam.HasValue ? FindFirstAvailableSlot(targetTeam.Value) : null;
+
+            if (HighlightedTeam != targetTeam || HighlightedIndex != targetIndex)
+            {
+                HighlightedTeam = targetTeam;
+                HighlightedIndex = targetIndex;
+                StateHasChanged();
+            }
+        }
+    }
+
+    protected override void OnMouseUp(MousePanelEvent e)
+    {
+        base.OnMouseUp(e);
+
+        if (IsDragging)
+        {
+            Log.Info("[DragDrop] Mouse released - ending drag");
+            EndDrag();
+        }
+    }
+
+    private void EndDrag()
+    {
+        var sourceSlot = GetSlot(DragSourceTeam, DragSourceIndex);
+
+        // Find which team panel we're dropping on
+        var targetTeam = FindTeamUnderMouse();
+
+        if (targetTeam.HasValue)
+        {
+            // Find first available slot in the target team
+            var targetIndex = FindFirstAvailableSlot(targetTeam.Value);
+
+            if (targetIndex.HasValue)
+            {
+                // Check if dropping on same team with only one slot occupied (effectively same slot)
+                if (targetTeam.Value == DragSourceTeam && targetIndex.Value == DragSourceIndex)
+                {
+                    Log.Info("[DragDrop] Dropped on same position - no change");
+                }
+                else
+                {
+                    var targetSlot = GetSlot(targetTeam.Value, targetIndex.Value);
+
+                    // Drop into the available slot
+                    Log.Info($"[DragDrop] Dropping {DraggedDisplayName} into {targetTeam.Value} slot {targetIndex.Value}");
+
+                    targetSlot.IsOccupied = true;
+                    targetSlot.SteamId = DraggedSteamId;
+                    targetSlot.DisplayName = DraggedDisplayName;
+
+                    // Clear source slot
+                    sourceSlot.IsOccupied = false;
+                    sourceSlot.SteamId = 0;
+                    sourceSlot.DisplayName = null;
+                }
+            }
+            else
+            {
+                Log.Info($"[DragDrop] No available slots in {targetTeam.Value} - returning to source");
+            }
+        }
+        else
+        {
+            Log.Info("[DragDrop] Dropped outside valid team panel - returning to source");
+        }
+
+        // Always clear the dragging state on source
+        if (sourceSlot != null)
+        {
+            sourceSlot.IsBeingDragged = false;
+        }
+
+        IsDragging = false;
+        HighlightedTeam = null;
+        HighlightedIndex = null;
+        StateHasChanged();
+    }
+
+    private Team? FindTeamUnderMouse()
+    {
+        Vector2 mousePos = Mouse.Position;
+
+        if (IsMouseOverPanel(RedTeamPanel, mousePos))
+            return Team.Red;
+
+        if (IsMouseOverPanel(BlueTeamPanel, mousePos))
+            return Team.Blue;
+
+        if (IsMouseOverPanel(SpectatorPanel, mousePos))
+            return Team.Spectator;
+
+        return null;
+    }
+
+    private int? FindFirstAvailableSlot(Team team)
+    {
+        var slots = team switch
+        {
+            Team.Red => RedTeamSlots,
+            Team.Blue => BlueTeamSlots,
+            Team.Spectator => SpectatorSlots,
+            _ => null
+        };
+
+        if (slots == null) return null;
+
+        for (int i = 0; i < slots.Length; i++)
+        {
+            if (!slots[i].IsOccupied)
+                return i;
+        }
+
+        return null; // No available slots
+    }
+
+    private bool IsMouseOverPanel(Panel panel, Vector2 mousePos)
+    {
+        if (panel == null) return false;
+
+        var rect = panel.Box.Rect;
+        return mousePos.x >= rect.Left && mousePos.x <= rect.Right &&
+               mousePos.y >= rect.Top && mousePos.y <= rect.Bottom;
+    }
+
+    private void UpdateDraggedElementPosition()
+    {
+        if (DraggedElement == null || !IsDragging) return;
+
+        // Convert screen position to panel space
+        Vector2 panelPosition = ScaleFromScreen * DragPosition;
+
+        DraggedElement.Style.Left = Length.Pixels(panelPosition.x);
+        DraggedElement.Style.Top = Length.Pixels(panelPosition.y);
+    }
+
+    private PlayerSlot GetSlot(Team team, int index)
+    {
+        return team switch
+        {
+            Team.Red => index < RedTeamSlots.Length ? RedTeamSlots[index] : null,
+            Team.Blue => index < BlueTeamSlots.Length ? BlueTeamSlots[index] : null,
+            Team.Spectator => index < SpectatorSlots.Length ? SpectatorSlots[index] : null,
+            _ => null
+        };
+    }
+
+    private string GetDraggedTeamClass()
+    {
+        return DragSourceTeam switch
+        {
+            Team.Red => "team-red",
+            Team.Blue => "team-blue",
+            Team.Spectator => "team-spectator",
+            _ => ""
+        };
+    }
 
     protected override int BuildHash()
     {
-        return System.HashCode.Combine(base.BuildHash());
+        return System.HashCode.Combine(
+            base.BuildHash(),
+            IsDragging,
+            DragPosition,
+            RedTeamSlots[0]?.IsOccupied,
+            RedTeamSlots[0]?.IsBeingDragged
+        );
     }
 }
