@@ -1,11 +1,56 @@
 using Sandbox;
 using Sandbox.Network;
 using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+public enum NetworkState
+{
+	/// <summary>
+	/// Not in any network session, in the menu preparing to create/join a lobby
+	/// </summary>
+	CreatingLobby,
+
+	/// <summary>
+	/// Lobby is created and active, players can connect, teams can be assigned, game settings configured
+	/// </summary>
+	InLobby,
+
+	/// <summary>
+	/// Host has started the game, all players are loading into the game scene
+	/// </summary>
+	StartingGame
+}
 
 public sealed class NetworkManager : SingletonComponent<NetworkManager>
 {
 	[Property] public bool showDebugInfo { get; set; } = true;
 
+	/// <summary>
+	/// Current state of the network loop
+	/// </summary>
+	public NetworkState CurrentState { get; private set; } = NetworkState.CreatingLobby;
+
+	/// <summary>
+	/// Fired when the network state changes
+	/// </summary>
+	public event Action<NetworkState, NetworkState> OnStateChanged;
+
+	/// <summary>
+	/// Fired when the lobby list is updated after a search
+	/// </summary>
+	public event Action OnLobbiesUpdated;
+
+	/// <summary>
+	/// List of available lobbies from the last search
+	/// </summary>
+	public IReadOnlyList<LobbyInformation> AvailableLobbies => _availableLobbies;
+	private List<LobbyInformation> _availableLobbies = new();
+
+	/// <summary>
+	/// Whether we're currently searching for lobbies
+	/// </summary>
+	public bool IsSearchingLobbies { get; private set; }
 
 	protected override void OnAwake()
 	{
@@ -15,10 +60,23 @@ public sealed class NetworkManager : SingletonComponent<NetworkManager>
 		GameObject.Flags = GameObjectFlags.DontDestroyOnLoad;
 	}
 
+	/// <summary>
+	/// Transition to a new network state
+	/// </summary>
+	public void SetState( NetworkState newState )
+	{
+		if ( CurrentState == newState )
+			return;
+
+		var oldState = CurrentState;
+		CurrentState = newState;
+
+		Log.Info( $"[Network] State changed: {oldState} -> {newState}" );
+		OnStateChanged?.Invoke( oldState, newState );
+	}
+
 	public void CreateLobby( int maxPlayers = 8, LobbyPrivacy privacy = LobbyPrivacy.Private, string name = "My Lobby Name" )
 	{
-
-
 		Networking.CreateLobby( new LobbyConfig()
 		{
 			MaxPlayers = maxPlayers,
@@ -26,13 +84,65 @@ public sealed class NetworkManager : SingletonComponent<NetworkManager>
 			Name = name
 		} );
 
+		SetState( NetworkState.InLobby );
 	}
 
-	public void SearchLobbies()
+	public void LeaveLobby()
 	{
-		
+		Networking.Disconnect();
+		SetState( NetworkState.CreatingLobby );
+	}
 
+	public void StartGame()
+	{
+		if ( !Networking.IsHost )
+		{
+			Log.Warning( "[Network] Only the host can start the game" );
+			return;
+		}
 
+		if ( CurrentState != NetworkState.InLobby )
+		{
+			Log.Warning( "[Network] Can only start game from InLobby state" );
+			return;
+		}
+
+		SetState( NetworkState.StartingGame );
+	}
+
+	public async void SearchLobbies()
+	{
+		if ( IsSearchingLobbies )
+			return;
+
+		IsSearchingLobbies = true;
+		Log.Info( "[Network] Searching for lobbies..." );
+
+		try
+		{
+			var lobbies = await Networking.QueryLobbies();
+			_availableLobbies.Clear();
+			_availableLobbies.AddRange( lobbies );
+
+			Log.Info( $"[Network] Found {_availableLobbies.Count} lobbies" );
+			OnLobbiesUpdated?.Invoke();
+		}
+		catch ( Exception e )
+		{
+			Log.Warning( $"[Network] Failed to search lobbies: {e.Message}" );
+		}
+		finally
+		{
+			IsSearchingLobbies = false;
+		}
+	}
+
+	public void JoinLobby( LobbyInformation lobby )
+	{
+		Log.Info( $"[Network] Joining lobby: {lobby.Name}" );
+
+		Networking.Connect( lobby.LobbyId );
+		SetState( NetworkState.InLobby );
 	}
 
 	protected override void OnUpdate()
@@ -50,6 +160,9 @@ public sealed class NetworkManager : SingletonComponent<NetworkManager>
 
 		Gizmo.Draw.ScreenText( "=== Networking Info ===", new Vector2( x, networkY ), "roboto", 28, TextFlag.RightCenter );
 		networkY += networkLineHeight + 10;
+
+		Gizmo.Draw.ScreenText( $"State: {CurrentState}", new Vector2( x, networkY ), "roboto", 24, TextFlag.RightCenter );
+		networkY += networkLineHeight;
 
 		Gizmo.Draw.ScreenText( $"Networking Active: {Networking.IsActive}", new Vector2( x, networkY ), "roboto", 24, TextFlag.RightCenter );
 		networkY += networkLineHeight;

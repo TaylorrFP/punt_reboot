@@ -2,6 +2,8 @@
 @using Sandbox.UI;
 @using Sandbox.UI.Navigation;
 @using Sandbox.Network;
+@using Sandbox.Modals;
+
 
 @inherits Panel
 @implements INavigatorPage
@@ -174,7 +176,13 @@
 
     private void OnAddFriendClicked()
     {
-        Game.Overlay.ShowFriendsList();
+
+        var opts = new FriendsListModalOptions();
+
+      
+
+
+        Game.Overlay.ShowFriendsList( new FriendsListModalOptions() );
     }
 
     private void OnCreateLobbyClicked()

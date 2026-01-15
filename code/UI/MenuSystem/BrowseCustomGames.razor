@@ -21,15 +21,27 @@
         </div>
 
         <div class="browser-list">
-            @foreach (var game in PlaceholderGames)
+            @if ( IsSearching )
             {
-                <div class="browser-entry">
-                    <div class="column-name">@game.Name</div>
-                    <div class="column-team-size">@game.TeamSize</div>
-                    <div class="column-map">@game.Map</div>
-                    <div class="column-ping">@game.Ping</div>
-                    <div class="column-players">@game.Players</div>
-                </div>
+                <div class="browser-message">Searching for lobbies...</div>
+            }
+            else if ( Lobbies.Count == 0 )
+            {
+                <div class="browser-message">No lobbies found</div>
+            }
+            else
+            {
+                @foreach ( var lobby in Lobbies )
+                {
+                    var isSelected = SelectedLobby.HasValue && SelectedLobby.Value.LobbyId == lobby.LobbyId;
+                    <div class="browser-entry @(isSelected ? "selected" : "")" onclick="@(() => SelectLobby(lobby))" ondblclick="@(() => JoinLobby(lobby))">
+                        <div class="column-name">@lobby.Name</div>
+                        <div class="column-team-size">-</div>
+                        <div class="column-map">@(lobby.Map ?? "Unknown")</div>
+                        <div class="column-ping">-</div>
+                        <div class="column-players">@lobby.Members / @lobby.MaxMembers</div>
+                    </div>
+                }
             }
         </div>
     </div>
@@ -38,40 +50,27 @@
 
 @code
 {
-    public class GameLobby
-    {
-        public string Name { get; set; }
-        public string TeamSize { get; set; }
-        public string Map { get; set; }
-        public string Ping { get; set; }
-        public string Players { get; set; }
-    }
+    private LobbyInformation? SelectedLobby;
+    private bool _subscribedToEvents;
 
-    private List<GameLobby> PlaceholderGames
+    protected override void OnAfterTreeRender( bool firstTime )
     {
-        get
+        base.OnAfterTreeRender( firstTime );
+
+        if ( firstTime && NetworkManager.Instance != null && !_subscribedToEvents )
         {
-            if (_placeholderGames == null)
-            {
-                _placeholderGames = new List<GameLobby>();
-                // Generate 100 placeholder entries
-                for (int i = 1; i <= 100; i++)
-                {
-                    _placeholderGames.Add(new GameLobby
-                    {
-                        Name = $"Server {i}",
-                        TeamSize = $"{Random.Shared.Next(1, 5)}v{Random.Shared.Next(1, 5)}",
-                        Map = $"Map_{Random.Shared.Next(1, 10)}",
-                        Ping = $"{Random.Shared.Next(10, 200)}ms",
-                        Players = $"{Random.Shared.Next(1, 20)}/{Random.Shared.Next(10, 20)}"
-                    });
-                }
-            }
-            return _placeholderGames;
+            NetworkManager.Instance.OnLobbiesUpdated += OnLobbiesUpdated;
+            _subscribedToEvents = true;
         }
     }
 
-    private List<GameLobby> _placeholderGames;
+    private void OnLobbiesUpdated()
+    {
+        StateHasChanged();
+    }
+
+    private IReadOnlyList<LobbyInformation> Lobbies => NetworkManager.Instance?.AvailableLobbies ?? Array.Empty<LobbyInformation>();
+    private bool IsSearching => NetworkManager.Instance?.IsSearchingLobbies ?? false;
 
     public void OnNavigationOpen()
     {
@@ -92,42 +91,57 @@
                 Refresh
             </div>
 
-                <a class="footer-button" href="/CreateGame">
-                 <span class="key-indicator">C</span>
-                 Create
-             </a>
+            <div class="footer-button" onclick=@JoinSelectedLobby>
+                <span class="key-indicator">Enter</span>
+                Join
+            </div>
+
+            <a class="footer-button" href="/CreateGame">
+                <span class="key-indicator">C</span>
+                Create
+            </a>
 
         </text>);
+
+        // Auto-refresh on open
+        RefreshList();
     }
 
     public void OnNavigationClose()
     {
         // Clear page buttons when leaving this page
         MainMenuRoot.Instance?.ClearPageFooterButtons();
-    }
 
-    void CreateGame()
-    {
-        // // TODO: Navigate to create game page
-        // Log.Info("Create game clicked");
-
-        // NetworkManager.Instance?.CreateLobby();
-
+        // Unsubscribe from events
+        if ( NetworkManager.Instance != null && _subscribedToEvents )
+        {
+            NetworkManager.Instance.OnLobbiesUpdated -= OnLobbiesUpdated;
+            _subscribedToEvents = false;
+        }
     }
 
     void RefreshList()
     {
-        // TODO: Refresh the game list
-        Log.Info("Refresh list clicked");
+        NetworkManager.Instance?.SearchLobbies();
     }
- 
 
+    void SelectLobby( LobbyInformation lobby )
+    {
+        SelectedLobby = lobby;
+        StateHasChanged();
+    }
 
+    void JoinSelectedLobby()
+    {
+        if ( SelectedLobby.HasValue )
+        {
+            NetworkManager.Instance?.JoinLobby( SelectedLobby.Value );
+        }
+    }
 
-
-
-
-
-    
+    void JoinLobby( LobbyInformation lobby )
+    {
+        NetworkManager.Instance?.JoinLobby( lobby );
+    }
 }
 
