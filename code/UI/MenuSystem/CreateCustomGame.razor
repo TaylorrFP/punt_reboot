@@ -12,6 +12,12 @@
 
     <div class="content-panels">
         <div class="buttons-panel">
+
+            <div class="button">
+                <i>person_add_alt</i>
+                <span>Add Friend</span>
+            </div>
+
             <div class="button">
                 <i>settings</i>
                 <span>Settings</span>
@@ -27,7 +33,25 @@
                     <div class="pitch-name">Test Map</div>
                 </div>
                 <div class="lobby-config-panel">
-                    lobby config
+                    <div class="lobby-name-input">
+                        <TextEntry @ref="LobbyNameInput" Text="@DefaultLobbyName" Placeholder="Lobby Name" />
+                    </div>
+
+                    <div class="lobby-setting">
+                        <span class="setting-label">Privacy</span>
+                        <DropDown @ref="PrivacyDropdown" Options=@PrivacyOptions Value=@("Public") />
+                    </div>
+
+                    <div class="lobby-setting">
+                        <span class="setting-label">Max Players</span>
+                        <DropDown @ref="MaxPlayersDropdown" Options=@MaxPlayersOptions Value=@("4") />
+                    </div>
+
+                    <div class="create-lobby-button-container">
+                        <div class="create-lobby-button" onclick="@OnCreateLobbyClicked">
+                            Create Lobby
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="right-column">
@@ -116,6 +140,56 @@
 
 @code
 {
+    // ===================================================================================
+    // LOBBY CONFIGURATION
+    // ===================================================================================
+
+    private TextEntry LobbyNameInput;
+    private DropDown PrivacyDropdown;
+    private DropDown MaxPlayersDropdown;
+    private string DefaultLobbyName => $"{Connection.Local?.DisplayName ?? "Player"}'s Game";
+
+    private static List<Option> PrivacyOptions => new()
+    {
+        new Option( "Public", "Public" ),
+        new Option( "Friends Only", "Friends Only" ),
+        new Option( "Private", "Private" )
+    };
+
+    private static List<Option> MaxPlayersOptions => new()
+    {
+        new Option( "2", "2" ),
+        new Option( "3", "3" ),
+        new Option( "4", "4" ),
+        new Option( "5", "5" ),
+        new Option( "6", "6" ),
+        new Option( "7", "7" ),
+        new Option( "8", "8" ),
+        new Option( "9", "9" ),
+        new Option( "10", "10" ),
+        new Option( "11", "11" ),
+        new Option( "12", "12" )
+
+    };
+
+    private void OnCreateLobbyClicked()
+    {
+        var lobbyName = LobbyNameInput?.Text ?? DefaultLobbyName;
+        var maxPlayers = int.Parse( MaxPlayersDropdown?.Selected?.Value?.ToString() ?? "4" );
+        var privacyValue = PrivacyDropdown?.Selected?.Value?.ToString() ?? "Public";
+
+        var privacy = privacyValue switch
+        {
+            "Friends Only" => LobbyPrivacy.FriendsOnly,
+            "Private" => LobbyPrivacy.Private,
+            _ => LobbyPrivacy.Public
+        };
+
+        Log.Info( $"[CreateLobby] Creating lobby: {lobbyName}, MaxPlayers: {maxPlayers}, Privacy: {privacy}" );
+
+        NetworkManager.Instance?.CreateLobby( maxPlayers, privacy, lobbyName );
+    }
+
     // ===================================================================================
     // DRAG-AND-DROP PLAYER SLOT SYSTEM
     // ===================================================================================

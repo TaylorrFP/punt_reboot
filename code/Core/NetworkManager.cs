@@ -4,6 +4,9 @@ using System;
 
 public sealed class NetworkManager : SingletonComponent<NetworkManager>
 {
+
+	
+
 	protected override void OnAwake()
 	{
 		base.OnAwake();
@@ -14,12 +17,22 @@ public sealed class NetworkManager : SingletonComponent<NetworkManager>
 
 	public void CreateLobby( int maxPlayers = 8, LobbyPrivacy privacy = LobbyPrivacy.Private, string name = "My Lobby Name" )
 	{
+
+
 		Networking.CreateLobby( new LobbyConfig()
 		{
 			MaxPlayers = maxPlayers,
 			Privacy = privacy,
 			Name = name
 		} );
+
+	}
+
+	public void SearchLobbies()
+	{
+		
+
+
 	}
 
 	protected override void OnUpdate()
