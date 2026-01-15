@@ -43,6 +43,13 @@
                     Exit
                 </div>
             }
+            else if (IsInLobby)
+            {
+                <div class="footer-button" onclick=@LeaveLobby>
+                    <span class="key-indicator">escape</span>
+                    Leave Lobby
+                </div>
+            }
             else
             {
                 <div class="footer-button" onclick=@NavigateBack>
@@ -79,6 +86,23 @@
 
     }
 
+    protected override void OnAfterTreeRender( bool firstTime )
+    {
+        base.OnAfterTreeRender( firstTime );
+
+        if ( firstTime && NetworkManager.Instance != null )
+        {
+            NetworkManager.Instance.OnStateChanged += OnNetworkStateChanged;
+        }
+    }
+
+    private void OnNetworkStateChanged( NetworkState oldState, NetworkState newState )
+    {
+        StateHasChanged();
+    }
+
+    private bool IsInLobby => NetworkManager.Instance?.CurrentState == NetworkState.InLobby;
+
     public void SetPageFooterButtons(RenderFragment buttons)
     {
         PageFooterButtons = buttons;
@@ -93,6 +117,12 @@
 
     void NavigateBack()
     {
+        GoBack();
+    }
+
+    void LeaveLobby()
+    {
+        NetworkManager.Instance?.LeaveLobby();
         GoBack();
     }
 

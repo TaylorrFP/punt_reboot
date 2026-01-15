@@ -159,6 +159,15 @@ $color-team-spectator: #666666;
                                 border-color: rgba(white, 0.5);
                             }
                         }
+
+                        &.disabled {
+                            opacity: 0.1;
+                            pointer-events: none;
+
+                            textentry {
+                                border-color: rgba(white, 0.1);
+                            }
+                        }
                     }
 
                     .lobby-setting {
@@ -192,6 +201,15 @@ $color-team-spectator: #666666;
                                 border-color: rgba(white, 0.4);
                             }
                         }
+
+                        &.disabled {
+                            opacity: 0.1;
+                            pointer-events: none;
+
+                            dropdown {
+                                border-color: rgba(white, 0.1);
+                            }
+                        }
                     }
 
                     .create-lobby-button-container {
@@ -210,10 +228,21 @@ $color-team-spectator: #666666;
                             text-transform: uppercase;
                             border-radius: 12px;
                             cursor: pointer;
-                            transition: transform 0.1s ease;
+                            transition: transform 0.1s ease, background-color 0.2s ease;
 
                             &:hover {
                                 transform: scale(1.05);
+                            }
+
+                            &.start-game {
+                                background-color: #4CAF50;
+                                color: white;
+                                border: 2px, rgb(94, 215, 99);
+                                box-shadow: 0 4px 16px rgba(76, 175, 80, 0.4);
+
+                                &:hover {
+                                    background-color: #45a049;
+                                }
                             }
                         }
                     }

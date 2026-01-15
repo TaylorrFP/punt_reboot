@@ -35,24 +35,33 @@
                     <div class="pitch-name">Test Map</div>
                 </div>
                 <div class="lobby-config-panel">
-                    <div class="lobby-name-input">
+                    <div class="lobby-name-input @(IsInLobby ? "disabled" : "")">
                         <TextEntry @ref="LobbyNameInput" Text="@DefaultLobbyName" Placeholder="Lobby Name" />
                     </div>
 
-                    <div class="lobby-setting">
+                    <div class="lobby-setting @(IsInLobby ? "disabled" : "")">
                         <span class="setting-label">Privacy</span>
                         <DropDown @ref="PrivacyDropdown" Options=@PrivacyOptions Value=@("Public") />
                     </div>
 
-                    <div class="lobby-setting">
+                    <div class="lobby-setting @(IsInLobby ? "disabled" : "")">
                         <span class="setting-label">Max Players</span>
                         <DropDown @ref="MaxPlayersDropdown" Options=@MaxPlayersOptions Value=@("4") />
                     </div>
 
                     <div class="create-lobby-button-container">
-                        <div class="create-lobby-button" onclick="@OnCreateLobbyClicked">
-                            Create Lobby
-                        </div>
+                        @if (IsInLobby)
+                        {
+                            <div class="create-lobby-button start-game" onclick="@OnStartGameClicked">
+                                Start Game
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="create-lobby-button" onclick="@OnCreateLobbyClicked">
+                                Create Lobby
+                            </div>
+                        }
                     </div>
                 </div>
             </div>
@@ -150,6 +159,7 @@
     private DropDown PrivacyDropdown;
     private DropDown MaxPlayersDropdown;
     private string DefaultLobbyName => $"{Connection.Local?.DisplayName ?? "Player"}'s Game";
+    private bool IsInLobby => NetworkManager.Instance?.CurrentState == NetworkState.InLobby;
 
     private static List<Option> PrivacyOptions => new()
     {
@@ -201,6 +211,16 @@
         Log.Info( $"[CreateLobby] Creating lobby: {lobbyName}, MaxPlayers: {maxPlayers}, Privacy: {privacy}" );
 
         NetworkManager.Instance?.CreateLobby( maxPlayers, privacy, lobbyName );
+
+        // Refresh lobby members after creating the lobby
+        RefreshLobbyMembers();
+        StateHasChanged();
+    }
+
+    private void OnStartGameClicked()
+    {
+        Log.Info( "[CreateLobby] Starting game..." );
+        NetworkManager.Instance?.StartGame();
     }
 
     // ===================================================================================
@@ -292,6 +312,13 @@
     {
         base.OnAfterTreeRender(firstTime);
 
+        if (firstTime && NetworkManager.Instance != null)
+        {
+            NetworkManager.Instance.OnStateChanged += OnNetworkStateChanged;
+            NetworkManager.Instance.OnPlayerJoined += OnPlayerJoined;
+            NetworkManager.Instance.OnPlayerLeft += OnPlayerLeft;
+        }
+
         if (!SlotsInitialized)
         {
             InitializeSlots();
@@ -301,47 +328,85 @@
         UpdateDraggedElementPosition();
     }
 
+    public void OnNavigationOpen()
+    {
+        // Refresh lobby members when opening this page
+        if (IsInLobby)
+        {
+            RefreshLobbyMembers();
+        }
+    }
+
+    public void OnNavigationClose()
+    {
+        // Unsubscribe from events when leaving this page
+        if (NetworkManager.Instance != null)
+        {
+            NetworkManager.Instance.OnStateChanged -= OnNetworkStateChanged;
+            NetworkManager.Instance.OnPlayerJoined -= OnPlayerJoined;
+            NetworkManager.Instance.OnPlayerLeft -= OnPlayerLeft;
+        }
+    }
+
+    private void OnNetworkStateChanged( NetworkState oldState, NetworkState newState )
+    {
+        StateHasChanged();
+    }
+
+    private void OnPlayerJoined( Connection connection )
+    {
+        Log.Info( $"[CreateLobby] Player joined: {connection.DisplayName}" );
+        RefreshLobbyMembers();
+    }
+
+    private void OnPlayerLeft( Connection connection )
+    {
+        Log.Info( $"[CreateLobby] Player left: {connection.DisplayName}" );
+        RefreshLobbyMembers();
+    }
+
     private void InitializeSlots()
     {
         Log.Info("[DragDrop] InitializeSlots called");
+        RefreshLobbyMembers();
+    }
 
-        // Place local player in first red team slot
-        if (Connection.Local != null)
+    private void RefreshLobbyMembers()
+    {
+        Log.Info("[DragDrop] RefreshLobbyMembers called");
+
+        // Clear all slots first
+        foreach (var slot in RedTeamSlots) { slot.IsOccupied = false; slot.SteamId = 0; slot.DisplayName = null; }
+        foreach (var slot in BlueTeamSlots) { slot.IsOccupied = false; slot.SteamId = 0; slot.DisplayName = null; }
+        foreach (var slot in SpectatorSlots) { slot.IsOccupied = false; slot.SteamId = 0; slot.DisplayName = null; }
+
+        // Get all lobby members from NetworkManager
+        var lobbyMembers = NetworkManager.Instance?.LobbyMembers;
+        if (lobbyMembers == null || lobbyMembers.Count == 0)
         {
-            RedTeamSlots[0].IsOccupied = true;
-            RedTeamSlots[0].SteamId = Game.SteamId;
-            RedTeamSlots[0].DisplayName = Connection.Local.DisplayName;
-            Log.Info($"[DragDrop] Placed local player: {Connection.Local.DisplayName} in RedTeamSlots[0]");
+            Log.Info("[DragDrop] No lobby members found");
+            StateHasChanged();
+            return;
+        }
 
-            // Add other party members to remaining red team slots
-            if (PartyRoom.Current != null)
+        // Place all lobby members in red team slots by default
+        int slotIndex = 0;
+        foreach (var member in lobbyMembers)
+        {
+            if (slotIndex >= RedTeamSlots.Length)
             {
-                int slotIndex = 1;
-                foreach (var member in PartyRoom.Current.Members)
-                {
-                    // Skip ourselves (already added above)
-                    if (member.Id == Game.SteamId)
-                        continue;
-
-                    // Make sure we have available slots
-                    if (slotIndex >= RedTeamSlots.Length)
-                    {
-                        Log.Info($"[DragDrop] No more red team slots available for {member.Name}");
-                        break;
-                    }
-
-                    RedTeamSlots[slotIndex].IsOccupied = true;
-                    RedTeamSlots[slotIndex].SteamId = (long)member.Id;
-                    RedTeamSlots[slotIndex].DisplayName = member.Name;
-                    Log.Info($"[DragDrop] Placed party member: {member.Name} in RedTeamSlots[{slotIndex}]");
-                    slotIndex++;
-                }
+                Log.Info($"[DragDrop] No more red team slots available for {member.DisplayName}");
+                break;
             }
+
+            RedTeamSlots[slotIndex].IsOccupied = true;
+            RedTeamSlots[slotIndex].SteamId = member.SteamId;
+            RedTeamSlots[slotIndex].DisplayName = member.DisplayName;
+            Log.Info($"[DragDrop] Placed lobby member: {member.DisplayName} in RedTeamSlots[{slotIndex}]");
+            slotIndex++;
         }
-        else
-        {
-            Log.Info("[DragDrop] Connection.Local is null!");
-        }
+
+        StateHasChanged();
     }
 
     private void OnSlotMouseDown(Team team, int index)

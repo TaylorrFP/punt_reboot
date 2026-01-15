@@ -22,7 +22,7 @@ public enum NetworkState
 	StartingGame
 }
 
-public sealed class NetworkManager : SingletonComponent<NetworkManager>
+public sealed class NetworkManager : SingletonComponent<NetworkManager>, Component.INetworkListener
 {
 	[Property] public bool showDebugInfo { get; set; } = true;
 
@@ -42,6 +42,16 @@ public sealed class NetworkManager : SingletonComponent<NetworkManager>
 	public event Action OnLobbiesUpdated;
 
 	/// <summary>
+	/// Fired when a player joins the current lobby
+	/// </summary>
+	public event Action<Connection> OnPlayerJoined;
+
+	/// <summary>
+	/// Fired when a player leaves the current lobby
+	/// </summary>
+	public event Action<Connection> OnPlayerLeft;
+
+	/// <summary>
 	/// List of available lobbies from the last search
 	/// </summary>
 	public IReadOnlyList<LobbyInformation> AvailableLobbies => _availableLobbies;
@@ -52,12 +62,35 @@ public sealed class NetworkManager : SingletonComponent<NetworkManager>
 	/// </summary>
 	public bool IsSearchingLobbies { get; private set; }
 
+	/// <summary>
+	/// Current lobby members (all connected players)
+	/// </summary>
+	public IReadOnlyList<Connection> LobbyMembers => Connection.All;
+
 	protected override void OnAwake()
 	{
 		base.OnAwake();
 
 		// Make this GameObject persist across scene loads
 		GameObject.Flags = GameObjectFlags.DontDestroyOnLoad;
+	}
+
+	/// <summary>
+	/// Called on the host when someone successfully joins and completes handshake (including local player)
+	/// </summary>
+	public void OnActive( Connection connection )
+	{
+		Log.Info( $"[Network] Player joined and is active: {connection.DisplayName}" );
+		OnPlayerJoined?.Invoke( connection );
+	}
+
+	/// <summary>
+	/// Called when a client disconnects from the server
+	/// </summary>
+	public void OnDisconnected( Connection connection )
+	{
+		Log.Info( $"[Network] Player disconnected: {connection.DisplayName}" );
+		OnPlayerLeft?.Invoke( connection );
 	}
 
 	/// <summary>
