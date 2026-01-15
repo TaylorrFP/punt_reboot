@@ -4,8 +4,8 @@ using System;
 
 public sealed class NetworkManager : SingletonComponent<NetworkManager>
 {
+	[Property] public bool showDebugInfo { get; set; } = true;
 
-	
 
 	protected override void OnAwake()
 	{
@@ -36,8 +36,7 @@ public sealed class NetworkManager : SingletonComponent<NetworkManager>
 	}
 
 	protected override void OnUpdate()
-	{
-		DrawNetworkDebugInfo();
+	{	if( showDebugInfo ) { DrawNetworkDebugInfo(); }
 	}
 
 	private void DrawNetworkDebugInfo()

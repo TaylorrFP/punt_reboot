@@ -1305,7 +1305,8 @@
           "OnComponentEnabled": null,
           "OnComponentFixedUpdate": null,
           "OnComponentStart": null,
-          "OnComponentUpdate": null
+          "OnComponentUpdate": null,
+          "showDebugInfo": false
         },
         {
           "__type": "NetworkManager",
@@ -1317,7 +1318,8 @@
           "OnComponentEnabled": null,
           "OnComponentFixedUpdate": null,
           "OnComponentStart": null,
-          "OnComponentUpdate": null
+          "OnComponentUpdate": null,
+          "showDebugInfo": false
         }
       ],
       "Children": []

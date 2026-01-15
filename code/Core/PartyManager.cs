@@ -3,6 +3,8 @@ using System;
 
 public sealed class PartyManager : SingletonComponent<PartyManager>
 {
+	[Property] public bool showDebugInfo { get; set; } = true;
+
 	private PartyRoom _currentParty;
 
 	protected override void OnAwake()
@@ -44,8 +46,10 @@ public sealed class PartyManager : SingletonComponent<PartyManager>
 			_currentParty = currentParty;
 		}
 
+
+		if ( showDebugInfo ) { DrawPartyDebugInfo(); }
 		// Debug drawing
-		DrawPartyDebugInfo();
+		
 	}
 
 	private void DrawPartyDebugInfo()
