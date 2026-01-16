@@ -214,7 +214,6 @@
 
         // Refresh lobby members after creating the lobby
         RefreshLobbyMembers();
-        StateHasChanged();
     }
 
     private void OnStartGameClicked()
@@ -330,6 +329,12 @@
 
     public void OnNavigationOpen()
     {
+        // Transition to CreatingLobby state if we're not already in a lobby
+        if (NetworkManager.Instance != null && NetworkManager.Instance.CurrentState == NetworkState.None)
+        {
+            NetworkManager.Instance.SetState(NetworkState.CreatingLobby);
+        }
+
         // Refresh lobby members when opening this page
         if (IsInLobby)
         {
@@ -339,6 +344,12 @@
 
     public void OnNavigationClose()
     {
+        // Transition back to None state if we're just creating a lobby (not in one yet)
+        if (NetworkManager.Instance != null && NetworkManager.Instance.CurrentState == NetworkState.CreatingLobby)
+        {
+            NetworkManager.Instance.SetState(NetworkState.None);
+        }
+
         // Unsubscribe from events when leaving this page
         if (NetworkManager.Instance != null)
         {
@@ -350,7 +361,7 @@
 
     private void OnNetworkStateChanged( NetworkState oldState, NetworkState newState )
     {
-        StateHasChanged();
+        // BuildHash will handle the rebuild automatically
     }
 
     private void OnPlayerJoined( Connection connection )
@@ -385,7 +396,6 @@
         if (lobbyMembers == null || lobbyMembers.Count == 0)
         {
             Log.Info("[DragDrop] No lobby members found");
-            StateHasChanged();
             return;
         }
 
@@ -405,8 +415,6 @@
             Log.Info($"[DragDrop] Placed lobby member: {member.DisplayName} in RedTeamSlots[{slotIndex}]");
             slotIndex++;
         }
-
-        StateHasChanged();
     }
 
     private void OnSlotMouseDown(Team team, int index)
@@ -438,8 +446,7 @@
         // Mark source slot as being dragged (shows as empty)
         slot.IsBeingDragged = true;
 
-        StateHasChanged();
-        Log.Info("[DragDrop] Drag started, StateHasChanged called");
+        Log.Info("[DragDrop] Drag started");
     }
 
 
@@ -462,7 +469,6 @@
             {
                 HighlightedTeam = targetTeam;
                 HighlightedIndex = targetIndex;
-                StateHasChanged();
             }
         }
     }
@@ -538,7 +544,6 @@
         IsDragging = false;
         HighlightedTeam = null;
         HighlightedIndex = null;
-        StateHasChanged();
     }
 
     private Team? FindTeamUnderMouse()
@@ -651,12 +656,20 @@
 
     protected override int BuildHash()
     {
+        // Count occupied slots in each team to detect changes
+        int redCount = RedTeamSlots.Count(s => s.IsOccupied);
+        int blueCount = BlueTeamSlots.Count(s => s.IsOccupied);
+        int spectatorCount = SpectatorSlots.Count(s => s.IsOccupied);
+
         return System.HashCode.Combine(
             base.BuildHash(),
             IsDragging,
             DragPosition,
-            RedTeamSlots[0]?.IsOccupied,
-            RedTeamSlots[0]?.IsBeingDragged
+            HighlightedTeam,
+            HighlightedIndex,
+            IsInLobby,
+            redCount,
+            System.HashCode.Combine(blueCount, spectatorCount)
         );
     }
 }

@@ -7,7 +7,12 @@ using System.Threading.Tasks;
 public enum NetworkState
 {
 	/// <summary>
-	/// Not in any network session, in the menu preparing to create/join a lobby
+	/// Not connected to any network session, browsing main menu
+	/// </summary>
+	None,
+
+	/// <summary>
+	/// On the create/join lobby screen, preparing to create or join a lobby
 	/// </summary>
 	CreatingLobby,
 
@@ -29,12 +34,21 @@ public sealed class NetworkManager : SingletonComponent<NetworkManager>, Compone
 	/// <summary>
 	/// Current state of the network loop
 	/// </summary>
-	public NetworkState CurrentState { get; private set; } = NetworkState.CreatingLobby;
+	[Property, Sync, Change( nameof(OnCurrentStateChanged) )] public NetworkState CurrentState { get; private set; } = NetworkState.None;
 
 	/// <summary>
 	/// Fired when the network state changes
 	/// </summary>
 	public event Action<NetworkState, NetworkState> OnStateChanged;
+
+	/// <summary>
+	/// Called automatically when CurrentState is synced from the network
+	/// </summary>
+	private void OnCurrentStateChanged( NetworkState oldState, NetworkState newState )
+	{
+		Log.Info( $"[Network] State synced from network: {oldState} -> {newState}" );
+		OnStateChanged?.Invoke( oldState, newState );
+	}
 
 	/// <summary>
 	/// Fired when the lobby list is updated after a search
@@ -81,6 +95,15 @@ public sealed class NetworkManager : SingletonComponent<NetworkManager>, Compone
 	public void OnActive( Connection connection )
 	{
 		Log.Info( $"[Network] Player joined and is active: {connection.DisplayName}" );
+
+		// If we're not already in InLobby state, transition to it
+		// This handles cases where we join via Steam invite without calling CreateLobby/JoinLobby
+		if ( CurrentState == NetworkState.None || CurrentState == NetworkState.CreatingLobby )
+		{
+			Log.Info( "[Network] Connected to lobby - transitioning to InLobby state" );
+			SetState( NetworkState.InLobby );
+		}
+
 		OnPlayerJoined?.Invoke( connection );
 	}
 
@@ -114,7 +137,9 @@ public sealed class NetworkManager : SingletonComponent<NetworkManager>, Compone
 		{
 			MaxPlayers = maxPlayers,
 			Privacy = privacy,
-			Name = name
+			Name = name,
+			Hidden = false,
+			DestroyWhenHostLeaves = false
 		} );
 
 		SetState( NetworkState.InLobby );
@@ -123,7 +148,7 @@ public sealed class NetworkManager : SingletonComponent<NetworkManager>, Compone
 	public void LeaveLobby()
 	{
 		Networking.Disconnect();
-		SetState( NetworkState.CreatingLobby );
+		SetState( NetworkState.None );
 	}
 
 	public void StartGame()
@@ -149,6 +174,7 @@ public sealed class NetworkManager : SingletonComponent<NetworkManager>, Compone
 			return;
 
 		IsSearchingLobbies = true;
+		OnLobbiesUpdated?.Invoke(); // Notify UI that searching started
 		Log.Info( "[Network] Searching for lobbies..." );
 
 		try
@@ -158,7 +184,6 @@ public sealed class NetworkManager : SingletonComponent<NetworkManager>, Compone
 			_availableLobbies.AddRange( lobbies );
 
 			Log.Info( $"[Network] Found {_availableLobbies.Count} lobbies" );
-			OnLobbiesUpdated?.Invoke();
 		}
 		catch ( Exception e )
 		{
@@ -167,6 +192,7 @@ public sealed class NetworkManager : SingletonComponent<NetworkManager>, Compone
 		finally
 		{
 			IsSearchingLobbies = false;
+			OnLobbiesUpdated?.Invoke(); // Notify UI that searching finished and results are ready
 		}
 	}
 

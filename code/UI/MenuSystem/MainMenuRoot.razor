@@ -93,26 +93,46 @@
         if ( firstTime && NetworkManager.Instance != null )
         {
             NetworkManager.Instance.OnStateChanged += OnNetworkStateChanged;
+
+            // Check if we're already in a lobby on startup (e.g., joined via Steam invite)
+            if ( NetworkManager.Instance.CurrentState == NetworkState.InLobby )
+            {
+                Log.Info( "[MainMenuRoot] Already in lobby on startup - navigating to CreateGame page" );
+                Navigate( "/CreateGame" );
+            }
         }
     }
 
     private void OnNetworkStateChanged( NetworkState oldState, NetworkState newState )
     {
-        StateHasChanged();
+        Log.Info( $"[MainMenuRoot] Network state changed: {oldState} -> {newState}" );
+
+        // Auto-navigate to CreateGame page when entering a lobby
+        if ( newState == NetworkState.InLobby && oldState != NetworkState.InLobby )
+        {
+            Log.Info( "[MainMenuRoot] Entering lobby - navigating to CreateGame page" );
+            Navigate( "/CreateGame" );
+        }
+        // Navigate back to home when leaving the lobby
+        else if ( newState == NetworkState.None && oldState == NetworkState.InLobby )
+        {
+            Log.Info( "[MainMenuRoot] Left lobby - navigating to home page" );
+            Navigate( "/" );
+        }
     }
 
     private bool IsInLobby => NetworkManager.Instance?.CurrentState == NetworkState.InLobby;
 
     public void SetPageFooterButtons(RenderFragment buttons)
     {
+        Log.Info("[MainMenuRoot] SetPageFooterButtons called");
         PageFooterButtons = buttons;
-        StateHasChanged();
     }
 
     public void ClearPageFooterButtons()
     {
+        Log.Info("[MainMenuRoot] ClearPageFooterButtons called");
         PageFooterButtons = null;
-        StateHasChanged();
     }
 
     void NavigateBack()
@@ -122,8 +142,9 @@
 
     void LeaveLobby()
     {
+        Log.Info( "[MainMenuRoot] Leaving lobby" );
         NetworkManager.Instance?.LeaveLobby();
-        GoBack();
+        // Navigation to home will happen automatically via OnNetworkStateChanged
     }
 
     void ToggleChat()
@@ -136,6 +157,16 @@
     void ExitGame()
     {
         Game.Close();
+    }
+
+    protected override int BuildHash()
+    {
+        return System.HashCode.Combine(
+            base.BuildHash(),
+            IsInLobby,
+            PageFooterButtons?.GetHashCode() ?? 0,
+            CurrentUrl
+        );
     }
 }
 

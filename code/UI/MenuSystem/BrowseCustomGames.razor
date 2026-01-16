@@ -17,24 +17,27 @@
             <div class="column-team-size">Teams</div>
             <div class="column-map">Current Map</div>
             <div class="column-ping">Ping</div>
-            <div class="column-players">Players </div> @* WHY THE FUCK IS <i>person</i> NOT WORKING HERE *@
+            <div class="column-players">Players</div>
         </div>
 
         <div class="browser-list">
             @if ( IsSearching )
             {
-                <div class="browser-message">Searching for lobbies...</div>
+                <div class="browser-message searching">
+                    <div class="loading-spinner"></div>
+                    <div>Searching for lobbies...</div>
+                </div>
             }
             else if ( Lobbies.Count == 0 )
             {
-                <div class="browser-message">No lobbies found</div>
+                <div class="browser-message empty">No lobbies found 😢</div>
             }
             else
             {
                 @foreach ( var lobby in Lobbies )
                 {
                     var isSelected = SelectedLobby.HasValue && SelectedLobby.Value.LobbyId == lobby.LobbyId;
-                    <div class="browser-entry @(isSelected ? "selected" : "")" onclick="@(() => SelectLobby(lobby))" ondblclick="@(() => JoinLobby(lobby))">
+                    <div class="browser-entry @(isSelected ? "selected" : "")" onclick="@(() => SelectLobby(lobby))" ondblclick="@JoinSelectedLobby">
                         <div class="column-name">@lobby.Name</div>
                         <div class="column-team-size">-</div>
                         <div class="column-map">@(lobby.Map ?? "Unknown")</div>
@@ -66,14 +69,30 @@
 
     private void OnLobbiesUpdated()
     {
-        StateHasChanged();
+        Log.Info($"[BrowseCustomGames] OnLobbiesUpdated called - Lobbies count: {Lobbies.Count}, IsSearching: {IsSearching}");
+        // BuildHash will handle the rebuild automatically
     }
 
     private IReadOnlyList<LobbyInformation> Lobbies => NetworkManager.Instance?.AvailableLobbies ?? Array.Empty<LobbyInformation>();
     private bool IsSearching => NetworkManager.Instance?.IsSearchingLobbies ?? false;
 
+    protected override int BuildHash()
+    {
+        return System.HashCode.Combine(
+            base.BuildHash(),
+            IsSearching,
+            Lobbies.Count,
+            SelectedLobby?.LobbyId ?? 0
+        );
+    }
+
     public void OnNavigationOpen()
     {
+        Log.Info("[BrowseCustomGames] OnNavigationOpen called");
+
+        // Clear any previous selection
+        SelectedLobby = null;
+
         // Reset scroll position on the browser list
         var browserList = Descendants.FirstOrDefault(x => x.HasClass("browser-list"));
         if (browserList != null)
@@ -81,8 +100,16 @@
             browserList.ScrollOffset = Vector2.Zero;
         }
 
-        // Clear any existing page buttons first, then set this page's buttons
-        MainMenuRoot.Instance?.ClearPageFooterButtons();
+        // Set footer buttons for this page (must happen after clearing selection)
+        SetFooterButtons();
+
+        // Auto-refresh on open
+        RefreshList();
+    }
+
+    private void SetFooterButtons()
+    {
+        Log.Info("[BrowseCustomGames] Setting footer buttons");
 
         MainMenuRoot.Instance?.SetPageFooterButtons(@<text>
 
@@ -91,24 +118,27 @@
                 Refresh
             </div>
 
-            <div class="footer-button" onclick=@JoinSelectedLobby>
-                <span class="key-indicator">Enter</span>
-                Join
-            </div>
-
             <a class="footer-button" href="/CreateGame">
                 <span class="key-indicator">C</span>
                 Create
             </a>
 
-        </text>);
+            @if (SelectedLobby.HasValue)
+            {
+                    <div class="footer-button" onclick=@JoinSelectedLobby>
+                        <span class="key-indicator">Enter</span>
+                        Join
+                    </div>
+            }
 
-        // Auto-refresh on open
-        RefreshList();
+        </text>);
     }
 
     public void OnNavigationClose()
     {
+        // Clear selection when leaving the page
+        SelectedLobby = null;
+
         // Clear page buttons when leaving this page
         MainMenuRoot.Instance?.ClearPageFooterButtons();
 
@@ -128,7 +158,9 @@
     void SelectLobby( LobbyInformation lobby )
     {
         SelectedLobby = lobby;
-        StateHasChanged();
+
+        // Update footer buttons to show Join button
+        SetFooterButtons();
     }
 
     void JoinSelectedLobby()
@@ -137,11 +169,6 @@
         {
             NetworkManager.Instance?.JoinLobby( SelectedLobby.Value );
         }
-    }
-
-    void JoinLobby( LobbyInformation lobby )
-    {
-        NetworkManager.Instance?.JoinLobby( lobby );
     }
 }
 

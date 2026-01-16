@@ -29,7 +29,6 @@
     {
         Message = message;
         IsShowing = true;
-        StateHasChanged();
 
         // Schedule auto-hide
         await Task.DelaySeconds(duration);
@@ -46,7 +45,6 @@
     public void Hide()
     {
         IsShowing = false;
-        StateHasChanged();
     }
 
     protected override int BuildHash()

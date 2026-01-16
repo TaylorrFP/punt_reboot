@@ -67,10 +67,16 @@
         text-transform: uppercase;
         font-weight: bold;
 
-
         &:hover {
             background-color: rgba(255, 255, 255, 0.5);
             color: $color-text-black;
+        }
+
+        &.selected {
+            background-color: rgba(0, 255, 255, 0.70);
+            color: $color-text-black;
+            border: 2px, white;
+
         }
 
         > div:first-child {
@@ -106,5 +112,48 @@
         flex: 1 1 0;
         text-align: center;
         max-width: 150px;
+    }
+
+    .browser-message {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        width: 100%;
+        gap: 24px;
+
+        &.empty {
+            font-size: 48px;
+            font-weight: bold;
+            color: white;
+            text-transform: uppercase;
+        }
+
+        &.searching {
+            font-size: 32px;
+            font-weight: bold;
+            color: rgba(255, 255, 255, 0.7);
+            text-transform: uppercase;
+        }
+    }
+
+    .loading-spinner {
+        width: 64px;
+        height: 64px;
+        border: 6px solid rgba(255, 255, 255, 0.2);
+        border-top-color: white;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
     }
 }

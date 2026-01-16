@@ -30,8 +30,6 @@
         SelectedIndex--;
         if (SelectedIndex < 0)
             SelectedIndex = Options.Count - 1;
-
-        StateHasChanged();
     }
 
     private void OnNext()
@@ -41,8 +39,6 @@
         SelectedIndex++;
         if (SelectedIndex >= Options.Count)
             SelectedIndex = 0;
-
-        StateHasChanged();
     }
 
     protected override int BuildHash()
