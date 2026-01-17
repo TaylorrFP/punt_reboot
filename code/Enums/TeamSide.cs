@@ -6,5 +6,6 @@ public enum TeamSide
 {
 	None,
 	Blue,
-	Red
+	Red,
+	Spectator
 }

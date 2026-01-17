@@ -1321,6 +1321,22 @@
           "OnComponentStart": null,
           "OnComponentUpdate": null,
           "showDebugInfo": true
+        },
+        {
+          "__type": "GameSession",
+          "__guid": "cfa7b04d-5eef-4613-8ea8-d5bf9310c575",
+          "__enabled": true,
+          "Flags": 0,
+          "AllowMidMatchJoin": true,
+          "DebugTeamAssignments": "(empty)",
+          "MidMatchJoinTeam": "Spectator",
+          "OnComponentDestroy": null,
+          "OnComponentDisabled": null,
+          "OnComponentEnabled": null,
+          "OnComponentFixedUpdate": null,
+          "OnComponentStart": null,
+          "OnComponentUpdate": null,
+          "ShowDebugInfo": true
         }
       ],
       "Children": []
