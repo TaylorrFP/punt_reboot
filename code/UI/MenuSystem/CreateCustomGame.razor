@@ -49,14 +49,16 @@
                     </div>
 
                     <div class="lobby-setting @(IsInLobby ? "disabled" : "")">
+                        <span class="setting-label">Max Players</span>
+                        <DropDown @ref="MaxPlayersDropdown" Options=@MaxPlayersOptions Value=@("4") />
+                    </div>
+
+                    <div class="lobby-setting @(IsInLobby ? "disabled" : "")">
                         <span class="setting-label">Privacy</span>
                         <DropDown @ref="PrivacyDropdown" Options=@PrivacyOptions Value=@("Public") />
                     </div>
 
-                    <div class="lobby-setting @(IsInLobby ? "disabled" : "")">
-                        <span class="setting-label">Max Players</span>
-                        <DropDown @ref="MaxPlayersDropdown" Options=@MaxPlayersOptions Value=@("4") />
-                    </div>
+
 
                     <div class="create-lobby-button-container">
                         @if (IsInLobby)
