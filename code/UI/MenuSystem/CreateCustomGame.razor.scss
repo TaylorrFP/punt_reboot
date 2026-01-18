@@ -311,11 +311,11 @@ $color-team-spectator: #666666;
                         &.team-spectator {
                             background-color: $color-team-spectator;
                         }
-                        // When being dragged, look exactly like an empty slot
+                        // When being dragged, look like an empty slot
                         // Placed after team colors to ensure it overrides them
                         &.being-dragged {
                             background-color: rgba(black, 0.65);
-                            border: none;
+                            border: $outline-profile-picture solid transparent;
                             justify-content: center;
                             padding: 0;
                             cursor: grabbing;
@@ -331,9 +331,15 @@ $color-team-spectator: #666666;
                                 text-transform: uppercase;
                                 font-size: 22px;
                             }
+
+                            // Highlight as drop target when no other target is hovered
+                            &.drop-target {
+                                background-color: rgba(white, 0.3);
+                                border: $outline-profile-picture solid rgba(white, 0.6);
+                            }
                         }
 
-                        &:hover {
+                        &:hover:not(.being-dragged) {
                             transform: scale(1.02);
                             box-shadow: 0 4px 16px rgba(black, 0.3);
                         }

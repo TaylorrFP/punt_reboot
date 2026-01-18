@@ -89,7 +89,7 @@
                                     var index = i;
                                     @if (slot.IsOccupied)
                                     {
-                                        <div class="player-slot occupied team-red @(slot.IsBeingDragged ? "being-dragged" : "")" onmousedown="@(() => OnSlotMouseDown(Team.Red, index))">
+                                        <div class="player-slot occupied team-red @(slot.IsBeingDragged ? "being-dragged" : "") @(slot.IsBeingDragged && (!HighlightedTeam.HasValue || HighlightedTeam == DragSourceTeam) ? "drop-target" : "")" onmousedown="@(() => OnSlotMouseDown(Team.Red, index))">
                                             <img src="avatar:@slot.SteamId" class="profile-picture" />
                                             <span class="player-name">@slot.DisplayName</span>
                                         </div>
@@ -113,7 +113,7 @@
                                     var index = i;
                                     @if (slot.IsOccupied)
                                     {
-                                        <div class="player-slot occupied team-blue @(slot.IsBeingDragged ? "being-dragged" : "")" onmousedown="@(() => OnSlotMouseDown(Team.Blue, index))">
+                                        <div class="player-slot occupied team-blue @(slot.IsBeingDragged ? "being-dragged" : "") @(slot.IsBeingDragged && (!HighlightedTeam.HasValue || HighlightedTeam == DragSourceTeam) ? "drop-target" : "")" onmousedown="@(() => OnSlotMouseDown(Team.Blue, index))">
                                             <img src="avatar:@slot.SteamId" class="profile-picture" />
                                             <span class="player-name">@slot.DisplayName</span>
                                         </div>
@@ -136,7 +136,7 @@
                             var index = i;
                             @if (slot.IsOccupied)
                             {
-                                <div class="player-slot occupied team-spectator @(slot.IsBeingDragged ? "being-dragged" : "")" onmousedown="@(() => OnSlotMouseDown(Team.Spectator, index))">
+                                <div class="player-slot occupied team-spectator @(slot.IsBeingDragged ? "being-dragged" : "") @(slot.IsBeingDragged && (!HighlightedTeam.HasValue || HighlightedTeam == DragSourceTeam) ? "drop-target" : "")" onmousedown="@(() => OnSlotMouseDown(Team.Spectator, index))">
                                     <img src="avatar:@slot.SteamId" class="profile-picture" />
                                     <span class="player-name">@slot.DisplayName</span>
                                 </div>
