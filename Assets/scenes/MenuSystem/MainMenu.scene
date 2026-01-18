@@ -1306,21 +1306,20 @@
           "OnComponentFixedUpdate": null,
           "OnComponentStart": null,
           "OnComponentUpdate": null,
-          "showDebugInfo": true
+          "showDebugInfo": false
         },
         {
           "__type": "NetworkManager",
           "__guid": "5cb16ef6-cc48-4ab4-a0b6-354b287592bc",
           "__enabled": true,
           "Flags": 0,
-          "CurrentState": "None",
           "OnComponentDestroy": null,
           "OnComponentDisabled": null,
           "OnComponentEnabled": null,
           "OnComponentFixedUpdate": null,
           "OnComponentStart": null,
           "OnComponentUpdate": null,
-          "showDebugInfo": true
+          "ShowDebugInfo": true
         },
         {
           "__type": "GameSession",
@@ -1336,7 +1335,8 @@
           "OnComponentFixedUpdate": null,
           "OnComponentStart": null,
           "OnComponentUpdate": null,
-          "ShowDebugInfo": true
+          "ShowDebugInfo": true,
+          "State": "None"
         }
       ],
       "Children": []

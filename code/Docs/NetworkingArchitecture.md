@@ -26,53 +26,55 @@ Handles connection lifecycle and lobby management. Implements `Component.INetwor
 **Responsibilities:**
 - Creating/joining/leaving lobbies
 - Searching for available lobbies
-- Tracking connection state (`NetworkState`)
 - Firing events when players join/leave
 - Persists across scene loads (`DontDestroyOnLoad`)
 
-**Network States:**
-| State | Description |
-|-------|-------------|
-| `None` | Not connected, browsing main menu |
-| `CreatingLobby` | On create/join screen, preparing to create or join |
-| `InLobby` | Lobby active, players connecting, configuring teams/settings |
-| `StartingGame` | Host started game, loading into game scene |
-
 **Key Events:**
-- `OnStateChanged(oldState, newState)` - Network state transitions
 - `OnPlayerJoined(Connection)` - Player completed handshake
 - `OnPlayerLeft(Connection)` - Player disconnected
 - `OnLobbiesUpdated` - Lobby search results ready
+
+**Note:** NetworkManager does NOT track session state - that responsibility belongs to GameSession.
 
 ---
 
 ### GameSession
 **Location:** `Core/GameSession.cs`
 
-Shared data container for lobby and game state. Single source of truth for team assignments and game settings.
+Shared data container for lobby and game state. Single source of truth for team assignments, session state, and game settings.
 
 **Responsibilities:**
+- Tracking session state (None, CustomLobby, Matchmaking, InGame, etc.)
 - Storing team assignments (which players are on which team)
-- Storing game settings (match duration, cooldowns, rules)
-- Storing map selection
+- Storing game settings (match duration, cooldowns, rules) - *future*
 - Syncing all data to clients via `[Sync]` properties
 - Persists across scene loads (`DontDestroyOnLoad`)
+
+**Session States:**
+| State | Description |
+|-------|-------------|
+| `None` | Not in any networked session, browsing menus |
+| `CustomLobby` | In a custom game lobby - host can configure teams and settings |
+| `Matchmaking` | In ranked matchmaking queue, waiting for a match |
+| `MatchFound` | Match found in ranked queue, connecting to game server |
+| `InGame` | Actively in a game (loaded into game scene) |
 
 **Key Properties:**
 | Property | Type | Description |
 |----------|------|-------------|
-| `LobbyType` | `LobbyType` | Custom, Ranked, or Private |
+| `State` | `SessionState` | Current session state (synced from host) |
 | `TeamAssignments` | `NetDictionary<long, TeamSide>` | Maps SteamId to team |
-| `MatchDuration` | `float` | Match length in seconds |
-| `PieceCooldown` | `float` | Cooldown between piece flicks |
-| `MapName` | `string` | Selected map identifier |
 | `AllowMidMatchJoin` | `bool` | Whether players can join during gameplay |
 | `MidMatchJoinTeam` | `TeamSide` | Default team for mid-match joiners (usually Spectator) |
 
-**Why GameSession Exists:**
-- Avoids duplicating team/settings data between "lobby manager" and "game manager"
-- Data configured in lobby flows naturally into gameplay
-- Single source of truth eliminates sync issues
+**Key Events:**
+- `OnStateChanged(oldState, newState)` - Session state transitions
+- `OnTeamsChanged` - Team assignments modified
+
+**Why GameSession Owns Session State:**
+- Allows differentiating between `CustomLobby` and `Matchmaking` even when `Networking.IsActive` is true for both
+- State is synced to clients automatically via `[Sync(SyncFlags.FromHost)]`
+- Single source of truth for "what kind of session are we in?"
 
 ---
 
@@ -105,8 +107,9 @@ In-game state machine for match flow. Only active during gameplay scenes.
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                       GameSession                           │
+│  • State (SessionState - synced from host)                  │
 │  • TeamAssignments (NetDictionary<long, TeamSide>)          │
-│  • MatchDuration, PieceCooldown, MapName                    │
+│  • AllowMidMatchJoin, MidMatchJoinTeam                      │
 │  • [Sync(SyncFlags.FromHost)] - host controls, all receive  │
 └─────────────────────────────────────────────────────────────┘
                     ▲                       │
@@ -125,7 +128,7 @@ In-game state machine for match flow. Only active during gameplay scenes.
 │                     NetworkManager                         │
 │  • CreateLobby / JoinLobby / LeaveLobby                   │
 │  • INetworkListener (OnActive, OnDisconnected)            │
-│  • NetworkState tracking                                   │
+│  • SearchLobbies                                           │
 └───────────────────────────────────────────────────────────┘
 ```
 
@@ -137,12 +140,10 @@ In-game state machine for match flow. Only active during gameplay scenes.
 
 ```
 1. User navigates to Create Game screen
-   └─> NetworkManager.SetState(CreatingLobby)
 
 2. User configures settings and clicks "Create Lobby"
    └─> NetworkManager.CreateLobby(maxPlayers, privacy, name)
-   └─> NetworkManager.SetState(InLobby)
-   └─> GameSession initializes with default settings
+   └─> GameSession.State = CustomLobby
 
 3. Host appears in lobby UI
    └─> NetworkManager.OnActive(hostConnection)
@@ -154,7 +155,7 @@ In-game state machine for match flow. Only active during gameplay scenes.
 
 5. Host clicks "Start Game"
    └─> NetworkManager.StartGame()
-   └─> NetworkManager.SetState(StartingGame)
+   └─> GameSession.State = InGame
    └─> Scene loads, MatchController reads GameSession
 ```
 
@@ -167,15 +168,14 @@ In-game state machine for match flow. Only active during gameplay scenes.
 
 2. User selects and joins lobby
    └─> NetworkManager.JoinLobby(lobby)
-   └─> NetworkManager.SetState(InLobby)
 
 3. Client completes handshake
    └─> Host's NetworkManager.OnActive(clientConnection)
-   └─> Client receives synced GameSession data
+   └─> Client receives synced GameSession (State = CustomLobby)
    └─> Client UI shows current team assignments
 
 4. Host starts game
-   └─> Client receives NetworkState.StartingGame
+   └─> Client receives GameSession.State = InGame
    └─> Scene loads, client's MatchController reads GameSession
 ```
 
@@ -186,7 +186,7 @@ Players may join while a match is in progress (if `AllowMidMatchJoin` is true):
 ```
 1. Player joins during active match
    └─> NetworkManager.OnActive(connection)
-   └─> NetworkState is already StartingGame or InGame
+   └─> GameSession.State is already InGame
 
 2. Determine team assignment
    └─> If GameSession.TeamAssignments already has this SteamId:
@@ -207,24 +207,26 @@ Ranked matchmaking is a separate system that eventually populates a GameSession:
 
 ```
 1. Player enters ranked queue
+   └─> GameSession.State = Matchmaking
    └─> UI shows queue status, estimated wait time
    └─> Matchmaking server groups players by MMR/region
 
 2. Match found
+   └─> GameSession.State = MatchFound
    └─> Server creates lobby, assigns all players
    └─> Server populates GameSession:
-       └─> LobbyType = Ranked
        └─> TeamAssignments (balanced by MMR)
-       └─> Settings (standard ranked rules)
        └─> AllowMidMatchJoin = false (or Spectator only)
 
 3. Players connect to match
    └─> Client receives pre-populated GameSession
+   └─> GameSession.State = InGame
    └─> No lobby phase - straight to game loading
    └─> MatchController starts match
 
 4. Post-match
    └─> Results submitted to ranking server
+   └─> GameSession.State = None
    └─> Players returned to queue or main menu
 ```
 
@@ -238,10 +240,10 @@ Using `[Sync(SyncFlags.FromHost)]` for data that only the host should modify:
 
 ```csharp
 [Sync(SyncFlags.FromHost)]
-public NetDictionary<long, TeamSide> TeamAssignments { get; set; }
+public SessionState State { get; set; }
 
 [Sync(SyncFlags.FromHost)]
-public float MatchDuration { get; set; }
+public NetDictionary<long, TeamSide> TeamAssignments { get; set; }
 ```
 
 ### Client Requests
@@ -267,12 +269,12 @@ public void RequestTeamChange(long steamId, TeamSide requestedTeam)
 Using `[Change]` attribute for UI updates:
 
 ```csharp
-[Sync(SyncFlags.FromHost), Change(nameof(OnTeamAssignmentsChanged))]
-public NetDictionary<long, TeamSide> TeamAssignments { get; set; }
+[Sync(SyncFlags.FromHost), Change(nameof(OnSessionStateChanged))]
+public SessionState State { get; set; }
 
-private void OnTeamAssignmentsChanged(...)
+private void OnSessionStateChanged(SessionState oldState, SessionState newState)
 {
-    OnTeamsChanged?.Invoke(); // UI subscribes to refresh
+    OnStateChanged?.Invoke(oldState, newState); // UI subscribes to refresh
 }
 ```
 

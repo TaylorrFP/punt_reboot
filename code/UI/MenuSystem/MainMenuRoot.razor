@@ -90,12 +90,12 @@
     {
         base.OnAfterTreeRender( firstTime );
 
-        if ( firstTime && NetworkManager.Instance != null )
+        if ( firstTime && GameSession.Instance != null )
         {
-            NetworkManager.Instance.OnStateChanged += OnNetworkStateChanged;
+            GameSession.Instance.OnStateChanged += OnSessionStateChanged;
 
             // Check if we're already in a lobby on startup (e.g., joined via Steam invite)
-            if ( NetworkManager.Instance.CurrentState == NetworkState.InLobby )
+            if ( GameSession.Instance.State == SessionState.CustomLobby )
             {
                 Log.Info( "[MainMenuRoot] Already in lobby on startup - navigating to CreateGame page" );
                 Navigate( "/CreateGame" );
@@ -103,25 +103,25 @@
         }
     }
 
-    private void OnNetworkStateChanged( NetworkState oldState, NetworkState newState )
+    private void OnSessionStateChanged( SessionState oldState, SessionState newState )
     {
-        Log.Info( $"[MainMenuRoot] Network state changed: {oldState} -> {newState}" );
+        Log.Info( $"[MainMenuRoot] Session state changed: {oldState} -> {newState}" );
 
-        // Auto-navigate to CreateGame page when entering a lobby
-        if ( newState == NetworkState.InLobby && oldState != NetworkState.InLobby )
+        // Auto-navigate to CreateGame page when entering a custom lobby
+        if ( newState == SessionState.CustomLobby && oldState != SessionState.CustomLobby )
         {
             Log.Info( "[MainMenuRoot] Entering lobby - navigating to CreateGame page" );
             Navigate( "/CreateGame" );
         }
-        // Navigate back to home when leaving the lobby
-        else if ( newState == NetworkState.None && oldState == NetworkState.InLobby )
+        // Navigate back to home when leaving the session
+        else if ( newState == SessionState.None && oldState == SessionState.CustomLobby )
         {
             Log.Info( "[MainMenuRoot] Left lobby - navigating to home page" );
             Navigate( "/" );
         }
     }
 
-    private bool IsInLobby => NetworkManager.Instance?.CurrentState == NetworkState.InLobby;
+    private bool IsInLobby => GameSession.Instance?.State == SessionState.CustomLobby;
 
     public void SetPageFooterButtons(RenderFragment buttons)
     {

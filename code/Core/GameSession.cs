@@ -5,11 +5,77 @@ using System.Collections.Generic;
 using System.Linq;
 
 /// <summary>
+/// Represents what kind of networked session we're currently in.
+/// </summary>
+public enum SessionState
+{
+	/// <summary>
+	/// Not in any networked session, browsing menus.
+	/// </summary>
+	None,
+
+	/// <summary>
+	/// In a custom game lobby - host can configure teams and settings.
+	/// </summary>
+	CustomLobby,
+
+	/// <summary>
+	/// In ranked matchmaking queue, waiting for a match.
+	/// </summary>
+	Matchmaking,
+
+	/// <summary>
+	/// Match found in ranked queue, connecting to game server.
+	/// </summary>
+	MatchFound,
+
+	/// <summary>
+	/// Actively in a game (loaded into game scene).
+	/// </summary>
+	InGame
+}
+
+/// <summary>
 /// Shared data container for lobby and game state.
-/// Single source of truth for team assignments - persists across scene loads.
+/// Single source of truth for team assignments and session state - persists across scene loads.
 /// </summary>
 public sealed class GameSession : SingletonComponent<GameSession>
 {
+	// =========================================================================
+	// SESSION STATE
+	// =========================================================================
+
+	/// <summary>
+	/// Current session state. Host-controlled, synced to all clients.
+	/// </summary>
+	[Property, Sync( SyncFlags.FromHost ), Change( nameof( OnSessionStateChanged ) )]
+	public SessionState State { get; set; } = SessionState.None;
+
+	/// <summary>
+	/// Fired when the session state changes.
+	/// </summary>
+	public event Action<SessionState, SessionState> OnStateChanged;
+
+	private void OnSessionStateChanged( SessionState oldState, SessionState newState )
+	{
+		Log.Info( $"[GameSession] State changed: {oldState} -> {newState}" );
+		OnStateChanged?.Invoke( oldState, newState );
+	}
+
+	/// <summary>
+	/// Convenience property: are we currently in a lobby (custom or matchmaking)?
+	/// </summary>
+	public bool IsInLobby => State == SessionState.CustomLobby || State == SessionState.Matchmaking;
+
+	/// <summary>
+	/// Convenience property: are we in an active game?
+	/// </summary>
+	public bool IsInGame => State == SessionState.InGame;
+
+	// =========================================================================
+	// TEAM ASSIGNMENTS
+	// =========================================================================
+
 	/// <summary>
 	/// Team assignments keyed by SteamId. Host-controlled, synced to all clients.
 	/// </summary>
@@ -181,6 +247,9 @@ public sealed class GameSession : SingletonComponent<GameSession>
 
 		Gizmo.Draw.ScreenText( "=== GameSession ===", new Vector2( x, y ), "roboto", 24, TextFlag.RightCenter );
 		y += lineHeight + 5;
+
+		Gizmo.Draw.ScreenText( $"State: {State}", new Vector2( x, y ), "roboto", 20, TextFlag.RightCenter );
+		y += lineHeight;
 
 		Gizmo.Draw.ScreenText( $"AllowMidMatchJoin: {AllowMidMatchJoin}", new Vector2( x, y ), "roboto", 20, TextFlag.RightCenter );
 		y += lineHeight;

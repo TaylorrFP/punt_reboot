@@ -170,7 +170,7 @@
     private DropDown PrivacyDropdown;
     private DropDown MaxPlayersDropdown;
     private string DefaultLobbyName => $"{Connection.Local?.DisplayName ?? "Player"}'s Game";
-    private bool IsInLobby => NetworkManager.Instance?.CurrentState == NetworkState.InLobby;
+    private bool IsInLobby => GameSession.Instance?.State == SessionState.CustomLobby;
 
     private static List<Option> PrivacyOptions => new()
     {
@@ -322,11 +322,17 @@
     {
         base.OnAfterTreeRender(firstTime);
 
-        if (firstTime && NetworkManager.Instance != null)
+        if (firstTime)
         {
-            NetworkManager.Instance.OnStateChanged += OnNetworkStateChanged;
-            NetworkManager.Instance.OnPlayerJoined += OnPlayerJoined;
-            NetworkManager.Instance.OnPlayerLeft += OnPlayerLeft;
+            if (GameSession.Instance != null)
+            {
+                GameSession.Instance.OnStateChanged += OnSessionStateChanged;
+            }
+            if (NetworkManager.Instance != null)
+            {
+                NetworkManager.Instance.OnPlayerJoined += OnPlayerJoined;
+                NetworkManager.Instance.OnPlayerLeft += OnPlayerLeft;
+            }
         }
 
         if (!SlotsInitialized)
@@ -340,13 +346,7 @@
 
     public void OnNavigationOpen()
     {
-        // Transition to CreatingLobby state if we're not already in a lobby
-        if (NetworkManager.Instance != null && NetworkManager.Instance.CurrentState == NetworkState.None)
-        {
-            NetworkManager.Instance.SetState(NetworkState.CreatingLobby);
-        }
-
-        // Refresh lobby members when opening this page
+        // Refresh lobby members when opening this page if already in a lobby
         if (IsInLobby)
         {
             RefreshLobbyMembers();
@@ -355,22 +355,19 @@
 
     public void OnNavigationClose()
     {
-        // Transition back to None state if we're just creating a lobby (not in one yet)
-        if (NetworkManager.Instance != null && NetworkManager.Instance.CurrentState == NetworkState.CreatingLobby)
-        {
-            NetworkManager.Instance.SetState(NetworkState.None);
-        }
-
         // Unsubscribe from events when leaving this page
+        if (GameSession.Instance != null)
+        {
+            GameSession.Instance.OnStateChanged -= OnSessionStateChanged;
+        }
         if (NetworkManager.Instance != null)
         {
-            NetworkManager.Instance.OnStateChanged -= OnNetworkStateChanged;
             NetworkManager.Instance.OnPlayerJoined -= OnPlayerJoined;
             NetworkManager.Instance.OnPlayerLeft -= OnPlayerLeft;
         }
     }
 
-    private void OnNetworkStateChanged( NetworkState oldState, NetworkState newState )
+    private void OnSessionStateChanged( SessionState oldState, SessionState newState )
     {
         // BuildHash will handle the rebuild automatically
     }
