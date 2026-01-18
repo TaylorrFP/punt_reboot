@@ -231,7 +231,24 @@
 
     private void OnStartGameClicked()
     {
-        
+        var session = GameSession.Instance;
+        if (session == null) return;
+
+        int redCount = session.GetTeamCount(TeamSide.Red);
+        int blueCount = session.GetTeamCount(TeamSide.Blue);
+
+        // Warn if either team is empty
+        if (redCount == 0 || blueCount == 0)
+        {
+            ConfirmationDialog.Show(
+                "Not all teams have players. Start Anyway?",
+                "Yes",
+                "Cancel",
+                () => NetworkManager.Instance?.StartGame()
+            );
+            return;
+        }
+
         NetworkManager.Instance?.StartGame();
     }
 

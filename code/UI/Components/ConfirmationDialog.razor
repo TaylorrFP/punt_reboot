@@ -1,0 +1,91 @@
+@using Sandbox.UI
+@using System
+
+@namespace Punt.UI
+@inherits Panel
+
+<root class="confirmation-dialog-overlay @(IsShowing ? "visible" : "")">
+    <div class="confirmation-dialog">
+        <div class="dialog-message">@Message</div>
+        <div class="dialog-buttons">
+            <div class="dialog-button negative" onclick="@OnNegativeClicked">@NegativeText</div>
+            <div class="dialog-button positive" onclick="@OnPositiveClicked">@PositiveText</div>
+        </div>
+    </div>
+</root>
+
+@code
+{
+    public static ConfirmationDialog Instance { get; private set; }
+
+    private bool IsShowing { get; set; }
+    private string Message { get; set; } = "";
+    private string PositiveText { get; set; } = "Continue";
+    private string NegativeText { get; set; } = "Cancel";
+
+    private Action OnPositive;
+    private Action OnNegative;
+
+    public ConfirmationDialog()
+    {
+        Instance = this;
+    }
+
+    /// <summary>
+    /// Show a confirmation dialog with custom message and button text.
+    /// </summary>
+    /// <param name="message">The warning/confirmation message to display</param>
+    /// <param name="positiveText">Text for the positive/continue button</param>
+    /// <param name="negativeText">Text for the negative/cancel button</param>
+    /// <param name="onPositive">Callback when positive button is clicked</param>
+    /// <param name="onNegative">Optional callback when negative button is clicked</param>
+    public static void Show(string message, string positiveText, string negativeText, Action onPositive, Action onNegative = null)
+    {
+        if (Instance == null)
+        {
+            Log.Warning("[ConfirmationDialog] No instance available. Make sure ConfirmationDialog is in your UI hierarchy.");
+            return;
+        }
+
+        Instance.Message = message;
+        Instance.PositiveText = positiveText;
+        Instance.NegativeText = negativeText;
+        Instance.OnPositive = onPositive;
+        Instance.OnNegative = onNegative;
+        Instance.IsShowing = true;
+    }
+
+    /// <summary>
+    /// Hide the dialog without triggering any callbacks.
+    /// </summary>
+    public static void Hide()
+    {
+        if (Instance != null)
+        {
+            Instance.IsShowing = false;
+            Instance.OnPositive = null;
+            Instance.OnNegative = null;
+        }
+    }
+
+    private void OnPositiveClicked()
+    {
+        IsShowing = false;
+        OnPositive?.Invoke();
+        OnPositive = null;
+        OnNegative = null;
+    }
+
+    private void OnNegativeClicked()
+    {
+        IsShowing = false;
+        OnNegative?.Invoke();
+        OnPositive = null;
+        OnNegative = null;
+    }
+
+    protected override int BuildHash()
+    {
+        return HashCode.Combine(IsShowing, Message, PositiveText, NegativeText);
+    }
+}

@@ -235,7 +235,7 @@
       "__version": 2,
       "Flags": 0,
       "Name": "CameraController",
-      "Position": "-210,0,0",
+      "Position": "-132.9322,0,0",
       "Rotation": "0,0.3826835,0,0.9238795",
       "Scale": "1,1,1",
       "Tags": "",
@@ -274,7 +274,7 @@
           "__version": 2,
           "Flags": 0,
           "Name": "MainCamera",
-          "Position": "-2800,0,15",
+          "Position": "-2731.883,0,15",
           "Rotation": "0,0,0,1",
           "Scale": "1,1,1",
           "Tags": "maincamera",
@@ -293,7 +293,7 @@
               "BackgroundColor": "0.33333,0.46275,0.52157,1",
               "ClearFlags": "All",
               "EnablePostProcessing": true,
-              "FieldOfView": 42,
+              "FieldOfView": 45,
               "FovAxis": "Horizontal",
               "IsMainCamera": true,
               "OnComponentDestroy": null,
@@ -471,7 +471,7 @@
           "ShowGoalEnclosureDebug": false,
           "ShowGoalsDebug": true,
           "ShowGoalVolumeDebug": false,
-          "ShowWallsDebug": false,
+          "ShowWallsDebug": true,
           "WallHeight": 400,
           "WallThickness": 30
         }
@@ -699,7 +699,7 @@
               "IdValue": "ad8604dc-4731-4bf5-9544-f9bd106773c0"
             },
             "Property": "Position",
-            "Value": "-268.2334,67.15658,5.508378"
+            "Value": "-811.6846,-2.292669,5.508378"
           }
         ],
         "MovedObjects": []
@@ -751,7 +751,7 @@
               "IdValue": "ad8604dc-4731-4bf5-9544-f9bd106773c0"
             },
             "Property": "Position",
-            "Value": "193.4907,242.3594,5.508378"
+            "Value": "813.8832,-0.2140474,5.508378"
           }
         ],
         "MovedObjects": []

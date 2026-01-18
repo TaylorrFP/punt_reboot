@@ -1,0 +1,78 @@
+@import "/UI/Styles/punt.scss";
+
+.confirmation-dialog-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease;
+    z-index: 1000;
+    backdrop-filter: blur(8px);
+
+    font-family: $font-body;
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 1.2px;
+
+    &.visible {
+        opacity: 1;
+        pointer-events: all;
+    }
+}
+
+.confirmation-dialog {
+    background-color: $panel-background-dark;
+    border-radius: 24px;
+    padding: 20px 40px;
+    min-width: 600px;
+    max-width: 800px;
+    text-align: center;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.dialog-message {
+    font-size: 24px;
+    color: $color-text;
+
+}
+
+.dialog-buttons {
+    flex-direction: row;
+    justify-content: center;
+    gap: 20px;
+}
+
+.dialog-button {
+    padding: 12px 30px;
+    width: 200px;
+    font-size: 24px;
+    border-radius: 16px;
+    cursor: pointer;
+    pointer-events: all;
+    transition: all 0.15s ease;
+    border: 4px solid transparent;
+
+    &:hover {
+        transform: scale(1.05);
+        border-color: $color-selection;
+        sound-in: ui.button.over;
+    }
+
+    &.positive {
+        background-color: $color-primary;
+        color: $color-text;
+    }
+
+    &.negative {
+        background-color: $color-text;
+        color: $color-text-black;
+    }
+}

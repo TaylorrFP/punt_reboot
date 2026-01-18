@@ -10,11 +10,13 @@ mainmenuroot {
 	right: 0;
 	bottom: 0;
 
+
 	> root {
 		display: flex;
 		flex-direction: column;
 		width: 100%;
 		height: 100%;
+
 	}
 }
 
@@ -25,6 +27,7 @@ mainmenuroot {
 	flex-direction: column;
 	pointer-events: all;
 	cursor: default; // Ensures custom cursor is used across entire menu area
+
 
 	&.hidden {
 		display: none;
