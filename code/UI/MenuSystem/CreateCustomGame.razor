@@ -1,3 +1,4 @@
+@using System
 @using Sandbox.Menu
 @using Sandbox.UI;
 @using Sandbox.UI.Navigation;
@@ -9,7 +10,7 @@
 @implements INavigatorPage
 @namespace Punt.UI
 
-<root class="main-menu create-custom-games-page">
+<root class="main-menu create-custom-games-page @(IsDragging ? "is-dragging" : "")">
     <page-header>Create Game</page-header>
 
     <div class="content-panels">
@@ -280,7 +281,8 @@
     public class PlayerSlot
     {
         public bool IsOccupied { get; set; }
-        public long SteamId { get; set; }
+        public Guid ConnectionId { get; set; }  // Used for team assignment lookups
+        public long SteamId { get; set; }       // Used for avatar display
         public string DisplayName { get; set; }
         public bool IsBeingDragged { get; set; }
     }
@@ -300,6 +302,7 @@
     private bool IsDragging = false;
     private Team DragSourceTeam;
     private int DragSourceIndex;
+    private Guid DraggedConnectionId;
     private long DraggedSteamId;
     private string DraggedDisplayName;
     private Vector2 DragPosition;
@@ -329,11 +332,6 @@
             {
                 GameSession.Instance.OnStateChanged += OnSessionStateChanged;
             }
-            if (NetworkManager.Instance != null)
-            {
-                NetworkManager.Instance.OnPlayerJoined += OnPlayerJoined;
-                NetworkManager.Instance.OnPlayerLeft += OnPlayerLeft;
-            }
         }
 
         if (!SlotsInitialized)
@@ -361,28 +359,11 @@
         {
             GameSession.Instance.OnStateChanged -= OnSessionStateChanged;
         }
-        if (NetworkManager.Instance != null)
-        {
-            NetworkManager.Instance.OnPlayerJoined -= OnPlayerJoined;
-            NetworkManager.Instance.OnPlayerLeft -= OnPlayerLeft;
-        }
     }
 
     private void OnSessionStateChanged( SessionState oldState, SessionState newState )
     {
         // BuildHash will handle the rebuild automatically
-    }
-
-    private void OnPlayerJoined( Connection connection )
-    {
-        
-        RefreshLobbyMembers();
-    }
-
-    private void OnPlayerLeft( Connection connection )
-    {
-        
-        RefreshLobbyMembers();
     }
 
     private void InitializeSlots()
@@ -393,36 +374,63 @@
 
     private void RefreshLobbyMembers()
     {
-        //Log.Info("[DragDrop] RefreshLobbyMembers called");
-
         // Clear all slots first
-        foreach (var slot in RedTeamSlots) { slot.IsOccupied = false; slot.SteamId = 0; slot.DisplayName = null; }
-        foreach (var slot in BlueTeamSlots) { slot.IsOccupied = false; slot.SteamId = 0; slot.DisplayName = null; }
-        foreach (var slot in SpectatorSlots) { slot.IsOccupied = false; slot.SteamId = 0; slot.DisplayName = null; }
+        foreach (var slot in RedTeamSlots) { slot.IsOccupied = false; slot.ConnectionId = Guid.Empty; slot.SteamId = 0; slot.DisplayName = null; }
+        foreach (var slot in BlueTeamSlots) { slot.IsOccupied = false; slot.ConnectionId = Guid.Empty; slot.SteamId = 0; slot.DisplayName = null; }
+        foreach (var slot in SpectatorSlots) { slot.IsOccupied = false; slot.ConnectionId = Guid.Empty; slot.SteamId = 0; slot.DisplayName = null; }
 
-        // Get all lobby members from NetworkManager
-        var lobbyMembers = NetworkManager.Instance?.LobbyMembers;
-        if (lobbyMembers == null || lobbyMembers.Count == 0)
-        {
-            Log.Info("[DragDrop] No lobby members found");
+        var teamAssignments = GameSession.Instance?.TeamAssignments;
+        if (teamAssignments == null || teamAssignments.Count == 0)
             return;
-        }
 
-        // Place all lobby members in red team slots by default
-        int slotIndex = 0;
-        foreach (var member in lobbyMembers)
+        // Track slot indices for each team
+        int redIndex = 0, blueIndex = 0, spectatorIndex = 0;
+
+        foreach (var kvp in teamAssignments)
         {
-            if (slotIndex >= RedTeamSlots.Length)
-            {
-                //Log.Info($"[DragDrop] No more red team slots available for {member.DisplayName}");
-                break;
-            }
+            var connectionId = kvp.Key;
+            var team = kvp.Value;
 
-            RedTeamSlots[slotIndex].IsOccupied = true;
-            RedTeamSlots[slotIndex].SteamId = member.SteamId;
-            RedTeamSlots[slotIndex].DisplayName = member.DisplayName;
-            //Log.Info($"[DragDrop] Placed lobby member: {member.DisplayName} in RedTeamSlots[{slotIndex}]");
-            slotIndex++;
+            // Find the connection to get display name and SteamId
+            var connection = Connection.All.FirstOrDefault(c => c.Id == connectionId);
+            var displayName = connection?.DisplayName ?? $"Player {connectionId}";
+            var steamId = connection?.SteamId ?? 0L;
+
+            switch (team)
+            {
+                case TeamSide.Red:
+                    if (redIndex < RedTeamSlots.Length)
+                    {
+                        RedTeamSlots[redIndex].IsOccupied = true;
+                        RedTeamSlots[redIndex].ConnectionId = connectionId;
+                        RedTeamSlots[redIndex].SteamId = steamId;
+                        RedTeamSlots[redIndex].DisplayName = displayName;
+                        redIndex++;
+                    }
+                    break;
+
+                case TeamSide.Blue:
+                    if (blueIndex < BlueTeamSlots.Length)
+                    {
+                        BlueTeamSlots[blueIndex].IsOccupied = true;
+                        BlueTeamSlots[blueIndex].ConnectionId = connectionId;
+                        BlueTeamSlots[blueIndex].SteamId = steamId;
+                        BlueTeamSlots[blueIndex].DisplayName = displayName;
+                        blueIndex++;
+                    }
+                    break;
+
+                case TeamSide.Spectator:
+                    if (spectatorIndex < SpectatorSlots.Length)
+                    {
+                        SpectatorSlots[spectatorIndex].IsOccupied = true;
+                        SpectatorSlots[spectatorIndex].ConnectionId = connectionId;
+                        SpectatorSlots[spectatorIndex].SteamId = steamId;
+                        SpectatorSlots[spectatorIndex].DisplayName = displayName;
+                        spectatorIndex++;
+                    }
+                    break;
+            }
         }
     }
 
@@ -448,6 +456,7 @@
         IsDragging = true;
         DragSourceTeam = team;
         DragSourceIndex = index;
+        DraggedConnectionId = slot.ConnectionId;
         DraggedSteamId = slot.SteamId;
         DraggedDisplayName = slot.DisplayName;
         DragPosition = Mouse.Position;
@@ -500,43 +509,19 @@
         // Find which team panel we're dropping on
         var targetTeam = FindTeamUnderMouse();
 
-        if (targetTeam.HasValue)
+        if (targetTeam.HasValue && targetTeam.Value != DragSourceTeam)
         {
-            // Find first available slot in the target team
-            var targetIndex = FindFirstAvailableSlot(targetTeam.Value);
-
-            if (targetIndex.HasValue)
+            // Convert UI Team enum to TeamSide enum
+            var targetTeamSide = targetTeam.Value switch
             {
-                // Check if dropping on same team with only one slot occupied (effectively same slot)
-                if (targetTeam.Value == DragSourceTeam && targetIndex.Value == DragSourceIndex)
-                {
-                    //Log.Info("[DragDrop] Dropped on same position - no change");
-                }
-                else
-                {
-                    var targetSlot = GetSlot(targetTeam.Value, targetIndex.Value);
+                Team.Red => TeamSide.Red,
+                Team.Blue => TeamSide.Blue,
+                Team.Spectator => TeamSide.Spectator,
+                _ => TeamSide.None
+            };
 
-                    // Drop into the available slot
-                    //Log.Info($"[DragDrop] Dropping {DraggedDisplayName} into {targetTeam.Value} slot {targetIndex.Value}");
-
-                    targetSlot.IsOccupied = true;
-                    targetSlot.SteamId = DraggedSteamId;
-                    targetSlot.DisplayName = DraggedDisplayName;
-
-                    // Clear source slot
-                    sourceSlot.IsOccupied = false;
-                    sourceSlot.SteamId = 0;
-                    sourceSlot.DisplayName = null;
-                }
-            }
-            else
-            {
-                //Log.Info($"[DragDrop] No available slots in {targetTeam.Value} - returning to source");
-            }
-        }
-        else
-        {
-            //Log.Info("[DragDrop] Dropped outside valid team panel - returning to source");
+            // Update GameSession - this will sync to all clients
+            GameSession.Instance?.AssignTeam(DraggedConnectionId, targetTeamSide);
         }
 
         // Always clear the dragging state on source
@@ -606,12 +591,14 @@
                 {
                     // Move this slot to the write position
                     slots[writeIndex].IsOccupied = true;
+                    slots[writeIndex].ConnectionId = slots[readIndex].ConnectionId;
                     slots[writeIndex].SteamId = slots[readIndex].SteamId;
                     slots[writeIndex].DisplayName = slots[readIndex].DisplayName;
                     slots[writeIndex].IsBeingDragged = slots[readIndex].IsBeingDragged;
 
                     // Clear the old position
                     slots[readIndex].IsOccupied = false;
+                    slots[readIndex].ConnectionId = Guid.Empty;
                     slots[readIndex].SteamId = 0;
                     slots[readIndex].DisplayName = null;
                     slots[readIndex].IsBeingDragged = false;
@@ -665,10 +652,19 @@
 
     protected override int BuildHash()
     {
-        // Count occupied slots in each team to detect changes
-        int redCount = RedTeamSlots.Count(s => s.IsOccupied);
-        int blueCount = BlueTeamSlots.Count(s => s.IsOccupied);
-        int spectatorCount = SpectatorSlots.Count(s => s.IsOccupied);
+        // Hash team assignments from GameSession
+        var teamAssignments = GameSession.Instance?.TeamAssignments;
+        int teamHash = 0;
+        if (teamAssignments != null)
+        {
+            foreach (var kvp in teamAssignments)
+            {
+                teamHash = System.HashCode.Combine(teamHash, kvp.Key, kvp.Value);
+            }
+        }
+
+        // Rebuild local slots from GameSession data when hash changes
+        RefreshLobbyMembers();
 
         return System.HashCode.Combine(
             base.BuildHash(),
@@ -678,7 +674,7 @@
             HighlightedIndex,
             IsInLobby,
             Networking.IsHost,
-            System.HashCode.Combine(redCount, blueCount, spectatorCount, DisplayedLobbyName)
+            System.HashCode.Combine(teamHash, DisplayedLobbyName)
         );
     }
 }

@@ -83,10 +83,11 @@ public sealed class GameSession : SingletonComponent<GameSession>
 	// =========================================================================
 
 	/// <summary>
-	/// Team assignments keyed by SteamId. Host-controlled, synced to all clients.
+	/// Team assignments keyed by Connection.Id. Host-controlled, synced to all clients.
+	/// Uses Guid instead of SteamId to support local testing instances with same Steam account.
 	/// </summary>
 	[Sync( SyncFlags.FromHost )]
-	public NetDictionary<long, TeamSide> TeamAssignments { get; set; } = new();
+	public NetDictionary<Guid, TeamSide> TeamAssignments { get; set; } = new();
 
 	/// <summary>
 	/// Whether players can join during an active match.
@@ -114,7 +115,7 @@ public sealed class GameSession : SingletonComponent<GameSession>
 	/// <summary>
 	/// Assign a player to a team. Host only.
 	/// </summary>
-	public void AssignTeam( long steamId, TeamSide team )
+	public void AssignTeam( Guid connectionId, TeamSide team )
 	{
 		if ( !Networking.IsHost )
 		{
@@ -122,24 +123,26 @@ public sealed class GameSession : SingletonComponent<GameSession>
 			return;
 		}
 
-		var oldTeam = GetTeam( steamId );
-		TeamAssignments[steamId] = team;
+		var oldTeam = GetTeam( connectionId );
+		TeamAssignments[connectionId] = team;
 
-		Log.Info( $"[GameSession] Assigned {steamId} to {team} (was {oldTeam})" );
+		var connection = Connection.All.FirstOrDefault( c => c.Id == connectionId );
+		var displayName = connection?.DisplayName ?? connectionId.ToString();
+		Log.Info( $"[GameSession] Assigned {displayName} to {team} (was {oldTeam})" );
 		OnTeamsChanged?.Invoke();
 	}
 
 	/// <summary>
 	/// Remove a player from team assignments (on disconnect).
 	/// </summary>
-	public void RemovePlayer( long steamId )
+	public void RemovePlayer( Guid connectionId )
 	{
 		if ( !Networking.IsHost )
 			return;
 
-		if ( TeamAssignments.Remove( steamId ) )
+		if ( TeamAssignments.Remove( connectionId ) )
 		{
-			Log.Info( $"[GameSession] Removed {steamId} from team assignments" );
+			Log.Info( $"[GameSession] Removed {connectionId} from team assignments" );
 			OnTeamsChanged?.Invoke();
 		}
 	}
@@ -147,9 +150,9 @@ public sealed class GameSession : SingletonComponent<GameSession>
 	/// <summary>
 	/// Get a player's current team assignment.
 	/// </summary>
-	public TeamSide GetTeam( long steamId )
+	public TeamSide GetTeam( Guid connectionId )
 	{
-		return TeamAssignments.TryGetValue( steamId, out var team ) ? team : TeamSide.None;
+		return TeamAssignments.TryGetValue( connectionId, out var team ) ? team : TeamSide.None;
 	}
 
 	/// <summary>
@@ -157,13 +160,13 @@ public sealed class GameSession : SingletonComponent<GameSession>
 	/// </summary>
 	public TeamSide GetTeam( Connection connection )
 	{
-		return GetTeam( connection.SteamId );
+		return GetTeam( connection.Id );
 	}
 
 	/// <summary>
 	/// Get all players on a specific team.
 	/// </summary>
-	public IEnumerable<long> GetPlayersOnTeam( TeamSide team )
+	public IEnumerable<Guid> GetPlayersOnTeam( TeamSide team )
 	{
 		return TeamAssignments.Where( kvp => kvp.Value == team ).Select( kvp => kvp.Key );
 	}
@@ -193,16 +196,16 @@ public sealed class GameSession : SingletonComponent<GameSession>
 	/// Request to change your own team. Clients call this, host processes it.
 	/// </summary>
 	[Rpc.Host]
-	public void RequestTeamChange( long steamId, TeamSide requestedTeam )
+	public void RequestTeamChange( Guid connectionId, TeamSide requestedTeam )
 	{
 		// Validate: can only change own team
-		if ( Rpc.Caller.SteamId != steamId )
+		if ( Rpc.Caller.Id != connectionId )
 		{
 			Log.Warning( $"[GameSession] {Rpc.Caller.DisplayName} tried to change someone else's team" );
 			return;
 		}
 
-		AssignTeam( steamId, requestedTeam );
+		AssignTeam( connectionId, requestedTeam );
 	}
 
 	// =========================================================================
@@ -211,28 +214,30 @@ public sealed class GameSession : SingletonComponent<GameSession>
 
 	[Property] public bool ShowDebugInfo { get; set; } = true;
 
-	/// <summary>
-	/// Debug display of current team assignments for the inspector.
-	/// </summary>
-	[Property, ReadOnly, Title( "Current Teams" )]
-	public string DebugTeamAssignments => GetDebugTeamString();
+	[Property, ReadOnly, Title( "Red Team" ), Group( "Teams" )]
+	public string DebugRedTeam => GetTeamDebugString( TeamSide.Red );
 
-	private string GetDebugTeamString()
+	[Property, ReadOnly, Title( "Blue Team" ), Group( "Teams" )]
+	public string DebugBlueTeam => GetTeamDebugString( TeamSide.Blue );
+
+	[Property, ReadOnly, Title( "Spectators" ), Group( "Teams" )]
+	public string DebugSpectators => GetTeamDebugString( TeamSide.Spectator );
+
+	private string GetTeamDebugString( TeamSide team )
 	{
 		if ( TeamAssignments == null || TeamAssignments.Count == 0 )
 			return "(empty)";
 
-		var lines = new List<string>();
+		var players = TeamAssignments
+			.Where( kvp => kvp.Value == team )
+			.Select( kvp =>
+			{
+				var connection = Connection.All.FirstOrDefault( c => c.Id == kvp.Key );
+				return connection?.DisplayName ?? $"Id:{kvp.Key}";
+			} )
+			.ToList();
 
-		foreach ( var kvp in TeamAssignments )
-		{
-			// Try to find the connection to get display name
-			var connection = Connection.All.FirstOrDefault( c => c.SteamId == kvp.Key );
-			var name = connection?.DisplayName ?? $"SteamId:{kvp.Key}";
-			lines.Add( $"{name} -> {kvp.Value}" );
-		}
-
-		return string.Join( "\n", lines );
+		return players.Count > 0 ? string.Join( ", ", players ) : "(empty)";
 	}
 
 	protected override void OnUpdate()
@@ -274,8 +279,8 @@ public sealed class GameSession : SingletonComponent<GameSession>
 
 		foreach ( var kvp in TeamAssignments )
 		{
-			var connection = Connection.All.FirstOrDefault( c => c.SteamId == kvp.Key );
-			var name = connection?.DisplayName ?? $"ID:{kvp.Key}";
+			var connection = Connection.All.FirstOrDefault( c => c.Id == kvp.Key );
+			var name = connection?.DisplayName ?? $"Id:{kvp.Key}";
 			var teamColor = kvp.Value switch
 			{
 				TeamSide.Red => "RED",

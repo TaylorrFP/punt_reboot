@@ -17,16 +17,6 @@ public sealed class NetworkManager : SingletonComponent<NetworkManager>, Compone
 	public event Action OnLobbiesUpdated;
 
 	/// <summary>
-	/// Fired when a player joins the current lobby/game
-	/// </summary>
-	public event Action<Connection> OnPlayerJoined;
-
-	/// <summary>
-	/// Fired when a player leaves the current lobby/game
-	/// </summary>
-	public event Action<Connection> OnPlayerLeft;
-
-	/// <summary>
 	/// List of available lobbies from the last search
 	/// </summary>
 	public IReadOnlyList<LobbyInformation> AvailableLobbies => _availableLobbies;
@@ -57,8 +47,10 @@ public sealed class NetworkManager : SingletonComponent<NetworkManager>, Compone
 	/// </summary>
 	public void OnActive( Connection connection )
 	{
-		Log.Info( $"[NetworkManager] Player active: {connection.DisplayName}" );
-		OnPlayerJoined?.Invoke( connection );
+		Log.Info( $"[NetworkManager] Player active: {connection.DisplayName} (Id: {connection.Id})" );
+
+		// Assign new player to default team (Red) in GameSession
+		GameSession.Instance?.AssignTeam( connection.Id, TeamSide.Red );
 	}
 
 	/// <summary>
@@ -66,8 +58,10 @@ public sealed class NetworkManager : SingletonComponent<NetworkManager>, Compone
 	/// </summary>
 	public void OnDisconnected( Connection connection )
 	{
-		Log.Info( $"[NetworkManager] Player disconnected: {connection.DisplayName}" );
-		OnPlayerLeft?.Invoke( connection );
+		Log.Info( $"[NetworkManager] Player disconnected: {connection.DisplayName} (Id: {connection.Id})" );
+
+		// Remove player from GameSession team assignments
+		GameSession.Instance?.RemovePlayer( connection.Id );
 	}
 
 	// =========================================================================
@@ -147,7 +141,12 @@ public sealed class NetworkManager : SingletonComponent<NetworkManager>, Compone
 		Log.Info( "[NetworkManager] Starting game..." );
 		session.State = SessionState.InGame;
 
-		// TODO: Load game scene
+		// Load the game scene
+		var sceneOptions = new SceneLoadOptions();
+		sceneOptions.ShowLoadingScreen = false;
+		sceneOptions.SetScene( "scenes/game/pitch.scene" );
+
+		Game.ChangeScene( sceneOptions );
 	}
 
 	/// <summary>

@@ -4,6 +4,16 @@ $color-team-spectator: #666666;
 
 .create-custom-games-page {
 
+    // When dragging, set cursor to grabbing for the entire page
+    &.is-dragging {
+        cursor: grabbing;
+
+        // Override hovering cursor on slots while dragging
+        .player-slot.occupied {
+            cursor: grabbing;
+        }
+    }
+
     page-header {
         margin-top: 64px;
         margin-left: $menu-paddingpx;
@@ -285,7 +295,7 @@ $color-team-spectator: #666666;
                     &.occupied {
                         gap: 12px;
                         border: $outline-profile-picture solid $color-text;
-                        cursor: pointer;
+                        cursor: hovering;
                         pointer-events: all;
                         transition: transform 0.1s ease, box-shadow 0.1s ease;
 
@@ -308,6 +318,7 @@ $color-team-spectator: #666666;
                             border: none;
                             justify-content: center;
                             padding: 0;
+                            cursor: grabbing;
 
                             .profile-picture,
                             .player-name {
