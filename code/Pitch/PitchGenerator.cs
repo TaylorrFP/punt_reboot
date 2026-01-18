@@ -235,7 +235,8 @@ public sealed class PitchGenerator : Component
 			Name = "PitchWall",
 			Parent = collidersContainer,
 			WorldPosition = center + normal * (WallThickness / 2f) + Vector3.Up * (WallHeight / 2f),
-			WorldRotation = Rotation.FromYaw( angle )
+			WorldRotation = Rotation.FromYaw( angle ),
+			Tags = { "wall" }
 		};
 
 		var collider = wallObj.Components.Create<BoxCollider>();
@@ -266,7 +267,8 @@ public sealed class PitchGenerator : Component
 		{
 			Name = "GoalPost",
 			Parent = collidersContainer,
-			WorldPosition = insetPosition
+			WorldPosition = insetPosition,
+			Tags = { "goalpost" }
 		};
 
 		var collider = postObj.Components.Create<CapsuleCollider>();
