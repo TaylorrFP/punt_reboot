@@ -93,6 +93,7 @@ public sealed class NetworkManager : SingletonComponent<NetworkManager>, Compone
 		// Update GameSession state
 		if ( GameSession.Instance != null )
 		{
+			GameSession.Instance.LobbyName = name;
 			GameSession.Instance.State = SessionState.CustomLobby;
 		}
 	}
@@ -119,6 +120,7 @@ public sealed class NetworkManager : SingletonComponent<NetworkManager>, Compone
 		// Reset GameSession state
 		if ( GameSession.Instance != null )
 		{
+			GameSession.Instance.LobbyName = "";
 			GameSession.Instance.State = SessionState.None;
 			GameSession.Instance.ClearTeams();
 		}

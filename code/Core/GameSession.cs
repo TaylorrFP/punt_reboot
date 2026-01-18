@@ -52,6 +52,12 @@ public sealed class GameSession : SingletonComponent<GameSession>
 	public SessionState State { get; set; } = SessionState.None;
 
 	/// <summary>
+	/// The name of the current lobby. Host-controlled, synced to all clients.
+	/// </summary>
+	[Property, Sync( SyncFlags.FromHost )]
+	public string LobbyName { get; set; } = "";
+
+	/// <summary>
 	/// Fired when the session state changes.
 	/// </summary>
 	public event Action<SessionState, SessionState> OnStateChanged;
@@ -250,6 +256,12 @@ public sealed class GameSession : SingletonComponent<GameSession>
 
 		Gizmo.Draw.ScreenText( $"State: {State}", new Vector2( x, y ), "roboto", 20, TextFlag.RightCenter );
 		y += lineHeight;
+
+		if ( !string.IsNullOrEmpty( LobbyName ) )
+		{
+			Gizmo.Draw.ScreenText( $"Lobby: {LobbyName}", new Vector2( x, y ), "roboto", 20, TextFlag.RightCenter );
+			y += lineHeight;
+		}
 
 		Gizmo.Draw.ScreenText( $"AllowMidMatchJoin: {AllowMidMatchJoin}", new Vector2( x, y ), "roboto", 20, TextFlag.RightCenter );
 		y += lineHeight;

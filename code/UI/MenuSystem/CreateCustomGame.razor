@@ -45,7 +45,7 @@
                 </div>
                 <div class="lobby-config-panel">
                     <div class="lobby-name-input @(IsInLobby ? "disabled" : "")">
-                        <TextEntry @ref="LobbyNameInput" Text="@DefaultLobbyName" Placeholder="Lobby Name" />
+                        <TextEntry @ref="LobbyNameInput" Text="@DisplayedLobbyName" Placeholder="Lobby Name" />
                     </div>
 
                     <div class="lobby-setting @(IsInLobby ? "disabled" : "")">
@@ -61,13 +61,13 @@
 
 
                     <div class="create-lobby-button-container">
-                        @if (IsInLobby)
+                        @if (IsInLobby && Networking.IsHost)
                         {
                             <div class="create-lobby-button start-game" onclick="@OnStartGameClicked">
                                 Start Game
                             </div>
                         }
-                        else
+                        else if (!IsInLobby)
                         {
                             <div class="create-lobby-button" onclick="@OnCreateLobbyClicked">
                                 Create Lobby
@@ -171,6 +171,7 @@
     private DropDown MaxPlayersDropdown;
     private string DefaultLobbyName => $"{Connection.Local?.DisplayName ?? "Player"}'s Game";
     private bool IsInLobby => GameSession.Instance?.State == SessionState.CustomLobby;
+    private string DisplayedLobbyName => IsInLobby ? GameSession.Instance?.LobbyName ?? DefaultLobbyName : DefaultLobbyName;
 
     private static List<Option> PrivacyOptions => new()
     {
@@ -219,7 +220,7 @@
             _ => LobbyPrivacy.Public
         };
 
-        Log.Info( $"[CreateLobby] Creating lobby: {lobbyName}, MaxPlayers: {maxPlayers}, Privacy: {privacy}" );
+        
 
         NetworkManager.Instance?.CreateLobby( maxPlayers, privacy, lobbyName );
 
@@ -229,7 +230,7 @@
 
     private void OnStartGameClicked()
     {
-        Log.Info( "[CreateLobby] Starting game..." );
+        
         NetworkManager.Instance?.StartGame();
     }
 
@@ -374,25 +375,25 @@
 
     private void OnPlayerJoined( Connection connection )
     {
-        Log.Info( $"[CreateLobby] Player joined: {connection.DisplayName}" );
+        
         RefreshLobbyMembers();
     }
 
     private void OnPlayerLeft( Connection connection )
     {
-        Log.Info( $"[CreateLobby] Player left: {connection.DisplayName}" );
+        
         RefreshLobbyMembers();
     }
 
     private void InitializeSlots()
     {
-        Log.Info("[DragDrop] InitializeSlots called");
+        //Log.Info("[DragDrop] InitializeSlots called");
         RefreshLobbyMembers();
     }
 
     private void RefreshLobbyMembers()
     {
-        Log.Info("[DragDrop] RefreshLobbyMembers called");
+        //Log.Info("[DragDrop] RefreshLobbyMembers called");
 
         // Clear all slots first
         foreach (var slot in RedTeamSlots) { slot.IsOccupied = false; slot.SteamId = 0; slot.DisplayName = null; }
@@ -413,35 +414,35 @@
         {
             if (slotIndex >= RedTeamSlots.Length)
             {
-                Log.Info($"[DragDrop] No more red team slots available for {member.DisplayName}");
+                //Log.Info($"[DragDrop] No more red team slots available for {member.DisplayName}");
                 break;
             }
 
             RedTeamSlots[slotIndex].IsOccupied = true;
             RedTeamSlots[slotIndex].SteamId = member.SteamId;
             RedTeamSlots[slotIndex].DisplayName = member.DisplayName;
-            Log.Info($"[DragDrop] Placed lobby member: {member.DisplayName} in RedTeamSlots[{slotIndex}]");
+            //Log.Info($"[DragDrop] Placed lobby member: {member.DisplayName} in RedTeamSlots[{slotIndex}]");
             slotIndex++;
         }
     }
 
     private void OnSlotMouseDown(Team team, int index)
     {
-        Log.Info($"[DragDrop] OnSlotMouseDown called - Team: {team}, Index: {index}");
+       //Log.Info($"[DragDrop] OnSlotMouseDown called - Team: {team}, Index: {index}");
 
         var slot = GetSlot(team, index);
         if (slot == null)
         {
-            Log.Info("[DragDrop] Slot is null!");
+            //Log.Info("[DragDrop] Slot is null!");
             return;
         }
         if (!slot.IsOccupied)
         {
-            Log.Info("[DragDrop] Slot is not occupied!");
+            //Log.Info("[DragDrop] Slot is not occupied!");
             return;
         }
 
-        Log.Info($"[DragDrop] Starting drag for player: {slot.DisplayName}");
+        //Log.Info($"[DragDrop] Starting drag for player: {slot.DisplayName}");
 
         // Start dragging
         IsDragging = true;
@@ -454,7 +455,7 @@
         // Mark source slot as being dragged (shows as empty)
         slot.IsBeingDragged = true;
 
-        Log.Info("[DragDrop] Drag started");
+        //Log.Info("[DragDrop] Drag started");
     }
 
 
@@ -487,7 +488,7 @@
 
         if (IsDragging)
         {
-            Log.Info("[DragDrop] Mouse released - ending drag");
+            //Log.Info("[DragDrop] Mouse released - ending drag");
             EndDrag();
         }
     }
@@ -509,14 +510,14 @@
                 // Check if dropping on same team with only one slot occupied (effectively same slot)
                 if (targetTeam.Value == DragSourceTeam && targetIndex.Value == DragSourceIndex)
                 {
-                    Log.Info("[DragDrop] Dropped on same position - no change");
+                    //Log.Info("[DragDrop] Dropped on same position - no change");
                 }
                 else
                 {
                     var targetSlot = GetSlot(targetTeam.Value, targetIndex.Value);
 
                     // Drop into the available slot
-                    Log.Info($"[DragDrop] Dropping {DraggedDisplayName} into {targetTeam.Value} slot {targetIndex.Value}");
+                    //Log.Info($"[DragDrop] Dropping {DraggedDisplayName} into {targetTeam.Value} slot {targetIndex.Value}");
 
                     targetSlot.IsOccupied = true;
                     targetSlot.SteamId = DraggedSteamId;
@@ -530,12 +531,12 @@
             }
             else
             {
-                Log.Info($"[DragDrop] No available slots in {targetTeam.Value} - returning to source");
+                //Log.Info($"[DragDrop] No available slots in {targetTeam.Value} - returning to source");
             }
         }
         else
         {
-            Log.Info("[DragDrop] Dropped outside valid team panel - returning to source");
+            //Log.Info("[DragDrop] Dropped outside valid team panel - returning to source");
         }
 
         // Always clear the dragging state on source
@@ -676,8 +677,8 @@
             HighlightedTeam,
             HighlightedIndex,
             IsInLobby,
-            redCount,
-            System.HashCode.Combine(blueCount, spectatorCount)
+            Networking.IsHost,
+            System.HashCode.Combine(redCount, blueCount, spectatorCount, DisplayedLobbyName)
         );
     }
 }
