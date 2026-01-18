@@ -190,6 +190,7 @@
           },
           "ControllerAimSmoothing": 10,
           "ControllerDistanceWeight": 0.05,
+          "EnableEdgePanning": false,
           "FlickStrength": 1,
           "InputManager": {
             "_type": "component",
@@ -211,6 +212,7 @@
           "ShowCursor": true,
           "ShowDebug": false,
           "ShowRealCursor": false,
+          "SnapBackThreshold": 5,
           "Team": "Blue"
         },
         {
@@ -263,8 +265,8 @@
           "OnComponentUpdate": null,
           "OverlapTolerance": 0.5,
           "PanSpeed": 1,
-          "PassivePanHorizontalMult": 2.5,
-          "PassivePanSpeed": 30,
+          "PassivePanHorizontalMult": 1,
+          "PassivePanSpeed": 100,
           "ShowDebug": true,
           "Smoothing": 5,
           "SmoothPan": true

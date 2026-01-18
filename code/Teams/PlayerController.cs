@@ -17,6 +17,9 @@ public sealed class PlayerController : Component
 	[Property, Group( "Flick Settings" )] public float MinFlickDistance { get; set; } = 50f;
 	[Property, Group( "Flick Settings" )] public float MaxFlickDistance { get; set; } = 650f;
 	[Property, Group( "Flick Settings" )] public bool InvertAimIndicator { get; set; } = false;
+	[Property, Group( "Flick Settings" )] public bool EnableEdgePanning { get; set; } = true;
+	[Property, Group( "Flick Settings" ), HideIf( nameof(EnableEdgePanning), true ), Description( "Minimum mouse movement required to snap cursor back from off-screen (prevents jitter)" )]
+	public float SnapBackThreshold { get; set; } = 3f;
 
 	[Property, Group( "Cursor" )] public bool ShowRealCursor { get; set; } = false;
 	[Property, Group( "Cursor" )] public bool ShowCursor { get; set; } = true;
@@ -37,6 +40,9 @@ public sealed class PlayerController : Component
 	// Virtual cursor
 	private Vector2 cursorPosition;
 	private bool cursorInitialized;
+
+	// Off-screen cursor tracking (for no-edge-panning mode)
+	private Vector2 unclampedCursorPosition;
 
 	// World position of cursor
 	private Vector3 worldCursorPosition;
@@ -187,22 +193,84 @@ public sealed class PlayerController : Component
 		if ( !cursorInitialized )
 		{
 			cursorPosition = Mouse.Position;
+			unclampedCursorPosition = cursorPosition;
 			cursorInitialized = true;
 		}
 
-		cursorPosition += Mouse.Delta;
+		Vector2 delta = Mouse.Delta;
 
-		// Clamp to screen bounds
-		cursorPosition = new Vector2(
-			Math.Clamp( cursorPosition.x, 0, Screen.Width ),
-			Math.Clamp( cursorPosition.y, 0, Screen.Height )
-		);
+		if ( !EnableEdgePanning && selectedSelectable != null )
+		{
+			// No edge panning mode while dragging:
+			// Check if we're currently off-screen on each axis
+			bool offLeft = unclampedCursorPosition.x < 0;
+			bool offRight = unclampedCursorPosition.x > Screen.Width;
+			bool offTop = unclampedCursorPosition.y < 0;
+			bool offBottom = unclampedCursorPosition.y > Screen.Height;
+
+			// If moving back toward screen on an axis where we're off-screen,
+			// snap that axis to the edge immediately (with threshold to prevent jitter)
+			if ( offLeft && delta.x > SnapBackThreshold )
+			{
+				// Moving right while off left edge - snap X to left edge
+				unclampedCursorPosition.x = 0;
+			}
+			else if ( offRight && delta.x < -SnapBackThreshold )
+			{
+				// Moving left while off right edge - snap X to right edge
+				unclampedCursorPosition.x = Screen.Width;
+			}
+
+			if ( offTop && delta.y > SnapBackThreshold )
+			{
+				// Moving down while off top edge - snap Y to top edge
+				unclampedCursorPosition.y = 0;
+			}
+			else if ( offBottom && delta.y < -SnapBackThreshold )
+			{
+				// Moving up while off bottom edge - snap Y to bottom edge
+				unclampedCursorPosition.y = Screen.Height;
+			}
+
+			// Now apply the delta
+			unclampedCursorPosition += delta;
+
+			// Check if unclamped cursor is within screen bounds
+			bool isOnScreen = unclampedCursorPosition.x >= 0 && unclampedCursorPosition.x <= Screen.Width &&
+							  unclampedCursorPosition.y >= 0 && unclampedCursorPosition.y <= Screen.Height;
+
+			if ( isOnScreen )
+			{
+				// Cursor is on screen - sync visual cursor
+				cursorPosition = unclampedCursorPosition;
+			}
+			else
+			{
+				// Cursor is off-screen - clamp visual cursor to edge
+				cursorPosition = new Vector2(
+					Math.Clamp( unclampedCursorPosition.x, 0, Screen.Width ),
+					Math.Clamp( unclampedCursorPosition.y, 0, Screen.Height )
+				);
+			}
+		}
+		else
+		{
+			// Normal mode: cursor follows mouse and clamps to screen
+			cursorPosition += delta;
+			cursorPosition = new Vector2(
+				Math.Clamp( cursorPosition.x, 0, Screen.Width ),
+				Math.Clamp( cursorPosition.y, 0, Screen.Height )
+			);
+			// Keep unclamped in sync when not in special mode
+			unclampedCursorPosition = cursorPosition;
+		}
 
 		Mouse.Visibility = ShowRealCursor ? MouseVisibility.Visible : MouseVisibility.Hidden;
 	}
 
 	private void UpdateWorldPosition()
 	{
+		// Always use clamped cursor for world position (direction)
 		var ray = Scene.Camera.ScreenPixelToRay( cursorPosition );
 
 		// Intersect with Z=0 plane
@@ -263,16 +331,32 @@ public sealed class PlayerController : Component
 	private void UpdateFlickVector()
 	{
 		lastCursorDelta = Mouse.Delta.Length;
+		bool isControllerMode = InputManager != null && InputManager.CurrentMode == InputMode.Controller;
 
-		// Calculate flick vector from piece to cursor, scaled and clamped
-		// (Controller smoothing only affects direction, not magnitude, so worldCursorPosition is correct)
+		// Calculate direction from clamped cursor (visual cursor position)
 		Vector3 pieceToCursor = (worldCursorPosition - selectedSelectable.SelectPosition).WithZ( 0 );
-		flickVector = -pieceToCursor;
-		flickVector *= FlickStrength;
+		Vector3 direction = pieceToCursor.Normal;
+
+		// Calculate magnitude - use unclamped position when edge panning is disabled
+		float magnitude;
+		if ( !EnableEdgePanning && !isControllerMode )
+		{
+			// Convert unclamped screen position to world for magnitude calculation
+			var unclampedRay = Scene.Camera.ScreenPixelToRay( unclampedCursorPosition );
+			float t = -unclampedRay.Position.z / unclampedRay.Forward.z;
+			Vector3 unclampedWorldPos = (unclampedRay.Position + unclampedRay.Forward * t).WithZ( 0f );
+			magnitude = (unclampedWorldPos - selectedSelectable.SelectPosition).WithZ( 0 ).Length;
+		}
+		else
+		{
+			magnitude = pieceToCursor.Length;
+		}
+
+		// Build flick vector: direction from clamped cursor, magnitude from unclamped
+		flickVector = -direction * magnitude * FlickStrength;
 		flickVector = flickVector.ClampLength( MaxFlickDistance );
 
 		// Buffer the magnitude for controller mode (captures peak strength before stick returns to center)
-		bool isControllerMode = InputManager != null && InputManager.CurrentMode == InputMode.Controller;
 		if ( isControllerMode )
 		{
 			flickMagnitudeBuffer[flickBufferIndex] = flickVector.Length;
@@ -283,10 +367,8 @@ public sealed class PlayerController : Component
 		float intensity = flickVector.Length / MaxFlickDistance;
 		bool exceedsMinimum = flickVector.Length >= MinFlickDistance;
 
-		// Calculate aim indicator position
-		// Normal: Arrow points from cursor toward piece (shows where you're pulling from)
-		// Inverted: Arrow points from piece in flick direction (shows where piece will go)
-		Vector3 clampedOffset = pieceToCursor.ClampLength( MaxFlickDistance );
+		// Calculate aim indicator position using clamped offset (matches visual cursor direction)
+		Vector3 clampedOffset = direction * Math.Min( magnitude, MaxFlickDistance / FlickStrength );
 		Vector3 aimIndicatorPos;
 		if ( InvertAimIndicator )
 		{
@@ -609,6 +691,15 @@ public sealed class PlayerController : Component
 
 		bool isControllerMode = InputManager != null && InputManager.CurrentMode == InputMode.Controller;
 		bool isDragging = selectedSelectable != null && selectedSelectable.CapturesSelection;
+
+		// When edge panning is disabled, don't trigger camera pan behavior
+		if ( !EnableEdgePanning && isDragging && !isControllerMode )
+		{
+			// Still update cursor position for passive pan, but don't trigger edge pan
+			CameraController.UpdatePan( cursorPosition, Vector3.Zero, false, 0f, false );
+			return;
+		}
+
 		Vector3 piecePosition = isDragging ? selectedSelectable.SelectPosition : Vector3.Zero;
 
 		// In controller mode, flick vector is already in world units
