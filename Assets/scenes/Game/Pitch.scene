@@ -755,7 +755,7 @@
               "IdValue": "ad8604dc-4731-4bf5-9544-f9bd106773c0"
             },
             "Property": "Position",
-            "Value": "813.8832,-0.2140474,5.508378"
+            "Value": "813.8832,-393.7382,5.508378"
           }
         ],
         "MovedObjects": []
@@ -963,7 +963,73 @@
               "IdValue": "49785efd-e970-463f-9687-94e98b09ebb2"
             },
             "Property": "Position",
-            "Value": "-10.95905,-58.09325,95.98026"
+            "Value": "738.9673,-58.09325,95.98026"
+          },
+          {
+            "Target": {
+              "Type": "Component",
+              "IdValue": "22f2f376-1964-415e-b559-7d5c4eae8476"
+            },
+            "Property": "DebugWallSlide",
+            "Value": true
+          },
+          {
+            "Target": {
+              "Type": "Component",
+              "IdValue": "22f2f376-1964-415e-b559-7d5c4eae8476"
+            },
+            "Property": "Rigidbody",
+            "Value": {
+              "_type": "component",
+              "component_id": "27f88667-e554-4012-a5e9-0ea7d37ae6dc",
+              "go": "49785efd-e970-463f-9687-94e98b09ebb2",
+              "component_type": "Rigidbody"
+            }
+          },
+          {
+            "Target": {
+              "Type": "Component",
+              "IdValue": "22f2f376-1964-415e-b559-7d5c4eae8476"
+            },
+            "Property": "SlideVelocityRetention",
+            "Value": 1
+          },
+          {
+            "Target": {
+              "Type": "Component",
+              "IdValue": "22f2f376-1964-415e-b559-7d5c4eae8476"
+            },
+            "Property": "WallSlideCurve",
+            "Value": [
+              {
+                "x": 0,
+                "y": 0,
+                "in": 0,
+                "out": 0,
+                "mode": "Mirrored"
+              },
+              {
+                "x": 0.1,
+                "y": 0,
+                "in": 0,
+                "out": 0,
+                "mode": "Mirrored"
+              },
+              {
+                "x": 0.6,
+                "y": 1,
+                "in": 0,
+                "out": 0,
+                "mode": "Mirrored"
+              },
+              {
+                "x": 1,
+                "y": 1,
+                "in": 0,
+                "out": 0,
+                "mode": "Mirrored"
+              }
+            ]
           }
         ],
         "MovedObjects": []
