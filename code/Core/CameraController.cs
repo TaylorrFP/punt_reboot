@@ -14,6 +14,8 @@ public sealed class CameraController : Component
 
 	[Property, Group( "Edge Pan" )] public float EdgeThreshold { get; set; } = 50f;
 	[Property, Group( "Edge Pan" )] public float PanSpeed { get; set; } = 1f;
+	[Property, Group( "Edge Pan" ), Range( 0f, 5f ), Description( "Extra distance from the overlap range that still allows camera panning, as a fraction of the smaller screen dimension" )]
+	public float OverlapTolerance { get; set; } = 0.1f;
 
 	[Property, Group( "Smoothing" )] public bool SmoothPan { get; set; } = true;
 	[Property, Group( "Smoothing" )] public float Smoothing { get; set; } = 10f;
@@ -205,20 +207,20 @@ public sealed class CameraController : Component
 		bool nearTop = cursor.y < EdgeThreshold;
 		bool nearBottom = cursor.y > screenSize.y - EdgeThreshold;
 
-		// Check each edge: cursor must be near it, oval must overlap it, and cursor must be within overlap range
-		if ( nearLeft && overlap.directions.Contains( "left" ) && IsInRange( cursor.y, leftEdgeRange ) )
+		// Check each edge: cursor must be near it, oval must overlap it, and cursor must be within overlap range (with tolerance)
+		if ( nearLeft && overlap.directions.Contains( "left" ) && IsInRangeWithTolerance( cursor.y, leftEdgeRange ) )
 		{
 			panDir.x = -1f;
 		}
-		if ( nearRight && overlap.directions.Contains( "right" ) && IsInRange( cursor.y, rightEdgeRange ) )
+		if ( nearRight && overlap.directions.Contains( "right" ) && IsInRangeWithTolerance( cursor.y, rightEdgeRange ) )
 		{
 			panDir.x = 1f;
 		}
-		if ( nearTop && overlap.directions.Contains( "top" ) && IsInRange( cursor.x, topEdgeRange ) )
+		if ( nearTop && overlap.directions.Contains( "top" ) && IsInRangeWithTolerance( cursor.x, topEdgeRange ) )
 		{
 			panDir.y = -1f;
 		}
-		if ( nearBottom && overlap.directions.Contains( "bottom" ) && IsInRange( cursor.x, bottomEdgeRange ) )
+		if ( nearBottom && overlap.directions.Contains( "bottom" ) && IsInRangeWithTolerance( cursor.x, bottomEdgeRange ) )
 		{
 			panDir.y = 1f;
 		}
@@ -229,6 +231,19 @@ public sealed class CameraController : Component
 	private bool IsInRange( float value, Vector2 range )
 	{
 		return value >= range.x && value <= range.y;
+	}
+
+	private bool IsInRangeWithTolerance( float value, Vector2 range )
+	{
+		float tolerancePixels = GetTolerancePixels();
+		return value >= (range.x - tolerancePixels) && value <= (range.y + tolerancePixels);
+	}
+
+	private float GetTolerancePixels()
+	{
+		// Use smaller dimension so tolerance feels consistent regardless of aspect ratio
+		float smallerDimension = MathF.Min( Screen.Width, Screen.Height );
+		return smallerDimension * OverlapTolerance;
 	}
 
 	private void ApplyEdgePan( Vector2 panDirection, bool isControllerMode )
@@ -467,26 +482,49 @@ public sealed class CameraController : Component
 		Vector2 screenSize = new Vector2( Screen.Width, Screen.Height );
 		const float thickness = 8f;
 		Color edgeColor = Color.Yellow.WithAlpha( 0.3f );
+		Color toleranceColor = Color.Orange.WithAlpha( 0.3f );
+		float tolerancePixels = GetTolerancePixels();
 
 		if ( panDirections.Contains( "left" ) )
 		{
 			float height = leftEdgeRange.y - leftEdgeRange.x;
 			Gizmo.Draw.ScreenRect( new Rect( 0, leftEdgeRange.x, thickness, height ), edgeColor );
+			// Draw tolerance above and below
+			if ( tolerancePixels > 0 )
+			{
+				Gizmo.Draw.ScreenRect( new Rect( 0, leftEdgeRange.x - tolerancePixels, thickness, tolerancePixels ), toleranceColor );
+				Gizmo.Draw.ScreenRect( new Rect( 0, leftEdgeRange.y, thickness, tolerancePixels ), toleranceColor );
+			}
 		}
 		if ( panDirections.Contains( "right" ) )
 		{
 			float height = rightEdgeRange.y - rightEdgeRange.x;
 			Gizmo.Draw.ScreenRect( new Rect( screenSize.x - thickness, rightEdgeRange.x, thickness, height ), edgeColor );
+			if ( tolerancePixels > 0 )
+			{
+				Gizmo.Draw.ScreenRect( new Rect( screenSize.x - thickness, rightEdgeRange.x - tolerancePixels, thickness, tolerancePixels ), toleranceColor );
+				Gizmo.Draw.ScreenRect( new Rect( screenSize.x - thickness, rightEdgeRange.y, thickness, tolerancePixels ), toleranceColor );
+			}
 		}
 		if ( panDirections.Contains( "top" ) )
 		{
 			float width = topEdgeRange.y - topEdgeRange.x;
 			Gizmo.Draw.ScreenRect( new Rect( topEdgeRange.x, 0, width, thickness ), edgeColor );
+			if ( tolerancePixels > 0 )
+			{
+				Gizmo.Draw.ScreenRect( new Rect( topEdgeRange.x - tolerancePixels, 0, tolerancePixels, thickness ), toleranceColor );
+				Gizmo.Draw.ScreenRect( new Rect( topEdgeRange.y, 0, tolerancePixels, thickness ), toleranceColor );
+			}
 		}
 		if ( panDirections.Contains( "bottom" ) )
 		{
 			float width = bottomEdgeRange.y - bottomEdgeRange.x;
 			Gizmo.Draw.ScreenRect( new Rect( bottomEdgeRange.x, screenSize.y - thickness, width, thickness ), edgeColor );
+			if ( tolerancePixels > 0 )
+			{
+				Gizmo.Draw.ScreenRect( new Rect( bottomEdgeRange.x - tolerancePixels, screenSize.y - thickness, tolerancePixels, thickness ), toleranceColor );
+				Gizmo.Draw.ScreenRect( new Rect( bottomEdgeRange.y, screenSize.y - thickness, tolerancePixels, thickness ), toleranceColor );
+			}
 		}
 	}
 

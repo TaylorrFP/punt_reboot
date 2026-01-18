@@ -260,6 +260,7 @@
           "OnComponentFixedUpdate": null,
           "OnComponentStart": null,
           "OnComponentUpdate": null,
+          "OverlapTolerance": 0.5,
           "PanSpeed": 1,
           "PassivePanHorizontalMult": 2.5,
           "PassivePanSpeed": 30,
