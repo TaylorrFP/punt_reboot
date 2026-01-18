@@ -4,11 +4,20 @@
 @namespace Punt.UI
 @inherits PanelComponent
 
-<root class="aim-indicator @(IsVisible ? "visible" : "hidden")">
+<root class="aim-indicator @(IsVisible ? "visible" : "hidden") @(IsInverted ? "inverted" : "")">
     <div class="aim-line">
-        <div class="aim-tail aim-block" style="@GetBackgroundStyle(TailImage)"></div>
-        <div class="aim-body aim-block" style="@GetBackgroundStyle(BodyImage)"></div>
-        <div class="aim-head aim-block" style="@GetBackgroundStyle(HeadImage)"></div>
+        @if (IsInverted)
+        {
+            <div class="aim-head aim-block" style="@GetBackgroundStyle(HeadImage)"></div>
+            <div class="aim-body aim-block" style="@GetBackgroundStyle(BodyImage)"></div>
+            <div class="aim-tail aim-block" style="@GetBackgroundStyle(TailImage)"></div>
+        }
+        else
+        {
+            <div class="aim-tail aim-block" style="@GetBackgroundStyle(TailImage)"></div>
+            <div class="aim-body aim-block" style="@GetBackgroundStyle(BodyImage)"></div>
+            <div class="aim-head aim-block" style="@GetBackgroundStyle(HeadImage)"></div>
+        }
     </div>
 </root>
 
@@ -33,6 +42,12 @@
     /// Is the indicator currently visible?
     /// </summary>
     [Property] public bool IsVisible { get; set; }
+
+    /// <summary>
+    /// When true, the indicator shows trajectory (head at end, pointing away from piece).
+    /// When false, the indicator shows pull direction (tail at end, pointing toward piece).
+    /// </summary>
+    [Property] public bool IsInverted { get; set; }
 
     /// <summary>
     /// Fixed width (perpendicular to the line direction)
@@ -123,6 +138,6 @@
 
     protected override int BuildHash()
     {
-        return HashCode.Combine(IsVisible, StartPosition, EndPosition);
+        return HashCode.Combine(IsVisible, StartPosition, EndPosition, IsInverted);
     }
 }

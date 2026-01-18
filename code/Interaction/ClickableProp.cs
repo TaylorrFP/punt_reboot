@@ -19,7 +19,7 @@ public class ClickableProp : Component, ISelectable
 	public void OnAbort() { }
 
 	// Props don't capture selection, so this won't be called
-	public void OnDragUpdate( float intensity, float cursorDelta, Vector3 cursorPosition, bool exceedsMinimum ) { }
+	public void OnDragUpdate( float intensity, float cursorDelta, Vector3 cursorPosition, bool exceedsMinimum, bool invertIndicator = false ) { }
 
 	protected virtual void OnClicked()
 	{

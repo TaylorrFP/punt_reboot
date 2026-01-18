@@ -71,7 +71,7 @@ public sealed class PuntPiece : Component, ISelectable
 		}
 	}
 
-	public void OnDragUpdate( float intensity, float cursorDelta, Vector3 cursorPosition, bool exceedsMinimum )
+	public void OnDragUpdate( float intensity, float cursorDelta, Vector3 cursorPosition, bool exceedsMinimum, bool invertIndicator = false )
 	{
 		// Update the aim target position for the indicator
 		AimTargetPosition = cursorPosition;
@@ -81,6 +81,7 @@ public sealed class PuntPiece : Component, ISelectable
 		{
 			AimIndicator.StartPosition = WorldPosition;
 			AimIndicator.EndPosition = cursorPosition;
+			AimIndicator.IsInverted = invertIndicator;
 
 			// Only show indicator once we exceed the minimum threshold
 			AimIndicator.IsVisible = exceedsMinimum;

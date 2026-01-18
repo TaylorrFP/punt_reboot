@@ -197,6 +197,7 @@
             "go": "fd506fa4-4d4f-4140-baf8-271ddf8dc050",
             "component_type": "InputManager"
           },
+          "InvertAimIndicator": true,
           "MaxFlickDistance": 450,
           "MaxFlickStrength": 650,
           "MinFlickDistance": 100,
@@ -701,6 +702,14 @@
             },
             "Property": "Position",
             "Value": "-811.6846,-2.292669,5.508378"
+          },
+          {
+            "Target": {
+              "Type": "Component",
+              "IdValue": "4834d9d2-6246-4914-be23-9380b627292c"
+            },
+            "Property": "IsInverted",
+            "Value": false
           }
         ],
         "MovedObjects": []
@@ -753,6 +762,14 @@
             },
             "Property": "Position",
             "Value": "813.8832,-0.2140474,5.508378"
+          },
+          {
+            "Target": {
+              "Type": "Component",
+              "IdValue": "4834d9d2-6246-4914-be23-9380b627292c"
+            },
+            "Property": "IsInverted",
+            "Value": false
           }
         ],
         "MovedObjects": []
@@ -805,6 +822,14 @@
             },
             "Property": "Position",
             "Value": "-277.1673,522.025,5.508378"
+          },
+          {
+            "Target": {
+              "Type": "Component",
+              "IdValue": "4834d9d2-6246-4914-be23-9380b627292c"
+            },
+            "Property": "IsInverted",
+            "Value": false
           }
         ],
         "MovedObjects": []
@@ -857,6 +882,14 @@
             },
             "Property": "Position",
             "Value": "278.519,522.025,5.508378"
+          },
+          {
+            "Target": {
+              "Type": "Component",
+              "IdValue": "4834d9d2-6246-4914-be23-9380b627292c"
+            },
+            "Property": "IsInverted",
+            "Value": false
           }
         ],
         "MovedObjects": []
@@ -909,6 +942,14 @@
             },
             "Property": "Position",
             "Value": "-14.89386,867.1069,5.508378"
+          },
+          {
+            "Target": {
+              "Type": "Component",
+              "IdValue": "4834d9d2-6246-4914-be23-9380b627292c"
+            },
+            "Property": "IsInverted",
+            "Value": false
           }
         ],
         "MovedObjects": []

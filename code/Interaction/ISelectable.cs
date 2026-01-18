@@ -64,5 +64,6 @@ public interface ISelectable
 	/// <param name="cursorDelta">How much the cursor moved this frame.</param>
 	/// <param name="cursorPosition">The current world position of the cursor.</param>
 	/// <param name="exceedsMinimum">True if the drag exceeds the minimum flick threshold.</param>
-	void OnDragUpdate( float intensity, float cursorDelta, Vector3 cursorPosition, bool exceedsMinimum );
+	/// <param name="invertIndicator">True if the aim indicator should show trajectory instead of pull direction.</param>
+	void OnDragUpdate( float intensity, float cursorDelta, Vector3 cursorPosition, bool exceedsMinimum, bool invertIndicator = false );
 }

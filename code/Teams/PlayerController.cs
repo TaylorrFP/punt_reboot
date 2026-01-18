@@ -16,6 +16,7 @@ public sealed class PlayerController : Component
 	[Property, Group( "Flick Settings" )] public float MaxFlickStrength { get; set; } = 650f;
 	[Property, Group( "Flick Settings" )] public float MinFlickDistance { get; set; } = 50f;
 	[Property, Group( "Flick Settings" )] public float MaxFlickDistance { get; set; } = 650f;
+	[Property, Group( "Flick Settings" )] public bool InvertAimIndicator { get; set; } = false;
 
 	[Property, Group( "Cursor" )] public bool ShowRealCursor { get; set; } = false;
 	[Property, Group( "Cursor" )] public bool ShowCursor { get; set; } = true;
@@ -265,7 +266,8 @@ public sealed class PlayerController : Component
 
 		// Calculate flick vector from piece to cursor, scaled and clamped
 		// (Controller smoothing only affects direction, not magnitude, so worldCursorPosition is correct)
-		flickVector = (selectedSelectable.SelectPosition - worldCursorPosition).WithZ( 0 );
+		Vector3 pieceToCursor = (worldCursorPosition - selectedSelectable.SelectPosition).WithZ( 0 );
+		flickVector = -pieceToCursor;
 		flickVector *= FlickStrength;
 		flickVector = flickVector.ClampLength( MaxFlickDistance );
 
@@ -281,13 +283,23 @@ public sealed class PlayerController : Component
 		float intensity = flickVector.Length / MaxFlickDistance;
 		bool exceedsMinimum = flickVector.Length >= MinFlickDistance;
 
-		// Calculate clamped cursor position for aim indicator (use smoothed position for visuals)
-		Vector3 pieceToCursor = worldCursorPosition - selectedSelectable.SelectPosition;
-		pieceToCursor = pieceToCursor.WithZ( 0 );
+		// Calculate aim indicator position
+		// Normal: Arrow points from cursor toward piece (shows where you're pulling from)
+		// Inverted: Arrow points from piece in flick direction (shows where piece will go)
 		Vector3 clampedOffset = pieceToCursor.ClampLength( MaxFlickDistance );
-		Vector3 clampedCursorPos = selectedSelectable.SelectPosition + clampedOffset;
+		Vector3 aimIndicatorPos;
+		if ( InvertAimIndicator )
+		{
+			// Show trajectory: position on opposite side of piece from cursor
+			aimIndicatorPos = selectedSelectable.SelectPosition - clampedOffset;
+		}
+		else
+		{
+			// Show cursor position (clamped)
+			aimIndicatorPos = selectedSelectable.SelectPosition + clampedOffset;
+		}
 
-		selectedSelectable.OnDragUpdate( intensity, lastCursorDelta, clampedCursorPos, exceedsMinimum );
+		selectedSelectable.OnDragUpdate( intensity, lastCursorDelta, aimIndicatorPos, exceedsMinimum, InvertAimIndicator );
 	}
 
 	private void SelectTarget( ISelectable target )
