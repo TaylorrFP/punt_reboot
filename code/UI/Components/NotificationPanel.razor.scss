@@ -1,0 +1,40 @@
+@import "/UI/Styles/punt.scss";
+
+.notification-panel {
+    position: absolute;
+    top: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 999;
+    pointer-events: none;
+
+    opacity: 0;
+    transition: none;
+
+    &.visible {
+        opacity: 1;
+        transition: none;
+    }
+
+    &.fading {
+        opacity: 0;
+        top: 0px;
+        transition: opacity 0.5s ease-out, top 0.5s ease-out;
+    }
+}
+
+.notification-content {
+    background-color: $panel-background-dark;
+    backdrop-filter: blur(8px);
+    padding: 20px 40px;
+    border-radius: 24px;
+    color: $color-text;
+    font-family: $font-body;
+    font-size: 24px;
+    font-weight: 600;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    min-width: 400px;
+    max-width: 800px;
+}

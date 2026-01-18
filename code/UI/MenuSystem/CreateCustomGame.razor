@@ -210,6 +210,13 @@
 
     private void OnCreateLobbyClicked()
     {
+        // Check if in a party and not the leader
+        if (PartyRoom.Current != null && PartyRoom.Current.Owner.Id != Game.SteamId)
+        {
+            NotificationPanel.Show("Only the party leader can create a lobby",0.75f);
+            return;
+        }
+
         var lobbyName = LobbyNameInput?.Text ?? DefaultLobbyName;
         var maxPlayers = int.Parse( MaxPlayersDropdown?.Selected?.Value?.ToString() ?? "4" );
         var privacyValue = PrivacyDropdown?.Selected?.Value?.ToString() ?? "Public";
@@ -220,8 +227,6 @@
             "Private" => LobbyPrivacy.Private,
             _ => LobbyPrivacy.Public
         };
-
-        
 
         NetworkManager.Instance?.CreateLobby( maxPlayers, privacy, lobbyName );
 

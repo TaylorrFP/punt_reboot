@@ -1,0 +1,65 @@
+@using Sandbox.UI
+@using System
+
+@namespace Punt.UI
+@inherits Panel
+
+<root class="notification-panel @(IsShowing ? "visible" : "") @(IsFading ? "fading" : "")">
+    <div class="notification-content">@Message</div>
+</root>
+
+@code
+{
+    public static NotificationPanel Instance { get; private set; }
+
+    private bool IsShowing { get; set; }
+    private bool IsFading { get; set; }
+    private string Message { get; set; } = "";
+    private RealTimeUntil TimeUntilHide { get; set; }
+
+    public NotificationPanel()
+    {
+        Instance = this;
+    }
+
+    /// <summary>
+    /// Show a notification message that auto-dismisses after the specified duration.
+    /// </summary>
+    /// <param name="message">The message to display</param>
+    /// <param name="duration">How long to show the message (default 2 seconds)</param>
+    public static void Show(string message, float duration = 2f)
+    {
+        if (Instance == null)
+        {
+            Log.Warning("[NotificationPanel] No instance available. Make sure NotificationPanel is in your UI hierarchy.");
+            return;
+        }
+
+        Instance.Message = message;
+        Instance.IsShowing = true;
+        Instance.IsFading = false;
+        Instance.TimeUntilHide = duration;
+    }
+
+    public override void Tick()
+    {
+        base.Tick();
+
+        if (IsShowing && !IsFading && TimeUntilHide <= 0)
+        {
+            IsFading = true;
+        }
+
+        // After fade animation completes, hide completely
+        if (IsFading && TimeUntilHide <= -0.5f)
+        {
+            IsShowing = false;
+            IsFading = false;
+        }
+    }
+
+    protected override int BuildHash()
+    {
+        return HashCode.Combine(IsShowing, IsFading, Message);
+    }
+}
