@@ -86,14 +86,17 @@
           "__guid": "35b807b1-e616-4c1e-8b6d-c085864146e2",
           "__enabled": true,
           "Flags": 0,
+          "__version": 1,
+          "BakedTexture": null,
           "Bounds": {
-            "Mins": "-512,-512,-512",
-            "Maxs": "512,512,512"
+            "Mins": "-993.3156,-1152.569,-512",
+            "Maxs": "1069.779,1107.771,512"
           },
           "DelayBetweenUpdates": 0.1,
           "Feathering": 0,
           "FrameInterval": 5,
           "MaxDistance": 512,
+          "Mode": "Realtime",
           "MultiBounce": false,
           "OnComponentDestroy": null,
           "OnComponentDisabled": null,
@@ -101,8 +104,8 @@
           "OnComponentFixedUpdate": null,
           "OnComponentStart": null,
           "OnComponentUpdate": null,
+          "Priority": 0,
           "Projection": "Sphere",
-          "RenderDynamically": true,
           "Resolution": "Large",
           "Texture": null,
           "TintColor": "1,1,1,1",
@@ -430,6 +433,42 @@
               "OnComponentUpdate": null,
               "StartDistance": 2000,
               "VerticalFalloffExponent": 1
+            },
+            {
+              "__type": "Sandbox.Bloom",
+              "__guid": "5a5f61b8-dd27-48da-a894-b7111cff05f3",
+              "__enabled": false,
+              "Flags": 0,
+              "__version": 1,
+              "Filter": "Biquadratic",
+              "Gamma": 1.2554455,
+              "Mode": "Additive",
+              "OnComponentDestroy": null,
+              "OnComponentDisabled": null,
+              "OnComponentEnabled": null,
+              "OnComponentFixedUpdate": null,
+              "OnComponentStart": null,
+              "OnComponentUpdate": null,
+              "Strength": 1.6336633,
+              "Threshold": 2,
+              "Tint": "1,1,1,1"
+            },
+            {
+              "__type": "Sandbox.DepthOfField",
+              "__guid": "391dc2a8-fa31-40e4-9a66-32e9720ee4b7",
+              "__enabled": false,
+              "Flags": 0,
+              "BackBlur": true,
+              "BlurSize": 1.5789473,
+              "FocalDistance": 926.38947,
+              "FocusRange": 2000,
+              "FrontBlur": false,
+              "OnComponentDestroy": null,
+              "OnComponentDisabled": null,
+              "OnComponentEnabled": null,
+              "OnComponentFixedUpdate": null,
+              "OnComponentStart": null,
+              "OnComponentUpdate": null
             }
           ],
           "Children": []
@@ -963,7 +1002,7 @@
               "IdValue": "49785efd-e970-463f-9687-94e98b09ebb2"
             },
             "Property": "Position",
-            "Value": "738.9673,-58.09325,95.98026"
+            "Value": "-41.9682,607.932,61.74739"
           },
           {
             "Target": {
@@ -1149,6 +1188,98 @@
         }
       ],
       "Children": []
+    },
+    {
+      "__guid": "c2c772d7-c5c9-4861-9baf-00aa82453719",
+      "__version": 2,
+      "Flags": 0,
+      "Name": "Cube",
+      "Position": "-113.1973,-96.20474,-22.66019",
+      "Rotation": "0,0,0,1",
+      "Scale": "47.58379,41.90784,1",
+      "Tags": "",
+      "Enabled": true,
+      "NetworkMode": 2,
+      "NetworkFlags": 0,
+      "NetworkOrphaned": 0,
+      "NetworkTransmit": true,
+      "OwnerTransfer": 1,
+      "Components": [
+        {
+          "__type": "Sandbox.ModelRenderer",
+          "__guid": "cfb0494b-69cd-46bb-b99b-732fc062974d",
+          "__enabled": true,
+          "Flags": 0,
+          "BodyGroups": 18446744073709551615,
+          "CreateAttachments": false,
+          "LodOverride": null,
+          "MaterialGroup": null,
+          "MaterialOverride": "prefabs/pitches/dev/shaderdev/sparkle/sparkle.vmat",
+          "Materials": null,
+          "Model": "models/dev/box.vmdl",
+          "OnComponentDestroy": null,
+          "OnComponentDisabled": null,
+          "OnComponentEnabled": null,
+          "OnComponentFixedUpdate": null,
+          "OnComponentStart": null,
+          "OnComponentUpdate": null,
+          "RenderOptions": {
+            "GameLayer": true,
+            "OverlayLayer": false,
+            "BloomLayer": false,
+            "AfterUILayer": false
+          },
+          "RenderType": "On",
+          "Tint": "1,1,1,1"
+        }
+      ],
+      "Children": []
+    },
+    {
+      "__guid": "5b596ef7-fd8b-4fed-949d-39eb16064f25",
+      "__version": 2,
+      "Flags": 0,
+      "Name": "Cube (1)",
+      "Position": "-113.1973,-96.20474,-22.66019",
+      "Rotation": "0,0,0,1",
+      "Scale": "47.58379,41.90784,1",
+      "Tags": "",
+      "Enabled": true,
+      "NetworkMode": 2,
+      "NetworkFlags": 0,
+      "NetworkOrphaned": 0,
+      "NetworkTransmit": true,
+      "OwnerTransfer": 1,
+      "Components": [
+        {
+          "__type": "Sandbox.ModelRenderer",
+          "__guid": "c378a340-e494-4d92-abd4-e3d6514b7710",
+          "__enabled": true,
+          "Flags": 0,
+          "BodyGroups": 18446744073709551615,
+          "CreateAttachments": false,
+          "LodOverride": null,
+          "MaterialGroup": null,
+          "MaterialOverride": "prefabs/pitches/dev/shaderdev/sparkle/sparkle.vmat",
+          "Materials": null,
+          "Model": "models/dev/box.vmdl",
+          "OnComponentDestroy": null,
+          "OnComponentDisabled": null,
+          "OnComponentEnabled": null,
+          "OnComponentFixedUpdate": null,
+          "OnComponentStart": null,
+          "OnComponentUpdate": null,
+          "RenderOptions": {
+            "GameLayer": true,
+            "OverlayLayer": false,
+            "BloomLayer": false,
+            "AfterUILayer": false
+          },
+          "RenderType": "On",
+          "Tint": "1,1,1,1"
+        }
+      ],
+      "Children": []
     }
   ],
   "SceneProperties": {
@@ -1167,7 +1298,8 @@
       "AgentMaxSlope": 40,
       "ExcludedBodies": "",
       "IncludedBodies": ""
-    }
+    },
+    "GameObjectSystems": []
   },
   "ResourceVersion": 3,
   "Title": null,

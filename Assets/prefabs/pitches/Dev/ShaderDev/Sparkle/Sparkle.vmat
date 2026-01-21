@@ -1,0 +1,21 @@
+// THIS FILE IS AUTO-GENERATED
+
+Layer0
+{
+	shader "shaders/pitch/sparkle.shader"
+
+	g_flFresnelPow "2.996"
+	g_flFresnelStrength "0.361"
+	g_flGlitterHighlight "122.744"
+	g_flHighlightStrength "5.415"
+	g_flMetalness "0.653"
+	g_flObjectSpaceTiling "273.560"
+	g_flRoughness "0.610"
+	g_flScreenSpaceTiling "11.191"
+	g_vBaseColour "[0.101961 0.211765 0.050980 1.000000]"
+	Texture_ps_0 "prefabs/pitches/dev/shaderdev/sparkle/sparklemask.tga"
+	Texture_ps_1 "prefabs/pitches/dev/shaderdev/sparkle/sparklemask.tga"
+
+	//---- Fog ----
+	g_bFogEnabled "1"
+}
