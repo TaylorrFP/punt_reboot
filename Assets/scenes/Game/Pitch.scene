@@ -7,7 +7,7 @@
       "Flags": 0,
       "Name": "Sun",
       "Position": "0,0,0",
-      "Rotation": "-0.788408,-0.4949742,0.3429092,-0.125803",
+      "Rotation": "0.850629,0.3781763,-0.357283,0.07590714",
       "Scale": "1,1,1",
       "Tags": "light_directional,light",
       "Enabled": true,
@@ -459,9 +459,9 @@
               "__enabled": false,
               "Flags": 0,
               "BackBlur": true,
-              "BlurSize": 1.5789473,
-              "FocalDistance": 926.38947,
-              "FocusRange": 2000,
+              "BlurSize": 1,
+              "FocalDistance": 1000,
+              "FocusRange": 1000,
               "FrontBlur": false,
               "OnComponentDestroy": null,
               "OnComponentDisabled": null,
@@ -632,7 +632,7 @@
               "Rotation": "0,0,0,1",
               "Scale": "30.62738,36.44506,40",
               "Tags": "",
-              "Enabled": false,
+              "Enabled": true,
               "NetworkMode": 2,
               "NetworkFlags": 0,
               "NetworkOrphaned": 0,
@@ -994,6 +994,112 @@
       }
     },
     {
+      "__guid": "b7368868-4cf1-4c6f-9ca4-f4d7500d36d8",
+      "__version": 2,
+      "__Prefab": "prefabs/pitches/dev/rubberduck/rubberduckclickable.prefab",
+      "__PrefabInstancePatch": {
+        "AddedObjects": [],
+        "RemovedObjects": [],
+        "PropertyOverrides": [
+          {
+            "Target": {
+              "Type": "GameObject",
+              "IdValue": "25d6cc95-0a98-49d4-a64d-5c7e6bd5c2b4"
+            },
+            "Property": "Position",
+            "Value": "-805.0806,-817.8759,-0.0002286434"
+          },
+          {
+            "Target": {
+              "Type": "Component",
+              "IdValue": "7f16bbc9-284f-402d-ac6f-4ac7c55058d4"
+            },
+            "Property": "Radius",
+            "Value": 50
+          },
+          {
+            "Target": {
+              "Type": "Component",
+              "IdValue": "466ba5a7-e9fe-4b2d-a03b-314d903c65ae"
+            },
+            "Property": "__enabled",
+            "Value": false
+          },
+          {
+            "Target": {
+              "Type": "Component",
+              "IdValue": "ae7000da-612c-4cf5-a3bf-c994d262f8b0"
+            },
+            "Property": "HoverColor",
+            "Value": "0.71628,0.71628,0.71628,1"
+          },
+          {
+            "Target": {
+              "Type": "Component",
+              "IdValue": "ae7000da-612c-4cf5-a3bf-c994d262f8b0"
+            },
+            "Property": "SelectedColor",
+            "Value": "1,1,1,1"
+          }
+        ],
+        "MovedObjects": []
+      },
+      "__PrefabIdToInstanceId": {
+        "25d6cc95-0a98-49d4-a64d-5c7e6bd5c2b4": "b7368868-4cf1-4c6f-9ca4-f4d7500d36d8",
+        "b9f22fae-79dc-4d23-bd58-f77b47515744": "38db45b9-5763-42a5-b094-9108fa9779d4",
+        "7f16bbc9-284f-402d-ac6f-4ac7c55058d4": "eb4da226-e01c-485a-9e09-e3a38e581563",
+        "b2f922b0-4eeb-427e-a2ed-80a0a3a4d714": "c7a99ef3-c080-4bdd-85f3-6f87c5958991",
+        "466ba5a7-e9fe-4b2d-a03b-314d903c65ae": "66a28144-e65a-485e-b012-6e7c409f0dfe",
+        "ae7000da-612c-4cf5-a3bf-c994d262f8b0": "13ab6069-0cdb-4d16-8c90-8d081046fd37"
+      }
+    },
+    {
+      "__guid": "5b596ef7-fd8b-4fed-949d-39eb16064f25",
+      "__version": 2,
+      "Flags": 0,
+      "Name": "Cube (1)",
+      "Position": "0,0,-25",
+      "Rotation": "0,0,0,1",
+      "Scale": "50,50,1",
+      "Tags": "",
+      "Enabled": false,
+      "NetworkMode": 2,
+      "NetworkFlags": 0,
+      "NetworkOrphaned": 0,
+      "NetworkTransmit": true,
+      "OwnerTransfer": 1,
+      "Components": [
+        {
+          "__type": "Sandbox.ModelRenderer",
+          "__guid": "c378a340-e494-4d92-abd4-e3d6514b7710",
+          "__enabled": true,
+          "Flags": 0,
+          "BodyGroups": 18446744073709551615,
+          "CreateAttachments": false,
+          "LodOverride": null,
+          "MaterialGroup": null,
+          "MaterialOverride": "prefabs/pitches/dev/shaderdev/sparkle/sparkle.vmat",
+          "Materials": null,
+          "Model": "models/dev/box.vmdl",
+          "OnComponentDestroy": null,
+          "OnComponentDisabled": null,
+          "OnComponentEnabled": null,
+          "OnComponentFixedUpdate": null,
+          "OnComponentStart": null,
+          "OnComponentUpdate": null,
+          "RenderOptions": {
+            "GameLayer": true,
+            "OverlayLayer": false,
+            "BloomLayer": false,
+            "AfterUILayer": false
+          },
+          "RenderType": "On",
+          "Tint": "1,1,1,1"
+        }
+      ],
+      "Children": []
+    },
+    {
       "__guid": "798fdc07-a2ed-48d8-b7d8-e2af23d65044",
       "__version": 2,
       "__Prefab": "prefabs/pieces/ball/puntball.prefab",
@@ -1081,7 +1187,7 @@
               "IdValue": "49785efd-e970-463f-9687-94e98b09ebb2"
             },
             "Property": "Position",
-            "Value": "-41.9682,607.932,61.74739"
+            "Value": "259.1982,703.0309,61.74618"
           },
           {
             "Target": {
@@ -1169,231 +1275,11 @@
       }
     },
     {
-      "__guid": "b7368868-4cf1-4c6f-9ca4-f4d7500d36d8",
-      "__version": 2,
-      "__Prefab": "prefabs/pitches/dev/rubberduck/rubberduckclickable.prefab",
-      "__PrefabInstancePatch": {
-        "AddedObjects": [],
-        "RemovedObjects": [],
-        "PropertyOverrides": [
-          {
-            "Target": {
-              "Type": "GameObject",
-              "IdValue": "25d6cc95-0a98-49d4-a64d-5c7e6bd5c2b4"
-            },
-            "Property": "Position",
-            "Value": "-805.0806,-817.8759,-0.0002286434"
-          },
-          {
-            "Target": {
-              "Type": "Component",
-              "IdValue": "7f16bbc9-284f-402d-ac6f-4ac7c55058d4"
-            },
-            "Property": "Radius",
-            "Value": 50
-          },
-          {
-            "Target": {
-              "Type": "Component",
-              "IdValue": "466ba5a7-e9fe-4b2d-a03b-314d903c65ae"
-            },
-            "Property": "__enabled",
-            "Value": false
-          },
-          {
-            "Target": {
-              "Type": "Component",
-              "IdValue": "ae7000da-612c-4cf5-a3bf-c994d262f8b0"
-            },
-            "Property": "HoverColor",
-            "Value": "0.71628,0.71628,0.71628,1"
-          },
-          {
-            "Target": {
-              "Type": "Component",
-              "IdValue": "ae7000da-612c-4cf5-a3bf-c994d262f8b0"
-            },
-            "Property": "SelectedColor",
-            "Value": "1,1,1,1"
-          }
-        ],
-        "MovedObjects": []
-      },
-      "__PrefabIdToInstanceId": {
-        "25d6cc95-0a98-49d4-a64d-5c7e6bd5c2b4": "b7368868-4cf1-4c6f-9ca4-f4d7500d36d8",
-        "b9f22fae-79dc-4d23-bd58-f77b47515744": "38db45b9-5763-42a5-b094-9108fa9779d4",
-        "7f16bbc9-284f-402d-ac6f-4ac7c55058d4": "eb4da226-e01c-485a-9e09-e3a38e581563",
-        "b2f922b0-4eeb-427e-a2ed-80a0a3a4d714": "c7a99ef3-c080-4bdd-85f3-6f87c5958991",
-        "466ba5a7-e9fe-4b2d-a03b-314d903c65ae": "66a28144-e65a-485e-b012-6e7c409f0dfe",
-        "ae7000da-612c-4cf5-a3bf-c994d262f8b0": "13ab6069-0cdb-4d16-8c90-8d081046fd37"
-      }
-    },
-    {
-      "__guid": "c5eef3ef-4bff-4692-b246-39a5c16bc197",
-      "__version": 2,
-      "Flags": 0,
-      "Name": "Spot Light",
-      "Position": "-507.5228,-769.4186,1504.502",
-      "Rotation": "0.07695039,0.6038784,0.1002837,0.7869896",
-      "Scale": "1,1,1",
-      "Tags": "light_spot,light",
-      "Enabled": true,
-      "NetworkMode": 2,
-      "NetworkFlags": 0,
-      "NetworkOrphaned": 0,
-      "NetworkTransmit": true,
-      "OwnerTransfer": 1,
-      "Components": [
-        {
-          "__type": "Sandbox.SpotLight",
-          "__guid": "e0561383-a4fa-4dcc-b1e7-1d242b7313f8",
-          "__enabled": false,
-          "Flags": 0,
-          "Attenuation": 0,
-          "ConeInner": 300,
-          "ConeOuter": 45.666668,
-          "Cookie": null,
-          "FogMode": "Enabled",
-          "FogStrength": 1,
-          "LightColor": "0.07442,0.07442,0.07442,1",
-          "OnComponentDestroy": null,
-          "OnComponentDisabled": null,
-          "OnComponentEnabled": null,
-          "OnComponentFixedUpdate": null,
-          "OnComponentStart": null,
-          "OnComponentUpdate": null,
-          "Radius": 2000,
-          "Shadows": false
-        }
-      ],
-      "Children": []
-    },
-    {
-      "__guid": "5b596ef7-fd8b-4fed-949d-39eb16064f25",
-      "__version": 2,
-      "Flags": 0,
-      "Name": "Cube (1)",
-      "Position": "0,0,-25",
-      "Rotation": "0,0,0,1",
-      "Scale": "50,50,1",
-      "Tags": "",
-      "Enabled": true,
-      "NetworkMode": 2,
-      "NetworkFlags": 0,
-      "NetworkOrphaned": 0,
-      "NetworkTransmit": true,
-      "OwnerTransfer": 1,
-      "Components": [
-        {
-          "__type": "Sandbox.ModelRenderer",
-          "__guid": "c378a340-e494-4d92-abd4-e3d6514b7710",
-          "__enabled": true,
-          "Flags": 0,
-          "BodyGroups": 18446744073709551615,
-          "CreateAttachments": false,
-          "LodOverride": null,
-          "MaterialGroup": null,
-          "MaterialOverride": "prefabs/pitches/dev/shaderdev/sparkle/sparkle.vmat",
-          "Materials": null,
-          "Model": "models/dev/box.vmdl",
-          "OnComponentDestroy": null,
-          "OnComponentDisabled": null,
-          "OnComponentEnabled": null,
-          "OnComponentFixedUpdate": null,
-          "OnComponentStart": null,
-          "OnComponentUpdate": null,
-          "RenderOptions": {
-            "GameLayer": true,
-            "OverlayLayer": false,
-            "BloomLayer": false,
-            "AfterUILayer": false
-          },
-          "RenderType": "On",
-          "Tint": "1,1,1,1"
-        }
-      ],
-      "Children": []
-    },
-    {
-      "__guid": "43b630eb-1535-41f0-9019-4b0d380c1752",
-      "__version": 2,
-      "Flags": 0,
-      "Name": "Point Light",
-      "Position": "0,727.0988,429.1201",
-      "Rotation": "0,0,0,1",
-      "Scale": "1,1,1",
-      "Tags": "light_point,light",
-      "Enabled": false,
-      "NetworkMode": 2,
-      "NetworkFlags": 0,
-      "NetworkOrphaned": 0,
-      "NetworkTransmit": true,
-      "OwnerTransfer": 1,
-      "Components": [
-        {
-          "__type": "Sandbox.PointLight",
-          "__guid": "c41e44d9-cd52-4895-9f51-4937cb49f3fe",
-          "__enabled": true,
-          "Flags": 0,
-          "Attenuation": 0.15151516,
-          "FogMode": "Enabled",
-          "FogStrength": 1,
-          "LightColor": "0.64571,0.79296,0.84651,1",
-          "OnComponentDestroy": null,
-          "OnComponentDisabled": null,
-          "OnComponentEnabled": null,
-          "OnComponentFixedUpdate": null,
-          "OnComponentStart": null,
-          "OnComponentUpdate": null,
-          "Radius": 1000,
-          "Shadows": true
-        }
-      ],
-      "Children": []
-    },
-    {
-      "__guid": "3e34bfcb-af12-4f5a-8bb1-31c09c117292",
-      "__version": 2,
-      "Flags": 0,
-      "Name": "Point Light (2)",
-      "Position": "0,-954.0684,429.1201",
-      "Rotation": "0,0,0,1",
-      "Scale": "1,1,1",
-      "Tags": "light_point,light",
-      "Enabled": false,
-      "NetworkMode": 2,
-      "NetworkFlags": 0,
-      "NetworkOrphaned": 0,
-      "NetworkTransmit": true,
-      "OwnerTransfer": 1,
-      "Components": [
-        {
-          "__type": "Sandbox.PointLight",
-          "__guid": "928930c3-5970-4c88-9f7a-1e99ba5f4745",
-          "__enabled": true,
-          "Flags": 0,
-          "Attenuation": 0.15151516,
-          "FogMode": "Enabled",
-          "FogStrength": 1,
-          "LightColor": "0.64571,0.79296,0.84651,1",
-          "OnComponentDestroy": null,
-          "OnComponentDisabled": null,
-          "OnComponentEnabled": null,
-          "OnComponentFixedUpdate": null,
-          "OnComponentStart": null,
-          "OnComponentUpdate": null,
-          "Radius": 1000,
-          "Shadows": true
-        }
-      ],
-      "Children": []
-    },
-    {
       "__guid": "71f3eed9-9364-4bbb-8d04-d178a02c9029",
       "__version": 2,
       "Flags": 0,
       "Name": "Point Light (1)",
-      "Position": "492.2664,-472.8247,109.0744",
+      "Position": "371.7188,666.4149,54.88153",
       "Rotation": "0,0,0,1",
       "Scale": "1,1,1",
       "Tags": "light_point,light",
@@ -1409,17 +1295,57 @@
           "__guid": "645fc188-f100-4de0-a4fe-881c00ee3bdf",
           "__enabled": true,
           "Flags": 0,
-          "Attenuation": 0.959596,
+          "Attenuation": 1.919192,
           "FogMode": "Enabled",
           "FogStrength": 1,
-          "LightColor": "2,0,0,1",
+          "LightColor": "0,2.91668,5,1",
           "OnComponentDestroy": null,
           "OnComponentDisabled": null,
           "OnComponentEnabled": null,
           "OnComponentFixedUpdate": null,
           "OnComponentStart": null,
           "OnComponentUpdate": null,
-          "Radius": 400,
+          "Radius": 270.93344,
+          "Shadows": true
+        }
+      ],
+      "Children": []
+    },
+    {
+      "__guid": "c5eef3ef-4bff-4692-b246-39a5c16bc197",
+      "__version": 2,
+      "Flags": 0,
+      "Name": "Spot Light",
+      "Position": "386.1371,265.4496,91.77235",
+      "Rotation": "0.3374352,0.4980137,0.5573243,0.5722847",
+      "Scale": "1,1,1",
+      "Tags": "light_spot,light",
+      "Enabled": false,
+      "NetworkMode": 2,
+      "NetworkFlags": 0,
+      "NetworkOrphaned": 0,
+      "NetworkTransmit": true,
+      "OwnerTransfer": 1,
+      "Components": [
+        {
+          "__type": "Sandbox.SpotLight",
+          "__guid": "e0561383-a4fa-4dcc-b1e7-1d242b7313f8",
+          "__enabled": true,
+          "Flags": 0,
+          "Attenuation": 0.05050505,
+          "ConeInner": 300,
+          "ConeOuter": 28.181818,
+          "Cookie": null,
+          "FogMode": "Enabled",
+          "FogStrength": 1,
+          "LightColor": "0.27209,0.03522,0.34419,1",
+          "OnComponentDestroy": null,
+          "OnComponentDisabled": null,
+          "OnComponentEnabled": null,
+          "OnComponentFixedUpdate": null,
+          "OnComponentStart": null,
+          "OnComponentUpdate": null,
+          "Radius": 500,
           "Shadows": true
         }
       ],

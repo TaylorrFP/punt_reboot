@@ -158,7 +158,7 @@
       "DefaultA": 0,
       "DefaultB": 5,
       "Identifier": "6",
-      "Position": "288,-324",
+      "Position": "192,-348",
       "HandleOffsets": {},
       "A": {
         "Identifier": "19",
@@ -181,7 +181,7 @@
         "Output": "Result"
       },
       "B": {
-        "Identifier": "21",
+        "Identifier": "20",
         "Output": "Result"
       }
     },
@@ -210,7 +210,7 @@
       "Position": "888,-468",
       "HandleOffsets": {},
       "Input": {
-        "Identifier": "6",
+        "Identifier": "39",
         "Output": "Result"
       }
     },
@@ -312,7 +312,7 @@
         "Output": "ViewportSize"
       },
       "B": {
-        "Identifier": "20",
+        "Identifier": "21",
         "Output": "Result"
       }
     },
@@ -390,7 +390,7 @@
         }
       },
       "Identifier": "20",
-      "Position": "-1248,-552",
+      "Position": "-852,-144",
       "HandleOffsets": {}
     },
     {
@@ -414,13 +414,13 @@
         }
       },
       "Identifier": "21",
-      "Position": "-876,-144",
+      "Position": "-1248,-552",
       "HandleOffsets": {}
     },
     {
       "_class": "Camera",
       "Identifier": "22",
-      "Position": "-1284,-972",
+      "Position": "-1512,-936",
       "HandleOffsets": {}
     },
     {
@@ -442,7 +442,7 @@
     {
       "_class": "Multiply",
       "DefaultA": 0,
-      "DefaultB": 100,
+      "DefaultB": 1000,
       "Identifier": "24",
       "Position": "-792,-900",
       "HandleOffsets": {},
@@ -456,7 +456,7 @@
       "DefaultA": 0,
       "DefaultB": 1,
       "Identifier": "25",
-      "Position": "-996,-1032",
+      "Position": "-1212,-936",
       "HandleOffsets": {},
       "B": {
         "Identifier": "22",
@@ -508,7 +508,7 @@
     {
       "_class": "Float",
       "Min": 0,
-      "Max": 50,
+      "Max": 128,
       "Value": 5,
       "Name": "PointLightBoost",
       "IsAttribute": false,
@@ -608,7 +608,7 @@
     {
       "_class": "Float",
       "Min": 0,
-      "Max": 50,
+      "Max": 128,
       "Value": 1,
       "Name": "PointBoost",
       "IsAttribute": false,
@@ -668,6 +668,87 @@
       "Identifier": "35",
       "Position": "300,-468",
       "HandleOffsets": {}
+    },
+    {
+      "_class": "Fresnel",
+      "DefaultPower": 10,
+      "Identifier": "36",
+      "Position": "-24,36",
+      "HandleOffsets": {},
+      "Normal": {
+        "Identifier": "37",
+        "Output": "Result"
+      },
+      "Direction": {
+        "Identifier": "38",
+        "Output": "Result"
+      },
+      "Power": {
+        "Identifier": "40",
+        "Output": "Result"
+      }
+    },
+    {
+      "_class": "WorldNormal",
+      "Identifier": "37",
+      "Position": "-300,12",
+      "HandleOffsets": {}
+    },
+    {
+      "_class": "ViewDirection",
+      "Identifier": "38",
+      "Position": "-300,72",
+      "HandleOffsets": {}
+    },
+    {
+      "_class": "Multiply",
+      "DefaultA": 0,
+      "DefaultB": 1,
+      "Identifier": "39",
+      "Position": "456,-144",
+      "HandleOffsets": {},
+      "A": {
+        "Identifier": "6",
+        "Output": "Result"
+      },
+      "B": {
+        "Identifier": "41",
+        "Output": "Result"
+      }
+    },
+    {
+      "_class": "Float",
+      "Min": 0,
+      "Max": 20,
+      "Value": 1,
+      "Name": "FresnelPower",
+      "IsAttribute": false,
+      "UI": {
+        "Type": "Default",
+        "Step": 0,
+        "Priority": 0,
+        "PrimaryGroup": {
+          "Name": null,
+          "Priority": 0
+        },
+        "SecondaryGroup": {
+          "Name": null,
+          "Priority": 0
+        }
+      },
+      "Identifier": "40",
+      "Position": "-288,144",
+      "HandleOffsets": {}
+    },
+    {
+      "_class": "Saturate",
+      "Identifier": "41",
+      "Position": "264,-24",
+      "HandleOffsets": {},
+      "Input": {
+        "Identifier": "36",
+        "Output": "Result"
+      }
     }
   ]
 }

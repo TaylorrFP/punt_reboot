@@ -83,10 +83,11 @@ PS
 	float4 g_vBaseColour < UiType( Color ); UiGroup( ",0/,0/0" ); Default4( 0.10, 0.21, 0.05, 1.00 ); >;
 	float g_flSpecPower < UiGroup( ",0/,0/0" ); Default1( 64 ); Range1( 0, 256 ); >;
 	float g_flStrength < UiGroup( ",0/,0/0" ); Default1( 1 ); Range1( 0, 50 ); >;
-	float g_flPointBoost < UiGroup( ",0/,0/0" ); Default1( 1 ); Range1( 0, 50 ); >;
+	float g_flPointBoost < UiGroup( ",0/,0/0" ); Default1( 1 ); Range1( 0, 128 ); >;
 	float g_flShadowMask < UiGroup( ",0/,0/0" ); Default1( 1 ); Range1( 0, 1 ); >;
-	float g_flObjectSpaceTiling < UiGroup( ",0/,0/0" ); Default1( 256 ); Range1( 0, 1024 ); >;
 	float g_flScreenSpaceTiling < UiGroup( ",0/,0/0" ); Default1( 10 ); Range1( 0, 100 ); >;
+	float g_flObjectSpaceTiling < UiGroup( ",0/,0/0" ); Default1( 256 ); Range1( 0, 1024 ); >;
+	float g_flFresnelPower < UiGroup( ",0/,0/0" ); Default1( 1 ); Range1( 0, 20 ); >;
 	float g_flRoughness < UiGroup( ",0/,0/0" ); Default1( 0.44643673 ); Range1( 0, 1 ); >;
 	float g_flMetalness < UiGroup( ",0/,0/0" ); Default1( 0.8718644 ); Range1( 0, 1 ); >;
 	
@@ -117,31 +118,36 @@ PS
 		float3 l_10 = l_8 * float3( l_9, l_9, l_9 );
 		float3 l_11 = g_vCameraDirWs;
 		float3 l_12 = float3( 0, 0, 0 ) + l_11;
-		float3 l_13 = l_12 * float3( 100, 100, 100 );
+		float3 l_13 = l_12 * float3( 1000, 1000, 1000 );
 		float2 l_14 = CalculateViewportUv( i.vPositionSs.xy );
 		float2 l_15 = g_vViewportSize;
-		float l_16 = g_flObjectSpaceTiling;
+		float l_16 = g_flScreenSpaceTiling;
 		float2 l_17 = l_15 / float2( l_16, l_16 );
 		float2 l_18 = l_14 * l_17;
 		float3 l_19 = l_13 + float3( l_18, 0 );
 		float4 l_20 = Tex2DS( g_tSparkleMask, g_sSampler0, l_19.xy );
 		float4 l_21 = pow( l_20, float4( 1, 1, 1, 1 ) );
 		float2 l_22 = i.vTextureCoords.xy * float2( 1, 1 );
-		float l_23 = g_flScreenSpaceTiling;
+		float l_23 = g_flObjectSpaceTiling;
 		float2 l_24 = l_22 * float2( l_23, l_23 );
 		float4 l_25 = Tex2DS( g_tSparkleMask_0, g_sSampler0, l_24 );
 		float4 l_26 = pow( l_25, float4( 1, 1, 1, 1 ) );
 		float4 l_27 = l_21 * l_26;
-		float4 l_28 = float4( l_10, 0 ) * l_27;
-		float4 l_29 = l_28 * l_0;
-		float l_30 = g_flRoughness;
-		float l_31 = g_flMetalness;
+		float l_28 = g_flFresnelPower;
+		float3 l_29 = CalculatePositionToCameraDirWs( i.vPositionWithOffsetWs.xyz + g_vHighPrecisionLightingOffsetWs.xyz );
+		float3 l_30 = pow( 1.0 - dot( normalize( i.vNormalWs ), normalize( l_29 ) ), l_28 );
+		float3 l_31 = saturate( l_30 );
+		float4 l_32 = l_27 * float4( l_31, 0 );
+		float4 l_33 = float4( l_10, 0 ) * l_32;
+		float4 l_34 = l_33 * l_0;
+		float l_35 = g_flRoughness;
+		float l_36 = g_flMetalness;
 		
 		m.Albedo = l_0.xyz;
-		m.Emission = l_29.xyz;
+		m.Emission = l_34.xyz;
 		m.Opacity = 1;
-		m.Roughness = l_30;
-		m.Metalness = l_31;
+		m.Roughness = l_35;
+		m.Metalness = l_36;
 		m.AmbientOcclusion = 1;
 		
 		
