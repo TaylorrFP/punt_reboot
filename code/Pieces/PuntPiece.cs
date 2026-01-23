@@ -7,7 +7,7 @@ public sealed class PuntPiece : Component, ISelectable
 {
 	// === Networked State ===
 	[Property, Sync] public TeamSide Team { get; set; }
-	[Property, Sync] public PieceState State { get; private set; } = PieceState.Ready;
+	[Property, Sync] public PieceState State { get; set; } = PieceState.Ready;
 	[Property, Sync] public Guid GrabbedByPlayerId { get; private set; }
 	[Property, Sync] public Vector3 AimTargetPosition { get; private set; }
 

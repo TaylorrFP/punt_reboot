@@ -277,7 +277,21 @@
             "Value": false
           }
         ],
-        "MovedObjects": []
+        "MovedObjects": [
+          {
+            "Id": {
+              "Type": "GameObject",
+              "IdValue": "df056046-5e93-4a6c-805c-69de0c2b90d6"
+            },
+            "NewParent": {
+              "Type": "GameObject",
+              "IdValue": "49785efd-e970-463f-9687-94e98b09ebb2"
+            },
+            "NewContainerProperty": "Children",
+            "IsNewContainerArray": true,
+            "NewPreviousElement": null
+          }
+        ]
       },
       "__PrefabIdToInstanceId": {
         "49785efd-e970-463f-9687-94e98b09ebb2": "bd96de07-3d98-4228-9c82-899b18d7fa97",
@@ -292,7 +306,9 @@
         "b321dd26-1854-4b31-a42a-66c517cfb58f": "fad6fc9c-a602-409d-b87d-7cf8c29f4eec",
         "742b5c1b-9ab0-4512-be6d-7c018ce75a7e": "ac44ce86-9b1a-4c20-b533-c42f61093ace",
         "b54917e5-41ab-4b15-a366-17dd8d109baa": "d279c558-ae0d-4c62-a28d-cd7dfd2ff84f",
-        "d2b334af-81a6-4ed4-8905-21e32f3672bb": "eb736cca-fd11-4c1d-b1b0-e5614d0105db"
+        "d2b334af-81a6-4ed4-8905-21e32f3672bb": "eb736cca-fd11-4c1d-b1b0-e5614d0105db",
+        "df056046-5e93-4a6c-805c-69de0c2b90d6": "2411ef03-8941-46d5-baeb-ffc825d05ad4",
+        "3b89f539-785e-41f4-aa0f-3cf5b1d7ea95": "e2928023-4619-497f-bba2-23a3dddef804"
       }
     },
     {
@@ -710,6 +726,8 @@
           "__guid": "2eff18e7-6044-475d-b472-575f526f34c8",
           "__enabled": true,
           "Flags": 0,
+          "__version": 1,
+          "BakedTexture": null,
           "Bounds": {
             "Mins": "-512,-512,-512",
             "Maxs": "512,512,512"
@@ -718,6 +736,7 @@
           "Feathering": 0,
           "FrameInterval": 5,
           "MaxDistance": 512,
+          "Mode": "Realtime",
           "MultiBounce": false,
           "OnComponentDestroy": null,
           "OnComponentDisabled": null,
@@ -725,8 +744,8 @@
           "OnComponentFixedUpdate": null,
           "OnComponentStart": null,
           "OnComponentUpdate": null,
+          "Priority": 0,
           "Projection": "Sphere",
-          "RenderDynamically": true,
           "Resolution": "Large",
           "Texture": null,
           "TintColor": "1,1,1,1",
@@ -1361,7 +1380,8 @@
       "AgentMaxSlope": 40,
       "ExcludedBodies": "",
       "IncludedBodies": ""
-    }
+    },
+    "GameObjectSystems": []
   },
   "ResourceVersion": 3,
   "Title": null,

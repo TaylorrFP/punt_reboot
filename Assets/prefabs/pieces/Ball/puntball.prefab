@@ -3,7 +3,7 @@
     "__guid": "49785efd-e970-463f-9687-94e98b09ebb2",
     "__version": 2,
     "Flags": 0,
-    "Name": "puntball",
+    "Name": "PuntBall",
     "Position": "0,0,0",
     "Rotation": "0,0,0,1",
     "Scale": "1,1,1",
@@ -46,13 +46,13 @@
         "__guid": "27f88667-e554-4012-a5e9-0ea7d37ae6dc",
         "__enabled": true,
         "Flags": 0,
-        "AngularDamping": 0,
+        "AngularDamping": 0.3,
         "EnableImpactDamage": true,
         "EnhancedCcd": false,
         "Gravity": true,
         "GravityScale": 1,
         "ImpactDamage": 0,
-        "LinearDamping": 0.2,
+        "LinearDamping": 0.3,
         "Locking": {
           "X": false,
           "Y": false,
@@ -100,13 +100,50 @@
         "__guid": "22f2f376-1964-415e-b559-7d5c4eae8476",
         "__enabled": true,
         "Flags": 0,
+        "DebugWallSlide": true,
         "OnComponentDestroy": null,
         "OnComponentDisabled": null,
         "OnComponentEnabled": null,
         "OnComponentFixedUpdate": null,
         "OnComponentStart": null,
         "OnComponentUpdate": null,
-        "Rigidbody": null
+        "Rigidbody": {
+          "_type": "component",
+          "component_id": "27f88667-e554-4012-a5e9-0ea7d37ae6dc",
+          "go": "49785efd-e970-463f-9687-94e98b09ebb2",
+          "component_type": "Rigidbody"
+        },
+        "SlideVelocityRetention": 1,
+        "WallSlideCurve": [
+          {
+            "x": 0,
+            "y": 0,
+            "in": 0,
+            "out": 0,
+            "mode": "Mirrored"
+          },
+          {
+            "x": 0.1,
+            "y": 0,
+            "in": 0,
+            "out": 0,
+            "mode": "Mirrored"
+          },
+          {
+            "x": 0.6,
+            "y": 1,
+            "in": 0,
+            "out": 0,
+            "mode": "Mirrored"
+          },
+          {
+            "x": 1,
+            "y": 1,
+            "in": 0,
+            "out": 0,
+            "mode": "Mirrored"
+          }
+        ]
       },
       {
         "__type": "Sandbox.TrailRenderer",
@@ -164,6 +201,8 @@
           "Scale": 1,
           "Offset": 0,
           "Scroll": 0,
+          "FilterMode": "Anisotropic",
+          "TextureAddressMode": "Wrap",
           "Clamp": false
         },
         "Width": {
@@ -352,6 +391,43 @@
           }
         ],
         "Children": []
+      },
+      {
+        "__guid": "df056046-5e93-4a6c-805c-69de0c2b90d6",
+        "__version": 2,
+        "Flags": 0,
+        "Name": "Point Light",
+        "Position": "0,0,0",
+        "Rotation": "0,0,0,1",
+        "Scale": "1,1,1",
+        "Tags": "light_point,light",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkFlags": 0,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 1,
+        "Components": [
+          {
+            "__type": "Sandbox.PointLight",
+            "__guid": "3b89f539-785e-41f4-aa0f-3cf5b1d7ea95",
+            "__enabled": true,
+            "Flags": 0,
+            "Attenuation": 1,
+            "FogMode": "Enabled",
+            "FogStrength": 1,
+            "LightColor": "1,0.3,0,1",
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "Radius": 400,
+            "Shadows": true
+          }
+        ],
+        "Children": []
       }
     ],
     "__properties": {
@@ -370,7 +446,8 @@
         "AgentMaxSlope": 40,
         "ExcludedBodies": "",
         "IncludedBodies": ""
-      }
+      },
+      "GameObjectSystems": []
     },
     "__variables": []
   },

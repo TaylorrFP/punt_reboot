@@ -1,166 +1,187 @@
 using Sandbox;
 
-public sealed class MatchController : Component
+namespace Punt.Match
 {
-	// Current state
-	[Property, Sync] public MatchState State { get; private set; }
-
-	// Settings (could be a separate MatchSettings asset)
-	[Property] public float CountdownDuration { get; set; } = 3f;
-	[Property] public float GoalReplayDuration { get; set; } = 5f;
-	[Property] public bool IsSinglePlayer { get; set; }
-
-	// Internal timers
-	private TimeUntil stateTimer;
-
-	protected override void OnStart()
+	public sealed class MatchController : Component
 	{
-		ChangeState( MatchState.Intro );
-	}
+		// Current state
+		[Property, Sync] public MatchState State { get; private set; }
 
-	protected override void OnUpdate()
-	{
-		// Each state has its own update logic
-		switch ( State )
+		// Settings (could be a separate MatchSettings asset)
+		[Property] public float CountdownDuration { get; set; } = 3f;
+		[Property] public float GoalReplayDuration { get; set; } = 5f;
+		[Property] public bool IsSinglePlayer { get; set; }
+
+		// Components
+		[Property] public PieceSpawner PieceSpawner { get; set; }
+
+		// Internal timers
+		private TimeUntil stateTimer;
+
+		protected override void OnStart()
 		{
-			case MatchState.Intro:
-				UpdateIntro();
-				break;
-			case MatchState.WaitingForPlayers:
-				UpdateWaitingForPlayers();
-				break;
-			case MatchState.Countdown:
-				UpdateCountdown();
-				break;
-			case MatchState.Playing:
-				UpdatePlaying();
-				break;
-			case MatchState.GoalScored:
-				UpdateGoalScored();
-				break;
-			case MatchState.Overtime:
-				UpdateOvertime();
-				break;
-			case MatchState.Results:
-				UpdateResults();
-				break;
+			// Spawn pieces early so they're ready for interaction
+			// Blue team kicks off (attacking), Red team defends (receiving)
+		PieceSpawner?.SpawnPieces( FormationVariant.Attacking );
+			ChangeState( MatchState.Intro );
 		}
-	}
 
-	// Clean state transitions
-	private void ChangeState( MatchState newState )
-	{
-		var oldState = State;
-		State = newState;
-
-		OnExitState( oldState );
-		OnEnterState( newState );
-	}
-
-	private void OnEnterState( MatchState state )
-	{
-		switch ( state )
+		protected override void OnUpdate()
 		{
-			case MatchState.Intro:
-				//Camera.PlayIntro();
-				stateTimer = 4f; // Intro duration
-				break;
-
-			case MatchState.WaitingForPlayers:
-				// UI will show "Waiting for players..."
-				break;
-
-			case MatchState.Countdown:
-				stateTimer = CountdownDuration;
-				//Pitch.ResetPieces();
-				//Pitch.ResetBall();
-				break;
-
-			case MatchState.Playing:
-				MatchClock.Instance.Start();
-				//EnablePlayerInput( true );
-				break;
-
-			case MatchState.GoalScored:
-				MatchClock.Instance.Pause();
-				//EnablePlayerInput( false );
-				//Replay.PlayGoalReplay();
-				stateTimer = GoalReplayDuration;
-				break;
-
-			case MatchState.Overtime:
-				// Same as playing but no timer
-				//EnablePlayerInput( true );
-				break;
-
-			case MatchState.Results:
-				//EnablePlayerInput( false );
-				// UI shows results
-				break;
+			// Each state has its own update logic
+			switch ( State )
+			{
+				case MatchState.Intro:
+					UpdateIntro();
+					break;
+				case MatchState.WaitingForPlayers:
+					UpdateWaitingForPlayers();
+					break;
+				case MatchState.Countdown:
+					UpdateCountdown();
+					break;
+				case MatchState.Playing:
+					UpdatePlaying();
+					break;
+				case MatchState.GoalScored:
+					UpdateGoalScored();
+					break;
+				case MatchState.Overtime:
+					UpdateOvertime();
+					break;
+				case MatchState.Results:
+					UpdateResults();
+					break;
+			}
 		}
-	}
 
-	private void OnExitState( MatchState state )
-	{
-		// Cleanup when leaving a state if needed
-	}
-
-
-
-	private void UpdateIntro()
-	{
-		if ( stateTimer <= 0 )
+		// Clean state transitions
+		private void ChangeState( MatchState newState )
 		{
-			if ( IsSinglePlayer )
-				ChangeState( MatchState.Countdown );
-			else
-				ChangeState( MatchState.WaitingForPlayers );
+			var oldState = State;
+			State = newState;
+
+			OnExitState( oldState );
+			OnEnterState( newState );
 		}
-	}
 
-	private void UpdateWaitingForPlayers()
-	{
-		//if ( AllPlayersConnected() )
-		//{
-		//	ChangeState( MatchState.Countdown );
-		//}
-	}
-
-	private void UpdateCountdown()
-	{
-		if ( stateTimer <= 0 )
+		private void OnEnterState( MatchState state )
 		{
-			ChangeState( MatchState.Playing );
-		}
-	}
+			switch ( state )
+			{
+				case MatchState.Intro:
+					//Camera.PlayIntro();
+					stateTimer = 4f; // Intro duration
+					break;
 
-	private void UpdatePlaying()
-	{
-		if ( MatchClock.Instance.IsFinished )
+				case MatchState.WaitingForPlayers:
+					// UI will show "Waiting for players..."
+					break;
+
+				case MatchState.Countdown:
+					stateTimer = CountdownDuration;
+					PieceSpawner?.ResetPieces( FormationVariant.Defending );
+					//Pitch.ResetBall();
+					break;
+
+				case MatchState.Playing:
+					MatchClock.Instance.Start();
+					//EnablePlayerInput( true );
+					break;
+
+				case MatchState.GoalScored:
+					MatchClock.Instance.Pause();
+					//EnablePlayerInput( false );
+					//Replay.PlayGoalReplay();
+					stateTimer = GoalReplayDuration;
+					break;
+
+				case MatchState.Overtime:
+					// Same as playing but no timer
+					//EnablePlayerInput( true );
+					break;
+
+				case MatchState.Results:
+					//EnablePlayerInput( false );
+					// UI shows results
+					break;
+			}
+		}
+
+		private void OnExitState( MatchState state )
 		{
-			//if ( Score.IsDraw )
-			//	ChangeState( MatchState.Overtime );
-			//else
-			//	ChangeState( MatchState.Results );
+			// Cleanup when leaving a state if needed
 		}
-	}
 
-	private void UpdateGoalScored()
-	{
-		// Wait for replay to finish (or player skips)
-		//if ( stateTimer <= 0 || ReplaySkipped() )
-		//{
-		//	ChangeState( MatchState.Countdown );
-		//}
-	}
+		private void UpdateIntro()
+		{
+			if ( stateTimer <= 0 )
+			{
+				if ( IsSinglePlayer )
+					ChangeState( MatchState.Countdown );
+				else
+					ChangeState( MatchState.WaitingForPlayers );
+			}
+		}
 
-	private void UpdateOvertime()
-	{
-		// Overtime ends when a goal is scored (handled by OnGoalScored)
-	}
+		private void UpdateWaitingForPlayers()
+		{
+			//if ( AllPlayersConnected() )
+			//{
+			//	ChangeState( MatchState.Countdown );
+			//}
+		}
 
-	private void UpdateResults()
-	{
-		// Wait for player input to continue
+		private void UpdateCountdown()
+		{
+			if ( stateTimer <= 0 )
+			{
+				ChangeState( MatchState.Playing );
+			}
+		}
+
+		private void UpdatePlaying()
+		{
+			if ( MatchClock.Instance.IsFinished )
+			{
+				//if ( Score.IsDraw )
+				//	ChangeState( MatchState.Overtime );
+				//else
+				//	ChangeState( MatchState.Results );
+			}
+		}
+
+		private void UpdateGoalScored()
+		{
+			// Wait for replay to finish (or player skips)
+			//if ( stateTimer <= 0 || ReplaySkipped() )
+			//{
+			//	ChangeState( MatchState.Countdown );
+			//}
+		}
+
+		private void UpdateOvertime()
+		{
+			// Overtime ends when a goal is scored (handled by OnGoalScored)
+		}
+
+		private void UpdateResults()
+		{
+			// Wait for player input to continue
+		}
+
+		[Button]
+		private void EditorSpawnPieces()
+		{
+			PieceSpawner?.SpawnPieces( FormationVariant.Attacking, forceSpawn: true );
+			Log.Info( "Pieces spawned (attacking)" );
+		}
+
+		[Button]
+		private void EditorResetPieces()
+		{
+			PieceSpawner?.ResetPieces( FormationVariant.Defending, forceReset: true );
+			Log.Info( "Pieces reset (defending)" );
+		}
 	}
 }
