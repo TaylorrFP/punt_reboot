@@ -500,6 +500,25 @@
           "ShowWallsDebug": false,
           "WallHeight": 400,
           "WallThickness": 30
+        },
+        {
+          "__type": "Punt.Match.FormationPreview",
+          "__guid": "58db7b4a-f0c7-4c82-acf0-ba4280a5038e",
+          "__enabled": true,
+          "Flags": 0,
+          "Formation": "prefabs/pitches/formations/5v5.form",
+          "OnComponentDestroy": null,
+          "OnComponentDisabled": null,
+          "OnComponentEnabled": null,
+          "OnComponentFixedUpdate": null,
+          "OnComponentStart": null,
+          "OnComponentUpdate": null,
+          "Pitch": {
+            "_type": "component",
+            "component_id": "63a960f6-8058-4ca5-96e5-13fc1c271930",
+            "go": "ff49a667-07fa-403c-8cd3-948b02d311f5",
+            "component_type": "PitchGenerator"
+          }
         }
       ],
       "Children": [
@@ -1109,6 +1128,14 @@
             },
             "Property": "Position",
             "Value": "0,0,50"
+          },
+          {
+            "Target": {
+              "Type": "Component",
+              "IdValue": "22f2f376-1964-415e-b559-7d5c4eae8476"
+            },
+            "Property": "DebugWallSlide",
+            "Value": false
           }
         ],
         "MovedObjects": []
@@ -1130,44 +1157,6 @@
         "df056046-5e93-4a6c-805c-69de0c2b90d6": "9d3e4b5a-fa1a-4def-93c4-83171ce1bdc4",
         "3b89f539-785e-41f4-aa0f-3cf5b1d7ea95": "5c87fccc-3562-4feb-a662-54afe98210db"
       }
-    },
-    {
-      "__guid": "9b250f2a-56c5-444b-8bb1-f8125214e060",
-      "__version": 2,
-      "Flags": 0,
-      "Name": "FormationPreview",
-      "Position": "0,0,0",
-      "Rotation": "0,0,0,1",
-      "Scale": "1,1,1",
-      "Tags": "",
-      "Enabled": true,
-      "NetworkMode": 2,
-      "NetworkFlags": 0,
-      "NetworkOrphaned": 0,
-      "NetworkTransmit": true,
-      "OwnerTransfer": 1,
-      "Components": [
-        {
-          "__type": "Punt.Match.FormationPreview",
-          "__guid": "89601522-79e2-49b5-ab6d-bfb82fd7faf7",
-          "__enabled": true,
-          "Flags": 0,
-          "Formation": "prefabs/pitches/formations/5v5.form",
-          "OnComponentDestroy": null,
-          "OnComponentDisabled": null,
-          "OnComponentEnabled": null,
-          "OnComponentFixedUpdate": null,
-          "OnComponentStart": null,
-          "OnComponentUpdate": null,
-          "Pitch": {
-            "_type": "component",
-            "component_id": "63a960f6-8058-4ca5-96e5-13fc1c271930",
-            "go": "ff49a667-07fa-403c-8cd3-948b02d311f5",
-            "component_type": "PitchGenerator"
-          }
-        }
-      ],
-      "Children": []
     }
   ],
   "SceneProperties": {

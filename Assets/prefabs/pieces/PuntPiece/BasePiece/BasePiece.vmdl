@@ -23,7 +23,7 @@
 							},
 							{
 								from = "m_puntkit.vmat"
-								to = "prefabs/pieces/puntpiece/basepiece/materials/puntguy_defaultshirt.vmat"
+								to = "prefabs/pieces/puntpiece/basepiece/materials/puntguy_blueshirt.vmat"
 							},
 						]
 						use_global_default = false
@@ -32,13 +32,7 @@
 					{
 						_class = "MaterialGroup"
 						name = "Blue"
-						remaps = 
-						[
-							{
-								from = "prefabs/pieces/puntpiece/basepiece/materials/puntguy_defaultshirt.vmat"
-								to = "prefabs/pieces/puntpiece/basepiece/materials/puntguy_blueshirt.vmat"
-							},
-						]
+						remaps = [  ]
 					},
 					{
 						_class = "MaterialGroup"
@@ -46,7 +40,7 @@
 						remaps = 
 						[
 							{
-								from = "prefabs/pieces/puntpiece/basepiece/materials/puntguy_defaultshirt.vmat"
+								from = "prefabs/pieces/puntpiece/basepiece/materials/puntguy_blueshirt.vmat"
 								to = "prefabs/pieces/puntpiece/basepiece/materials/puntguy_redshirt.vmat"
 							},
 						]

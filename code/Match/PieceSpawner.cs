@@ -133,6 +133,7 @@ namespace Punt.Match
 				if ( puntPiece != null )
 				{
 					puntPiece.Team = team;
+					puntPiece.SetTeamMaterialGroups();
 					puntPiece.State = PieceState.Ready;
 
 					// Spawn the networked object

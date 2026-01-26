@@ -20,6 +20,8 @@ public sealed class PuntPiece : Component, ISelectable
 	[Property, Group( "Components" )] public ShakeEffect ShakeEffect { get; set; }
 	[Property, Group( "Components" )] public SquashAndStretch SquashStretch { get; set; }
 	[Property, Group( "Components" )] public AimIndicator AimIndicator { get; set; }
+	[Property, Group( "Components" )] public ModelRenderer CharacterModel { get; set; }
+	[Property, Group( "Components" )] public ModelRenderer BaseModel { get; set; }
 
 	// === ISelectable Implementation ===
 	public bool CanSelect => State == PieceState.Ready || State == PieceState.Hovered;
@@ -160,4 +162,27 @@ public sealed class PuntPiece : Component, ISelectable
 	public float CooldownProgress => State == PieceState.Cooldown
 		? Math.Min( 1f, timeSinceCooldownStarted / CooldownDuration )
 		: 1f;
+
+	/// <summary>
+	/// Sets the material groups for both character and base models based on team.
+	/// </summary>
+	public void SetTeamMaterialGroups()
+	{
+		var materialGroup = Team switch
+		{
+			TeamSide.Blue => "blue",
+			TeamSide.Red => "red",
+			_ => null
+		};
+
+		if ( CharacterModel != null )
+		{
+			CharacterModel.MaterialGroup = materialGroup;
+		}
+
+		if ( BaseModel != null )
+		{
+			BaseModel.MaterialGroup = materialGroup;
+		}
+	}
 }

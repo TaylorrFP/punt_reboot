@@ -136,6 +136,18 @@
           "component_type": "AimIndicator"
         },
         "AimTargetPosition": "0,0,0",
+        "BaseModel": {
+          "_type": "component",
+          "component_id": "20a16300-e9f1-46a0-a328-037e78582cc1",
+          "go": "a94cf439-2d29-4c01-9fb2-a25deb17f4e7",
+          "component_type": "ModelRenderer"
+        },
+        "CharacterModel": {
+          "_type": "component",
+          "component_id": "475ad2b9-6832-42a5-87db-b7b99dcf1a8b",
+          "go": "b7c8c7f9-d403-4d36-b7bb-66983aa71e68",
+          "component_type": "ModelRenderer"
+        },
         "CooldownDuration": 2,
         "GrabbedByPlayerId": "00000000-0000-0000-0000-000000000000",
         "Highlight": {
@@ -693,6 +705,7 @@
             "BodyImage": "ui/game/aimindicatorarrow/aimindicator_body.png",
             "EndPosition": "0,0,0",
             "HeadImage": "ui/game/aimindicatorarrow/aimindicator_head.png",
+            "IsInverted": false,
             "IsVisible": false,
             "OnComponentDestroy": null,
             "OnComponentDisabled": null,
@@ -731,7 +744,8 @@
         "AgentMaxSlope": 40,
         "ExcludedBodies": "",
         "IncludedBodies": ""
-      }
+      },
+      "GameObjectSystems": []
     },
     "__variables": []
   },
