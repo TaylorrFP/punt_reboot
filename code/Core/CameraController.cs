@@ -23,6 +23,8 @@ public sealed class CameraController : Component
 	[Property, Group( "Passive Pan" )] public bool EnablePassivePan { get; set; } = false;
 	[Property, Group( "Passive Pan" )] public float PassivePanSpeed { get; set; } = 50f;
 	[Property, Group( "Passive Pan" )] public float PassivePanHorizontalMult { get; set; } = 2f;
+	[Property, Group( "Passive Pan" )] public float PassivePanDepthMultUp { get; set; } = 1f;
+	[Property, Group( "Passive Pan" )] public float PassivePanDepthMultDown { get; set; } = 1f;
 
 	#endregion
 
@@ -187,8 +189,12 @@ public sealed class CameraController : Component
 			cursorOffset.y / screenCenter.y
 		);
 
+		// Apply different multipliers for up vs down movement
+		// When normalized.y < 0, mouse is above center (panning away), when > 0 it's below center (panning towards)
+		float depthMult = normalized.y < 0 ? PassivePanDepthMultUp : PassivePanDepthMultDown;
+
 		// Convert to world offset (screen X -> world -Y, screen Y -> world -X)
-		return new Vector3( -normalized.y, -normalized.x * PassivePanHorizontalMult, 0 ) * PassivePanSpeed;
+		return new Vector3( -normalized.y * depthMult, -normalized.x * PassivePanHorizontalMult, 0 ) * PassivePanSpeed;
 	}
 
 	#endregion

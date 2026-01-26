@@ -163,7 +163,7 @@
           },
           "ControllerAimSmoothing": 10,
           "ControllerDistanceWeight": 0.05,
-          "EnableEdgePanning": true,
+          "EnableEdgePanning": false,
           "FlickStrength": 1,
           "InputManager": {
             "_type": "component",
@@ -238,9 +238,11 @@
           "OnComponentUpdate": null,
           "OverlapTolerance": 0.5,
           "PanSpeed": 1,
+          "PassivePanDepthMultDown": 2,
+          "PassivePanDepthMultUp": 1,
           "PassivePanHorizontalMult": 1,
           "PassivePanSpeed": 100,
-          "ShowDebug": true,
+          "ShowDebug": false,
           "Smoothing": 5,
           "SmoothPan": true
         }
