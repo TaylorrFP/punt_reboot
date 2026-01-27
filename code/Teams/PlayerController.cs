@@ -12,10 +12,10 @@ public sealed class PlayerController : Component
 
 	[Property, Sync] public TeamSide Team { get; set; }
 
-	[Property, Group( "Flick Settings" )] public float FlickStrength { get; set; } = 0.6f;
-	[Property, Group( "Flick Settings" )] public float MaxFlickStrength { get; set; } = 650f;
 	[Property, Group( "Flick Settings" )] public float MinFlickDistance { get; set; } = 50f;
 	[Property, Group( "Flick Settings" )] public float MaxFlickDistance { get; set; } = 650f;
+	[Property, Group( "Flick Settings" )] public float MinFlickForce { get; set; } = 100f;
+	[Property, Group( "Flick Settings" )] public float MaxFlickForce { get; set; } = 650f;
 	[Property, Group( "Flick Settings" )] public bool InvertAimIndicator { get; set; } = false;
 	[Property, Group( "Flick Settings" )] public bool EnableEdgePanning { get; set; } = true;
 	[Property, Group( "Flick Settings" ), HideIf( nameof(EnableEdgePanning), true ), Description( "Minimum mouse movement required to snap cursor back from off-screen (prevents jitter)" )]
@@ -352,9 +352,18 @@ public sealed class PlayerController : Component
 			magnitude = pieceToCursor.Length;
 		}
 
-		// Build flick vector: direction from clamped cursor, magnitude from unclamped
-		flickVector = -direction * magnitude * FlickStrength;
-		flickVector = flickVector.ClampLength( MaxFlickDistance );
+		// Clamp drag distance to valid physical range
+		magnitude = Math.Clamp( magnitude, 0, MaxFlickDistance );
+
+		// Calculate flick force based on how far we've dragged
+		float dragRatio = MaxFlickDistance > MinFlickDistance
+			? (magnitude - MinFlickDistance) / (MaxFlickDistance - MinFlickDistance)
+			: 0f;
+		dragRatio = Math.Clamp( dragRatio, 0, 1 );
+		float force = MathX.Lerp( MinFlickForce, MaxFlickForce, dragRatio );
+
+		// Build flick vector
+		flickVector = -direction * force;
 
 		// Buffer the magnitude for controller mode (captures peak strength before stick returns to center)
 		if ( isControllerMode )
@@ -364,11 +373,11 @@ public sealed class PlayerController : Component
 		}
 
 		// Calculate feedback data for the selectable
-		float intensity = flickVector.Length / MaxFlickDistance;
-		bool exceedsMinimum = flickVector.Length >= MinFlickDistance;
+		float intensity = Math.Clamp( magnitude / MaxFlickDistance, 0, 1 );
+		bool exceedsMinimum = magnitude >= MinFlickDistance;
 
 		// Calculate aim indicator position using clamped offset (matches visual cursor direction)
-		Vector3 clampedOffset = direction * Math.Min( magnitude, MaxFlickDistance / FlickStrength );
+		Vector3 clampedOffset = direction * magnitude;
 		Vector3 aimIndicatorPos;
 		if ( InvertAimIndicator )
 		{
@@ -702,9 +711,8 @@ public sealed class PlayerController : Component
 
 		Vector3 piecePosition = isDragging ? selectedSelectable.SelectPosition : Vector3.Zero;
 
-		// In controller mode, flick vector is already in world units
-		// In mouse mode, we need to convert cursor distance to world units
-		float worldFlickRadius = isDragging ? (isControllerMode ? MaxFlickDistance : MaxFlickDistance / FlickStrength) : 0f;
+		// Physical drag radius for camera pan
+		float worldFlickRadius = isDragging ? MaxFlickDistance : 0f;
 
 		CameraController.UpdatePan( cursorPosition, piecePosition, isDragging, worldFlickRadius, isControllerMode );
 	}
@@ -858,7 +866,7 @@ public sealed class PlayerController : Component
 
 		// Draw max flick distance circle
 		Gizmo.Draw.Color = Color.Green;
-		Gizmo.Draw.LineCircle( selectedSelectable.SelectPosition, Vector3.Up, MaxFlickDistance / FlickStrength, 0, 360, 512 );
+		Gizmo.Draw.LineCircle( selectedSelectable.SelectPosition, Vector3.Up, MaxFlickDistance, 0, 360, 512 );
 
 		// Draw flick strength text
 		Gizmo.Draw.Color = Color.Black;
