@@ -59,13 +59,18 @@ public sealed class TestPhysicsWorld : Component
 	private struct BodyShapeInfo
 	{
 		public PhysicsBody Body;
+		public PuntPiece SourcePiece;
 		public float CapsuleRadius;
 		public Vector3 CapsuleStart;
 		public Vector3 CapsuleEnd;
 		public bool HasHull;
-		public BBox HullBounds;
+		public List<Line[]> HullLines; // Store lines for each hull
+		public Vector3 LastSourceVelocity;
 	}
 	private List<BodyShapeInfo> bodyShapeInfos = new();
+
+	[Property, Group( "Sync" )]
+	public float FlickDetectionThreshold { get; set; } = 50f;
 
 	protected override void OnStart()
 	{
@@ -78,8 +83,35 @@ public sealed class TestPhysicsWorld : Component
 		if ( physicsWorld == null )
 			return;
 
+		// Detect flicks on source pieces and apply to test bodies
+		SyncFlicksFromSourcePieces();
+
 		// Step the physics world at fixed timestep
 		physicsWorld.Step( Time.Delta );
+	}
+
+	private void SyncFlicksFromSourcePieces()
+	{
+		for ( int i = 0; i < bodyShapeInfos.Count; i++ )
+		{
+			var info = bodyShapeInfos[i];
+			if ( info.SourcePiece == null || !info.SourcePiece.IsValid || info.SourcePiece.Rigidbody == null )
+				continue;
+
+			var sourceVelocity = info.SourcePiece.Rigidbody.Velocity;
+			var velocityChange = sourceVelocity - info.LastSourceVelocity;
+
+			// Detect sudden velocity change (flick)
+			if ( velocityChange.Length > FlickDetectionThreshold )
+			{
+				// Apply the same velocity to the test body
+				info.Body.Velocity = sourceVelocity;
+			}
+
+			// Update stored velocity
+			info.LastSourceVelocity = sourceVelocity;
+			bodyShapeInfos[i] = info;
+		}
 	}
 
 	protected override void OnUpdate()
@@ -150,7 +182,12 @@ public sealed class TestPhysicsWorld : Component
 				continue;
 
 			var body = new PhysicsBody( physicsWorld );
-			var shapeInfo = new BodyShapeInfo { Body = body };
+			var shapeInfo = new BodyShapeInfo
+			{
+				Body = body,
+				SourcePiece = piece,
+				LastSourceVelocity = piece.Rigidbody?.Velocity ?? Vector3.Zero
+			};
 
 			// Read capsule collider from the piece
 			var capsuleCollider = piece.Components.Get<CapsuleCollider>();
@@ -168,6 +205,7 @@ public sealed class TestPhysicsWorld : Component
 			if ( modelCollider != null && modelCollider.Model != null )
 			{
 				var model = modelCollider.Model;
+				shapeInfo.HullLines = new List<Line[]>();
 
 				// Try to get hull parts from the model's physics data
 				foreach ( var part in model.Physics.Parts )
@@ -176,6 +214,13 @@ public sealed class TestPhysicsWorld : Component
 					foreach ( var hull in part.Hulls )
 					{
 						body.AddShape( hull, new Transform(), true );
+
+						// Store hull lines for debug drawing
+						var lines = hull.GetLines()?.ToArray();
+						if ( lines != null && lines.Length > 0 )
+						{
+							shapeInfo.HullLines.Add( lines );
+						}
 					}
 
 					foreach ( var mesh in part.Meshes )
@@ -184,8 +229,7 @@ public sealed class TestPhysicsWorld : Component
 					}
 				}
 
-				shapeInfo.HasHull = true;
-				shapeInfo.HullBounds = model.PhysicsBounds;
+				shapeInfo.HasHull = shapeInfo.HullLines.Count > 0;
 			}
 
 			// Enable physics simulation
@@ -287,13 +331,14 @@ public sealed class TestPhysicsWorld : Component
 					DrawCapsule( position, rotation, shapeInfo.CapsuleStart, shapeInfo.CapsuleEnd, shapeInfo.CapsuleRadius );
 				}
 
-				// Draw hull bounds if present
-				if ( shapeInfo.HasHull )
+				// Draw hull lines if present
+				if ( shapeInfo.HasHull && shapeInfo.HullLines != null )
 				{
-					Gizmo.Draw.Color = HullColor.WithAlpha( 0.5f );
-					Gizmo.Transform = new Transform( position, rotation );
-					Gizmo.Draw.LineBBox( shapeInfo.HullBounds );
-					Gizmo.Transform = new Transform();
+					Gizmo.Draw.Color = HullColor;
+					foreach ( var hullLines in shapeInfo.HullLines )
+					{
+						DrawHullLines( position, rotation, hullLines );
+					}
 				}
 
 				// If no special shapes, draw as sphere
@@ -342,6 +387,20 @@ public sealed class TestPhysicsWorld : Component
 			float angle = j * MathF.PI * 0.5f;
 			var offset = (perpendicular * MathF.Cos( angle ) + perpendicular2 * MathF.Sin( angle )) * radius;
 			Gizmo.Draw.Line( worldStart + offset, worldEnd + offset );
+		}
+	}
+
+	private void DrawHullLines( Vector3 bodyPosition, Rotation bodyRotation, Line[] lines )
+	{
+		if ( lines == null || lines.Length == 0 )
+			return;
+
+		foreach ( var line in lines )
+		{
+			// Transform line endpoints to world space
+			var worldStart = bodyPosition + bodyRotation * line.Start;
+			var worldEnd = bodyPosition + bodyRotation * line.End;
+			Gizmo.Draw.Line( worldStart, worldEnd );
 		}
 	}
 
