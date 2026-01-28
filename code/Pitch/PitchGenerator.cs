@@ -216,6 +216,7 @@ public sealed class PitchGenerator : Component
 			CreateGoalEnclosure( leftPost, rightPost, goalIndex );
 		}
 
+		CreateFloor();
 		CreateCeiling();
 	}
 
@@ -242,6 +243,24 @@ public sealed class PitchGenerator : Component
 		var collider = wallObj.Components.Create<BoxCollider>();
 		collider.Scale = new Vector3( length, WallThickness, WallHeight );
 		wallColliders.Add( collider );
+	}
+
+	private void CreateFloor()
+	{
+		// Floor extends across pitch and both goal areas
+		var floorLength = PitchLength + 2 * GoalDepth;
+
+		var floorObj = new GameObject
+		{
+			Name = "Floor",
+			Parent = collidersContainer,
+			WorldPosition = WorldPosition - Vector3.Up * (WallThickness / 2f),
+			Tags = { "floor" }
+		};
+
+		var collider = floorObj.Components.Create<BoxCollider>();
+		collider.Scale = new Vector3( PitchWidth, floorLength, WallThickness );
+		goalObjects.Add( floorObj );
 	}
 
 	private void CreateCeiling()
