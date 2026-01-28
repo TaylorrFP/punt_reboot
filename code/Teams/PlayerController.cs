@@ -16,9 +16,8 @@ public sealed class PlayerController : Component
 	[Property, Group( "Flick Settings" )] public float MaxFlickDistance { get; set; } = 650f;
 	[Property, Group( "Flick Settings" )] public float MinFlickForce { get; set; } = 100f;
 	[Property, Group( "Flick Settings" )] public float MaxFlickForce { get; set; } = 650f;
-	[Property, Group( "Flick Settings" )] public bool InvertAimIndicator { get; set; } = false;
-	[Property, Group( "Flick Settings" )] public bool EnableEdgePanning { get; set; } = true;
-	[Property, Group( "Flick Settings" ), HideIf( nameof(EnableEdgePanning), true ), Description( "Minimum mouse movement required to snap cursor back from off-screen (prevents jitter)" )]
+	[Property, Group( "Flick Settings" )] public bool InvertAimIndicator { get; set; } = true;
+	[Property, Group( "Flick Settings" ), Description( "Minimum mouse movement required to snap cursor back from off-screen (prevents jitter)" )]
 	public float SnapBackThreshold { get; set; } = 3f;
 
 	[Property, Group( "Cursor" )] public bool ShowRealCursor { get; set; } = false;
@@ -41,7 +40,7 @@ public sealed class PlayerController : Component
 	private Vector2 cursorPosition;
 	private bool cursorInitialized;
 
-	// Off-screen cursor tracking (for no-edge-panning mode)
+	// Unclamped cursor position for snap-back threshold behavior
 	private Vector2 unclampedCursorPosition;
 
 	// World position of cursor
@@ -199,9 +198,9 @@ public sealed class PlayerController : Component
 
 		Vector2 delta = Mouse.Delta;
 
-		if ( !EnableEdgePanning && selectedSelectable != null )
+		if ( selectedSelectable != null )
 		{
-			// No edge panning mode while dragging:
+			// Snap-back threshold behavior while dragging:
 			// Check if we're currently off-screen on each axis
 			bool offLeft = unclampedCursorPosition.x < 0;
 			bool offRight = unclampedCursorPosition.x > Screen.Width;
@@ -337,9 +336,9 @@ public sealed class PlayerController : Component
 		Vector3 pieceToCursor = (worldCursorPosition - selectedSelectable.SelectPosition).WithZ( 0 );
 		Vector3 direction = pieceToCursor.Normal;
 
-		// Calculate magnitude - use unclamped position when edge panning is disabled
+		// Calculate magnitude - use unclamped position for magnitude calculation
 		float magnitude;
-		if ( !EnableEdgePanning && !isControllerMode )
+		if ( !isControllerMode )
 		{
 			// Convert unclamped screen position to world for magnitude calculation
 			var unclampedRay = Scene.Camera.ScreenPixelToRay( unclampedCursorPosition );
@@ -701,10 +700,10 @@ public sealed class PlayerController : Component
 		bool isControllerMode = InputManager != null && InputManager.CurrentMode == InputMode.Controller;
 		bool isDragging = selectedSelectable != null && selectedSelectable.CapturesSelection;
 
-		// When edge panning is disabled, don't trigger camera pan behavior
-		if ( !EnableEdgePanning && isDragging && !isControllerMode )
+		// Disable camera pan during drag (no edge panning behavior)
+		if ( isDragging && !isControllerMode )
 		{
-			// Still update cursor position for passive pan, but don't trigger edge pan
+			// Still update cursor position for passive pan
 			CameraController.UpdatePan( cursorPosition, Vector3.Zero, false, 0f, false );
 			return;
 		}
