@@ -56,6 +56,7 @@ public sealed class PlayerController : Component
 
 	// Flick tracking
 	private Vector3 flickVector;
+	private float dragDistance; // Tracks the actual drag distance for minimum flick validation
 	private float lastCursorDelta;
 	private Vector2 lastValidStickDirection; // Tracks last valid stick direction for smooth rotation
 	private Vector3 smoothedFlickDirection; // Smoothed direction for controller aiming (magnitude preserved)
@@ -351,17 +352,20 @@ public sealed class PlayerController : Component
 			magnitude = pieceToCursor.Length;
 		}
 
-		// Clamp drag distance to valid physical range
-		magnitude = Math.Clamp( magnitude, 0, MaxFlickDistance );
+		// Store unclamped drag distance for minimum flick validation
+		dragDistance = magnitude;
+
+		// Clamp drag distance to valid physical range for force calculation
+		float clampedMagnitude = Math.Clamp( magnitude, 0, MaxFlickDistance );
 
 		// Calculate flick force based on how far we've dragged
 		float dragRatio = MaxFlickDistance > MinFlickDistance
-			? (magnitude - MinFlickDistance) / (MaxFlickDistance - MinFlickDistance)
+			? (clampedMagnitude - MinFlickDistance) / (MaxFlickDistance - MinFlickDistance)
 			: 0f;
 		dragRatio = Math.Clamp( dragRatio, 0, 1 );
 		float force = MathX.Lerp( MinFlickForce, MaxFlickForce, dragRatio );
 
-		// Build flick vector
+		// Build flick vector - don't clamp magnitude, let it scale naturally with drag distance
 		flickVector = -direction * force;
 
 		// Buffer the magnitude for controller mode (captures peak strength before stick returns to center)
@@ -372,11 +376,11 @@ public sealed class PlayerController : Component
 		}
 
 		// Calculate feedback data for the selectable
-		float intensity = Math.Clamp( magnitude / MaxFlickDistance, 0, 1 );
+		float intensity = Math.Clamp( clampedMagnitude / MaxFlickDistance, 0, 1 );
 		bool exceedsMinimum = magnitude >= MinFlickDistance;
 
 		// Calculate aim indicator position using clamped offset (matches visual cursor direction)
-		Vector3 clampedOffset = direction * magnitude;
+		Vector3 clampedOffset = direction * clampedMagnitude;
 		Vector3 aimIndicatorPos;
 		if ( InvertAimIndicator )
 		{
@@ -401,6 +405,7 @@ public sealed class PlayerController : Component
 		hoveredSelectable = null;
 
 		flickVector = Vector3.Zero;
+		dragDistance = 0f;
 		lastCursorDelta = 0f;
 		lastValidStickDirection = InputManager.RightStick.CurrentInput.Normal;
 		smoothedFlickDirection = Vector3.Zero; // Will be initialized on first cursor update
@@ -418,7 +423,7 @@ public sealed class PlayerController : Component
 
 	private void ReleaseSelection()
 	{
-		if ( flickVector.Length < MinFlickDistance )
+		if ( dragDistance < MinFlickDistance )
 		{
 			AbortSelection();
 			return;
@@ -438,6 +443,7 @@ public sealed class PlayerController : Component
 	{
 		selectedSelectable = null;
 		flickVector = Vector3.Zero;
+		dragDistance = 0f;
 		lastCursorDelta = 0f;
 	}
 
@@ -679,7 +685,7 @@ public sealed class PlayerController : Component
 			flickVector = flickVector.Normal * peakMagnitude;
 		}
 
-		if ( flickVector.Length < MinFlickDistance )
+		if ( dragDistance < MinFlickDistance )
 		{
 			AbortSelection();
 			return;
