@@ -110,7 +110,7 @@ public sealed class PuntPiece : Component, ISelectable
 		ShakeEffect?.Stop();
 
 		// Apply flick
-		Rigidbody.Velocity = flickVelocity*2.5f; //random value for now
+		Rigidbody.Velocity = flickVelocity;
 
 		Sound.Play( "sounds/custom/elastic/boing.sound" );
 
