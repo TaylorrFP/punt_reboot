@@ -861,9 +861,9 @@ public sealed class PlayerController : Component
 		Gizmo.Draw.Color = Color.Cyan;
 		Gizmo.Draw.SolidSphere( worldCursorPosition, 16f, 16, 16 );
 
-		// Draw flick direction line
+		// Draw drag line to actual cursor position
 		Gizmo.Draw.Color = Color.White;
-		Gizmo.Draw.Line( selectedSelectable.SelectPosition, selectedSelectable.SelectPosition - flickVector );
+		Gizmo.Draw.Line( selectedSelectable.SelectPosition, worldCursorPosition );
 
 		// Draw min flick distance circle
 		Gizmo.Draw.Color = Color.Red;
@@ -873,9 +873,9 @@ public sealed class PlayerController : Component
 		Gizmo.Draw.Color = Color.Green;
 		Gizmo.Draw.LineCircle( selectedSelectable.SelectPosition, Vector3.Up, MaxFlickDistance, 0, 360, 512 );
 
-		// Draw flick strength text
+		// Draw drag distance and flick force text
 		Gizmo.Draw.Color = Color.Black;
-		Gizmo.Draw.ScreenText( flickVector.Length.ToString( "F1" ), cursorPosition + Vector2.Down * 32, "roboto", 16f );
+		Gizmo.Draw.ScreenText( $"Distance: {dragDistance:F1}\nForce: {flickVector.Length:F1}", cursorPosition + Vector2.Down * 32, "roboto", 16f );
 	}
 
 	#endregion
