@@ -48,6 +48,9 @@ public sealed class TestPhysicsWorld : Component
 	[Property, Group( "Debug" )]
 	public Color CapsuleColor { get; set; } = Color.Cyan;
 
+	[Property, Group( "Debug" )]
+	public Color HullColor { get; set; } = Color.Magenta;
+
 	private PhysicsWorld physicsWorld;
 	private List<PhysicsBody> testBodies = new();
 	private PhysicsBody floorBody;
@@ -59,6 +62,8 @@ public sealed class TestPhysicsWorld : Component
 		public float CapsuleRadius;
 		public Vector3 CapsuleStart;
 		public Vector3 CapsuleEnd;
+		public bool HasHull;
+		public BBox HullBounds;
 	}
 	private List<BodyShapeInfo> bodyShapeInfos = new();
 
@@ -156,6 +161,31 @@ public sealed class TestPhysicsWorld : Component
 				shapeInfo.CapsuleEnd = capsuleCollider.End;
 
 				body.AddCapsuleShape( capsuleCollider.Start, capsuleCollider.End, capsuleCollider.Radius, true );
+			}
+
+			// Read hull from ModelCollider
+			var modelCollider = piece.Components.Get<ModelCollider>();
+			if ( modelCollider != null && modelCollider.Model != null )
+			{
+				var model = modelCollider.Model;
+
+				// Try to get hull parts from the model's physics data
+				foreach ( var part in model.Physics.Parts )
+				{
+					// BodyPart has Hulls and Meshes collections
+					foreach ( var hull in part.Hulls )
+					{
+						body.AddShape( hull, new Transform(), true );
+					}
+
+					foreach ( var mesh in part.Meshes )
+					{
+						body.AddShape( mesh, new Transform(), true, true );
+					}
+				}
+
+				shapeInfo.HasHull = true;
+				shapeInfo.HullBounds = model.PhysicsBounds;
 			}
 
 			// Enable physics simulation
@@ -256,9 +286,19 @@ public sealed class TestPhysicsWorld : Component
 					Gizmo.Draw.Color = CapsuleColor;
 					DrawCapsule( position, rotation, shapeInfo.CapsuleStart, shapeInfo.CapsuleEnd, shapeInfo.CapsuleRadius );
 				}
-				else
+
+				// Draw hull bounds if present
+				if ( shapeInfo.HasHull )
 				{
-					// Fallback to sphere
+					Gizmo.Draw.Color = HullColor.WithAlpha( 0.5f );
+					Gizmo.Transform = new Transform( position, rotation );
+					Gizmo.Draw.LineBBox( shapeInfo.HullBounds );
+					Gizmo.Transform = new Transform();
+				}
+
+				// If no special shapes, draw as sphere
+				if ( shapeInfo.CapsuleRadius == 0 && !shapeInfo.HasHull )
+				{
 					Gizmo.Draw.Color = DebugColor;
 					Gizmo.Draw.LineSphere( position, BodyRadius );
 				}
