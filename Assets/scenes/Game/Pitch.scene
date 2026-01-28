@@ -164,7 +164,6 @@
           "ControllerAimSmoothing": 10,
           "ControllerDistanceWeight": 0.05,
           "EnableEdgePanning": false,
-          "FlickStrength": 1,
           "InputManager": {
             "_type": "component",
             "component_id": "58db1fb2-df1e-4da9-ac14-0da5a0cd6ff4",
@@ -173,8 +172,9 @@
           },
           "InvertAimIndicator": true,
           "MaxFlickDistance": 450,
-          "MaxFlickStrength": 1000,
+          "MaxFlickForce": 650,
           "MinFlickDistance": 100,
+          "MinFlickForce": 100,
           "OnComponentDestroy": null,
           "OnComponentDisabled": null,
           "OnComponentEnabled": null,
@@ -183,7 +183,7 @@
           "OnComponentUpdate": null,
           "Sensitivity": 1,
           "ShowCursor": true,
-          "ShowDebug": false,
+          "ShowDebug": true,
           "ShowRealCursor": false,
           "SnapBackThreshold": 5,
           "Team": "Blue"
@@ -202,6 +202,48 @@
           "ShowDebug": false,
           "StickDeadzone": 0.2,
           "StickReleaseThreshold": 0.15
+        },
+        {
+          "__type": "BalanceOverride",
+          "__guid": "cb95d4ac-e87f-437a-872e-8b6a051cd2b1",
+          "__enabled": true,
+          "Flags": 0,
+          "BallAngularDamping": 0.3,
+          "BallElasticity": 0.9,
+          "BallFriction": 0.01,
+          "BallLinearDamping": 0.6,
+          "BallMass": 1000,
+          "BallRollingResistance": 0,
+          "FloorElasticity": 0.25,
+          "FloorFriction": 1,
+          "FloorRollingResistance": 0,
+          "MaxFlickForce": 650,
+          "MinFlickForce": 100,
+          "OnComponentDestroy": null,
+          "OnComponentDisabled": null,
+          "OnComponentEnabled": null,
+          "OnComponentFixedUpdate": null,
+          "OnComponentStart": null,
+          "OnComponentUpdate": null,
+          "OverrideBallPhysics": true,
+          "OverrideBallSurface": true,
+          "OverrideFlickSettings": true,
+          "OverrideFloorSurface": true,
+          "OverridePiecePhysics": true,
+          "OverridePieceSurface": true,
+          "OverrideTimeScale": false,
+          "OverrideWallSurface": true,
+          "PieceAngularDamping": 1,
+          "PieceCenterOfMassZ": 8,
+          "PieceElasticity": 0.5,
+          "PieceFriction": 1.5,
+          "PieceLinearDamping": 1.2,
+          "PieceMass": 7000,
+          "PieceRollingResistance": 1,
+          "TimeScale": 1,
+          "WallElasticity": -1,
+          "WallFriction": 0,
+          "WallRollingResistance": -1
         }
       ],
       "Children": []
@@ -484,8 +526,8 @@
           "BevelAmount": 515,
           "BevelResolution": 32,
           "DebugDraw": true,
-          "GoalDepth": 100,
-          "GoalHeight": 185,
+          "GoalDepth": 150,
+          "GoalHeight": 200,
           "GoalWidth": 640.84045,
           "OnComponentDestroy": null,
           "OnComponentDisabled": null,
@@ -543,7 +585,7 @@
             {
               "__type": "Sandbox.BoxCollider",
               "__guid": "68913490-a432-462b-b55a-95648265438b",
-              "__enabled": true,
+              "__enabled": false,
               "Flags": 0,
               "Center": "0,0,0",
               "ColliderFlags": 0,
@@ -1158,6 +1200,66 @@
         "d2b334af-81a6-4ed4-8905-21e32f3672bb": "ad5bc408-2a7c-428a-8bed-d43c0ffb30cd",
         "df056046-5e93-4a6c-805c-69de0c2b90d6": "9d3e4b5a-fa1a-4def-93c4-83171ce1bdc4",
         "3b89f539-785e-41f4-aa0f-3cf5b1d7ea95": "5c87fccc-3562-4feb-a662-54afe98210db"
+      }
+    },
+    {
+      "__guid": "eefe7ad8-2561-4180-8d78-23e488794bbc",
+      "__version": 2,
+      "__Prefab": "prefabs/pieces/puntpiece/puntpiece.prefab",
+      "__PrefabInstancePatch": {
+        "AddedObjects": [],
+        "RemovedObjects": [],
+        "PropertyOverrides": [
+          {
+            "Target": {
+              "Type": "GameObject",
+              "IdValue": "ad8604dc-4731-4bf5-9544-f9bd106773c0"
+            },
+            "Property": "Position",
+            "Value": "-584.7269,449.7302,5.509016"
+          },
+          {
+            "Target": {
+              "Type": "Component",
+              "IdValue": "557a9a38-57a3-4178-8b8a-089424db388a"
+            },
+            "Property": "AngularDamping",
+            "Value": 2
+          },
+          {
+            "Target": {
+              "Type": "Component",
+              "IdValue": "557a9a38-57a3-4178-8b8a-089424db388a"
+            },
+            "Property": "LinearDamping",
+            "Value": 2
+          }
+        ],
+        "MovedObjects": []
+      },
+      "__PrefabIdToInstanceId": {
+        "ad8604dc-4731-4bf5-9544-f9bd106773c0": "eefe7ad8-2561-4180-8d78-23e488794bbc",
+        "860a1dc4-0b11-4b29-9fa2-0761e954d29d": "015af287-d705-4330-b35f-6c67982127b3",
+        "6908b8f6-276c-4317-9f22-61902ad35137": "2bd0deb5-4229-4f11-a9a4-e8def1d8e552",
+        "557a9a38-57a3-4178-8b8a-089424db388a": "7fc27a4c-4327-4407-9063-fea597959552",
+        "9804d496-f0f0-486e-b6e1-0692acc7dcfd": "196ed582-1c46-465d-87c8-1c726f0ac7f2",
+        "38bc432e-dcb1-4edb-81ed-472b549f59e1": "6dad50b6-1db9-4678-8b49-6c33c0114ba3",
+        "02f9dbf4-2d8b-425b-9d43-67fd66f98461": "49d68315-9a38-4282-a347-dd68a9a66c8d",
+        "667741e6-99c4-4607-b886-3b9002761cff": "a060e319-5b8b-4146-96df-29ed214c9bb0",
+        "4d05c825-915a-47f5-ab8c-d38838417f21": "394dd79a-e9a3-4465-a1eb-1cdd408ea18b",
+        "2750d0aa-df49-443f-af2a-51ef62929f79": "07843260-d7e3-4311-a63c-08260e902a7f",
+        "d42e5e7d-3d5f-4eaf-b677-41fb7a18f09a": "cd0a7e67-c827-4812-8b93-0d945a03542b",
+        "011e0ad9-9f74-4495-a243-152fc90f6bc6": "a1f2ed52-fddf-4dd1-a307-71f658ae765e",
+        "5efe1f01-19ee-4413-b9e8-31300e849382": "90d5c7b7-3f7c-4266-ba6a-8b2babbcfa2c",
+        "6560871c-c32b-473d-ba3b-4bb11aab1c17": "bbad8e34-6bb8-451e-b562-ada4edd2543f",
+        "797caf46-9bc2-4e26-b71b-94468ede104c": "93a4b763-13ee-4d05-95bf-b64e46459223",
+        "b7c8c7f9-d403-4d36-b7bb-66983aa71e68": "6f39e5aa-106c-4f5c-9bf6-7fa1cae32973",
+        "475ad2b9-6832-42a5-87db-b7b99dcf1a8b": "1dc8d250-8432-4a40-ab2c-d0137465cfb9",
+        "a94cf439-2d29-4c01-9fb2-a25deb17f4e7": "847e19af-575c-4304-a778-7e10ae79f11d",
+        "20a16300-e9f1-46a0-a328-037e78582cc1": "aef9d00d-1b34-440e-a5bf-8b7ab04ef58c",
+        "dd32ce13-e62c-473e-8080-b0e725c0f061": "d48d9d11-dbc3-4af3-bfc3-864cffd52657",
+        "f0acf77d-3321-4560-9c30-c0017ade40ac": "0269b57b-e46e-4140-b5bb-92d14f294436",
+        "4834d9d2-6246-4914-be23-9380b627292c": "252036f4-343f-40a8-ad62-11665f3f3db3"
       }
     }
   ],
