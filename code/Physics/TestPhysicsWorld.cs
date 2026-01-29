@@ -45,6 +45,15 @@ public sealed class TestPhysicsWorld : Component
 	[Property, Group( "Debug" )]
 	public Color HullColor { get; set; } = Color.Magenta;
 
+	[Property, Group( "Prediction" )]
+	public int MaxPredictionSteps { get; set; } = 500;
+
+	[Property, Group( "Prediction" )]
+	public float PredictionTimestep { get; set; } = 1f / 60f;
+
+	[Property, Group( "Prediction" )]
+	public float StopVelocityThreshold { get; set; } = 1f;
+
 	private PhysicsWorld physicsWorld;
 	private List<PhysicsBody> testBodies = new();
 	private PhysicsBody floorBody;
@@ -62,48 +71,86 @@ public sealed class TestPhysicsWorld : Component
 	}
 	private List<BodyShapeInfo> bodyShapeInfos = new();
 
+	// Track drag start position to prevent jitter
+	private PuntPiece currentDragPiece;
+	private Vector3 dragStartPosition;
+
 	protected override void OnStart()
 	{
 		CreatePhysicsWorld();
 		SpawnTestBodies();
-
-		// Subscribe to flick events
-		if ( PlayerController != null )
-		{
-			PlayerController.OnPieceFlicked += OnPieceFlicked;
-		}
-	}
-
-	protected override void OnFixedUpdate()
-	{
-		if ( physicsWorld == null )
-			return;
-
-		// Step the physics world at fixed timestep
-		physicsWorld.Step( 1f/ProjectSettings.Physics.FixedUpdateFrequency );
-	}
-
-	private void OnPieceFlicked( PuntPiece piece, Vector3 flickVelocity )
-	{
-		// Find the test body that corresponds to this piece
-		foreach ( var info in bodyShapeInfos )
-		{
-			if ( info.SourcePiece == piece )
-			{
-				// Apply the flick velocity to the test body
-				info.Body.Velocity = flickVelocity;
-				break;
-			}
-		}
 	}
 
 	protected override void OnUpdate()
 	{
+		if ( physicsWorld == null )
+			return;
+
+		// Run prediction simulation while dragging
+		if ( PlayerController != null && PlayerController.IsDragging && PlayerController.SelectedPiece != null )
+		{
+			var piece = PlayerController.SelectedPiece;
+
+			// Lock in the start position when drag begins
+			if ( currentDragPiece != piece )
+			{
+				currentDragPiece = piece;
+				dragStartPosition = piece.WorldPosition;
+			}
+
+			RunPredictionSimulation( piece, PlayerController.CurrentFlickVector );
+		}
+		else
+		{
+			// Clear drag tracking when not dragging
+			currentDragPiece = null;
+		}
+
 		// Draw debug visualization
 		if ( ShowDebug )
 		{
 			DrawDebugBodies();
 			DrawDebugFloor();
+		}
+	}
+
+	private void RunPredictionSimulation( PuntPiece piece, Vector3 flickVelocity )
+	{
+		// Find the test body that corresponds to this piece
+		BodyShapeInfo? targetInfo = null;
+		foreach ( var info in bodyShapeInfos )
+		{
+			if ( info.SourcePiece == piece )
+			{
+				targetInfo = info;
+				break;
+			}
+		}
+
+		if ( !targetInfo.HasValue )
+			return;
+
+		var body = targetInfo.Value.Body;
+
+		// Reset body to locked start position with upright rotation
+		body.Position = dragStartPosition;
+		body.Rotation = Rotation.Identity;
+		body.Velocity = flickVelocity;
+		body.AngularVelocity = Vector3.Zero;
+
+		// Step physics until the body stops or we hit max iterations
+		for ( int i = 0; i < MaxPredictionSteps; i++ )
+		{
+			physicsWorld.Step( PredictionTimestep );
+
+			// Force angular velocity to zero to prevent any rotation
+			body.AngularVelocity = Vector3.Zero;
+
+			// Check if body has come to rest
+			if ( body.Velocity.Length < StopVelocityThreshold )
+			{
+				break;
+			}
 		}
 	}
 
@@ -253,10 +300,17 @@ public sealed class TestPhysicsWorld : Component
 
 			body.RebuildMass();
 
+			// Lock all rotation
+			body.Locking = new PhysicsLock
+			{
+				Pitch = true,
+				Roll = true,
+				Yaw = true
+			};
+
 			// Position at the piece's current position
 			body.Position = piece.WorldPosition;
 			body.Rotation = piece.WorldRotation;
-
 
 			testBodies.Add( body );
 			bodyShapeInfos.Add( shapeInfo );
@@ -390,12 +444,6 @@ public sealed class TestPhysicsWorld : Component
 
 	protected override void OnDestroy()
 	{
-		// Unsubscribe from flick events
-		if ( PlayerController != null )
-		{
-			PlayerController.OnPieceFlicked -= OnPieceFlicked;
-		}
-
 		if ( physicsWorld != null )
 		{
 			physicsWorld.Delete();

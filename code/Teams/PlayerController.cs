@@ -17,6 +17,25 @@ public sealed class PlayerController : Component
 
 	#endregion
 
+	#region Public State
+
+	/// <summary>
+	/// The currently selected/dragged piece, or null if not dragging.
+	/// </summary>
+	public PuntPiece SelectedPiece => selectedSelectable as PuntPiece;
+
+	/// <summary>
+	/// The current flick vector while dragging. Zero if not dragging.
+	/// </summary>
+	public Vector3 CurrentFlickVector => flickVector;
+
+	/// <summary>
+	/// Whether we're currently dragging a piece.
+	/// </summary>
+	public bool IsDragging => selectedSelectable != null;
+
+	#endregion
+
 	#region Properties
 
 	[Property, Sync] public TeamSide Team { get; set; }
