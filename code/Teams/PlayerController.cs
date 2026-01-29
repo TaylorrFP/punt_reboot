@@ -8,6 +8,15 @@ using System;
 /// </summary>
 public sealed class PlayerController : Component
 {
+	#region Events
+
+	/// <summary>
+	/// Fired when a piece is flicked. Parameters: the piece that was flicked, and the flick velocity vector.
+	/// </summary>
+	public event Action<PuntPiece, Vector3> OnPieceFlicked;
+
+	#endregion
+
 	#region Properties
 
 	[Property, Sync] public TeamSide Team { get; set; }
@@ -429,6 +438,12 @@ public sealed class PlayerController : Component
 			return;
 		}
 
+		// Fire flick event if it's a PuntPiece
+		if ( selectedSelectable is PuntPiece piece )
+		{
+			OnPieceFlicked?.Invoke( piece, flickVector );
+		}
+
 		selectedSelectable?.OnDeselect( flickVector );
 		ClearSelectionState();
 	}
@@ -689,6 +704,12 @@ public sealed class PlayerController : Component
 		{
 			AbortSelection();
 			return;
+		}
+
+		// Fire flick event if it's a PuntPiece
+		if ( selectedSelectable is PuntPiece piece )
+		{
+			OnPieceFlicked?.Invoke( piece, flickVector );
 		}
 
 		selectedSelectable?.OnDeselect( flickVector );

@@ -163,7 +163,6 @@
           },
           "ControllerAimSmoothing": 10,
           "ControllerDistanceWeight": 0.05,
-          "EnableEdgePanning": false,
           "InputManager": {
             "_type": "component",
             "component_id": "58db1fb2-df1e-4da9-ac14-0da5a0cd6ff4",
@@ -217,8 +216,8 @@
           "FloorElasticity": 0.25,
           "FloorFriction": 1,
           "FloorRollingResistance": 0,
-          "MaxFlickForce": 650,
-          "MinFlickForce": 100,
+          "MaxFlickForce": 1625,
+          "MinFlickForce": 250,
           "OnComponentDestroy": null,
           "OnComponentDisabled": null,
           "OnComponentEnabled": null,
@@ -269,8 +268,6 @@
           "__guid": "27c40f93-d95a-4ea9-aa6c-aecfdeb8a733",
           "__enabled": true,
           "Flags": 0,
-          "DebugPointSize": 4,
-          "EdgeThreshold": 50,
           "EnablePassivePan": true,
           "OnComponentDestroy": null,
           "OnComponentDisabled": null,
@@ -278,13 +275,10 @@
           "OnComponentFixedUpdate": null,
           "OnComponentStart": null,
           "OnComponentUpdate": null,
-          "OverlapTolerance": 0.5,
-          "PanSpeed": 1,
           "PassivePanDepthMultDown": 2,
           "PassivePanDepthMultUp": 1,
           "PassivePanHorizontalMult": 1,
           "PassivePanSpeed": 100,
-          "ShowDebug": false,
           "Smoothing": 5,
           "SmoothPan": true
         }
@@ -1216,7 +1210,15 @@
               "IdValue": "ad8604dc-4731-4bf5-9544-f9bd106773c0"
             },
             "Property": "Position",
-            "Value": "-584.7269,449.7302,5.509016"
+            "Value": "-584.7269,449.7302,151.039"
+          },
+          {
+            "Target": {
+              "Type": "GameObject",
+              "IdValue": "ad8604dc-4731-4bf5-9544-f9bd106773c0"
+            },
+            "Property": "Enabled",
+            "Value": false
           },
           {
             "Target": {
@@ -1261,6 +1263,306 @@
         "f0acf77d-3321-4560-9c30-c0017ade40ac": "0269b57b-e46e-4140-b5bb-92d14f294436",
         "4834d9d2-6246-4914-be23-9380b627292c": "252036f4-343f-40a8-ad62-11665f3f3db3"
       }
+    },
+    {
+      "__guid": "f852e801-8ed7-47c7-8c9e-b2fba45f3b20",
+      "__version": 2,
+      "__Prefab": "prefabs/pieces/puntpiece/puntpiece.prefab",
+      "__PrefabInstancePatch": {
+        "AddedObjects": [],
+        "RemovedObjects": [],
+        "PropertyOverrides": [
+          {
+            "Target": {
+              "Type": "GameObject",
+              "IdValue": "ad8604dc-4731-4bf5-9544-f9bd106773c0"
+            },
+            "Property": "Name",
+            "Value": "puntpiece (1)"
+          },
+          {
+            "Target": {
+              "Type": "GameObject",
+              "IdValue": "ad8604dc-4731-4bf5-9544-f9bd106773c0"
+            },
+            "Property": "Position",
+            "Value": "-584.7269,639.6671,5.509016"
+          },
+          {
+            "Target": {
+              "Type": "GameObject",
+              "IdValue": "ad8604dc-4731-4bf5-9544-f9bd106773c0"
+            },
+            "Property": "Enabled",
+            "Value": false
+          },
+          {
+            "Target": {
+              "Type": "Component",
+              "IdValue": "557a9a38-57a3-4178-8b8a-089424db388a"
+            },
+            "Property": "AngularDamping",
+            "Value": 2
+          },
+          {
+            "Target": {
+              "Type": "Component",
+              "IdValue": "557a9a38-57a3-4178-8b8a-089424db388a"
+            },
+            "Property": "LinearDamping",
+            "Value": 2
+          }
+        ],
+        "MovedObjects": []
+      },
+      "__PrefabIdToInstanceId": {
+        "ad8604dc-4731-4bf5-9544-f9bd106773c0": "f852e801-8ed7-47c7-8c9e-b2fba45f3b20",
+        "860a1dc4-0b11-4b29-9fa2-0761e954d29d": "70032685-68f7-4992-9ad1-52685ed9ddfd",
+        "6908b8f6-276c-4317-9f22-61902ad35137": "4d39fc22-c6e9-4035-b55d-55cb86291253",
+        "557a9a38-57a3-4178-8b8a-089424db388a": "34c54b82-9779-4254-9d3b-4889602614af",
+        "9804d496-f0f0-486e-b6e1-0692acc7dcfd": "9c0ae0bd-70aa-4ffe-aff6-053a60b8228e",
+        "38bc432e-dcb1-4edb-81ed-472b549f59e1": "317ae00a-73c1-4ca7-951a-4c542327e5e5",
+        "02f9dbf4-2d8b-425b-9d43-67fd66f98461": "03ecb69c-3228-428d-894b-fbd0d90fa651",
+        "667741e6-99c4-4607-b886-3b9002761cff": "f8eee9f1-8846-4237-ada5-78465105b76b",
+        "4d05c825-915a-47f5-ab8c-d38838417f21": "d026a915-d521-4b6e-98fc-e7d0146e29a6",
+        "2750d0aa-df49-443f-af2a-51ef62929f79": "8a2977e5-5125-4898-9d40-614a0c0973c9",
+        "d42e5e7d-3d5f-4eaf-b677-41fb7a18f09a": "55c98852-9f14-4eca-9634-2437e2cdb547",
+        "011e0ad9-9f74-4495-a243-152fc90f6bc6": "cc93b7ec-c9e2-4dde-b95b-08c286fee135",
+        "5efe1f01-19ee-4413-b9e8-31300e849382": "c372fef5-4554-40f3-85cb-a564c0433cfc",
+        "6560871c-c32b-473d-ba3b-4bb11aab1c17": "d61c45ec-9039-43b2-9701-b3380935aadb",
+        "797caf46-9bc2-4e26-b71b-94468ede104c": "e76e5889-0e75-406c-b11a-8057f349ed36",
+        "b7c8c7f9-d403-4d36-b7bb-66983aa71e68": "d243cf49-6010-4de3-97e3-0d56f28dc034",
+        "475ad2b9-6832-42a5-87db-b7b99dcf1a8b": "680747eb-d3aa-41fd-acff-69c992f0b5f8",
+        "a94cf439-2d29-4c01-9fb2-a25deb17f4e7": "0ae8f5f9-5ad4-45eb-abb3-a06d3fe0bf3f",
+        "20a16300-e9f1-46a0-a328-037e78582cc1": "0dbbfe49-ebb6-4ace-9835-da6c0b4655b1",
+        "dd32ce13-e62c-473e-8080-b0e725c0f061": "9e9b3401-41fc-4883-9c59-e331ccf0babc",
+        "f0acf77d-3321-4560-9c30-c0017ade40ac": "74d2f425-d9a1-4e10-ba78-c2b004380e68",
+        "4834d9d2-6246-4914-be23-9380b627292c": "3bc64abf-5260-4bb6-8999-7899b4bcaadb"
+      }
+    },
+    {
+      "__guid": "6d196f31-3804-42d4-9679-8688b53c71a1",
+      "__version": 2,
+      "__Prefab": "prefabs/pieces/puntpiece/puntpiece.prefab",
+      "__PrefabInstancePatch": {
+        "AddedObjects": [],
+        "RemovedObjects": [],
+        "PropertyOverrides": [
+          {
+            "Target": {
+              "Type": "GameObject",
+              "IdValue": "ad8604dc-4731-4bf5-9544-f9bd106773c0"
+            },
+            "Property": "Name",
+            "Value": "puntpiece (2)"
+          },
+          {
+            "Target": {
+              "Type": "GameObject",
+              "IdValue": "ad8604dc-4731-4bf5-9544-f9bd106773c0"
+            },
+            "Property": "Position",
+            "Value": "-428.8633,639.6671,5.509016"
+          },
+          {
+            "Target": {
+              "Type": "GameObject",
+              "IdValue": "ad8604dc-4731-4bf5-9544-f9bd106773c0"
+            },
+            "Property": "Enabled",
+            "Value": false
+          },
+          {
+            "Target": {
+              "Type": "Component",
+              "IdValue": "557a9a38-57a3-4178-8b8a-089424db388a"
+            },
+            "Property": "AngularDamping",
+            "Value": 2
+          },
+          {
+            "Target": {
+              "Type": "Component",
+              "IdValue": "557a9a38-57a3-4178-8b8a-089424db388a"
+            },
+            "Property": "LinearDamping",
+            "Value": 2
+          }
+        ],
+        "MovedObjects": []
+      },
+      "__PrefabIdToInstanceId": {
+        "ad8604dc-4731-4bf5-9544-f9bd106773c0": "6d196f31-3804-42d4-9679-8688b53c71a1",
+        "860a1dc4-0b11-4b29-9fa2-0761e954d29d": "97d304b9-3ca4-43e9-9676-ff90b38d56b4",
+        "6908b8f6-276c-4317-9f22-61902ad35137": "66e649bb-26b1-4298-a4f5-9ebaa2fe3b4b",
+        "557a9a38-57a3-4178-8b8a-089424db388a": "3d16d92e-d938-4cf6-ae91-2be9a308e80e",
+        "9804d496-f0f0-486e-b6e1-0692acc7dcfd": "e684f11b-02b8-4603-8d1b-2375cd216b63",
+        "38bc432e-dcb1-4edb-81ed-472b549f59e1": "24bc15d8-6942-4959-b7bc-a684a44963cf",
+        "02f9dbf4-2d8b-425b-9d43-67fd66f98461": "f3cfdb83-9ce7-4002-9901-082ec54a518f",
+        "667741e6-99c4-4607-b886-3b9002761cff": "05d79e25-a948-4233-ab0b-bbfddcb0defd",
+        "4d05c825-915a-47f5-ab8c-d38838417f21": "7aa2a702-afec-40b4-9d26-d0ec5aa718ef",
+        "2750d0aa-df49-443f-af2a-51ef62929f79": "d2dc6dc0-b07a-4087-be01-284794c48c05",
+        "d42e5e7d-3d5f-4eaf-b677-41fb7a18f09a": "333c86a4-e3d7-429e-8243-d7773d996085",
+        "011e0ad9-9f74-4495-a243-152fc90f6bc6": "c8240d5d-70e5-487c-878c-d05214ab7b91",
+        "5efe1f01-19ee-4413-b9e8-31300e849382": "a00887ba-7df3-48f5-8f1b-87fd58782dc1",
+        "6560871c-c32b-473d-ba3b-4bb11aab1c17": "82461497-20b2-4b51-9990-2faf8dc5ab03",
+        "797caf46-9bc2-4e26-b71b-94468ede104c": "46850519-2466-4d06-978d-3c8bf53275f7",
+        "b7c8c7f9-d403-4d36-b7bb-66983aa71e68": "d8d18279-5268-42f0-a415-b66ff6ace11c",
+        "475ad2b9-6832-42a5-87db-b7b99dcf1a8b": "44f8d7b8-d538-458e-960b-86d0a3aa7cf1",
+        "a94cf439-2d29-4c01-9fb2-a25deb17f4e7": "90698cca-74cd-4481-bf86-7bda37cd529b",
+        "20a16300-e9f1-46a0-a328-037e78582cc1": "90177a2a-8f5d-4725-9ccc-bef2de1ac6e5",
+        "dd32ce13-e62c-473e-8080-b0e725c0f061": "39022878-8021-4aff-8047-bedf261df752",
+        "f0acf77d-3321-4560-9c30-c0017ade40ac": "0a4372f4-9435-4a28-a8a2-898e3cdd36e7",
+        "4834d9d2-6246-4914-be23-9380b627292c": "8cc1e400-1d5a-421d-b322-6380843f7405"
+      }
+    },
+    {
+      "__guid": "ce8a1b8c-acc9-4993-a29a-ae03f5519678",
+      "__version": 2,
+      "__Prefab": "prefabs/pieces/puntpiece/puntpiece.prefab",
+      "__PrefabInstancePatch": {
+        "AddedObjects": [],
+        "RemovedObjects": [],
+        "PropertyOverrides": [
+          {
+            "Target": {
+              "Type": "GameObject",
+              "IdValue": "ad8604dc-4731-4bf5-9544-f9bd106773c0"
+            },
+            "Property": "Name",
+            "Value": "puntpiece (3)"
+          },
+          {
+            "Target": {
+              "Type": "GameObject",
+              "IdValue": "ad8604dc-4731-4bf5-9544-f9bd106773c0"
+            },
+            "Property": "Position",
+            "Value": "-428.8633,27.14758,5.509016"
+          },
+          {
+            "Target": {
+              "Type": "GameObject",
+              "IdValue": "ad8604dc-4731-4bf5-9544-f9bd106773c0"
+            },
+            "Property": "Enabled",
+            "Value": false
+          },
+          {
+            "Target": {
+              "Type": "Component",
+              "IdValue": "557a9a38-57a3-4178-8b8a-089424db388a"
+            },
+            "Property": "AngularDamping",
+            "Value": 2
+          },
+          {
+            "Target": {
+              "Type": "Component",
+              "IdValue": "557a9a38-57a3-4178-8b8a-089424db388a"
+            },
+            "Property": "LinearDamping",
+            "Value": 2
+          }
+        ],
+        "MovedObjects": []
+      },
+      "__PrefabIdToInstanceId": {
+        "ad8604dc-4731-4bf5-9544-f9bd106773c0": "ce8a1b8c-acc9-4993-a29a-ae03f5519678",
+        "860a1dc4-0b11-4b29-9fa2-0761e954d29d": "768132a7-cb86-4078-8e85-178fd7a652da",
+        "6908b8f6-276c-4317-9f22-61902ad35137": "593029eb-f4ed-4c61-9c00-d24f5853bc62",
+        "557a9a38-57a3-4178-8b8a-089424db388a": "9074cef0-7131-4f6e-b122-e0408820b54a",
+        "9804d496-f0f0-486e-b6e1-0692acc7dcfd": "b03fe6b1-cdde-491d-b6f8-ed0ff106dab5",
+        "38bc432e-dcb1-4edb-81ed-472b549f59e1": "c73901ba-31a9-4f87-978f-6da4d5ed020b",
+        "02f9dbf4-2d8b-425b-9d43-67fd66f98461": "ae056842-5055-4837-abbf-9cc22600533b",
+        "667741e6-99c4-4607-b886-3b9002761cff": "d77745da-00c5-4a24-bc04-74d93f817622",
+        "4d05c825-915a-47f5-ab8c-d38838417f21": "da78a759-860e-4402-9293-9635e4012056",
+        "2750d0aa-df49-443f-af2a-51ef62929f79": "17a4b35a-c58a-43f1-a790-7879f2b96426",
+        "d42e5e7d-3d5f-4eaf-b677-41fb7a18f09a": "7194dcda-9d66-44a8-8e30-bcd20c1a37d1",
+        "011e0ad9-9f74-4495-a243-152fc90f6bc6": "a851a60f-9ac0-4d0a-a053-5ccb1616e3e4",
+        "5efe1f01-19ee-4413-b9e8-31300e849382": "a3135cbc-c6e2-4eb2-b278-35bdb90e80ab",
+        "6560871c-c32b-473d-ba3b-4bb11aab1c17": "ec041b90-1048-46af-bd84-1890db9f684d",
+        "797caf46-9bc2-4e26-b71b-94468ede104c": "d934530f-49de-4d04-9bfe-b4dc0a463884",
+        "b7c8c7f9-d403-4d36-b7bb-66983aa71e68": "5e30ec18-29a0-469a-805e-054a25a42278",
+        "475ad2b9-6832-42a5-87db-b7b99dcf1a8b": "9d0ada08-c516-434c-9b57-007379332bd2",
+        "a94cf439-2d29-4c01-9fb2-a25deb17f4e7": "8fc06ea1-2aa3-4975-81e0-1d18da14bb80",
+        "20a16300-e9f1-46a0-a328-037e78582cc1": "0335bfaf-9abf-44c2-8799-cf53f77ae2b0",
+        "dd32ce13-e62c-473e-8080-b0e725c0f061": "ba471b86-67c5-4d77-82e2-c9c885560603",
+        "f0acf77d-3321-4560-9c30-c0017ade40ac": "93a0be10-4728-486b-8326-67eb41788ee6",
+        "4834d9d2-6246-4914-be23-9380b627292c": "233b2ee1-acfb-4e90-84b8-f1b0d591c65a"
+      }
+    },
+    {
+      "__guid": "45067a7b-3766-403a-a30c-d2cbde8df043",
+      "__version": 2,
+      "Flags": 0,
+      "Name": "PhysicsScene",
+      "Position": "0,0,0",
+      "Rotation": "0,0,0,1",
+      "Scale": "1,1,1",
+      "Tags": "",
+      "Enabled": true,
+      "NetworkMode": 2,
+      "NetworkFlags": 0,
+      "NetworkOrphaned": 0,
+      "NetworkTransmit": true,
+      "OwnerTransfer": 1,
+      "Components": [
+        {
+          "__type": "TestPhysicsWorld",
+          "__guid": "b9425134-860a-43e0-8297-eb6be11981fe",
+          "__enabled": true,
+          "Flags": 0,
+          "BalanceOverride": {
+            "_type": "component",
+            "component_id": "cb95d4ac-e87f-437a-872e-8b6a051cd2b1",
+            "go": "fd506fa4-4d4f-4140-baf8-271ddf8dc050",
+            "component_type": "BalanceOverride"
+          },
+          "CapsuleColor": "0,1,1,1",
+          "CreateFloor": true,
+          "DebugColor": "0,1,0,1",
+          "FloorOffset": -50,
+          "FloorSize": "2000,2000,100",
+          "Gravity": "0,0,-800",
+          "HullColor": "1,0,1,1",
+          "OnComponentDestroy": null,
+          "OnComponentDisabled": null,
+          "OnComponentEnabled": null,
+          "OnComponentFixedUpdate": null,
+          "OnComponentStart": null,
+          "OnComponentUpdate": null,
+          "PlayerController": {
+            "_type": "component",
+            "component_id": "d3685f9d-b13f-4326-9d7c-a086349cc825",
+            "go": "fd506fa4-4d4f-4140-baf8-271ddf8dc050",
+            "component_type": "PlayerController"
+          },
+          "ShowDebug": true,
+          "SourcePieces": [
+            {
+              "_type": "component",
+              "component_id": "6dad50b6-1db9-4678-8b49-6c33c0114ba3",
+              "go": "eefe7ad8-2561-4180-8d78-23e488794bbc",
+              "component_type": "PuntPiece"
+            },
+            {
+              "_type": "component",
+              "component_id": "317ae00a-73c1-4ca7-951a-4c542327e5e5",
+              "go": "f852e801-8ed7-47c7-8c9e-b2fba45f3b20",
+              "component_type": "PuntPiece"
+            },
+            {
+              "_type": "component",
+              "component_id": "24bc15d8-6942-4959-b7bc-a684a44963cf",
+              "go": "6d196f31-3804-42d4-9679-8688b53c71a1",
+              "component_type": "PuntPiece"
+            }
+          ],
+          "UsePuntPieceShapes": true
+        }
+      ],
+      "Children": []
     }
   ],
   "SceneProperties": {

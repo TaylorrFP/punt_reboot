@@ -18,17 +18,8 @@ public sealed class TestPhysicsWorld : Component
 	[Property, Group( "Punt Pieces" )]
 	public bool UsePuntPieceShapes { get; set; } = true;
 
-	[Property, Group( "Test Bodies" )]
-	public int NumberOfBodies { get; set; } = 3;
-
-	[Property, Group( "Test Bodies" )]
-	public float BodyMass { get; set; } = 1f;
-
-	[Property, Group( "Test Bodies" )]
-	public float BodyRadius { get; set; } = 5f;
-
-	[Property, Group( "Test Bodies" )]
-	public Vector3 InitialVelocity { get; set; } = new Vector3( 50f, 0, 0 );
+	[Property, Group( "Punt Pieces" )]
+	public PlayerController PlayerController { get; set; }
 
 	[Property, Group( "Floor" )]
 	public bool CreateFloor { get; set; } = true;
@@ -38,6 +29,9 @@ public sealed class TestPhysicsWorld : Component
 
 	[Property, Group( "Floor" )]
 	public float FloorOffset { get; set; } = -50f;
+
+	[Property, Group( "Floor" )]
+	public BalanceOverride BalanceOverride { get; set; }
 
 	[Property, Group( "Debug" )]
 	public bool ShowDebug { get; set; } = true;
@@ -65,17 +59,19 @@ public sealed class TestPhysicsWorld : Component
 		public Vector3 CapsuleEnd;
 		public bool HasHull;
 		public List<Line[]> HullLines; // Store lines for each hull
-		public Vector3 LastSourceVelocity;
 	}
 	private List<BodyShapeInfo> bodyShapeInfos = new();
-
-	[Property, Group( "Sync" )]
-	public float FlickDetectionThreshold { get; set; } = 50f;
 
 	protected override void OnStart()
 	{
 		CreatePhysicsWorld();
 		SpawnTestBodies();
+
+		// Subscribe to flick events
+		if ( PlayerController != null )
+		{
+			PlayerController.OnPieceFlicked += OnPieceFlicked;
+		}
 	}
 
 	protected override void OnFixedUpdate()
@@ -83,34 +79,21 @@ public sealed class TestPhysicsWorld : Component
 		if ( physicsWorld == null )
 			return;
 
-		// Detect flicks on source pieces and apply to test bodies
-		SyncFlicksFromSourcePieces();
-
 		// Step the physics world at fixed timestep
-		physicsWorld.Step( Time.Delta );
+		physicsWorld.Step( 1f/ProjectSettings.Physics.FixedUpdateFrequency );
 	}
 
-	private void SyncFlicksFromSourcePieces()
+	private void OnPieceFlicked( PuntPiece piece, Vector3 flickVelocity )
 	{
-		for ( int i = 0; i < bodyShapeInfos.Count; i++ )
+		// Find the test body that corresponds to this piece
+		foreach ( var info in bodyShapeInfos )
 		{
-			var info = bodyShapeInfos[i];
-			if ( info.SourcePiece == null || !info.SourcePiece.IsValid || info.SourcePiece.Rigidbody == null )
-				continue;
-
-			var sourceVelocity = info.SourcePiece.Rigidbody.Velocity;
-			var velocityChange = sourceVelocity - info.LastSourceVelocity;
-
-			// Detect sudden velocity change (flick)
-			if ( velocityChange.Length > FlickDetectionThreshold )
+			if ( info.SourcePiece == piece )
 			{
-				// Apply the same velocity to the test body
-				info.Body.Velocity = sourceVelocity;
+				// Apply the flick velocity to the test body
+				info.Body.Velocity = flickVelocity;
+				break;
 			}
-
-			// Update stored velocity
-			info.LastSourceVelocity = sourceVelocity;
-			bodyShapeInfos[i] = info;
 		}
 	}
 
@@ -131,13 +114,6 @@ public sealed class TestPhysicsWorld : Component
 			DrawDebugBodies();
 			DrawDebugFloor();
 		}
-	}
-
-	[Button]
-	public void RespawnBodies()
-	{
-		ClearBodies();
-		SpawnTestBodies();
 	}
 
 	private void CreatePhysicsWorld()
@@ -164,10 +140,6 @@ public sealed class TestPhysicsWorld : Component
 		{
 			SpawnFromPuntPieces();
 		}
-		else
-		{
-			SpawnSimpleSpheres();
-		}
 
 		// Create floor if enabled
 		if ( CreateFloor )
@@ -185,9 +157,12 @@ public sealed class TestPhysicsWorld : Component
 			var shapeInfo = new BodyShapeInfo
 			{
 				Body = body,
-				SourcePiece = piece,
-				LastSourceVelocity = piece.Rigidbody?.Velocity ?? Vector3.Zero
+				SourcePiece = piece
 			};
+
+			// Get source surface properties from the piece's colliders
+			// Note: PhysicsShape only supports Friction - elasticity/restitution not available
+			float sourceFriction = 0.5f;
 
 			// Read capsule collider from the piece
 			var capsuleCollider = piece.Components.Get<CapsuleCollider>();
@@ -197,7 +172,15 @@ public sealed class TestPhysicsWorld : Component
 				shapeInfo.CapsuleStart = capsuleCollider.Start;
 				shapeInfo.CapsuleEnd = capsuleCollider.End;
 
-				body.AddCapsuleShape( capsuleCollider.Start, capsuleCollider.End, capsuleCollider.Radius, true );
+				var shape = body.AddCapsuleShape( capsuleCollider.Start, capsuleCollider.End, capsuleCollider.Radius, true );
+
+				// Copy surface properties from the capsule collider (nullable)
+				sourceFriction = capsuleCollider.Friction ?? 0.5f;
+
+				if ( shape != null )
+				{
+					shape.Friction = sourceFriction;
+				}
 			}
 
 			// Read hull from ModelCollider
@@ -207,13 +190,22 @@ public sealed class TestPhysicsWorld : Component
 				var model = modelCollider.Model;
 				shapeInfo.HullLines = new List<Line[]>();
 
+				// Get surface properties from the model collider (nullable)
+				sourceFriction = modelCollider.Friction ?? 0.5f;
+
 				// Try to get hull parts from the model's physics data
 				foreach ( var part in model.Physics.Parts )
 				{
 					// BodyPart has Hulls and Meshes collections
 					foreach ( var hull in part.Hulls )
 					{
-						body.AddShape( hull, new Transform(), true );
+						var shape = body.AddShape( hull, new Transform(), true );
+
+						// Apply surface properties to the shape
+						if ( shape != null )
+						{
+							shape.Friction = sourceFriction;
+						}
 
 						// Store hull lines for debug drawing
 						var lines = hull.GetLines()?.ToArray();
@@ -225,7 +217,13 @@ public sealed class TestPhysicsWorld : Component
 
 					foreach ( var mesh in part.Meshes )
 					{
-						body.AddShape( mesh, new Transform(), true, true );
+						var shape = body.AddShape( mesh, new Transform(), true, true );
+
+						// Apply surface properties to the shape
+						if ( shape != null )
+						{
+							shape.Friction = sourceFriction;
+						}
 					}
 				}
 
@@ -237,51 +235,28 @@ public sealed class TestPhysicsWorld : Component
 			body.MotionEnabled = true;
 			body.GravityEnabled = true;
 
-			// Get mass from the original piece's rigidbody if available
-			var sourceMass = piece.Rigidbody?.Mass ?? BodyMass;
-			body.Mass = sourceMass;
+			// Copy physics properties from the source rigidbody
+			var sourceRb = piece.Rigidbody;
+			if ( sourceRb != null )
+			{
+				// Mass (use MassOverride if set, otherwise use calculated Mass)
+				body.Mass = sourceRb.MassOverride > 0 ? sourceRb.MassOverride : sourceRb.Mass;
+
+				// Linear and angular damping
+				body.LinearDamping = sourceRb.LinearDamping;
+				body.AngularDamping = sourceRb.AngularDamping;
+
+				// Mass center override
+				body.LocalMassCenter = sourceRb.MassCenterOverride;
+				body.OverrideMassCenter = true;
+			}
+
 			body.RebuildMass();
 
 			// Position at the piece's current position
 			body.Position = piece.WorldPosition;
 			body.Rotation = piece.WorldRotation;
 
-			// Give initial velocity
-			body.Velocity = InitialVelocity;
-
-			testBodies.Add( body );
-			bodyShapeInfos.Add( shapeInfo );
-		}
-	}
-
-	private void SpawnSimpleSpheres()
-	{
-		// Create test spheres
-		for ( int i = 0; i < NumberOfBodies; i++ )
-		{
-			var body = new PhysicsBody( physicsWorld );
-
-			// Add sphere shape to the body
-			body.AddSphereShape( new Sphere( Vector3.Zero, BodyRadius ) );
-
-			var shapeInfo = new BodyShapeInfo { Body = body };
-
-			// Enable physics simulation
-			body.Enabled = true;
-			body.MotionEnabled = true;
-			body.GravityEnabled = true;
-
-			// Set mass and rebuild from shape
-			body.Mass = BodyMass;
-			body.RebuildMass();
-
-			// Position bodies in a line with some variation
-			var xOffset = (i - NumberOfBodies / 2f) * 30f;
-			var yOffset = i * 10f;
-			body.Position = WorldPosition + new Vector3( xOffset, yOffset, 100f + i * 20f );
-
-			// Give them initial velocity
-			body.Velocity = new Vector3( (i % 2 == 0 ? 1 : -1) * InitialVelocity.x, InitialVelocity.y, InitialVelocity.z );
 
 			testBodies.Add( body );
 			bodyShapeInfos.Add( shapeInfo );
@@ -294,7 +269,14 @@ public sealed class TestPhysicsWorld : Component
 
 		// Add box shape to the floor body
 		var halfExtents = FloorSize / 2f;
-		floorBody.AddBoxShape( new BBox( -halfExtents, halfExtents ), Rotation.Identity, false );
+		var shape = floorBody.AddBoxShape( new BBox( -halfExtents, halfExtents ), Rotation.Identity, false );
+
+		// Copy surface properties from BalanceOverride if available
+		if ( shape != null && BalanceOverride != null && BalanceOverride.OverrideFloorSurface )
+		{
+			if ( BalanceOverride.FloorFriction >= 0 )
+				shape.Friction = BalanceOverride.FloorFriction;
+		}
 
 		// Configure as static body
 		floorBody.Mass = 0; // Static body (mass 0)
@@ -341,18 +323,6 @@ public sealed class TestPhysicsWorld : Component
 					}
 				}
 
-				// If no special shapes, draw as sphere
-				if ( shapeInfo.CapsuleRadius == 0 && !shapeInfo.HasHull )
-				{
-					Gizmo.Draw.Color = DebugColor;
-					Gizmo.Draw.LineSphere( position, BodyRadius );
-				}
-			}
-			else
-			{
-				// Fallback to sphere
-				Gizmo.Draw.Color = DebugColor;
-				Gizmo.Draw.LineSphere( position, BodyRadius );
 			}
 
 			// Draw velocity vector
@@ -420,6 +390,12 @@ public sealed class TestPhysicsWorld : Component
 
 	protected override void OnDestroy()
 	{
+		// Unsubscribe from flick events
+		if ( PlayerController != null )
+		{
+			PlayerController.OnPieceFlicked -= OnPieceFlicked;
+		}
+
 		if ( physicsWorld != null )
 		{
 			physicsWorld.Delete();
